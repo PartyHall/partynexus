@@ -1,0 +1,15 @@
+parameters:
+    env(PICTURE_LOCATIONS): '%kernel.project_dir%/var/uploaded_pictures'
+    env(SONG_EXTRACT_LOCATION): '%kernel.project_dir%/var/wip_songs'
+
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    App\:
+        resource: '../src/'
+        exclude:
+            - '../src/DependencyInjection/'
+            - '../src/Entity/'
+            - '../src/Kernel.php'

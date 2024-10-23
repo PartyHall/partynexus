@@ -1,0 +1,42 @@
+.loader {
+  width: 100%;
+  height: 100%;
+  font-size: 40px;
+  font-weight: bold;
+  color: #fff5f6;
+
+  text-shadow: 0 0 2px #000, 0 0 10px #fc1f2c, 0 0 5px #fc1f2c, 0 0 25px #fc1f2c;
+  backface-visibility: hidden;
+
+  animation: flicker 2s infinite alternate;
+
+
+  position: relative;
+  &:before {
+    position: absolute;
+    content: 'Loading...';
+
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+  }
+}
+
+/* Radioactive zone (claude.ai) should be done properly to have something nice*/
+@keyframes flicker {
+  0%, 18%, 22%, 25%, 53%, 57%, 100% {
+    text-shadow: 
+      0 0 2px #000,
+      0 0 10px #fc1f2c,
+      0 0 5px #fc1f2c,
+      0 0 25px #fc1f2c;
+  }
+
+  26%, 60%, 80%, 90% {
+    text-shadow: 
+      0 0 2px #000,
+      0 0 5px #fc1f2c,
+      0 0 10px #fc1f2c,
+      0 0 15px #fc1f2c;
+  }
+}

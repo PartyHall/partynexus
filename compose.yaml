@@ -1,0 +1,76 @@
+services:
+  app:
+    image: 'partynexus'
+    build:
+      context: '.'
+      dockerfile: './docker/app/Dockerfile'
+      target: 'frankenphp_dev'
+    tty: true
+    restart: 'unless-stopped'
+    environment:
+      SERVER_NAME: 'localhost:80, php:80, host.docker.internal:80'
+      MERCURE_PUBLISHER_JWT_KEY: '!ChangeThisMercureHubJWTSecretKey!'
+      MERCURE_SUBSCRIBER_JWT_KEY: '!ChangeThisMercureHubJWTSecretKey!'
+      MERCURE_URL: 'http://php/.well-known/mercure'
+      MERCURE_PUBLIC_URL: 'https://localhost/.well-known/mercure'
+      MERCURE_JWT_SECRET: '!ChangeThisMercureHubJWTSecretKey!'
+      MERCURE_EXTRA_DIRECTIVES: ''
+      XDEBUG_MODE: 'debug'
+      XDEBUG_CONFIG: "remote_host=host.docker.internal remote_port=9000 var_display_max_data=1024 var_display_max_depth=5"
+    volumes:
+      - 'caddy_data:/data'
+      - 'caddy_config:/config'
+      - './:/app'
+      - './docker/app/frankenphp/Caddyfile:/etc/caddy/Caddyfile:ro'
+      - './docker/app/frankenphp/conf.d/20-app.dev.ini:/usr/local/etc/php/app.conf.d/20-app.dev.ini:ro'
+    extra_hosts:
+      - 'host.docker.internal:host-gateway'
+    ports:
+      - '80:80/tcp'
+      - '443:443/tcp'
+      - '443:443/udp'
+
+# Mercure is installed as a Caddy module, prevent the Flex recipe from installing another service
+###> symfony/mercure-bundle ###
+###< symfony/mercure-bundle ###
+
+###> doctrine/doctrine-bundle ###
+  database:
+    image: 'postgres:16-alpine'
+    environment:
+      POSTGRES_DB: 'partynexus'
+      POSTGRES_PASSWORD: 'partynexus'
+      POSTGRES_USER: 'partynexus'
+    healthcheck:
+      test: ["CMD", "pg_isready", "-d", "partynexus", "-U", "partynexus"]
+      timeout: '5s'
+      start_period: '60s'
+      retries: 5
+    ports:
+      - '127.0.0.1:5432:5432'
+    volumes:
+      - './0_DATA/db:/var/lib/postgresql/data:rw'
+###< doctrine/doctrine-bundle ###
+
+  frontend:
+    image: 'node:lts'
+    init: true
+    user: "${UID:-1000}:${GID:-1000}"
+    working_dir: '/app'
+    env_file: ['./.env']
+    command: ['bash', '-c', '[ ! -d node_modules ] && npm install; npm run dev -- --host']
+    environment:
+      VITE_API_URL: 'http://localhost'
+    volumes:
+      - './frontend:/app'
+    ports:
+      - '127.0.0.1:5175:5173'
+
+volumes:
+  caddy_data:
+  caddy_config:
+###> symfony/mercure-bundle ###
+###< symfony/mercure-bundle ###
+
+###> doctrine/doctrine-bundle ###
+###< doctrine/doctrine-bundle ###

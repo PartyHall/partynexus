@@ -1,0 +1,23 @@
+vich_uploader:
+  db_driver: orm
+  
+  metadata:
+    type: attribute
+    
+  mappings:
+    pictures:
+      uri_prefix: /pictures
+      upload_destination: '%env(string:PICTURE_LOCATIONS)%'
+      namer: Vich\UploaderBundle\Naming\UniqidNamer
+
+    song_covers:
+        uri_prefix: /song_covers
+        upload_destination: '%kernel.project_dir%/public/song_covers'
+        namer: Vich\UploaderBundle\Naming\UniqidNamer
+
+    # Songs can be on S3 but extracted songs data MUST be local
+    
+    songs_extracted:
+        uri_prefix: /song_extracted
+        upload_destination: '%env(string:SONG_EXTRACT_LOCATION)%'
+        namer: Vich\UploaderBundle\Naming\UniqidNamer

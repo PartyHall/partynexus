@@ -1,0 +1,69 @@
+{
+    "generic": {
+        "username": "Username",
+        "password": "Password",
+        "email": "Email",
+        "error": {
+            "unknown": "An unknown error has occured",
+            "unknown_desc": "There was an issue, see the console for more info",
+            "not_found": {
+                "event": "The requested event was not found."
+            }
+        }
+    },
+    "menu": {
+        "events": "Events",
+        "karaoke": "Karaoke",
+        "my_account": "My account"
+    },
+    "login": {
+        "title": "Login",
+        "tab_login": "Login",
+        "tab_register": "Register",
+        "retype_password": "Re-type password",
+        "login_bt": "Login",
+        "register_bt": "Register"
+    },
+    "karaoke": {
+        "search": "Search a song...",
+        "by": "By {{artist}}",
+        "song_count": "{{total}} songs",
+        "new_song": "New song",
+        "editor": {
+            "title_edit": "Editing {{title}}",
+            "title_new": "New song",
+            "title": "Title",
+            "artist": "Artist",
+            "format": "Format",
+            "quality": "Quality",
+            "save": "Save",
+            "song_files": "Song files",
+            "compile": {
+                "title": "Compilation settings",
+                "text1": "A song can be either uncompiled (extracted, ready to be edited) or compiled (a .phk file is generated and edition is locked).",
+                "text2": "Here you can request to compile / decompile your song",
+                "text3": "Note that decompiling the song will remove it from all the appliances that fetched it, and rebuilding it will cause the appliance to fetch it again.",
+                "request_compile": "Lancer la compilation",
+                "request_decompile": "Lancer la décompilation"
+            }
+        }
+    },
+    "event": {
+        "by": "By {{author}}",
+        "at": "At {{location}}",
+        "no_events": "No event found",
+        "create_bt": "New",
+        "id": "PartyNexus ID",
+        "author": "Author",
+        "location": "Location",
+        "datetime": "On",
+        "download_export": "Download everything",
+        "pictures": {
+            "title": "Photos",
+            "timelapse": "Timelapse"
+        },
+        "karaoke": {
+            "sessions": "Sung songs"
+        }
+    }
+}

@@ -1,0 +1,69 @@
+{
+    "generic": {
+        "username": "Pseudo",
+        "password": "Mot de passe",
+        "email": "Email",
+        "error": {
+            "unknown": "Une erreur inconnue s'est produite",
+            "unknown_desc": "Il y a eu un soucis. Regardez la console pour plus d'infos",
+            "not_found": {
+                "event": "L'évènement n'a pas été trouvé"
+            }
+        }
+    },
+    "menu": {
+        "events": "Évènements",
+        "karaoke": "Karaoké",
+        "my_account": "Mon compte"
+    },
+    "login": {
+        "tab_login": "Connexion",
+        "tab_register": "S'inscrire",
+        "retype_password": "Retaper le mot de passe",
+        "loginBt": "Connexion",
+        "registerBt": "S'inscrire"
+    },
+    "karaoke": {
+        "search": "Rechercher une musique...",
+        "by": "Par {{artist}}",
+        "song_count": "{{total}} musiques",
+        "new_song": "Créer une musique",
+        "request_song": "Demander une musique",
+        "editor": {
+            "title_edit": "Modification de {{title}}",
+            "title_new": "Nouvelle musique",
+            "title": "Titre",
+            "artist": "Artiste",
+            "format": "Format",
+            "quality": "Qualité",
+            "save": "Sauvegarder",
+            "song_files": "Fichiers de la musique",
+            "compile": {
+                "title": "Paramètres de compilation",
+                "text1": "Une musique peut être décompilée (extraite, prête à être édité) ou compilé (un fichier .phk est généré et l'édition est bloquée).",
+                "text2": "Vous pouvez ici demander une compilation / décompilation de votre musique",
+                "text3": "Nb: Décompiler une musique va la supprimer de tous vos appareils qui l'ont synchronisé. Si vous recompilez, les appareils pourront la resynchroniser.",
+                "request_compile": "Lancer la compilation",
+                "request_decompile": "Lancer la décompilation"
+            }
+        }
+    },
+    "event": {
+        "by": "Par {{author}}",
+        "at": "Lieu: {{location}}",
+        "no_events": "Pas d'évènements trouvés",
+        "create_bt": "Nouveau",
+        "id": "ID PartyNexus",
+        "author": "Auteur",
+        "location": "Lieu",
+        "datetime": "Le",
+        "download_export": "Tout télécharger",
+        "pictures": {
+            "title": "Photos",
+            "timelapse": "Timelapse"
+        },
+        "karaoke": {
+            "sessions": "Musiques chantées"
+        }
+    }
+}
