@@ -33,7 +33,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Id]
     #[ORM\Column(type: Types::INTEGER)]
-    #[ORM\GeneratedValue(strategy: 'AUTO')]
+    #[ORM\GeneratedValue(strategy: 'SEQUENCE')]
     #[Groups([
         self::API_GET_ITEM,
         self::API_GET_COLLECTION,

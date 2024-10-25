@@ -73,7 +73,7 @@ class Song implements HasTimestamps
     public const string API_UPDATE = 'api:song:create';
 
     #[ORM\Id]
-    #[ORM\GeneratedValue(strategy: 'AUTO')]
+    #[ORM\GeneratedValue(strategy: 'SEQUENCE')]
     #[ORM\Column(type: Types::INTEGER)]
     #[Groups([
         self::API_GET_ITEM,

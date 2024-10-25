@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20241020145052 extends AbstractMigration
+final class Version20241025214150 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -33,11 +33,15 @@ final class Version20241020145052 extends AbstractMigration
         $this->addSql('CREATE INDEX IDX_3BAE0AA77E3C61F9 ON event (owner_id)');
         $this->addSql('COMMENT ON COLUMN event.id IS \'(DC2Type:uuid)\'');
         $this->addSql('COMMENT ON COLUMN event.datetime IS \'(DC2Type:datetime_immutable)\'');
+        $this->addSql('CREATE TABLE event_user (event_id UUID NOT NULL, user_id INT NOT NULL, PRIMARY KEY(event_id, user_id))');
+        $this->addSql('CREATE INDEX IDX_92589AE271F7E88B ON event_user (event_id)');
+        $this->addSql('CREATE INDEX IDX_92589AE2A76ED395 ON event_user (user_id)');
+        $this->addSql('COMMENT ON COLUMN event_user.event_id IS \'(DC2Type:uuid)\'');
         $this->addSql('CREATE TABLE export (id INT NOT NULL, event_id UUID NOT NULL, started_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, status VARCHAR(255) DEFAULT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX IDX_428C169471F7E88B ON export (event_id)');
         $this->addSql('COMMENT ON COLUMN export.event_id IS \'(DC2Type:uuid)\'');
         $this->addSql('COMMENT ON COLUMN export.started_at IS \'(DC2Type:datetime_immutable)\'');
-        $this->addSql('CREATE TABLE nexus_user (id INT NOT NULL, username VARCHAR(32) NOT NULL, password VARCHAR(512) NOT NULL, email VARCHAR(255) NOT NULL, roles JSON NOT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE TABLE nexus_user (id INT NOT NULL, username VARCHAR(32) DEFAULT NULL, password VARCHAR(512) NOT NULL, email VARCHAR(255) NOT NULL, roles JSON NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE TABLE picture (id UUID NOT NULL, event_id UUID NOT NULL, taken_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, unattended BOOLEAN DEFAULT false NOT NULL, appliance_uuid UUID NOT NULL, filepath VARCHAR(255) DEFAULT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX IDX_16DB4F8971F7E88B ON picture (event_id)');
         $this->addSql('COMMENT ON COLUMN picture.id IS \'(DC2Type:uuid)\'');
@@ -57,6 +61,8 @@ final class Version20241020145052 extends AbstractMigration
         $this->addSql('COMMENT ON COLUMN song_file.updated_at IS \'(DC2Type:datetime_immutable)\'');
         $this->addSql('ALTER TABLE appliance ADD CONSTRAINT FK_B4E6C1107E3C61F9 FOREIGN KEY (owner_id) REFERENCES nexus_user (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE event ADD CONSTRAINT FK_3BAE0AA77E3C61F9 FOREIGN KEY (owner_id) REFERENCES nexus_user (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
+        $this->addSql('ALTER TABLE event_user ADD CONSTRAINT FK_92589AE271F7E88B FOREIGN KEY (event_id) REFERENCES event (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE');
+        $this->addSql('ALTER TABLE event_user ADD CONSTRAINT FK_92589AE2A76ED395 FOREIGN KEY (user_id) REFERENCES nexus_user (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE export ADD CONSTRAINT FK_428C169471F7E88B FOREIGN KEY (event_id) REFERENCES event (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE picture ADD CONSTRAINT FK_16DB4F8971F7E88B FOREIGN KEY (event_id) REFERENCES event (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE song_file ADD CONSTRAINT FK_FF0CE0E5A0BDB2F3 FOREIGN KEY (song_id) REFERENCES song (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
@@ -73,11 +79,14 @@ final class Version20241020145052 extends AbstractMigration
         $this->addSql('DROP SEQUENCE song_id_seq CASCADE');
         $this->addSql('ALTER TABLE appliance DROP CONSTRAINT FK_B4E6C1107E3C61F9');
         $this->addSql('ALTER TABLE event DROP CONSTRAINT FK_3BAE0AA77E3C61F9');
+        $this->addSql('ALTER TABLE event_user DROP CONSTRAINT FK_92589AE271F7E88B');
+        $this->addSql('ALTER TABLE event_user DROP CONSTRAINT FK_92589AE2A76ED395');
         $this->addSql('ALTER TABLE export DROP CONSTRAINT FK_428C169471F7E88B');
         $this->addSql('ALTER TABLE picture DROP CONSTRAINT FK_16DB4F8971F7E88B');
         $this->addSql('ALTER TABLE song_file DROP CONSTRAINT FK_FF0CE0E5A0BDB2F3');
         $this->addSql('DROP TABLE appliance');
         $this->addSql('DROP TABLE event');
+        $this->addSql('DROP TABLE event_user');
         $this->addSql('DROP TABLE export');
         $this->addSql('DROP TABLE nexus_user');
         $this->addSql('DROP TABLE picture');

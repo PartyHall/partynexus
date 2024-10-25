@@ -117,7 +117,7 @@ class Event {
     #[ORM\OneToMany(targetEntity: Export::class, mappedBy: 'event')]
     private Collection $exports;
 
-    #[ORM\ManyToMany(targetEntity: Event::class, inversedBy: 'participatingEvents')]
+    #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'participatingEvents')]
     #[Groups([
         self::API_GET_ITEM,
         self::API_CREATE,

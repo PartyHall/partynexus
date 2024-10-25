@@ -15,7 +15,7 @@ class Export
 
     #[ORM\Id]
     #[ORM\Column(type: Types::INTEGER)]
-    #[ORM\GeneratedValue(strategy: 'AUTO')]
+    #[ORM\GeneratedValue(strategy: 'SEQUENCE')]
     #[Groups([
         self::API_GET_COLLECTION,
         self::API_GET_ITEM,
