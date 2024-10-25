@@ -7,6 +7,7 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory as FakerFactory;
+use Symfony\Component\Uid\Uuid;
 
 class EventFixture extends Fixture implements DependentFixtureInterface
 {
@@ -29,6 +30,8 @@ class EventFixture extends Fixture implements DependentFixtureInterface
             ->setLocation($faker->address())
             ->setDatetime(\DateTimeImmutable::createFromMutable($faker->dateTime()))
             ->setOwner($this->getReference('user__admin'));
+
+        ReflectionUtils::setId($event, Uuid::fromString('0192bf5a-67d8-7d9d-8a5e-962b23aceeaa'));
 
         $manager->persist($event);
         $this->addReference('event__1', $event);

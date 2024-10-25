@@ -8,6 +8,7 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Link;
+use ApiPlatform\Metadata\Post;
 use App\Repository\PictureRepository;
 use App\State\Provider\PictureDownloadProvider;
 use Doctrine\DBAL\Types\Types;
@@ -18,14 +19,9 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Uid\Uuid;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * For now the upload is the ugly-ass class
- * App\Controller\UploadPictureController
- *
- * We should fix it at some point when I figure out
- * the correct way of doing it
- *
  * @TODO: Get, GetCollection only for appliance that owns the event AND the users that are in the event
  * @TODO: Download => Only the users that are in the event
  */
@@ -47,15 +43,20 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
             uriTemplate: '/pictures/{id}/download',
             provider: PictureDownloadProvider::class,
         ),
-        /*
         new Post(
+            uriTemplate: '/events/{eventId}/pictures',
             inputFormats: ['multipart' => ['multipart/form-data']],
             outputFormats: ['jsonld' => ['application/ld+json']],
+            uriVariables: [
+                'eventId' => new Link(
+                    fromProperty: 'pictures',
+                    fromClass: Event::class, // On veut pointer VERS LA CLASSE AUQUEL eventId FAIT REFERENCE (fromClass event d'après symfonycasts)
+                )
+            ],
+            denormalizationContext: ['groups' => ['api:picture:create']]
         )
-        */
     ],
     normalizationContext: ['groups' => ['api:picture:get_item']],
-    denormalizationContext: ['groups' => ['api:picture:create']]
 )]
 #[ApiFilter(BooleanFilter::class, properties: ['unattended'])]
 #[ORM\Entity(repositoryClass: PictureRepository::class)]
@@ -82,6 +83,7 @@ class Picture
         self::API_GET_ITEM,
         self::API_CREATE,
     ])]
+    #[Assert\NotNull]
     private Event $event;
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
@@ -90,6 +92,7 @@ class Picture
         self::API_GET_ITEM,
         self::API_CREATE,
     ])]
+    #[Assert\NotNull]
     private \DateTimeImmutable $takenAt;
 
     #[ORM\Column(type: Types::BOOLEAN, options: ['default' => false])]
@@ -98,13 +101,17 @@ class Picture
         self::API_GET_ITEM,
         self::API_CREATE,
     ])]
+    #[Assert\NotNull]
     private bool $unattended = false;
 
     #[ORM\Column(type: UuidType::NAME)]
     #[Groups([
         self::API_GET_COLLECTION,
         self::API_GET_ITEM,
+        self::API_CREATE,
     ])]
+    #[Assert\NotNull]
+    #[Assert\Uuid]
     private Uuid $applianceUuid;
 
     #[Vich\UploadableField(mapping: 'pictures', fileNameProperty: 'filepath')]

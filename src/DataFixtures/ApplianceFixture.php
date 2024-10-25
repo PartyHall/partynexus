@@ -19,6 +19,8 @@ class ApplianceFixture extends Fixture implements DependentFixtureInterface
             ->setOwner($this->getReference('user__admin'))
         ;
 
+        ReflectionUtils::setId($appliance, 1);
+
         $manager->persist($appliance);
         $this->setReference('appliance__1', $appliance);
 
@@ -28,6 +30,8 @@ class ApplianceFixture extends Fixture implements DependentFixtureInterface
             ->setApiToken('my-api-token2')
             ->setOwner($this->getReference('user__user'))
         ;
+
+        ReflectionUtils::setId($appliance, 2);
 
         $manager->persist($appliance);
         $this->setReference('appliance__2', $appliance);
