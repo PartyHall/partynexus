@@ -16,7 +16,7 @@ class UserFixture extends Fixture
     ) {
     }
 
-    private function createUser(string $username, array $roles = [])
+    private function createUser(int $id, string $username, array $roles = []): void
     {
         $user = (new User())
             ->setUsername($username)
@@ -27,6 +27,8 @@ class UserFixture extends Fixture
             $user->addRole($role);
         }
 
+        ReflectionUtils::setId($user, $id);
+
         $user->setPassword($this->hasher->hashPassword($user, 'password'));
         $this->manager->persist($user);
         $this->setReference('user__' . $username, $user);
@@ -36,10 +38,10 @@ class UserFixture extends Fixture
     {
         $this->manager = $manager;
 
-        $this->createUser('admin', ['ROLE_ADMIN']);
-        $this->createUser('eventmaker', ['ROLE_ADMIN']);
-        $this->createUser('user');
-        $this->createUser('noevents');
+        $this->createUser(1, 'admin', ['ROLE_ADMIN']);
+        $this->createUser(2, 'eventmaker', ['ROLE_ADMIN']);
+        $this->createUser(3, 'user');
+        $this->createUser(4, 'noevents');
 
         $manager->flush();
     }
