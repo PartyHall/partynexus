@@ -18,6 +18,9 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Uid\Uuid;
 
+/**
+ * @see App\Doctrine\FilterApplianceOnOwnerExtension
+ */
 #[ApiResource(
     operations: [
         new GetCollection(normalizationContext: ['groups' => [Appliance::API_GET_COLLECTION]]),

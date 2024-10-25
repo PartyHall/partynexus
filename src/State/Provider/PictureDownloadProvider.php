@@ -13,13 +13,13 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
-class PictureDownloadProvider implements ProviderInterface
+readonly class PictureDownloadProvider implements ProviderInterface
 {
     public function __construct(
-        private readonly PictureRepository $repo,
-        private readonly Security $security,
+        private PictureRepository $repo,
+        private Security          $security,
         #[Autowire(env: 'PICTURE_LOCATIONS')]
-        private readonly string $basePath,
+        private string            $basePath,
     )
     {
     }

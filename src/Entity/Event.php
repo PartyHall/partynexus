@@ -19,6 +19,9 @@ use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 
+/**
+ * @see App\Doctrine\FilterEventOnOwnerExtension
+ */
 #[ApiResource(
     operations: [
         new GetCollection(
@@ -29,12 +32,12 @@ use Symfony\Component\Validator\Constraints as Assert;
         new Post(
             normalizationContext: ['groups' => [self::API_GET_ITEM]],
             denormalizationContext: ['groups' => [self::API_CREATE]],
-            security: 'is_granted("ROLE_APPLIANCE")'
+            security: 'is_granted("ROLE_APPLIANCE") or is_granted("ROLE_ADMIN")',
         ),
         new Put(
             normalizationContext: ['groups' => [self::API_GET_ITEM]],
             denormalizationContext: ['groups' => [self::API_UPDATE]],
-            security: 'is_granted("ROLE_ADMIN")'
+            security: 'is_granted("ROLE_ADMIN") or user == object.owner'
         ),
     ],
 )]
@@ -94,7 +97,7 @@ class Event {
     ])]
     private ?string $location = null;
 
-    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'events')]
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'userEvents')]
     #[ORM\JoinColumn(nullable: false)]
     #[Groups([
         self::API_GET_COLLECTION,
@@ -113,6 +116,14 @@ class Event {
 
     #[ORM\OneToMany(targetEntity: Export::class, mappedBy: 'event')]
     private Collection $exports;
+
+    #[ORM\ManyToMany(targetEntity: Event::class, inversedBy: 'participatingEvents')]
+    #[Groups([
+        self::API_GET_ITEM,
+        self::API_CREATE,
+        self::API_UPDATE,
+    ])]
+    private Collection $participants;
 
     public function __construct()
     {
@@ -181,7 +192,7 @@ class Event {
     public function setOwner(User $user): self
     {
         $this->owner = $user;
-        $this->owner->addEvent($this);
+        $this->owner->addUserEvent($this);
 
         return $this;
     }
@@ -208,5 +219,19 @@ class Event {
     public function getExports(): Collection
     {
         return $this->exports;
+    }
+
+    public function getParticipants(): Collection
+    {
+        return $this->participants;
+    }
+
+    public function setParticipants(array|Collection $participants): void
+    {
+        if (\is_array($participants)) {
+            $participants = new ArrayCollection($participants);
+        }
+
+        $this->participants = $participants;
     }
 }

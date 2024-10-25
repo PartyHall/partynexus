@@ -33,7 +33,11 @@ final readonly class FilterApplianceOnOwnerExtension implements QueryCollectionE
 
     private function addWhere(QueryBuilder $queryBuilder, string $resourceClass): void
     {
-        if (Appliance::class !== $resourceClass || null === ($user = $this->security->getUser()) || $this->security->isGranted('ROLE_ADMIN')) {
+        if (
+            Appliance::class !== $resourceClass
+            || null === ($user = $this->security->getUser())
+            || $this->security->isGranted('ROLE_ADMIN')
+        ) {
             return;
         }
 

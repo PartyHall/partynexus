@@ -10,12 +10,15 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ApiResource(
     operations: [
-        new Get(),
+        new Get(
+            security: 'object == user or is_granted("ROLE_ADMIN")'
+        ),
         new GetCollection(
             security: 'is_granted("ROLE_ADMIN")',
         )
@@ -25,15 +28,25 @@ use Symfony\Component\Security\Core\User\UserInterface;
 #[ORM\Table('nexus_user')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
+    public const string API_GET_COLLECTION = 'api:user:get-collection';
+    public const string API_GET_ITEM = 'api:user:get';
+
     #[ORM\Id]
     #[ORM\Column(type: Types::INTEGER)]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
+    #[Groups([
+        self::API_GET_ITEM,
+        self::API_GET_COLLECTION,
+    ])]
     private int $id;
 
-    #[ORM\Column(type: Types::STRING, length: 32)]
-    #[Assert\NotBlank]
+    #[ORM\Column(type: Types::STRING, length: 32, nullable: true)]
     #[Assert\Length(min: 3, max: 32)]
-    private string $username;
+    #[Groups([
+        self::API_GET_ITEM,
+        self::API_GET_COLLECTION,
+    ])]
+    private ?string $username = null;
 
     #[ORM\Column(type: Types::STRING, length: 512)] // @TODO: Check length is good enough
     private ?string $password;
@@ -51,12 +64,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private Collection $appliances;
 
     #[ORM\OneToMany(targetEntity: Event::class, mappedBy: 'owner')]
-    private Collection $events;
+    private Collection $userEvents;
+
+    #[ORM\ManyToMany(targetEntity: Event::class, mappedBy: 'participants')]
+    private Collection $participatingEvents;
 
     public function __construct()
     {
         $this->appliances = new ArrayCollection();
-        $this->events = new ArrayCollection();
+        $this->userEvents = new ArrayCollection();
+        $this->participatingEvents = new ArrayCollection();
     }
 
     public function getId(): int
@@ -146,25 +163,55 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->username;
     }
 
-    public function getEvents(): Collection
+    /**
+     * @return Collection<User>
+     */
+    public function getUserEvents(): Collection
     {
-        return $this->events;
+        return $this->userEvents;
     }
 
-    public function addEvent(Event $event): self
+    /**
+     * @param User[]|Collection<User> $userEvents
+     */
+    public function setUserEvents(array|Collection $userEvents): self
     {
-        if (!$this->events->contains($event)) {
-            $this->events->add($event);
+        if (\is_array($userEvents)) {
+            $userEvents = new ArrayCollection($userEvents);
+        }
+
+        $this->userEvents = $userEvents;
+
+        return $this;
+    }
+
+    public function addUserEvent(Event $event): self
+    {
+        if (!$this->userEvents->contains($event)) {
+            $this->userEvents->add($event);
         }
 
         return $this;
     }
 
-    public function removeEvent(Event $event): self
+    /**
+     * @return Collection<User>
+     */
+    public function getParticipatingEvents(): Collection
     {
-        if ($this->events->contains($event)) {
-            $this->events->removeElement($event);
+        return $this->participatingEvents;
+    }
+
+    /**
+     * @param User[]|Collection<User> $participatingEvents
+     */
+    public function setParticipatingEvents(array|Collection $participatingEvents): self
+    {
+        if (\is_array($participatingEvents)) {
+            $participatingEvents = new ArrayCollection($participatingEvents);
         }
+
+        $this->participatingEvents = $participatingEvents;
 
         return $this;
     }

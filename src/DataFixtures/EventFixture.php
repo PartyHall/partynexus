@@ -36,6 +36,11 @@ class EventFixture extends Fixture implements DependentFixtureInterface
         $manager->persist($event);
         $this->addReference('event__1', $event);
 
+        $event->setParticipants([
+            $this->getReference('user__eventmaker'),
+            $this->getReference('user__user'),
+        ]);
+
         for ($i = 0; $i < 100; $i++) {
             $event = (new Event())
                 ->setName($faker->words(3, true))

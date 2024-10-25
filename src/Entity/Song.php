@@ -28,6 +28,10 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 // @TODO: A built song should have nothing extracted from .phk that can be exported by the admin and that is used by the
 // appliance to sync songs
+
+/**
+ * @see App\Doctrine\FilterSongOnReadinessExtension
+ */
 #[ApiResource(
     operations: [
         new GetCollection(

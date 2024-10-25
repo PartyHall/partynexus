@@ -17,7 +17,7 @@ use Symfony\Component\Security\Http\Authenticator\Passport\SelfValidatingPasspor
 class ApplianceAuthenticator extends AbstractAuthenticator
 {
     public function __construct(
-        private ApplianceRepository $repository,
+        private readonly ApplianceRepository $repository,
     )
     {
     }
