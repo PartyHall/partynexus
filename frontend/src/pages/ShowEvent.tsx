@@ -10,7 +10,7 @@ import EventTimelapse from "../components/event_display/EventTimelapse";
 import Loader from "../components/Loader";
 import { PnEvent } from "../sdk/responses/event";
 import { SdkError } from "../sdk/responses/error";
-import { useAsyncEffect } from "ahooks";
+import { useAsyncEffect, useTitle } from "ahooks";
 import { useAuth } from "../hooks/auth";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -24,6 +24,9 @@ export default function ShowEventPage() {
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [event, setEvent] = useState<PnEvent | null>(null);
+    const [pageName, setPageName] = useState<string>(t('event.show_one'));
+
+    useTitle(pageName + ' - PartyHall');
 
     useAsyncEffect(async () => {
         if (!id) {
@@ -33,7 +36,9 @@ export default function ShowEventPage() {
 
         setLoading(true);
         try {
-            setEvent(await api.events.get(id));
+            const event = await api.events.get(id);
+            setEvent(event);
+            setPageName(event?.name ?? t('event.show_one'));
         } catch (e) {
             if (e instanceof SdkError && e.status == 404) {
                 setError('not_found.event');
@@ -42,7 +47,7 @@ export default function ShowEventPage() {
             }
         }
         setLoading(false);
-    }, [id])
+    }, [id]);
 
     const displayOwnerStuff = isAdminOrEventOwner(event);
 

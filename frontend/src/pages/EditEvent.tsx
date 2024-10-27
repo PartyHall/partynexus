@@ -4,7 +4,7 @@ import { PnEvent } from "../sdk/responses/event";
 import { SdkError } from "../sdk/responses/error";
 import { Typography } from "antd";
 
-import { useAsyncEffect } from "ahooks";
+import { useAsyncEffect, useTitle } from "ahooks";
 import { useAuth } from "../hooks/auth";
 import { useParams } from "react-router-dom";
 import { useState } from "react";
@@ -18,6 +18,8 @@ export default function EditEventPage() {
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [event, setEvent] = useState<PnEvent | null>(null);
+
+    useTitle(t('event.editor.edit_title', {title: event?.name ?? '...'}) + ' - PartyHall');
 
     useAsyncEffect(async () => {
         if (!id) {

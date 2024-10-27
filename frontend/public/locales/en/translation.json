@@ -1,5 +1,6 @@
 {
     "generic": {
+        "home": "Home",
         "username": "Username",
         "password": "Password",
         "email": "Email",
@@ -24,7 +25,12 @@
         "login_bt": "Login",
         "register_bt": "Register"
     },
+    "my_account": {
+        "title": "My account",
+        "logout": "Logout"
+    },
     "karaoke": {
+        "title": "Song list",
         "search": "Search a song...",
         "by": "By {{artist}}",
         "song_count": "{{total}} songs",

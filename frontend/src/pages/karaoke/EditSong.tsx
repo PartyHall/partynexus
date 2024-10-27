@@ -1,3 +1,4 @@
+import { useAsyncEffect, useTitle } from "ahooks";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -6,8 +7,8 @@ import PnSong from "../../sdk/responses/song";
 import SongEditor from "../../components/song_editor/SongEditor";
 import { Typography } from "antd";
 
-import { useAsyncEffect } from "ahooks";
 import { useAuth } from "../../hooks/auth";
+import { useTranslation } from "react-i18next";
 
 export default function EditSongPage() {
     const { id } = useParams();
@@ -18,6 +19,8 @@ export default function EditSongPage() {
     const [fetchingSong, setFetchingSong] = useState<boolean>(true);
     const [song, setSong] = useState<PnSong | null>(null);
 
+    const {t} = useTranslation();
+    useTitle(t('karaoke.editor.title_edit', {title: song?.title ?? '...'}) + ' - PartyHall');
 
     useAsyncEffect(async () => {
         try {
