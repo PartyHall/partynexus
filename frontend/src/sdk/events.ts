@@ -36,4 +36,50 @@ export class Events {
             x => PnPicture.fromJson(x),
         );
     }
+
+    async create(event: PnEvent): Promise<PnEvent|null> {
+        const body: any = {
+            'name': event.name,
+            'author': event.author,
+            'datetime': event.datetime.toISOString(),
+            'location': event.location,
+        };
+
+        const resp = await this.sdk.post('/api/events', body);
+        const data = await resp.json();
+
+        return PnEvent.fromJson(data);
+    }
+
+    async update(event: PnEvent): Promise<PnEvent|null> {
+        const body: any = {
+            'name': event.name,
+            'author': event.author,
+            'datetime': event.datetime.toISOString(),
+            'location': event.location,
+        };
+
+        const resp = await this.sdk.patch(`/api/events/${event.id}`, body);
+        const data = await resp.json();
+
+        return PnEvent.fromJson(data);
+    }
+
+    async upsert(event: PnEvent): Promise<PnEvent|null> {
+        if (event.id) {
+            return this.update(event);
+        }
+
+        return this.create(event);
+    }
+
+    async updateParticipants(event: PnEvent, participants: string[]): Promise<PnEvent|null> {
+        const resp = await this.sdk.patch(`/api/events/${event.id}`, {
+            'participants': participants,
+        });
+
+        const data = await resp.json();
+
+        return PnEvent.fromJson(data);
+    }
 }

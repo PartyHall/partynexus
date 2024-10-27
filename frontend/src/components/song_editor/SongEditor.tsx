@@ -14,7 +14,7 @@ type Props = {
 export default function SongEditor({ song: initialSong }: Props) {
     const [song, setSong] = useState<PnSong | null>(initialSong);
     const { t } = useTranslation();
-    const isCreating = !song;
+    const isCreating = !initialSong;
 
     return <Flex vertical gap={16}>
         <Typography.Title className="blue-glow">
@@ -24,14 +24,14 @@ export default function SongEditor({ song: initialSong }: Props) {
         <SongEditorForm isCreating={isCreating} song={song} setSong={setSong} />
 
         {
-            !isCreating &&
+            !isCreating && song &&
             <>
                 <Flex vertical gap={8}>
                     <Title className="blue-glow" style={{ margin: 0 }}>{t('karaoke.editor.song_files')}</Title>
 
                     <SongFileUploader type="instrumental" song={song} />
                     {
-                        song.format === 'cdg' &&
+                        song?.format === 'cdg' &&
                         <SongFileUploader type="lyrics" song={song} />
                     }
                     <SongFileUploader type="vocals" song={song} />

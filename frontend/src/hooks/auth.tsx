@@ -1,6 +1,7 @@
 import { ReactNode, createContext, useCallback, useContext, useState } from 'react';
 
 import Cookies from 'js-cookie';
+import { PnEvent } from '../sdk/responses/event';
 import { SDK } from '../sdk';
 
 const BASE_URL = import.meta.env.VITE_API_URL;
@@ -36,6 +37,7 @@ type AuthContextProps = AuthProps & {
     setToken: (token: string, refresh: string) => void;
     isLoggedIn: () => boolean;
     isGranted: (role: string) => boolean;
+    isAdminOrEventOwner: (event?: PnEvent|null) => boolean;
     logout: () => void;
 };
 
@@ -49,6 +51,7 @@ const AuthContext = createContext<AuthContextProps>({
     login: async () => { },
     setToken: () => { },
     isGranted: () => false,
+    isAdminOrEventOwner: () => false,
     isLoggedIn: () => false,
     logout: () => { },
 });
@@ -104,6 +107,18 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
         return context.api.tokenUser.roles.includes(role);
     }
 
+    const isAdminOrEventOwner = (event?: PnEvent|null) => {
+        if (isGranted('ROLE_ADMIN')) {
+            return true;
+        }
+
+        if (!event) {
+            return false;
+        }
+
+        return event.owner.iri === context.api.tokenUser?.iri;
+    }
+
     return (
         <AuthContext.Provider
             value={{
@@ -111,6 +126,7 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
                 login,
                 setToken,
                 isGranted,
+                isAdminOrEventOwner,
                 isLoggedIn,
                 logout,
             }}

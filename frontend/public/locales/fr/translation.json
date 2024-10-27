@@ -54,12 +54,45 @@
         "no_events": "Pas d'évènements trouvés",
         "create_bt": "Nouveau",
         "id": "ID PartyNexus",
+        "name": "Nom",
         "author": "Auteur",
         "location": "Lieu",
         "datetime": "Le",
         "download_export": "Tout télécharger",
+        "edit": "Editer",
+        "see": "Ouvrir",
+        "editor": {
+            "create_title": "Créer un évènement",
+            "edit_title": "Édition de {{title}}",
+            "save": "Sauvegarder",
+            "participants": "Participants",
+            "delete": {
+                "title": "Expulser un utilisateur",
+                "description": "Vous allez expulser {{name}} de l'évènement.",
+                "cancel": "Annuler",
+                "yes": "Expulser",
+                "failure": {
+                    "title": "Échec de l'expulsion",
+                    "description": "Une erreur est survenue lors de l'expulsion de {{name}}."
+                }
+            },
+            "add": {
+                "title": "Ajouter un participant",
+                "failure": {
+                    "title": "Échec de l'ajout",
+                    "description": "Une erreur est survenue lors de l'ajout d'un participant."
+                }
+            },
+            "search": {
+                "failure": {
+                    "title": "Échec de la recherche",
+                    "description": "Une erreur est survenue lors de la recherche."
+                }
+            }
+        },
         "pictures": {
             "title": "Photos",
+            "no_pictures": "Pas de photo disponibles pour l'instant",
             "timelapse": "Timelapse"
         },
         "karaoke": {

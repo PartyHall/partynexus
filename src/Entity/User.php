@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
@@ -17,13 +19,16 @@ use Symfony\Component\Security\Core\User\UserInterface;
 #[ApiResource(
     operations: [
         new Get(
+            normalizationContext: ['groups' => [self::API_GET_ITEM]],
             security: 'object == user or is_granted("ROLE_ADMIN")'
         ),
         new GetCollection(
+            normalizationContext: ['groups' => [self::API_GET_COLLECTION]],
             security: 'is_granted("ROLE_ADMIN")',
         )
     ]
 )]
+#[ApiFilter(SearchFilter::class, properties: ['username' => 'ipartial'])]
 #[ORM\Entity]
 #[ORM\Table('nexus_user')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
@@ -56,6 +61,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: Types::STRING, length: 255)]
     #[Assert\NotBlank]
     #[Assert\Email]
+    #[Groups([
+        self::API_GET_ITEM,
+    ])]
     private string $email;
 
     #[ORM\Column(type: Types::JSON)]

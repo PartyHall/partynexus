@@ -54,12 +54,45 @@
         "no_events": "No event found",
         "create_bt": "New",
         "id": "PartyNexus ID",
+        "name": "Name",
         "author": "Author",
         "location": "Location",
         "datetime": "On",
         "download_export": "Download everything",
+        "edit": "Edit",
+        "see": "See",
+        "editor": {
+            "create_title": "Create an event",
+            "edit_title": "Editing {{title}}",
+            "save": "Save",
+            "participants": "Participants",
+            "delete": {
+                "title": "Kicking a user",
+                "description": "You are going to kick {{name}} from the event.",
+                "cancel": "Cancel",
+                "yes": "Remove",
+                "failure": {
+                    "title": "Kick failed",
+                    "description": "An error occured while kicking {{name}} out of the event."
+                }
+            },
+            "add": {
+                "title": "Add participant",
+                "failure": {
+                    "title": "Adding failed",
+                    "description": "An error occured while adding the user to the event."
+                }
+            },
+            "search": {
+                "failure": {
+                    "title": "Searching failed",
+                    "description": "An error occured while searching for a user."
+                }
+            }
+        },
         "pictures": {
             "title": "Photos",
+            "no_pictures": "No pictures available yet.",
             "timelapse": "Timelapse"
         },
         "karaoke": {

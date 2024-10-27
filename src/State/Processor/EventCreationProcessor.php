@@ -13,7 +13,7 @@ use Symfony\Component\DependencyInjection\Attribute\AsDecorator;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 #[AsDecorator('api_platform.doctrine.orm.state.persist_processor')]
-readonly class EventProcessor implements ProcessorInterface
+readonly class EventCreationProcessor implements ProcessorInterface
 {
     public function __construct(
         private ProcessorInterface $decorated,

@@ -46,12 +46,20 @@ export default function EventPictureBar({ event }: { event: PnEvent }) {
         <Typography.Title>{t('event.pictures.title')}</Typography.Title>
         <Loader loading={loadingPictures}>
             <Flex gap={8} align="center" justify="start">
-                <Image.PreviewGroup items={pictures.map(x => x.iri + '/download')}>
-                    {firstThreePictures.map(x => <PictureCard key={x.iri} picture={x} />)}
-                </Image.PreviewGroup>
                 {
-                    pictures.length !== firstThreePictures.length &&
-                    <>More...</>
+                    pictures.length > 0 && <>
+                        <Image.PreviewGroup items={pictures.map(x => x.iri + '/download')}>
+                            {firstThreePictures.map(x => <PictureCard key={x.iri} picture={x} />)}
+                        </Image.PreviewGroup>
+                        {
+                            pictures.length !== firstThreePictures.length &&
+                            <>More...</>
+                        }
+                    </>
+                }
+
+                {
+                    pictures.length === 0 && <Typography.Text>{t('event.pictures.no_pictures')}</Typography.Text>
                 }
             </Flex>
         </Loader>

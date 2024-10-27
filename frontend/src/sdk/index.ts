@@ -1,10 +1,12 @@
+import ValidationError, { ValidationErrors } from "./responses/validation_error";
 import Auth from "./auth";
 import { Events } from "./events";
 import Karaoke from "./karaoke";
 import { PnTokenUser } from "./responses/auth";
 import { SdkError } from "./responses/error";
+import Users from "./users";
+
 import dayjs from "dayjs";
-import ValidationError, { ValidationErrors } from "./responses/validation_error";
 
 export type StoreToken = (
     token: string | null,
@@ -27,6 +29,7 @@ export class SDK {
     public auth: Auth;
     public events: Events;
     public karaoke: Karaoke;
+    public users: Users;
 
     public constructor(
         baseUrl: string,
@@ -41,6 +44,7 @@ export class SDK {
         this.auth = new Auth(this);
         this.events = new Events(this);
         this.karaoke = new Karaoke(this);
+        this.users = new Users(this);
 
         this.storeToken = storeToken || (() => {});
 
@@ -132,7 +136,7 @@ export class SDK {
                 options.headers = {};
             }
 
-            options.headers['Content-Type'] = 'application/json';
+            options.headers['Content-Type'] = 'application/merge-patch+json';
             options.body = JSON.stringify(data);
         }
 
