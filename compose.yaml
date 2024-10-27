@@ -49,7 +49,7 @@ services:
     ports:
       - '127.0.0.1:5432:5432'
     volumes:
-      - './0_DATA/db:/var/lib/postgresql/data:rw'
+      - './docker/postgres:/docker-entrypoint-initdb.d/'
 ###< doctrine/doctrine-bundle ###
 
   frontend:

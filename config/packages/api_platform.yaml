@@ -4,10 +4,15 @@ api_platform:
     formats:
         jsonld: ['application/ld+json']
         json: ['application/json']
+    patch_formats:
+        json: ['application/merge-patch+json']
+        jsonapi: ['application/vnd.api+json']
     docs_formats:
         jsonld: ['application/ld+json']
         jsonopenapi: ['application/vnd.openapi+json']
         html: ['text/html']
+    mercure:
+        include_type: true
     defaults:
         stateless: true
         cache_headers:

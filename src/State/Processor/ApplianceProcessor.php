@@ -21,7 +21,7 @@ readonly class ApplianceProcessor implements ProcessorInterface
     {
     }
 
-    public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = [])
+    public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): mixed
     {
         if ($data instanceof Appliance && $operation instanceof Post) {
             if (($user = $this->security->getUser()) instanceof User) {

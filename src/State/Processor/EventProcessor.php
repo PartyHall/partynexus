@@ -22,7 +22,7 @@ readonly class EventProcessor implements ProcessorInterface
     {
     }
 
-    public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = [])
+    public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): mixed
     {
         if ($data instanceof Event && $operation instanceof Post) {
             $user = $this->security->getUser();

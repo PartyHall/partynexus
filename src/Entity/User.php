@@ -37,6 +37,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups([
         self::API_GET_ITEM,
         self::API_GET_COLLECTION,
+        Event::API_GET_ITEM,
     ])]
     private int $id;
 
@@ -45,6 +46,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups([
         self::API_GET_ITEM,
         self::API_GET_COLLECTION,
+        Event::API_GET_ITEM,
     ])]
     private ?string $username = null;
 
@@ -63,10 +65,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Appliance::class, mappedBy: 'owner')]
     private Collection $appliances;
 
-    #[ORM\OneToMany(targetEntity: Event::class, mappedBy: 'owner')]
+    #[ORM\OneToMany(targetEntity: Event::class, mappedBy: 'owner', cascade: ['PERSIST'])]
     private Collection $userEvents;
 
-    #[ORM\ManyToMany(targetEntity: Event::class, mappedBy: 'participants')]
+    #[ORM\ManyToMany(targetEntity: Event::class, mappedBy: 'participants', cascade: ['PERSIST'])]
     private Collection $participatingEvents;
 
     public function __construct()
@@ -121,6 +123,23 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getAppliances(): Collection
     {
         return $this->appliances;
+    }
+
+    public function hasAppliance(UserInterface $appliance): bool
+    {
+        return $this->appliances->contains($appliance);
+    }
+
+    /**
+     * @param Appliance[]|Collection<Appliance> $appliances
+     */
+    public function setAppliances(array|Collection $appliances): void
+    {
+        if (\is_array($appliances)) {
+            $appliances = new ArrayCollection($appliances);
+        }
+
+        $this->appliances = $appliances;
     }
 
     public function getRoles(): array

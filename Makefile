@@ -14,14 +14,17 @@ migrations:
 
 migrate:
 	docker compose exec app php bin/console doctrine:migrations:migrate -vv --env=dev --no-interaction
+	docker compose exec app php bin/console doctrine:migrations:migrate -vv --env=test --no-interaction
 
 clear:
 	docker compose exec app php bin/console cache:clear -v --env=dev
 
 reset-db:
 	docker compose exec app bin/console doctrine:schema:drop --force --full-database
+	docker compose exec app bin/console doctrine:schema:drop --env=test --force --full-database
 	$(MAKE) migrate
 	docker compose exec app bin/console doctrine:fixtures:load --no-interaction
+	docker compose exec app bin/console doctrine:fixtures:load --env=test --no-interaction
 
 lint:
 	docker compose exec app vendor/bin/php-cs-fixer fix --dry-run -vv --diff
@@ -41,9 +44,5 @@ lint-ts:
 	@docker compose exec frontend npm run lint -- --fix
 
 tests:
-	@docker compose exec app bin/console doctrine:schema:drop --env=test --full-database --force
-	@docker compose exec app bin/console doctrine:database:create --env=test --if-not-exists
-	@docker compose exec app bin/console doctrine:migrations:migrate --env=test --no-interaction
-	@docker compose exec app bin/console doctrine:fixtures:load --env=test --no-interaction
 	@docker compose exec app bin/phpunit
 
