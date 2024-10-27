@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
@@ -17,13 +19,16 @@ use Symfony\Component\Security\Core\User\UserInterface;
 #[ApiResource(
     operations: [
         new Get(
+            normalizationContext: ['groups' => [self::API_GET_ITEM]],
             security: 'object == user or is_granted("ROLE_ADMIN")'
         ),
         new GetCollection(
+            normalizationContext: ['groups' => [self::API_GET_COLLECTION]],
             security: 'is_granted("ROLE_ADMIN")',
         )
     ]
 )]
+#[ApiFilter(SearchFilter::class, properties: ['username' => 'ipartial'])]
 #[ORM\Entity]
 #[ORM\Table('nexus_user')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
@@ -33,10 +38,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Id]
     #[ORM\Column(type: Types::INTEGER)]
-    #[ORM\GeneratedValue(strategy: 'AUTO')]
+    #[ORM\GeneratedValue(strategy: 'SEQUENCE')]
     #[Groups([
         self::API_GET_ITEM,
         self::API_GET_COLLECTION,
+        Event::API_GET_ITEM,
     ])]
     private int $id;
 
@@ -45,6 +51,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups([
         self::API_GET_ITEM,
         self::API_GET_COLLECTION,
+        Event::API_GET_ITEM,
     ])]
     private ?string $username = null;
 
@@ -54,6 +61,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: Types::STRING, length: 255)]
     #[Assert\NotBlank]
     #[Assert\Email]
+    #[Groups([
+        self::API_GET_ITEM,
+    ])]
     private string $email;
 
     #[ORM\Column(type: Types::JSON)]
@@ -63,10 +73,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Appliance::class, mappedBy: 'owner')]
     private Collection $appliances;
 
-    #[ORM\OneToMany(targetEntity: Event::class, mappedBy: 'owner')]
+    #[ORM\OneToMany(targetEntity: Event::class, mappedBy: 'owner', cascade: ['PERSIST'])]
     private Collection $userEvents;
 
-    #[ORM\ManyToMany(targetEntity: Event::class, mappedBy: 'participants')]
+    #[ORM\ManyToMany(targetEntity: Event::class, mappedBy: 'participants', cascade: ['PERSIST'])]
     private Collection $participatingEvents;
 
     public function __construct()
@@ -121,6 +131,23 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getAppliances(): Collection
     {
         return $this->appliances;
+    }
+
+    public function hasAppliance(UserInterface $appliance): bool
+    {
+        return $this->appliances->contains($appliance);
+    }
+
+    /**
+     * @param Appliance[]|Collection<Appliance> $appliances
+     */
+    public function setAppliances(array|Collection $appliances): void
+    {
+        if (\is_array($appliances)) {
+            $appliances = new ArrayCollection($appliances);
+        }
+
+        $this->appliances = $appliances;
     }
 
     public function getRoles(): array

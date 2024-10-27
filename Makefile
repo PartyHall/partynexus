@@ -1,3 +1,5 @@
+.PHONY: tests migrations
+
 USER := $(shell id -u):$(shell id -g)
 
 up:
@@ -7,19 +9,22 @@ up:
 shell:
 	docker compose exec app bash
 
-gen-mig:
+migrations:
 	docker compose exec app php bin/console doctrine:migrations:diff
 
 migrate:
 	docker compose exec app php bin/console doctrine:migrations:migrate -vv --env=dev --no-interaction
+	docker compose exec app php bin/console doctrine:migrations:migrate -vv --env=test --no-interaction
 
 clear:
 	docker compose exec app php bin/console cache:clear -v --env=dev
 
 reset-db:
 	docker compose exec app bin/console doctrine:schema:drop --force --full-database
+	docker compose exec app bin/console doctrine:schema:drop --env=test --force --full-database
 	$(MAKE) migrate
 	docker compose exec app bin/console doctrine:fixtures:load --no-interaction
+	docker compose exec app bin/console doctrine:fixtures:load --env=test --no-interaction
 
 lint:
 	docker compose exec app vendor/bin/php-cs-fixer fix --dry-run -vv --diff
@@ -37,4 +42,7 @@ gen-key:
 lint-ts:
 	@docker compose exec frontend npx prettier . --write
 	@docker compose exec frontend npm run lint -- --fix
+
+tests:
+	@docker compose exec app bin/phpunit
 

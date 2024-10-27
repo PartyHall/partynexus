@@ -7,14 +7,15 @@ use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
-use ApiPlatform\Metadata\Put;
 use App\Repository\EventRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Types\UuidType;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -28,16 +29,19 @@ use Symfony\Component\Validator\Constraints as Assert;
             order: ['datetime' => 'DESC'],
             normalizationContext: ['groups' => [self::API_GET_COLLECTION]],
         ),
-        new Get(normalizationContext: ['groups' => [self::API_GET_ITEM]]),
+        new Get(
+            normalizationContext: ['groups' => [self::API_GET_ITEM]],
+            security: 'is_granted("ROLE_ADMIN") or object.getOwner().hasAppliance(user) or object.hasParticipant(user)'
+        ),
         new Post(
             normalizationContext: ['groups' => [self::API_GET_ITEM]],
             denormalizationContext: ['groups' => [self::API_CREATE]],
             security: 'is_granted("ROLE_APPLIANCE") or is_granted("ROLE_ADMIN")',
         ),
-        new Put(
+        new Patch(
             normalizationContext: ['groups' => [self::API_GET_ITEM]],
             denormalizationContext: ['groups' => [self::API_UPDATE]],
-            security: 'is_granted("ROLE_ADMIN") or user == object.owner'
+            security: 'is_granted("ROLE_ADMIN") or user == object.getOwner()'
         ),
     ],
 )]
@@ -117,7 +121,7 @@ class Event {
     #[ORM\OneToMany(targetEntity: Export::class, mappedBy: 'event')]
     private Collection $exports;
 
-    #[ORM\ManyToMany(targetEntity: Event::class, inversedBy: 'participatingEvents')]
+    #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'participatingEvents')]
     #[Groups([
         self::API_GET_ITEM,
         self::API_CREATE,
@@ -215,10 +219,34 @@ class Event {
         return $this->pictures;
     }
 
+    /**
+     * @param Picture[]|Collection<Picture> $pictures
+     */
+    public function setPictures(array|Collection $pictures): void
+    {
+        if (\is_array($pictures)) {
+            $pictures = new ArrayCollection($pictures);
+        }
+
+        $this->pictures = $pictures;
+    }
+
     /** @return Collection<Export> */
     public function getExports(): Collection
     {
         return $this->exports;
+    }
+
+    /**
+     * @param Export[]|Collection<Export> $exports
+     */
+    public function setExports(array|Collection $exports): void
+    {
+        if (\is_array($exports)) {
+            $exports = new ArrayCollection($exports);
+        }
+
+        $this->exports = $exports;
     }
 
     public function getParticipants(): Collection
@@ -226,12 +254,26 @@ class Event {
         return $this->participants;
     }
 
-    public function setParticipants(array|Collection $participants): void
+    public function hasParticipant(UserInterface $user): bool
+    {
+        if ($this->getOwner() === $user) {
+            return true;
+        }
+
+        return $this->participants->contains($user);
+    }
+
+    /**
+     * @param User[]|Collection<User> $participants
+     */
+    public function setParticipants(array|Collection $participants): self
     {
         if (\is_array($participants)) {
             $participants = new ArrayCollection($participants);
         }
 
         $this->participants = $participants;
+
+        return $this;
     }
 }

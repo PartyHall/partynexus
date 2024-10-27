@@ -1,20 +1,25 @@
+import { Button, Flex, Typography } from "antd";
+import { useNavigate, useParams } from "react-router-dom"
+
 import EventActionBar from "../components/event_display/EventActionBar";
 import EventInfos from "../components/event_display/EventInfos";
 import EventPictureBar from "../components/event_display/EventPictureBar";
+import EventSongs from "../components/event_display/EventSongs";
+import EventTimelapse from "../components/event_display/EventTimelapse";
+
 import Loader from "../components/Loader";
 import { PnEvent } from "../sdk/responses/event";
 import { SdkError } from "../sdk/responses/error";
-import { Typography } from "antd";
 import { useAsyncEffect } from "ahooks";
 import { useAuth } from "../hooks/auth";
-import { useParams } from "react-router-dom"
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 export default function ShowEventPage() {
     const { id } = useParams();
-    const { api, isGranted } = useAuth();
+    const { api, isAdminOrEventOwner } = useAuth();
     const { t } = useTranslation();
+    const navigate = useNavigate();
 
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
@@ -39,8 +44,7 @@ export default function ShowEventPage() {
         setLoading(false);
     }, [id])
 
-    /* @TODO: Admin or if user is owner of the event */
-    const displayOwnerStuff = isGranted('ROLE_ADMIN');
+    const displayOwnerStuff = isAdminOrEventOwner(event);
 
     return <Loader loading={loading}>
         {
@@ -48,17 +52,18 @@ export default function ShowEventPage() {
         }
         {
             !error && event && <>
-                <Typography.Title className="blue-glow">{event.name}</Typography.Title>
+                <Flex justify="space-between" align="center" style={{ marginRight: '1em' }}>
+                    <Typography.Title className="blue-glow">{event.name}</Typography.Title>
+                    {displayOwnerStuff && <Button onClick={() => navigate(`/events/${event.id}/edit`)}>{t('event.edit')}</Button>}
+                </Flex>
 
                 <EventInfos event={event} displayOwnerStuff={displayOwnerStuff} />
                 <EventActionBar event={event} displayOwnerStuff={displayOwnerStuff} />
                 <EventPictureBar event={event} />
 
-                {/* Only if the event is finished & the timelapse is generated */}
-                <Typography.Title>{t('event.pictures.timelapse')}</Typography.Title>
-
-                <Typography.Title>{t('event.karaoke.sessions')}</Typography.Title>
+                <EventTimelapse event={event} />
+                <EventSongs event={event} />
             </>
         }
-    </Loader>
+    </Loader >
 }

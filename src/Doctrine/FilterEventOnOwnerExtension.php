@@ -14,7 +14,7 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 
 // https://api-platform.com/docs/core/extensions/
-final readonly class FilterEventOnOwnerExtension implements QueryCollectionExtensionInterface, QueryItemExtensionInterface
+final readonly class FilterEventOnOwnerExtension implements QueryCollectionExtensionInterface
 {
     public function __construct(
         private Security $security,
@@ -23,11 +23,6 @@ final readonly class FilterEventOnOwnerExtension implements QueryCollectionExten
     }
 
     public function applyToCollection(QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, ?Operation $operation = null, array $context = []): void
-    {
-        $this->addWhere($queryBuilder, $resourceClass);
-    }
-
-    public function applyToItem(QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, array $identifiers, ?Operation $operation = null, array $context = []): void
     {
         $this->addWhere($queryBuilder, $resourceClass);
     }

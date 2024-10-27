@@ -1,4 +1,5 @@
 import dayjs from "dayjs";
+import { EmbeddedUser } from "./user";
 
 export class PnListEvent {
     iri: string;
@@ -46,21 +47,31 @@ export class PnEvent {
     datetime: dayjs.Dayjs
     location: string|null;
 
-    owner: string;
+    over: boolean;
 
-    constructor(iri: string, id: string, name: string, author: string|null, datetime: dayjs.Dayjs, location: string|null, owner: string) {
-        this.iri = iri;
-        this.id = id;
-        this.name = name; 
-        this.author = author;
-        this.datetime = datetime;
-        this.location = location;
+    owner: EmbeddedUser;
+    participants: EmbeddedUser[];
+
+    constructor(data: Record<string, any>) {
+        const owner = EmbeddedUser.fromUser(data['owner']);
+        if (!owner) {
+            throw 'No owner in the response!';
+        }
+
+        this.iri = data['@id'];
+        this.id = data['id'];
+        this.name = data['name'];
+        this.author = data['author'];
+        this.datetime = dayjs(data['datetime']);
+        this.location = data['location'];
+        this.owner = owner;
+        this.over = data['over'];
+
+        this.participants = EmbeddedUser.fromArray(data['participants']);
 
         /**
          * @TODO: Amt images handtaken, amt images unattended
          */
-
-        this.owner = owner;
     }
 
     static fromJson(data: Record<string, any>|null): PnEvent|null {
@@ -68,14 +79,6 @@ export class PnEvent {
             return null;
         }
 
-        return new PnEvent(
-            data['@id'],
-            data['id'],
-            data['name'],
-            data['author'],
-            dayjs(data['datetime']),
-            data['location'],
-            data['owner'],
-        );
+        return new PnEvent(data);
     }
 }

@@ -9,7 +9,7 @@ export default function EventCard({ event }: { event: PnListEvent }) {
     return <Card
         size="small"
         title={event.name}
-        extra={<Link to={`/events/${event.id}`}>See</Link>}
+        extra={<Link to={`/events/${event.id}`}>{t('event.see')}</Link>}
         style={{width: '15em'}}
     >
         <Flex vertical>
