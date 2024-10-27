@@ -4,7 +4,7 @@ import EventCard from "../components/EventCard";
 import Loader from "../components/Loader";
 import { PlusOutlined } from '@ant-design/icons';
 import { PnListEvent } from "../sdk/responses/event";
-import { useAsyncEffect } from "ahooks";
+import { useAsyncEffect, useTitle } from "ahooks";
 import { useAuth } from "../hooks/auth";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
@@ -17,6 +17,8 @@ export default function EventsPage() {
 
     const [loaded, setLoaded] = useState<boolean>(false);
     const [events, setEvents] = useState<Collection<PnListEvent> | null>(null);
+
+    useTitle(t('generic.home') + ' - PartyHall');
 
     useAsyncEffect(async () => {
         setLoaded(false);

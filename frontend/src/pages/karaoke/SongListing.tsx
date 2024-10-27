@@ -1,5 +1,5 @@
 import { Button, Flex, Input, Pagination, Switch, Typography } from "antd";
-import { useAsyncEffect, useDebounce } from "ahooks";
+import { useAsyncEffect, useDebounce, useTitle } from "ahooks";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
 import { Collection } from "../../sdk/responses/collection";
@@ -38,6 +38,8 @@ export default function SongListingPage() {
     const debouncedSearch = useDebounce(ctx.search, {
         wait: 500,
     })
+
+    useTitle(t('karaoke.title') + ' - PartyHall');
 
     useAsyncEffect(async () => {
         const params: any = { page: ctx.page + '' }

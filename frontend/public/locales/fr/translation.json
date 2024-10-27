@@ -1,5 +1,6 @@
 {
     "generic": {
+        "home": "Accueil",
         "username": "Pseudo",
         "password": "Mot de passe",
         "email": "Email",
@@ -23,7 +24,12 @@
         "loginBt": "Connexion",
         "registerBt": "S'inscrire"
     },
+    "my_account": {
+        "title": "Mon compte",
+        "logout": "Déconnexion"
+    },
     "karaoke": {
+        "title": "Liste des musiques",
         "search": "Rechercher une musique...",
         "by": "Par {{artist}}",
         "song_count": "{{total}} musiques",
@@ -49,6 +55,7 @@
         }
     },
     "event": {
+        "show_one": "Afficher un évènement",
         "by": "Par {{author}}",
         "at": "Lieu: {{location}}",
         "no_events": "Pas d'évènements trouvés",
