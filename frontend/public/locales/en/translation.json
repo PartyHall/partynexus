@@ -20,10 +20,26 @@
     "login": {
         "title": "Login",
         "tab_login": "Login",
-        "tab_register": "Register",
+        "tab_login_password": "Password",
+        "tab_magic_login": "Magic link",
         "retype_password": "Re-type password",
         "login_bt": "Login",
-        "register_bt": "Register"
+        "register_bt": "Register",
+        "magic_login": {
+            "desc": "A magic link will be sent to your email to authenticate",
+            "sent": "If a user exists with this email, you should receive a link to connect",
+            "rate_limit": "Please wait before trying to login again!"
+        },
+        "magic_login_callback": {
+            "title": "Welcome back!",
+            "desc": "Sign-in in progress...",
+            "fail": {
+                "title": "An error occured",
+                "desc_already_used": "This link was already used",
+                "desc_expired": "This link has expired",
+                "desc_unknown": "An unknown error has occured, see console for more details"
+            }
+        }
     },
     "my_account": {
         "title": "My account",

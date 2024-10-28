@@ -19,10 +19,26 @@
     },
     "login": {
         "tab_login": "Connexion",
-        "tab_register": "S'inscrire",
+        "tab_login_password": "Mot de passe",
+        "tab_magic_login": "Lien magique",
         "retype_password": "Retaper le mot de passe",
-        "loginBt": "Connexion",
-        "registerBt": "S'inscrire"
+        "login_bt": "Connexion",
+        "registerBt": "S'inscrire",
+        "magic_login": {
+            "desc": "Un lien vous sera envoyé par email pour vous connecter",
+            "sent": "Si un utilisateur avec cet email existe vous allez recevoir un lien de connexion",
+            "rate_limit": "Veuillez patienter avant de faire une nouvelle tentative !"
+        },
+        "magic_login_callback": {
+            "title": "Bon retour !",
+            "desc": "Connexion en cours...",
+            "fail": {
+                "title": "Une erreur est survenue",
+                "desc_already_used": "Ce lien à déjà été utilisé",
+                "desc_expired": "Ce lien à expiré",
+                "desc_unknown": "Erreur inconnue, regarder la console pour plus d'infos"
+            }
+        }
     },
     "my_account": {
         "title": "Mon compte",

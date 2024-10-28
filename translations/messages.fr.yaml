@@ -1,0 +1,8 @@
+emails:
+    login:
+        subject: 'Tentative de connexion'
+        welcome: 'Salut %username%!'
+        text1: "Vous avez essayé de vous connecter à PartyHall, voici votre lien magique"
+        link: 'Connexion à PartyHall'
+        warning: "Ce lien va expirer dans 15 minutes. Si vous n'avez pas fait cette demande, contactez votre administrateur PartyHall et supprimez cet email."
+

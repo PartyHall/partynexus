@@ -21,6 +21,7 @@ class UserFixture extends Fixture
         $user = (new User())
             ->setUsername($username)
             ->setEmail($username . '@partyhall.dev')
+            ->setLanguage('en_US')
         ;
 
         foreach ($roles as $role) {

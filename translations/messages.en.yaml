@@ -1,0 +1,7 @@
+emails:
+    login:
+        subject: 'Login request'
+        welcome: 'Welcome %username%!'
+        text1: "You tried to login to PartyHall, here's your magic-link"
+        link: 'Login to PartyHall'
+        warning: 'This will expire in 15 minutes. If you did not request this, please contact your PartyHall administrator and remove this email.'

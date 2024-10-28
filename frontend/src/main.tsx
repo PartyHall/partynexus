@@ -19,6 +19,7 @@ import i18n from "i18next";
 import SongListingPage from './pages/karaoke/SongListing.tsx';
 import NewSongPage from './pages/karaoke/NewSong.tsx';
 import EditSongPage from './pages/karaoke/EditSong.tsx';
+import MagicLoginPage from './pages/login/MagicLoginCallback.tsx';
 
 i18n
     .use(Backend)
@@ -36,6 +37,10 @@ const router = createBrowserRouter([
     {
         path: '/login',
         element: <LoginPage />,
+    },
+    {
+        path: '/magic-login',
+        element: <MagicLoginPage />,
     },
     {
         path: '/',

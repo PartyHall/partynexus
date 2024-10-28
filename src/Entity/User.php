@@ -66,8 +66,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     ])]
     private string $email;
 
+    #[ORM\Column(type: Types::STRING, length: 255, options: ['default' => 'en_US'])]
+    #[Assert\NotBlank]
+    #[Groups([
+        self::API_GET_ITEM,
+    ])]
+    private string $language;
+
     #[ORM\Column(type: Types::JSON)]
     private array $roles = [];
+
+    #[ORM\OneToMany(targetEntity: MagicLink::class, mappedBy: 'user', cascade: ['PERSIST'])]
+    private Collection $magicLinks;
 
     /** @var Collection<Appliance> $appliances  */
     #[ORM\OneToMany(targetEntity: Appliance::class, mappedBy: 'owner')]
@@ -81,6 +91,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function __construct()
     {
+        $this->magicLinks = new ArrayCollection();
         $this->appliances = new ArrayCollection();
         $this->userEvents = new ArrayCollection();
         $this->participatingEvents = new ArrayCollection();
@@ -123,6 +134,33 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setEmail(string $email): self
     {
         $this->email = $email;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<MagicLink>
+     */
+    public function getMagicLinks(): Collection
+    {
+        return $this->magicLinks;
+    }
+
+    public function addMagicLink(MagicLink $link): self
+    {
+        if (!$this->magicLinks->contains($link)) {
+            $link->setUser($this);
+            $this->magicLinks->add($link);
+        }
+
+        return $this;
+    }
+
+    public function removeMagicLink(MagicLink $link): self
+    {
+        if ($this->magicLinks->contains($link)) {
+            $this->magicLinks->removeElement($link);
+        }
 
         return $this;
     }
@@ -239,6 +277,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         }
 
         $this->participatingEvents = $participatingEvents;
+
+        return $this;
+    }
+
+    public function getLanguage(): string
+    {
+        return $this->language;
+    }
+
+    public function setLanguage(string $language): self
+    {
+        $this->language = $language;
 
         return $this;
     }
