@@ -53,7 +53,7 @@ export class PnEvent {
     participants: EmbeddedUser[];
 
     constructor(data: Record<string, any>) {
-        const owner = EmbeddedUser.fromUser(data['owner']);
+        const owner = EmbeddedUser.fromJson(data['owner']);
         if (!owner) {
             throw 'No owner in the response!';
         }

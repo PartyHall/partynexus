@@ -22,7 +22,7 @@ export default function EventsPage() {
 
     useAsyncEffect(async () => {
         setLoaded(false);
-        setEvents(await api.events.getCollection(1, api.tokenUser?.iri ?? ''));
+        setEvents(await api.events.getCollection(1));
         setLoaded(true);
     }, []);
 

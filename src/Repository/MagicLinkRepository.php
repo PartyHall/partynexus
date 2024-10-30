@@ -22,6 +22,7 @@ class MagicLinkRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('m')
             ->join('m.user', 'u')
             ->andWhere('u.email = :email')
+            ->andWhere('u.bannedAt IS NULL')
             ->andWhere('m.code = :code')
             ->setParameter('email', $email)
             ->setParameter('code', $code)

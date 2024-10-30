@@ -20,6 +20,10 @@ type Context = {
     ready: boolean;
 };
 
+/**
+ * @TODO: Use SearchablePaginatedList
+ */
+
 export default function SongListingPage() {
     const { t } = useTranslation();
     const navigate = useNavigate();
@@ -37,7 +41,7 @@ export default function SongListingPage() {
 
     const debouncedSearch = useDebounce(ctx.search, {
         wait: 500,
-    })
+    });
 
     useTitle(t('karaoke.title') + ' - PartyHall');
 

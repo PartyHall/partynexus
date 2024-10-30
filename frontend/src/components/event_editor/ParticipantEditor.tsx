@@ -29,12 +29,18 @@ export default function ParticipantsEditor({ event, setEvent }: { event: PnEvent
         try {
             const currentUsers = event.participants.map(x => x.iri);
 
-            const users = await api.users.search(query);
-            const filteredUsers = users.filter(x => !currentUsers.includes(x.iri) && x.iri !== api.tokenUser?.iri);
-
-            const options = [...filteredUsers.map(x => ({ label: x.username, value: x.iri }))];
-
-            setOptions(options);
+            const users = await api.users.getCollection(query);
+            if (users) {
+                setOptions([
+                    ...users
+                        .items
+                        .filter(x => !currentUsers.includes(x.iri) && x.iri !== api.tokenUser?.iri)
+                        .map(x => ({
+                            label: x.username,
+                            value: x.iri,
+                        }))
+                ]);
+            }
         } catch (e) {
             notif.error({
                 message: t('event.editor.search.failure.title'),

@@ -20,6 +20,9 @@ import SongListingPage from './pages/karaoke/SongListing.tsx';
 import NewSongPage from './pages/karaoke/NewSong.tsx';
 import EditSongPage from './pages/karaoke/EditSong.tsx';
 import MagicLoginPage from './pages/login/MagicLoginCallback.tsx';
+import AdminLayout from './layout/AdminLayout.tsx';
+import AdminUsersPage from './pages/admin/users.tsx';
+import AdminNewUserPage from './pages/admin/new_user.tsx';
 
 i18n
     .use(Backend)
@@ -46,6 +49,20 @@ const router = createBrowserRouter([
         path: '/',
         element: <AuthenticatedLayout />,
         children: [
+            {
+                path: '/admin',
+                element: <AdminLayout />,
+                children: [
+                    {
+                        path: '/admin/users/new',
+                        element: <AdminNewUserPage />
+                    },
+                    {
+                        path: '/admin/users',
+                        element: <AdminUsersPage />
+                    },
+                ],
+            },
             {
                 path: '/events',
                 element: <EventsPage />,

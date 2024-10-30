@@ -5,3 +5,4 @@ framework:
 
         routing:
             'App\Message\MagicLinkNotification': async
+            'App\Message\UserRegisteredNotification': async
