@@ -46,3 +46,12 @@ body {
 
     backface-visibility: hidden;
 }
+
+.EventList {
+    // align-items: stretch; // @TODO: Does not work when few events
+    align-items: start;
+    justify-content: center;
+    flex-wrap: wrap;
+    flex-direction: row;
+    overflow-y: scroll;
+}

@@ -10,11 +10,12 @@ export class Events {
         this.sdk = sdk;
     }
 
-    async getCollection(page: number, owner: string|null = null): Promise<Collection<PnListEvent> | null> {
+    async getCollection(page: number, name: string|null = null): Promise<Collection<PnListEvent> | null> {
         const searchParams = new URLSearchParams();
         searchParams.set('page', `${page}`);
-        if (owner) {
-            searchParams.set('owner', owner);
+
+        if (name) {
+            searchParams.set('name', name);
         }
 
         const resp = await this.sdk.get(`/api/events?${searchParams.toString()}`);
