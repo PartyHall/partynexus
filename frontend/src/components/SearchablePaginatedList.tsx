@@ -1,19 +1,25 @@
 import { Flex, Input, Pagination } from "antd";
-import { Collection } from "../sdk/responses/collection";
-import { useTranslation } from "react-i18next";
 import { ReactNode, useState } from "react";
-import { useSearchParams } from "react-router-dom";
 import { useAsyncEffect, useDebounce } from "ahooks";
-import useNotification from "antd/es/notification/useNotification";
+
+import { Collection } from "../sdk/responses/collection";
 import Loader from "./Loader";
+
+import useNotification from "antd/es/notification/useNotification";
+import { useSearchParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 type Props<T> = {
     searchParameterName?: string | null;
     doSearch: (query: string, page: number) => Promise<Collection<T>|null>;
     renderElement: (element: T) => ReactNode;
+    extraFilters?: ReactNode;
     extraActions?: ReactNode;
+
     searchTranslationKey?: string | null;
     countTranslationKey?: string | null;
+
+    className?: string;
 };
 
 type State<T> = {
@@ -29,9 +35,11 @@ export default function SearchablePaginatedList<T>(props: Props<T>) {
         searchParameterName,
         doSearch,
         renderElement,
+        extraFilters,
         extraActions,
         searchTranslationKey,
         countTranslationKey,
+        className,
     } = props;
 
     const [searchParams, setSearchParams] = useSearchParams();
@@ -45,6 +53,8 @@ export default function SearchablePaginatedList<T>(props: Props<T>) {
     });
 
     const debouncedSearch = useDebounce(ctx.search, { wait: 500 });
+
+    const classNames = className ?? '';
 
     useAsyncEffect(async () => {
         const params: any = { page: ctx.page + '' }
@@ -75,10 +85,10 @@ export default function SearchablePaginatedList<T>(props: Props<T>) {
                 value={ctx.search}
                 onChange={x => setCtx(old => ({ ...old, search: x.target.value, page: 1 }))}
             />
-            {/** @TODO: Extra filters */}
+            { extraFilters }
         </Flex>
 
-        <Flex vertical gap={16} align="stretch" style={{ overflowY: 'scroll', flex: '1' }}>
+        <Flex vertical gap={16} align="stretch" style={{ overflowY: 'scroll', flex: '1' }} className={classNames}>
             <Loader loading={ctx.loading}>
                 {ctx.results?.items.map(renderElement)}
             </Loader >

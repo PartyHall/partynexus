@@ -9,7 +9,11 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
+use App\Controller\EventConcludeController;
+use App\Filter\EventFilter;
 use App\Repository\EventRepository;
+use App\State\Processor\EventConcludeProcessor;
+use App\State\Provider\EventConcludeProvider;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -43,9 +47,18 @@ use Symfony\Component\Validator\Constraints as Assert;
             denormalizationContext: ['groups' => [self::API_UPDATE]],
             security: 'is_granted("ROLE_ADMIN") or user == object.getOwner()'
         ),
+        new Post(
+            uriTemplate: '/events/{id}/conclude',
+            controller: EventConcludeController::class,
+            normalizationContext: ['groups' => [self::API_GET_ITEM]],
+            denormalizationContext: ['groups' => []],
+            security: 'is_granted("ROLE_ADMIN") or user == object.getOwner()',
+            read: false,
+            validate: false,
+        ),
     ],
 )]
-#[ApiFilter(SearchFilter::class, properties: ['owner' => 'exact'])]
+#[ApiFilter(SearchFilter::class, properties: ['name' => 'ipartial'])]
 #[ORM\Entity(repositoryClass: EventRepository::class)]
 class Event {
     public const string API_GET_COLLECTION = 'api:event:get-collection';

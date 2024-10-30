@@ -1,10 +1,13 @@
 import { Flex, Menu, Typography } from "antd";
+import { useAsyncEffect, useTitle } from "ahooks";
+
 import { Collection } from "../sdk/responses/collection";
 import EventCard from "../components/EventCard";
 import Loader from "../components/Loader";
 import { PlusOutlined } from '@ant-design/icons';
 import { PnListEvent } from "../sdk/responses/event";
-import { useAsyncEffect, useTitle } from "ahooks";
+import SearchablePaginatedList from "../components/SearchablePaginatedList";
+
 import { useAuth } from "../hooks/auth";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
@@ -38,22 +41,27 @@ export default function EventsPage() {
 
     return <Loader loading={!loaded}>
         {
-            (isGranted('ROLE_ADMIN')) && <Menu
-                mode="horizontal"
-                items={menu}
-                style={{justifyContent: 'center'}}
-                onClick={x => navigate(x.key)}
-            />
-        }
-
-        {
             events &&
-            <Flex style={{ height: 'min-content' }}>
-                <Flex gap={16} align="start" justify="center" style={{alignItems: 'stretch'}} wrap>
-                    {events.items.map(x => <EventCard key={x.iri} event={x} />)}
-                </Flex>
+            <Flex style={{ height: '100%', overflowY: 'auto' }}>
+                <SearchablePaginatedList
+                    className="EventList"
+                    doSearch={async (query: string, page: number) => api.events.getCollection(
+                        page,
+                        query,
+                    )}
+                    renderElement={(x: PnListEvent) => <EventCard key={x.iri} event={x} />}
+                    extraActions={<Flex>
+                        {
+                            (isGranted('ROLE_ADMIN')) && <Menu
+                                mode="horizontal"
+                                items={menu}
+                                style={{ justifyContent: 'center' }}
+                                onClick={x => navigate(x.key)}
+                            />
+                        }
+                    </Flex>}
+                />
             </Flex>
-
         }
 
         {
