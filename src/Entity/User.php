@@ -8,6 +8,7 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use App\State\Processor\BanUserProcessor;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -34,6 +35,11 @@ use Symfony\Component\Security\Core\User\UserInterface;
             normalizationContext: ['groups' => [self::API_GET_ITEM]],
             denormalizationContext: ['groups' => [self::API_CREATE]],
             security: 'is_granted("ROLE_ADMIN")',
+        ),
+        new Patch(
+            normalizationContext: ['groups' => [self::API_GET_ITEM]],
+            denormalizationContext: ['groups' => [self::API_UPDATE]],
+            security: 'is_granted("ROLE_ADMIN") or user === object',
         ),
         new Post(
             uriTemplate: '/users/{id}/ban',
@@ -64,6 +70,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public const string API_GET_COLLECTION = 'api:user:get-collection';
     public const string API_GET_ITEM = 'api:user:get';
     public const string API_CREATE = 'api:user:create';
+    public const string API_UPDATE = 'api:user:update';
 
     #[ORM\Id]
     #[ORM\Column(type: Types::INTEGER)]
@@ -81,6 +88,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         self::API_GET_ITEM,
         self::API_GET_COLLECTION,
         self::API_CREATE,
+        self::API_UPDATE,
         Event::API_GET_ITEM,
     ])]
     private string $username;
@@ -95,6 +103,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         self::API_GET_ITEM,
         self::API_GET_COLLECTION,
         self::API_CREATE,
+        self::API_UPDATE,
     ])]
     private string $email;
 
@@ -103,6 +112,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups([
         self::API_GET_ITEM,
         self::API_CREATE,
+        self::API_UPDATE,
     ])]
     private string $language;
 

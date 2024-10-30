@@ -1,4 +1,4 @@
-import { EmbeddedUser, PnListUser } from "./responses/user";
+import { PnListUser, User } from "./responses/user";
 import { Collection } from "./responses/collection";
 import { SDK } from ".";
 
@@ -28,11 +28,18 @@ export default class Users {
         return Collection.fromJson(data, x => PnListUser.fromJson(x));
     }
 
-    async register(username: string, email: string, language: string): Promise<EmbeddedUser | null> {
+    async getFromIri(iri: string): Promise<User|null> {
+        const resp = await this.sdk.get(iri);
+        const data = await resp.json();
+    
+        return User.fromJson(data);
+    }
+
+    async register(username: string, email: string, language: string): Promise<User | null> {
         const resp = await this.sdk.post('/api/users', { username, email, language });
         const data = await resp.json();
 
-        return EmbeddedUser.fromJson(data);
+        return User.fromJson(data);
     }
 
     async ban(iri: string): Promise<PnListUser|null> {
@@ -47,5 +54,15 @@ export default class Users {
         const data = await resp.json();
 
         return PnListUser.fromJson(data);
+    }
+
+    async update(id: number, postData: User): Promise<User|null>{
+        const resp = await this.sdk.patch(
+            `/api/users/${id}`,
+            postData,
+        );
+        const data = await resp.json();
+
+        return User.fromJson(data);
     }
 }

@@ -35,7 +35,8 @@ export class SDK {
         baseUrl: string,
         token: string | null,
         refreshToken: string | null,
-        storeToken?: StoreToken
+        storeToken?: StoreToken,
+        onExpired?: OnExpired,
     ) {
         this.baseUrl = baseUrl.replace(/\/$/, '');
         this.token = token;
@@ -47,6 +48,7 @@ export class SDK {
         this.users = new Users(this);
 
         this.storeToken = storeToken || (() => {});
+        this.setOnExpired(onExpired);
 
         if (token) {
             this.setToken(token, refreshToken);
@@ -206,8 +208,8 @@ export class SDK {
         this.storeToken = storeToken;
     }
 
-    setOnExpired(onExpired: OnExpired) {
-        this.onExpired = onExpired;
+    setOnExpired(onExpired?: OnExpired) {
+        this.onExpired = onExpired ?? (() => {});
     }
 
     clearRefresh() {

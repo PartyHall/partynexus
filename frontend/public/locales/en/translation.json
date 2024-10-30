@@ -86,6 +86,11 @@
             "success_desc": "The user {{username}} was unbanned!",
             "error_title": "Failed to unban user",
             "error_desc": "An error occured while unbanning this user. More info in the console."
+        },
+        "editor": {
+            "username": "My username",
+            "email": "My email",
+            "save_bt": "Save"
         }
     },
     "karaoke": {

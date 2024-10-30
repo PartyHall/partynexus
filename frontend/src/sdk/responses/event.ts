@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import { EmbeddedUser } from "./user";
+import { User } from "./user";
 
 export class PnListEvent {
     iri: string;
@@ -49,11 +49,11 @@ export class PnEvent {
 
     over: boolean;
 
-    owner: EmbeddedUser;
-    participants: EmbeddedUser[];
+    owner: User;
+    participants: User[];
 
     constructor(data: Record<string, any>) {
-        const owner = EmbeddedUser.fromJson(data['owner']);
+        const owner = User.fromJson(data['owner']);
         if (!owner) {
             throw 'No owner in the response!';
         }
@@ -67,7 +67,7 @@ export class PnEvent {
         this.owner = owner;
         this.over = data['over'];
 
-        this.participants = EmbeddedUser.fromArray(data['participants']);
+        this.participants = User.fromArray(data['participants']);
 
         /**
          * @TODO: Amt images handtaken, amt images unattended
