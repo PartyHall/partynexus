@@ -54,7 +54,7 @@ export default function EventEditor({ event: initialEvent }: Props) {
             notif.error({
                 message: 'Unknown error occured',
                 description: 'See console for more details',
-            })
+            });
         }
     };
 

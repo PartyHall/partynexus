@@ -44,7 +44,7 @@ type AuthContextProps = AuthProps & {
 
 const defaultProps: AuthProps = {
     loaded: false,
-    api: new SDK(BASE_URL, TOKEN, REFRESH_TOKEN, storeToken),
+    api: new SDK(BASE_URL, TOKEN, REFRESH_TOKEN, storeToken, () => storeToken(null, null)),
 };
 
 const AuthContext = createContext<AuthContextProps>({
@@ -82,7 +82,7 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
                 setContext((oldCtx) => ({
                     ...oldCtx,
                     loaded: true,
-                    api: new SDK(BASE_URL, null, null, storeToken),
+                    api: new SDK(BASE_URL, null, null, storeToken, () => storeToken(null, null)),
                 }));
 
                 return;
@@ -91,7 +91,7 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
             setContext((oldCtx) => ({
                 ...oldCtx,
                 loaded: true,
-                api: new SDK(BASE_URL, token, refresh, storeToken),
+                api: new SDK(BASE_URL, token, refresh, storeToken, () => storeToken(null, null)),
             }));
 
             localStorage.setItem('token', token);

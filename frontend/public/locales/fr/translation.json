@@ -85,6 +85,11 @@
             "success_desc": "L'utilisateur {{username}} a été débanni !",
             "error_title": "Échec du débannissement de l'utilisateur",
             "error_desc": "Une erreur est survenue lors du débannissement de l'utilisateur. Voir la console pour plus d'infos"
+        },
+        "editor": {
+            "username": "Mon pseudo",
+            "email": "Mon email",
+            "save": "Sauvegarder"
         }
     },
     "karaoke": {
