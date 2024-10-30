@@ -1,0 +1,8 @@
+framework:
+    messenger:
+        transports:
+            async: '%env(MESSENGER_TRANSPORT_DSN)%'
+
+        routing:
+            'App\Message\MagicLinkNotification': async
+            'App\Message\UserRegisteredNotification': async

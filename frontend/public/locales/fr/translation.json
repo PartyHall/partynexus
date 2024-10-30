@@ -4,6 +4,8 @@
         "username": "Pseudo",
         "password": "Mot de passe",
         "email": "Email",
+        "search": "Rechercher...",
+        "list_count": "Total: {{total}}",
         "error": {
             "unknown": "Une erreur inconnue s'est produite",
             "unknown_desc": "Il y a eu un soucis. Regardez la console pour plus d'infos",
@@ -19,14 +21,71 @@
     },
     "login": {
         "tab_login": "Connexion",
-        "tab_register": "S'inscrire",
+        "tab_login_password": "Mot de passe",
+        "tab_magic_login": "Lien magique",
         "retype_password": "Retaper le mot de passe",
-        "loginBt": "Connexion",
-        "registerBt": "S'inscrire"
+        "login_bt": "Connexion",
+        "registerBt": "S'inscrire",
+        "magic_login": {
+            "desc": "Un lien vous sera envoyé par email pour vous connecter",
+            "sent": "Si un utilisateur avec cet email existe vous allez recevoir un lien de connexion",
+            "rate_limit": "Veuillez patienter avant de faire une nouvelle tentative !"
+        },
+        "magic_login_callback": {
+            "title": "Bon retour !",
+            "desc": "Connexion en cours...",
+            "fail": {
+                "title": "Une erreur est survenue",
+                "desc_already_used": "Ce lien à déjà été utilisé",
+                "desc_expired": "Ce lien à expiré",
+                "desc_unknown": "Erreur inconnue, regarder la console pour plus d'infos"
+            }
+        }
     },
     "my_account": {
         "title": "Mon compte",
-        "logout": "Déconnexion"
+        "logout": "Déconnexion",
+        "user_management": "Administration des utilisateurs"
+    },
+    "users": {
+        "title": "Utilisateurs",
+        "new_user_bt": "Inscrire un utilisateur",
+        "new": {
+            "username": "Pseudo",
+            "email": "Adresse email",
+            "lang": "Langue",
+            "register": "Inscrire l'utilisateur",
+            "success": {
+                "title": "Utilisateur créé",
+                "desc": "Vous avez inscrit {{username}}, un email sera envoyé dans sa boite pour se connecter."
+            }
+        },
+        "ban": {
+            "tooltip": "Bannir cet utilisateur",
+            "confirm": {
+                "title": "Vous tentez de bannir {{username}}",
+                "desc": "Cette personne ne pourra plus se connecter. Les tokens seront encore valides 15 minutes",
+                "yes": "Je suis sûr(e)",
+                "cancel": "Annuler"
+            },
+            "success_title": "Utilisateur banni",
+            "success_desc": "L'utilisateur {{username}} a été banni !",
+            "error_title": "Échec de banissement",
+            "error_desc": "Une erreur est survenue lors du bannissement de l'utilisateur. Voir la console pour plus d'infos"
+        },
+        "unban": {
+            "tooltip": "Dé-bannir cet utilisateur",
+            "confirm": {
+                "title": "Vous tentez de débannir {{username}}",
+                "desc": "Il pourra à nouveau se connecter.",
+                "yes": "Je suis sûr(e)",
+                "cancel": "Annuler"
+            },
+            "success_title": "Utilisateur dé-banni",
+            "success_desc": "L'utilisateur {{username}} a été débanni !",
+            "error_title": "Échec du débannissement de l'utilisateur",
+            "error_desc": "Une erreur est survenue lors du débannissement de l'utilisateur. Voir la console pour plus d'infos"
+        }
     },
     "karaoke": {
         "title": "Liste des musiques",
@@ -103,7 +162,8 @@
             "timelapse": "Timelapse"
         },
         "karaoke": {
-            "sessions": "Musiques chantées"
+            "sessions": "Musiques chantées",
+            "no_sung_songs": "Pas encore de musique chantées !"
         }
     }
 }

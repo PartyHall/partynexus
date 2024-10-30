@@ -65,6 +65,20 @@ services:
       - './frontend:/app'
     ports:
       - '127.0.0.1:5175:5173'
+    
+  ###> symfony/mailer ###
+  mailer:
+    image: 'axllent/mailpit'
+    ports:
+      - "127.0.0.1:1025:1025"
+      - "127.0.0.1:8025:8025"
+    environment:
+      MP_SMTP_AUTH_ACCEPT_ANY: 1
+      MP_SMTP_AUTH_ALLOW_INSECURE: 1
+  ###< symfony/mailer ###
+  
+  redis:
+    image: 'redis:7.4.1-bookworm'
 
 volumes:
   caddy_data:

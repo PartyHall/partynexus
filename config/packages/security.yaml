@@ -25,6 +25,7 @@ security:
             pattern: ^/api/login
             stateless: true
             provider: user_provider
+            user_checker: App\Security\UserChecker
             json_login:
                 check_path: /api/login
                 success_handler: lexik_jwt_authentication.handler.authentication_success
@@ -41,6 +42,7 @@ security:
             pattern: ^/api
             stateless: true
             provider: appliance_provider
+            user_checker: App\Security\UserChecker
             custom_authenticator: App\Security\ApplianceAuthenticator
             entry_point: jwt
             jwt:
@@ -51,6 +53,7 @@ security:
     
     access_control:
         - { path: ^/api/login, roles: PUBLIC_ACCESS }
+        - { path: ^/api/magic-login, roles: PUBLIC_ACCESS }
         - { path: ^/api/refresh, roles: PUBLIC_ACCESS }
         - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }
 

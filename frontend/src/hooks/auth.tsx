@@ -34,6 +34,7 @@ type AuthProps = {
 
 type AuthContextProps = AuthProps & {
     login: (username: string, password: string) => Promise<void>;
+    magicLogin: (email: string, code: string) => Promise<void>;
     setToken: (token: string, refresh: string) => void;
     isLoggedIn: () => boolean;
     isGranted: (role: string) => boolean;
@@ -49,6 +50,7 @@ const defaultProps: AuthProps = {
 const AuthContext = createContext<AuthContextProps>({
     ...defaultProps,
     login: async () => { },
+    magicLogin: async () => { },
     setToken: () => { },
     isGranted: () => false,
     isAdminOrEventOwner: () => false,
@@ -61,6 +63,11 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
 
     const login = async (username: string, password: string) => {
         const data = await context.api.auth.login(username, password);
+        setToken(data.token, data.refresh_token);
+    };
+
+    const magicLogin = async (email: string, code: string) => {
+        const data = await context.api.auth.magicLogin(email, code);
         setToken(data.token, data.refresh_token);
     };
 
@@ -124,6 +131,7 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
             value={{
                 ...context,
                 login,
+                magicLogin,
                 setToken,
                 isGranted,
                 isAdminOrEventOwner,

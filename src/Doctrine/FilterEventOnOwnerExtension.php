@@ -27,7 +27,7 @@ final readonly class FilterEventOnOwnerExtension implements QueryCollectionExten
         $this->addWhere($queryBuilder, $resourceClass);
     }
 
-    private function addWhere(QueryBuilder $queryBuilder, string $resourceClass): void
+    private function addWhere(QueryBuilder $qb, string $resourceClass): void
     {
         if (
             (Event::class !== $resourceClass)
@@ -37,13 +37,21 @@ final readonly class FilterEventOnOwnerExtension implements QueryCollectionExten
             return;
         }
 
-        $rootAlias = $queryBuilder->getRootAliases()[0];
-        $queryBuilder->andWhere(sprintf('%s.owner = :current_user', $rootAlias));
+        $rootAlias = $qb->getRootAliases()[0];
+
+        $qb->where(
+            $qb->expr()->orX(
+                $qb->expr()->eq("$rootAlias.owner", ':current_user'),
+                $qb->expr()->isMemberOf(':current_user', "$rootAlias.participants"),
+            )
+        );
 
         if ($user instanceof User) {
-            $queryBuilder->setParameter('current_user', $user->getId());
+            $qb->setParameter('current_user', $user);
         } else if ($user instanceof Appliance) {
-            $queryBuilder->setParameter('current_user', $user->getOwner()->getId());
+            $qb->setParameter('current_user', $user->getOwner());
         }
+
+        $qb->orderBy("$rootAlias.datetime", "DESC");
     }
 }

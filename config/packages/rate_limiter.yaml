@@ -1,0 +1,6 @@
+framework:
+    rate_limiter:
+        magic_link:
+            policy: 'sliding_window'
+            limit: 5
+            interval: '%env(MAGIC_LINK_EXPIRATION)%'
