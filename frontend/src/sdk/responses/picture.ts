@@ -1,14 +1,12 @@
 import dayjs from "dayjs";
 
 export default class PnPicture {
-    iri: string;
     id: string;
     event: string;
     takenAt: dayjs.Dayjs;
     unattended: boolean;
 
-    constructor(iri: string, id: string, event: string, takenAt: dayjs.Dayjs, unattended: boolean) {
-        this.iri = iri;
+    constructor(id: string, event: string, takenAt: dayjs.Dayjs, unattended: boolean) {
         this.id = id;
         this.event = event;
         this.takenAt = takenAt;
@@ -21,7 +19,6 @@ export default class PnPicture {
         }
 
         return new PnPicture(
-            data['@id'],
             data['id'],
             data['event'],
             dayjs(data['taken_at']),

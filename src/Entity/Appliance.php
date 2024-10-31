@@ -10,6 +10,7 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use App\Repository\ApplianceRepository;
+use App\State\Processor\ApplianceProcessor;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Types\UuidType;
@@ -28,7 +29,8 @@ use Symfony\Component\Uid\Uuid;
         new Post(
             normalizationContext: ['groups' => [Appliance::API_GET_ITEM]],
             denormalizationContext: ['groups' => [Appliance::API_CREATE]],
-            security: 'is_granted("ROLE_ADMIN")'
+            security: 'is_granted("ROLE_ADMIN")',
+            processor: ApplianceProcessor::class,
         ),
         new Put(
             normalizationContext: ['groups' => [Appliance::API_GET_ITEM]],

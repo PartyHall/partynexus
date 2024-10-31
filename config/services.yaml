@@ -1,6 +1,7 @@
 parameters:
     env(MAGIC_LINK_EXPIRATION): '15 minutes'
-    env(PICTURE_LOCATIONS): '%kernel.project_dir%/var/uploaded_pictures'
+    env(PICTURES_LOCATION): '%kernel.project_dir%/var/uploaded_pictures'
+    env(EXPORTS_LOCATION): '%kernel.project_dir%/var/exports'
     env(SONG_EXTRACT_LOCATION): '%kernel.project_dir%/var/wip_songs'
     env(PUBLIC_URL): 'https://partyhall.example.com'
 

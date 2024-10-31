@@ -2,8 +2,10 @@
 
 namespace App\Entity;
 
+use App\Enum\ExportProgress;
 use App\Enum\ExportStatus;
 use Doctrine\DBAL\Types\Types;
+use Doctrine\ORM\Mapping\JoinColumn;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -19,30 +21,49 @@ class Export
     #[Groups([
         self::API_GET_COLLECTION,
         self::API_GET_ITEM,
+        Event::API_GET_ITEM,
     ])]
     private int $id;
 
-    #[ORM\ManyToOne(targetEntity: Event::class, inversedBy: 'exports')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\OneToOne(targetEntity: Event::class, inversedBy: 'export')]
+    #[JoinColumn(name: 'event_id', referencedColumnName: 'id', nullable: false)]
     #[Groups([
         self::API_GET_COLLECTION,
         self::API_GET_ITEM,
     ])]
     private Event $event;
 
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
+    #[Groups([
+        self::API_GET_COLLECTION,
+        self::API_GET_ITEM,
+        Event::API_GET_ITEM,
+    ])]
+    private \DateTimeImmutable $startedAt;
+
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
     #[Groups([
         self::API_GET_COLLECTION,
         self::API_GET_ITEM,
+        Event::API_GET_ITEM,
     ])]
-    private ?\DateTimeImmutable $startedAt = null;
+    private ?\DateTimeImmutable $endedAt = null;
 
-    #[ORM\Column(type: Types::STRING, nullable: true, enumType: ExportStatus::class)]
+    #[ORM\Column(type: Types::STRING, enumType: ExportProgress::class)]
     #[Groups([
         self::API_GET_COLLECTION,
         self::API_GET_ITEM,
+        Event::API_GET_ITEM,
     ])]
-    private ?ExportStatus $status = null;
+    private ExportProgress $progress;
+
+    #[ORM\Column(type: Types::STRING, enumType: ExportStatus::class)]
+    #[Groups([
+        self::API_GET_COLLECTION,
+        self::API_GET_ITEM,
+        Event::API_GET_ITEM,
+    ])]
+    private ExportStatus $status;
 
     public function getId(): int
     {
@@ -61,14 +82,38 @@ class Export
         return $this;
     }
 
-    public function getStartedAt(): ?\DateTimeImmutable
+    public function getStartedAt(): \DateTimeImmutable
     {
         return $this->startedAt;
     }
 
-    public function setStartedAt(?\DateTimeImmutable $startedAt): self
+    public function setStartedAt(\DateTimeImmutable $startedAt): self
     {
         $this->startedAt = $startedAt;
+
+        return $this;
+    }
+
+    public function getEndedAt(): ?\DateTimeImmutable
+    {
+        return $this->endedAt;
+    }
+
+    public function setEndedAt(?\DateTimeImmutable $endedAt): self
+    {
+        $this->endedAt = $endedAt;
+
+        return $this;
+    }
+
+    public function getProgress(): ExportProgress
+    {
+        return $this->progress;
+    }
+
+    public function setProgress(ExportProgress $progress): self
+    {
+        $this->progress = $progress;
 
         return $this;
     }

@@ -164,7 +164,8 @@
         "pictures": {
             "title": "Photos",
             "no_pictures": "Pas de photo disponibles pour l'instant",
-            "timelapse": "Timelapse"
+            "timelapse": "Timelapse",
+            "more": "Plus..."
         },
         "karaoke": {
             "sessions": "Musiques chantées",

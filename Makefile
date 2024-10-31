@@ -1,4 +1,4 @@
-.PHONY: tests migrations
+.PHONY: tests migrations export
 
 USER := $(shell id -u):$(shell id -g)
 
@@ -25,6 +25,9 @@ reset-db:
 	$(MAKE) migrate
 	docker compose exec app bin/console doctrine:fixtures:load --no-interaction
 	docker compose exec app bin/console doctrine:fixtures:load --env=test --no-interaction
+
+export:
+	docker compose exec app bin/console event:export 0192e458-6c42-718f-a0a2-0841c2caacc5 -vvv
 
 lint:
 	docker compose exec app vendor/bin/php-cs-fixer fix --dry-run -vv --diff

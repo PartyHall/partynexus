@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Event;
-use App\Repository\EventRepository;
+use App\Message\EventConcludedNotification;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -12,7 +12,7 @@ use Symfony\Component\Messenger\MessageBusInterface;
 class EventConcludeController extends AbstractController
 {
     public function __construct(
-        private MessageBusInterface $messageBus,
+        private readonly MessageBusInterface $messageBus,
     )
     {
     }
@@ -21,7 +21,9 @@ class EventConcludeController extends AbstractController
     {
         $event->setOver(true);
 
-
+        $this->messageBus->dispatch(new EventConcludedNotification(
+            $event,
+        ));
 
         return $event;
     }

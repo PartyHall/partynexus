@@ -18,7 +18,7 @@ readonly class PictureDownloadProvider implements ProviderInterface
     public function __construct(
         private PictureRepository $repo,
         private Security          $security,
-        #[Autowire(env: 'PICTURE_LOCATIONS')]
+        #[Autowire(env: 'PICTURES_LOCATION')]
         private string            $basePath,
     )
     {
@@ -37,13 +37,27 @@ readonly class PictureDownloadProvider implements ProviderInterface
         /** @var User $user */
         $user = $this->security->getUser();
 
-        // @TODO: Also allow user that are in the event
-        // Maybe make a custom voter ?
+        // @TODO: Do this properly
+        // Maybe make a custom voter or so i'm not sure
+        $isAllowed = true;
         if ($user !== $picture->getEvent()->getOwner()) {
+            $isAllowed = false;
+        }
+
+        if (!$isAllowed) {
+            foreach ($picture->getEvent()->getParticipants() as $participant) {
+                if ($participant->getUser() === $user) {
+                    $isAllowed = true;
+                    break;
+                }
+            }
+        }
+
+        if (!$isAllowed) {
             throw HttpException::fromStatusCode(Response::HTTP_FORBIDDEN);
         }
 
-        $picturePath = join('/', [$this->basePath, $picture->filepath]);
+        $picturePath = join('/', [$this->basePath, $picture->getFilepath()]);
 
         if (!file_exists($picturePath)) {
             throw HttpException::fromStatusCode(Response::HTTP_NOT_FOUND);

@@ -8,7 +8,7 @@ export default function PictureCard({picture}: {picture: PnPicture}) {
      * @TODO Disable mirror icons + add a download button
      */
     return <Image
-        src={picture.iri + "/download"}
+        src={`/api/pictures/${picture.id}/download`}
         alt="Photobooth picture"
         placeholder={
             <Image
