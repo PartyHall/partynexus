@@ -118,6 +118,7 @@
         }
     },
     "event": {
+        "infos": "Infos",
         "by": "By {{author}}",
         "at": "At {{location}}",
         "no_events": "No event found",
@@ -127,9 +128,26 @@
         "author": "Author",
         "location": "Location",
         "datetime": "On",
+        "force_export": "Force export",
         "download_export": "Download everything",
+        "show_timelapse_bt": "Show the timelapse",
         "edit": "Edit",
         "see": "See",
+        "conclude": {
+            "bt": "Mark as \"over\"",
+            "title": "You are going to conclude the event",
+            "description": "This will start the export of the event and it will be locked for modification. You must do this only after the event is over.",
+            "yes": "I'm sure",
+            "cancel": "Cancel",
+            "success": {
+                "title": "The event is concluded",
+                "description": "The event will now be exported. Please wait, an email will be sent to participant once ready."
+            },
+            "failed": {
+                "title": "Failed to conclude the event",
+                "description": "Failure when concluding the event. The event will not be exported"
+            }
+        },
         "editor": {
             "create_title": "Create an event",
             "edit_title": "Editing {{title}}",
@@ -159,10 +177,19 @@
                 }
             }
         },
+        "export": {
+            "title": "Export",
+            "id": "ID",
+            "started_at": "Started at",
+            "ended_at": "Ended at",
+            "progress": "Progress",
+            "status": "Status"
+        },
         "pictures": {
             "title": "Photos",
             "no_pictures": "No pictures available yet.",
-            "timelapse": "Timelapse"
+            "timelapse": "Timelapse",
+            "more": "More..."
         },
         "karaoke": {
             "sessions": "Sung songs",

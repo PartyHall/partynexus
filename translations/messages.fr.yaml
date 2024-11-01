@@ -11,6 +11,11 @@ emails:
         text1: 'Un administrateur vous a créé un compte PartyHall !'
         link: "Se connecter !"
         warning: "Si vous n'avez pas demandé cela, merci de contacter votre administrateur PartyHall."
+    event_concluded:
+        subject: "%event_name% est terminé. Re-visionnez l'évènement !"
+        text1: "Maintenant que %event_name% est terminé, vous pouvez revoir toutes les photos prises sur le photomaton durant la soirée ainsi qu'un timelapse !"
+        text2: "Rendez-vous sur ce lien pour consulter tout ça !"
+        link: "Voir l'évènement"
         
 users:
     login:

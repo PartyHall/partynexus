@@ -6,7 +6,6 @@ use App\Entity\Appliance;
 use App\Entity\Event;
 use App\Repository\EventRepository;
 use App\Tests\AuthenticatedTestCase;
-use App\Tests\Factory\UserFactory;
 use Doctrine\ORM\EntityManagerInterface;
 
 class EventSecurityTest extends AuthenticatedTestCase
@@ -285,5 +284,47 @@ class EventSecurityTest extends AuthenticatedTestCase
 
         $this->assertEquals(200, $resp->getStatusCode());
         $this->assertJsonContains(self::EVENT_CREATED_DATA);
+    }
+
+    // Get collection (unauthenticated)
+    // @TODO
+
+    // GetCollection (Not admin, can only see which event he's participating/own)
+    // @TODO
+
+    // GetCollection (admin, can search either all event or its own / participating)
+    // @TODO
+
+    // Conclude event (unauthenticated)
+    public function test_event_conclude_unauthenticated()
+    {
+        $resp = static::createClient()->request('POST', '/api/events/0192bf5a-67d8-7d9d-8a5e-962b23aceeaa/conclude', ['json' => []]);
+        $this->assertEquals(401, $resp->getStatusCode());
+    }
+
+    // Conclude event (Not owner)
+    public function test_event_conclude_participant()
+    {
+        $token = $this->authenticate('user', 'password');
+
+        $resp = static::createClient()->request('POST', '/api/events/0192bf5a-67d8-7d9d-8a5e-962b23aceeaa/conclude', [
+            'headers' => ['Authorization' => $token],
+            'json' => [],
+        ]);
+
+        $this->assertEquals(403, $resp->getStatusCode());
+    }
+
+    // Conclude event (Owner)
+    public function test_event_conclude_owner()
+    {
+        $token = $this->authenticate('admin', 'password');
+
+        $resp = static::createClient()->request('POST', '/api/events/0192bf5a-67d8-7d9d-8a5e-962b23aceeaa/conclude', [
+            'headers' => ['Authorization' => $token],
+            'json' => [],
+        ]);
+
+        $this->assertEquals(201, $resp->getStatusCode());
     }
 }

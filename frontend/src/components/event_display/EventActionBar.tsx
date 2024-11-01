@@ -1,19 +1,75 @@
-import { Button, Flex } from "antd";
-import { DownloadOutlined } from '@ant-design/icons';
+import { Button, Flex, Popconfirm } from "antd";
+import { FolderInput, HardDriveDownload } from "lucide-react";
 import { PnEvent } from "../../sdk/responses/event";
+import { useAuth } from "../../hooks/auth";
+import useNotification from "antd/es/notification/useNotification";
 import { useTranslation } from "react-i18next";
 
 type Props = {
     event: PnEvent;
     displayOwnerStuff: boolean;
+    setEvent: (e: PnEvent|null) => void;
 };
 
-export default function EventActionBar({ event, displayOwnerStuff }: Props) {
+export default function EventActionBar({ event, displayOwnerStuff, setEvent }: Props) {
     const { t } = useTranslation();
+    const { api } = useAuth();
+    const [notif, notifCtx] = useNotification();
 
-    /* If export generated: Add a button to download the export.zip */
+    const onDownload = () => {
+        const link = document.createElement('a');
+        link.href = `/api/events/${event.id}/export`;
+        link.download = `${event.id}.zip`;
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+    };
+
+    const onConclude = async () => {
+        try {
+            const newEvent = await api.events.conclude(event);
+            notif.success({
+                message: t('event.conclude.success.title'),
+                description: t('event.conclude.success.description'),
+            });
+
+            setEvent(newEvent);
+        } catch (e) {
+            notif.error({
+                message: t('event.conclude.failed.title'),
+                description: t('event.conclude.failed.description'),
+            })
+
+            console.error(e);
+        }
+    };
+
     return <Flex align="center" justify="space-around" style={{ marginTop: 8 }}>
-        {/* Maybe we should use the Mercure JWT to authenticate for the download as its already sent as cookie (?) */}
-        <Button icon={<DownloadOutlined />}>{t('event.download_export')}</Button>
+        {
+            displayOwnerStuff &&
+            !event.over &&
+            <Popconfirm
+                title={t('event.conclude.title')}
+                description={t('event.conclude.description')}
+                onConfirm={onConclude}
+                okText={t('event.conclude.yes')}
+                cancelText={t('event.conclude.cancel')}
+            >
+                <Button icon={<FolderInput />}>{t('event.conclude.bt')}</Button>
+            </Popconfirm>
+        }
+        {
+            displayOwnerStuff &&
+            event.over &&
+            <Button icon={<FolderInput />} onClick={onConclude}>{t('event.force_export')}</Button>
+        }
+        {
+            event.export &&
+            <Button icon={<HardDriveDownload />} onClick={onDownload}>
+                {t('event.download_export')}
+            </Button>
+        }
+
+        {notifCtx}
     </Flex>
 }

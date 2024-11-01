@@ -13,15 +13,15 @@ FROM frankenphp_upstream AS frankenphp_base
 
 WORKDIR /app
 
-VOLUME /app/var/
-
 # persistent / runtime deps
+# PARTYNEXUS: Adding ffmpeg
 # hadolint ignore=DL3008
 RUN apt-get update && apt-get install -y --no-install-recommends \
 	acl \
 	file \
 	gettext \
 	git \
+    ffmpeg \
 	&& rm -rf /var/lib/apt/lists/*
 
 RUN set -eux; \
@@ -38,6 +38,7 @@ ENV COMPOSER_ALLOW_SUPERUSER=1
 
 ENV PHP_INI_SCAN_DIR=":$PHP_INI_DIR/app.conf.d"
 
+# PARTYNEXUS: Adding redis
 ###> recipes ###
 ###> doctrine/doctrine-bundle ###
 RUN install-php-extensions pdo_pgsql redis

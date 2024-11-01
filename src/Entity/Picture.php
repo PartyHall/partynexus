@@ -10,6 +10,7 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Link;
 use ApiPlatform\Metadata\Post;
 use App\Repository\PictureRepository;
+use App\State\Processor\PictureProcessor;
 use App\State\Provider\PictureDownloadProvider;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -36,6 +37,7 @@ use Symfony\Component\Validator\Constraints as Assert;
                     fromClass: Event::class, // On veut pointer VERS LA CLASSE AUQUEL eventId FAIT REFERENCE (fromClass event d'après symfonycasts)
                 )
             ],
+            paginationEnabled: false,
             order: ['takenAt' => 'ASC'],
         ),
         new Get(),
@@ -44,7 +46,7 @@ use Symfony\Component\Validator\Constraints as Assert;
             provider: PictureDownloadProvider::class,
         ),
         new Post(
-            uriTemplate: '/events/{eventId}/pictures',
+            // uriTemplate: '/events/{eventId}/pictures',
             inputFormats: ['multipart' => ['multipart/form-data']],
             outputFormats: ['jsonld' => ['application/ld+json']],
             uriVariables: [
@@ -53,7 +55,8 @@ use Symfony\Component\Validator\Constraints as Assert;
                     fromClass: Event::class, // On veut pointer VERS LA CLASSE AUQUEL eventId FAIT REFERENCE (fromClass event d'après symfonycasts)
                 )
             ],
-            denormalizationContext: ['groups' => ['api:picture:create']]
+            denormalizationContext: ['groups' => ['api:picture:create']],
+            processor: PictureProcessor::class,
         )
     ],
     normalizationContext: ['groups' => ['api:picture:get_item']],
@@ -83,7 +86,6 @@ class Picture
         self::API_GET_ITEM,
         self::API_CREATE,
     ])]
-    #[Assert\NotNull]
     private Event $event;
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
@@ -114,12 +116,15 @@ class Picture
     #[Assert\Uuid]
     private Uuid $applianceUuid;
 
-    #[Vich\UploadableField(mapping: 'pictures', fileNameProperty: 'filepath')]
+    #[Vich\UploadableField(mapping: 'pictures', fileNameProperty: 'filepath', mimeType: 'fileMimetype')]
     #[Groups([self::API_CREATE])]
-    public ?File $file = null;
+    private ?File $file = null;
 
-    #[ORM\Column(nullable: true)]
-    public ?string $filepath = null;
+    #[ORM\Column(type: Types::STRING, nullable: true)]
+    private ?string $filepath = null;
+
+    #[ORM\Column(type: Types::STRING, nullable: true)]
+    private ?string $fileMimetype = null;
 
     public function getId(): Uuid
     {
@@ -211,6 +216,18 @@ class Picture
     public function setApplianceUuid(Uuid $applianceUuid): self
     {
         $this->applianceUuid = $applianceUuid;
+
+        return $this;
+    }
+
+    public function getFileMimetype(): ?string
+    {
+        return $this->fileMimetype;
+    }
+
+    public function setFileMimetype(?string $fileMimetype): self
+    {
+        $this->fileMimetype = $fileMimetype;
 
         return $this;
     }

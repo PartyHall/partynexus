@@ -119,6 +119,7 @@
         }
     },
     "event": {
+        "infos": "Infos",
         "show_one": "Afficher un évènement",
         "by": "Par {{author}}",
         "at": "Lieu: {{location}}",
@@ -129,9 +130,26 @@
         "author": "Auteur",
         "location": "Lieu",
         "datetime": "Le",
+        "force_export": "Forcer l'export",
         "download_export": "Tout télécharger",
+        "show_timelapse_bt": "Voir le timelapse",
         "edit": "Editer",
         "see": "Ouvrir",
+        "conclude": {
+            "bt": "Marquer \"terminé\"",
+            "title": "Vous aller conclure l'évènement",
+            "description": "Cela provoquera l'export de l'évènement et il ne pourra plus être modifié. Il faut le faire après l'évènement uniquement.",
+            "yes": "Je suis sûr(e)",
+            "cancel": "Annuler",
+            "success": {
+                "title": "L'évènement est terminé !",
+                "description": "Il va maintenant être exporté. Un email sera envoyé aux participants quand ce sera terminé."
+            },
+            "failed": {
+                "title": "Échec du marquage de l'évènement",
+                "description": "L'évènement n'a pas été marqué conclu. Il ne sera pas exporté."
+            }
+        },
         "editor": {
             "create_title": "Créer un évènement",
             "edit_title": "Édition de {{title}}",
@@ -161,10 +179,19 @@
                 }
             }
         },
+        "export": {
+            "title": "Export",
+            "id": "ID",
+            "started_at": "Débuté à",
+            "ended_at": "Fini à",
+            "progress": "Progression",
+            "status": "Status"
+        },
         "pictures": {
             "title": "Photos",
             "no_pictures": "Pas de photo disponibles pour l'instant",
-            "timelapse": "Timelapse"
+            "timelapse": "Timelapse",
+            "more": "Plus..."
         },
         "karaoke": {
             "sessions": "Musiques chantées",

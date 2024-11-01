@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20241025214150 extends AbstractMigration
+final class Version20241031195718 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -22,6 +22,7 @@ final class Version20241025214150 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
         $this->addSql('CREATE SEQUENCE appliance_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE SEQUENCE export_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
+        $this->addSql('CREATE SEQUENCE magic_link_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE SEQUENCE nexus_user_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE SEQUENCE refresh_tokens_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE SEQUENCE song_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
@@ -38,11 +39,17 @@ final class Version20241025214150 extends AbstractMigration
         $this->addSql('CREATE INDEX IDX_92589AE2A76ED395 ON event_user (user_id)');
         $this->addSql('COMMENT ON COLUMN event_user.event_id IS \'(DC2Type:uuid)\'');
         $this->addSql('CREATE TABLE export (id INT NOT NULL, event_id UUID NOT NULL, started_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, status VARCHAR(255) DEFAULT NULL, PRIMARY KEY(id))');
-        $this->addSql('CREATE INDEX IDX_428C169471F7E88B ON export (event_id)');
+        $this->addSql('CREATE UNIQUE INDEX UNIQ_428C169471F7E88B ON export (event_id)');
         $this->addSql('COMMENT ON COLUMN export.event_id IS \'(DC2Type:uuid)\'');
         $this->addSql('COMMENT ON COLUMN export.started_at IS \'(DC2Type:datetime_immutable)\'');
-        $this->addSql('CREATE TABLE nexus_user (id INT NOT NULL, username VARCHAR(32) DEFAULT NULL, password VARCHAR(512) NOT NULL, email VARCHAR(255) NOT NULL, roles JSON NOT NULL, PRIMARY KEY(id))');
-        $this->addSql('CREATE TABLE picture (id UUID NOT NULL, event_id UUID NOT NULL, taken_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, unattended BOOLEAN DEFAULT false NOT NULL, appliance_uuid UUID NOT NULL, filepath VARCHAR(255) DEFAULT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE TABLE magic_link (id INT NOT NULL, user_id INT DEFAULT NULL, created_at TIMESTAMP(0) WITH TIME ZONE NOT NULL, code VARCHAR(255) NOT NULL, used BOOLEAN NOT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE INDEX IDX_6B40B1C6A76ED395 ON magic_link (user_id)');
+        $this->addSql('COMMENT ON COLUMN magic_link.created_at IS \'(DC2Type:datetimetz_immutable)\'');
+        $this->addSql('CREATE TABLE nexus_user (id INT NOT NULL, username VARCHAR(32) NOT NULL, password VARCHAR(512) DEFAULT NULL, email VARCHAR(255) NOT NULL, language VARCHAR(255) DEFAULT \'en_US\' NOT NULL, roles JSON NOT NULL, banned_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE UNIQUE INDEX UNIQ_6097C3D7F85E0677 ON nexus_user (username)');
+        $this->addSql('CREATE UNIQUE INDEX UNIQ_6097C3D7E7927C74 ON nexus_user (email)');
+        $this->addSql('COMMENT ON COLUMN nexus_user.banned_at IS \'(DC2Type:datetime_immutable)\'');
+        $this->addSql('CREATE TABLE picture (id UUID NOT NULL, event_id UUID NOT NULL, taken_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, unattended BOOLEAN DEFAULT false NOT NULL, appliance_uuid UUID NOT NULL, filepath VARCHAR(255) DEFAULT NULL, file_mimetype VARCHAR(255) DEFAULT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX IDX_16DB4F8971F7E88B ON picture (event_id)');
         $this->addSql('COMMENT ON COLUMN picture.id IS \'(DC2Type:uuid)\'');
         $this->addSql('COMMENT ON COLUMN picture.event_id IS \'(DC2Type:uuid)\'');
@@ -59,11 +66,27 @@ final class Version20241025214150 extends AbstractMigration
         $this->addSql('CREATE INDEX IDX_FF0CE0E5A0BDB2F3 ON song_file (song_id)');
         $this->addSql('COMMENT ON COLUMN song_file.created_at IS \'(DC2Type:datetime_immutable)\'');
         $this->addSql('COMMENT ON COLUMN song_file.updated_at IS \'(DC2Type:datetime_immutable)\'');
+        $this->addSql('CREATE TABLE messenger_messages (id BIGSERIAL NOT NULL, body TEXT NOT NULL, headers TEXT NOT NULL, queue_name VARCHAR(190) NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, available_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, delivered_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE INDEX IDX_75EA56E0FB7336F0 ON messenger_messages (queue_name)');
+        $this->addSql('CREATE INDEX IDX_75EA56E0E3BD61CE ON messenger_messages (available_at)');
+        $this->addSql('CREATE INDEX IDX_75EA56E016BA31DB ON messenger_messages (delivered_at)');
+        $this->addSql('COMMENT ON COLUMN messenger_messages.created_at IS \'(DC2Type:datetime_immutable)\'');
+        $this->addSql('COMMENT ON COLUMN messenger_messages.available_at IS \'(DC2Type:datetime_immutable)\'');
+        $this->addSql('COMMENT ON COLUMN messenger_messages.delivered_at IS \'(DC2Type:datetime_immutable)\'');
+        $this->addSql('CREATE OR REPLACE FUNCTION notify_messenger_messages() RETURNS TRIGGER AS $$
+            BEGIN
+                PERFORM pg_notify(\'messenger_messages\', NEW.queue_name::text);
+                RETURN NEW;
+            END;
+        $$ LANGUAGE plpgsql;');
+        $this->addSql('DROP TRIGGER IF EXISTS notify_trigger ON messenger_messages;');
+        $this->addSql('CREATE TRIGGER notify_trigger AFTER INSERT OR UPDATE ON messenger_messages FOR EACH ROW EXECUTE PROCEDURE notify_messenger_messages();');
         $this->addSql('ALTER TABLE appliance ADD CONSTRAINT FK_B4E6C1107E3C61F9 FOREIGN KEY (owner_id) REFERENCES nexus_user (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE event ADD CONSTRAINT FK_3BAE0AA77E3C61F9 FOREIGN KEY (owner_id) REFERENCES nexus_user (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE event_user ADD CONSTRAINT FK_92589AE271F7E88B FOREIGN KEY (event_id) REFERENCES event (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE event_user ADD CONSTRAINT FK_92589AE2A76ED395 FOREIGN KEY (user_id) REFERENCES nexus_user (id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE export ADD CONSTRAINT FK_428C169471F7E88B FOREIGN KEY (event_id) REFERENCES event (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
+        $this->addSql('ALTER TABLE magic_link ADD CONSTRAINT FK_6B40B1C6A76ED395 FOREIGN KEY (user_id) REFERENCES nexus_user (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE picture ADD CONSTRAINT FK_16DB4F8971F7E88B FOREIGN KEY (event_id) REFERENCES event (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE song_file ADD CONSTRAINT FK_FF0CE0E5A0BDB2F3 FOREIGN KEY (song_id) REFERENCES song (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
     }
@@ -74,6 +97,7 @@ final class Version20241025214150 extends AbstractMigration
         $this->addSql('CREATE SCHEMA public');
         $this->addSql('DROP SEQUENCE appliance_id_seq CASCADE');
         $this->addSql('DROP SEQUENCE export_id_seq CASCADE');
+        $this->addSql('DROP SEQUENCE magic_link_id_seq CASCADE');
         $this->addSql('DROP SEQUENCE nexus_user_id_seq CASCADE');
         $this->addSql('DROP SEQUENCE refresh_tokens_id_seq CASCADE');
         $this->addSql('DROP SEQUENCE song_id_seq CASCADE');
@@ -82,16 +106,19 @@ final class Version20241025214150 extends AbstractMigration
         $this->addSql('ALTER TABLE event_user DROP CONSTRAINT FK_92589AE271F7E88B');
         $this->addSql('ALTER TABLE event_user DROP CONSTRAINT FK_92589AE2A76ED395');
         $this->addSql('ALTER TABLE export DROP CONSTRAINT FK_428C169471F7E88B');
+        $this->addSql('ALTER TABLE magic_link DROP CONSTRAINT FK_6B40B1C6A76ED395');
         $this->addSql('ALTER TABLE picture DROP CONSTRAINT FK_16DB4F8971F7E88B');
         $this->addSql('ALTER TABLE song_file DROP CONSTRAINT FK_FF0CE0E5A0BDB2F3');
         $this->addSql('DROP TABLE appliance');
         $this->addSql('DROP TABLE event');
         $this->addSql('DROP TABLE event_user');
         $this->addSql('DROP TABLE export');
+        $this->addSql('DROP TABLE magic_link');
         $this->addSql('DROP TABLE nexus_user');
         $this->addSql('DROP TABLE picture');
         $this->addSql('DROP TABLE refresh_tokens');
         $this->addSql('DROP TABLE song');
         $this->addSql('DROP TABLE song_file');
+        $this->addSql('DROP TABLE messenger_messages');
     }
 }

@@ -1,4 +1,12 @@
-import { Flex, Image, Typography } from "antd";
+import { Button, Flex, Image, Modal, Typography } from "antd";
+import {
+    DownloadOutlined,
+    RotateLeftOutlined,
+    RotateRightOutlined,
+    ZoomInOutlined,
+    ZoomOutOutlined,
+} from '@ant-design/icons';
+
 import Loader from "../Loader";
 import PictureCard from "../PictureCard";
 import { PnEvent } from "../../sdk/responses/event";
@@ -8,9 +16,11 @@ import { useAuth } from "../../hooks/auth";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
+
 export default function EventPictureBar({ event }: { event: PnEvent }) {
     const { t } = useTranslation();
     const { api } = useAuth();
+    const [timelapseShown, setTimelapseShown] = useState<boolean>(false);
     const [loadingPictures, setLoadingPictures] = useState<boolean>(true);
 
     const [firstThreePictures, setFirstThreePictures] = useState<PnPicture[]>([]);
@@ -19,7 +29,7 @@ export default function EventPictureBar({ event }: { event: PnEvent }) {
     useAsyncEffect(async () => {
         setLoadingPictures(true);
 
-        const pictures = await api.events.getPictures(event.id, true);
+        const pictures = await api.events.getPictures(event.id, false);
         if (!pictures) {
             // @TODO: Display error
             setLoadingPictures(false);
@@ -42,18 +52,57 @@ export default function EventPictureBar({ event }: { event: PnEvent }) {
         setLoadingPictures(false);
     }, []);
 
-    return <>
-        <Typography.Title>{t('event.pictures.title')}</Typography.Title>
+    // Download method stolen from antd docs
+    const onDownload = (url: string) => {
+        const filename = Date.now() + '.jpg'; // @TODO: Send the format from server
+
+        fetch(url)
+            .then((response) => response.blob())
+            .then((blob) => {
+                const blobUrl = URL.createObjectURL(new Blob([blob]));
+                const link = document.createElement('a');
+                link.href = blobUrl;
+                link.download = filename;
+                document.body.appendChild(link);
+                link.click();
+                URL.revokeObjectURL(blobUrl);
+                link.remove();
+            });
+    };
+
+    return <Flex vertical gap={8}>
+        <Typography.Title className="red-glow ml1-2">{t('event.pictures.title')}</Typography.Title>
         <Loader loading={loadingPictures}>
-            <Flex gap={8} align="center" justify="start">
+            <Flex gap={8} align="center" justify="start" style={{ overflowX: 'scroll' }}> {/* @TODO: scroll not working */}
                 {
                     pictures.length > 0 && <>
-                        <Image.PreviewGroup items={pictures.map(x => x.iri + '/download')}>
-                            {firstThreePictures.map(x => <PictureCard key={x.iri} picture={x} />)}
+                        <Image.PreviewGroup
+                            items={pictures.map(x => `/api/pictures/${x.id}/download`)}
+                            preview={{
+                                toolbarRender: (
+                                    _,
+                                    {
+                                        transform: { scale },
+                                        actions: { onRotateLeft, onRotateRight, onZoomOut, onZoomIn },
+                                        image: { url }
+                                    },
+                                ) => (
+                                    <Flex gap={16} className="ant-image-preview-operations" style={{ padding: '.5em' }}>
+                                        <Button shape="circle" icon={<RotateLeftOutlined />} onClick={onRotateLeft} />
+                                        <Button shape="circle" icon={<RotateRightOutlined />} onClick={onRotateRight} />
+                                        <Button shape="circle" icon={<ZoomOutOutlined />} disabled={scale === 1} onClick={onZoomOut} />
+                                        <Button shape="circle" icon={<ZoomInOutlined />} disabled={scale === 50} onClick={onZoomIn} />
+                                        <Button shape="circle" icon={<DownloadOutlined />} onClick={() => onDownload(url)} />
+                                    </Flex>
+                                ),
+                            }}
+                        >
+                            {firstThreePictures.map(x => <PictureCard key={x.id} picture={x} />)}
                         </Image.PreviewGroup>
                         {
                             pictures.length !== firstThreePictures.length &&
-                            <>More...</>
+                            <Typography.Link>{t('event.pictures.more')}</Typography.Link>
+                            // @TODO: The link should be clickable
                         }
                     </>
                 }
@@ -63,5 +112,22 @@ export default function EventPictureBar({ event }: { event: PnEvent }) {
                 }
             </Flex>
         </Loader>
-    </>
+        <Flex align="center" justify="center">
+            <Button onClick={() => setTimelapseShown(true)}>{t('event.show_timelapse_bt')}</Button>
+        </Flex>
+
+        <Modal
+            title={t('event.pictures.timelapse')}
+            open={timelapseShown}
+            footer={[]}
+            onClose={() => setTimelapseShown(false)}
+            onCancel={() => setTimelapseShown(false)}
+        >
+            <video
+                className="timelapse_video"
+                src={`/api/events/${event.id}/timelapse`}
+                controls
+            />
+        </Modal>
+    </Flex>
 }

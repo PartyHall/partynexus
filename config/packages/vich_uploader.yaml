@@ -7,7 +7,7 @@ vich_uploader:
   mappings:
     pictures:
       uri_prefix: /pictures
-      upload_destination: '%env(string:PICTURE_LOCATIONS)%'
+      upload_destination: '%env(string:PICTURES_LOCATION)%'
       namer: Vich\UploaderBundle\Naming\UniqidNamer
 
     song_covers:

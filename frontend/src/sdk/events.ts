@@ -89,4 +89,11 @@ export class Events {
 
         return PnEvent.fromJson(data);
     }
+
+    async conclude(event: PnEvent): Promise<PnEvent|null> {
+        const resp = await this.sdk.post(`/api/events/${event.id}/conclude`, {});
+        const data = await resp.json();
+
+        return PnEvent.fromJson(data);
+    }
 }

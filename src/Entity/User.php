@@ -90,6 +90,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         self::API_CREATE,
         self::API_UPDATE,
         Event::API_GET_ITEM,
+        Event::API_EXPORT,
     ])]
     private string $username;
 

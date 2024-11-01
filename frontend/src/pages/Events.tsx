@@ -41,7 +41,7 @@ export default function EventsPage() {
 
     return <Loader loading={!loaded}>
         {
-            events &&
+            events && events.total > 0 &&
             <Flex style={{ height: '100%', overflowY: 'auto' }}>
                 <SearchablePaginatedList
                     className="EventList"

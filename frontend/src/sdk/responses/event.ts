@@ -1,5 +1,6 @@
-import dayjs from "dayjs";
+import PnExport from "./export";
 import { User } from "./user";
+import dayjs from "dayjs";
 
 export class PnListEvent {
     iri: string;
@@ -52,6 +53,8 @@ export class PnEvent {
     owner: User;
     participants: User[];
 
+    export: PnExport|null;
+
     constructor(data: Record<string, any>) {
         const owner = User.fromJson(data['owner']);
         if (!owner) {
@@ -68,6 +71,8 @@ export class PnEvent {
         this.over = data['over'];
 
         this.participants = User.fromArray(data['participants']);
+
+        this.export = PnExport.fromJson(data['export']);
 
         /**
          * @TODO: Amt images handtaken, amt images unattended

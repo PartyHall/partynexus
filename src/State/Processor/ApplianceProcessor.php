@@ -2,20 +2,21 @@
 
 namespace App\State\Processor;
 
+use ApiPlatform\Doctrine\Common\State\PersistProcessor;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\State\ProcessorInterface;
 use App\Entity\Appliance;
 use App\Entity\User;
 use Symfony\Bundle\SecurityBundle\Security;
-use Symfony\Component\DependencyInjection\Attribute\AsDecorator;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
-#[AsDecorator('api_platform.doctrine.orm.state.persist_processor')]
 readonly class ApplianceProcessor implements ProcessorInterface
 {
     public function __construct(
-        private ProcessorInterface $decorated,
+        #[Autowire(service: PersistProcessor::class)]
+        private ProcessorInterface $processor,
         private Security           $security,
     )
     {
@@ -32,6 +33,6 @@ readonly class ApplianceProcessor implements ProcessorInterface
             }
         }
 
-        return $this->decorated->process($data, $operation, $uriVariables, $context);
+        return $this->processor->process($data, $operation, $uriVariables, $context);
     }
 }

@@ -1,14 +1,10 @@
 import { Image } from 'antd';
+import PLACEHOLDER from '../assets/placeholder.webp';
 import PnPicture from '../sdk/responses/picture';
 
-const PLACEHOLDER = 'https://placehold.co/1920x1080/171520/d72793/png';
-
 export default function PictureCard({picture}: {picture: PnPicture}) {
-    /** 
-     * @TODO Disable mirror icons + add a download button
-     */
     return <Image
-        src={picture.iri + "/download"}
+        src={`/api/pictures/${picture.id}/download`}
         alt="Photobooth picture"
         placeholder={
             <Image
@@ -17,7 +13,7 @@ export default function PictureCard({picture}: {picture: PnPicture}) {
                 width={200}
             />
         }
-        fallback={PLACEHOLDER} // @TODO: Embed base64 directly
+        fallback={PLACEHOLDER}
         width={200}
     />
 }

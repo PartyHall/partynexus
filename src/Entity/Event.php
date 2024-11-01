@@ -10,10 +10,10 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use App\Controller\EventConcludeController;
-use App\Filter\EventFilter;
 use App\Repository\EventRepository;
-use App\State\Processor\EventConcludeProcessor;
-use App\State\Provider\EventConcludeProvider;
+use App\State\Processor\EventCreationProcessor;
+use App\State\Provider\ExportDownloadProvider;
+use App\State\Provider\TimelapseDownloadProvider;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -41,6 +41,7 @@ use Symfony\Component\Validator\Constraints as Assert;
             normalizationContext: ['groups' => [self::API_GET_ITEM]],
             denormalizationContext: ['groups' => [self::API_CREATE]],
             security: 'is_granted("ROLE_APPLIANCE") or is_granted("ROLE_ADMIN")',
+            processor: EventCreationProcessor::class,
         ),
         new Patch(
             normalizationContext: ['groups' => [self::API_GET_ITEM]],
@@ -52,10 +53,12 @@ use Symfony\Component\Validator\Constraints as Assert;
             controller: EventConcludeController::class,
             normalizationContext: ['groups' => [self::API_GET_ITEM]],
             denormalizationContext: ['groups' => []],
-            security: 'is_granted("ROLE_ADMIN") or user == object.getOwner()',
+            // security: 'is_granted("ROLE_ADMIN") or user == object.getOwner()', // Handled in the controller temporarly
             read: false,
             validate: false,
         ),
+        new Get(uriTemplate: '/events/{id}/timelapse', provider: TimelapseDownloadProvider::class),
+        new Get(uriTemplate: '/events/{id}/export', provider: ExportDownloadProvider::class),
     ],
 )]
 #[ApiFilter(SearchFilter::class, properties: ['name' => 'ipartial'])]
@@ -65,6 +68,7 @@ class Event {
     public const string API_GET_ITEM = 'api:event:get';
     public const string API_CREATE = 'api:event:create';
     public const string API_UPDATE = 'api:event:update';
+    public const string API_EXPORT = 'api:export';
 
     #[ORM\Id]
     #[ORM\Column(type: UuidType::NAME)]
@@ -73,6 +77,7 @@ class Event {
     #[Groups([
         self::API_GET_COLLECTION,
         self::API_GET_ITEM,
+        self::API_EXPORT,
     ])]
     private Uuid $id;
 
@@ -82,6 +87,7 @@ class Event {
         self::API_GET_ITEM,
         self::API_CREATE,
         self::API_UPDATE,
+        self::API_EXPORT,
     ])]
     #[Assert\NotBlank]
     private string $name;
@@ -92,6 +98,7 @@ class Event {
         self::API_GET_ITEM,
         self::API_CREATE,
         self::API_UPDATE,
+        self::API_EXPORT,
     ])]
     private ?string $author = null;
 
@@ -101,6 +108,7 @@ class Event {
         self::API_GET_ITEM,
         self::API_CREATE,
         self::API_UPDATE,
+        self::API_EXPORT,
     ])]
     #[Assert\NotBlank]
     private \DateTimeImmutable $datetime;
@@ -111,6 +119,7 @@ class Event {
         self::API_GET_ITEM,
         self::API_CREATE,
         self::API_UPDATE,
+        self::API_EXPORT,
     ])]
     private ?string $location = null;
 
@@ -119,6 +128,7 @@ class Event {
     #[Groups([
         self::API_GET_COLLECTION,
         self::API_GET_ITEM,
+        self::API_EXPORT,
     ])]
     private User $owner;
 
@@ -131,21 +141,24 @@ class Event {
     #[ORM\OneToMany(targetEntity: Picture::class, mappedBy: 'event')]
     private Collection $pictures;
 
-    #[ORM\OneToMany(targetEntity: Export::class, mappedBy: 'event')]
-    private Collection $exports;
+    #[ORM\OneToOne(targetEntity: Export::class, mappedBy: 'event')]
+    #[Groups([
+        self::API_GET_ITEM,
+    ])]
+    private ?Export $export = null;
 
     #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'participatingEvents')]
     #[Groups([
         self::API_GET_ITEM,
         self::API_CREATE,
         self::API_UPDATE,
+        self::API_EXPORT,
     ])]
     private Collection $participants;
 
     public function __construct()
     {
         $this->pictures = new ArrayCollection();
-        $this->exports = new ArrayCollection();
     }
 
     public function getId(): Uuid
@@ -244,24 +257,6 @@ class Event {
         $this->pictures = $pictures;
     }
 
-    /** @return Collection<Export> */
-    public function getExports(): Collection
-    {
-        return $this->exports;
-    }
-
-    /**
-     * @param Export[]|Collection<Export> $exports
-     */
-    public function setExports(array|Collection $exports): void
-    {
-        if (\is_array($exports)) {
-            $exports = new ArrayCollection($exports);
-        }
-
-        $this->exports = $exports;
-    }
-
     public function getParticipants(): Collection
     {
         return $this->participants;
@@ -288,5 +283,15 @@ class Event {
         $this->participants = $participants;
 
         return $this;
+    }
+
+    public function getExport(): ?Export
+    {
+        return $this->export;
+    }
+
+    public function setExport(?Export $export): void
+    {
+        $this->export = $export;
     }
 }
