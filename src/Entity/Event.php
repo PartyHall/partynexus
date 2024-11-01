@@ -12,6 +12,8 @@ use ApiPlatform\Metadata\Post;
 use App\Controller\EventConcludeController;
 use App\Repository\EventRepository;
 use App\State\Processor\EventCreationProcessor;
+use App\State\Provider\ExportDownloadProvider;
+use App\State\Provider\TimelapseDownloadProvider;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -51,10 +53,12 @@ use Symfony\Component\Validator\Constraints as Assert;
             controller: EventConcludeController::class,
             normalizationContext: ['groups' => [self::API_GET_ITEM]],
             denormalizationContext: ['groups' => []],
-            security: 'is_granted("ROLE_ADMIN") or user == object.getOwner()',
+            // security: 'is_granted("ROLE_ADMIN") or user == object.getOwner()', // Handled in the controller temporarly
             read: false,
             validate: false,
         ),
+        new Get(uriTemplate: '/events/{id}/timelapse', provider: TimelapseDownloadProvider::class),
+        new Get(uriTemplate: '/events/{id}/export', provider: ExportDownloadProvider::class),
     ],
 )]
 #[ApiFilter(SearchFilter::class, properties: ['name' => 'ipartial'])]

@@ -10,31 +10,43 @@ use App\Enum\ExportStatus;
 use App\Utils\DirectoryUtils;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Filesystem\Path;
+use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\MimeTypesInterface;
 use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Vich\UploaderBundle\Storage\StorageInterface;
 
-readonly class EventExporter
+class EventExporter
 {
+    private string $baseUrl;
+
     private Export $export;
     private Event $event;
     private string $tempPath;
     private string $outPath;
 
     public function __construct(
-        private LoggerInterface     $logger,
-        private Filesystem          $fs,
-        private StorageInterface    $storage,
-        private MimeTypesInterface  $mimeTypes,
-        private SerializerInterface $serializer,
-        private EntityManagerInterface $emi,
+        private readonly LoggerInterface        $logger,
+        private readonly Filesystem             $fs,
+        private readonly StorageInterface       $storage,
+        private readonly MimeTypesInterface     $mimeTypes,
+        private readonly SerializerInterface    $serializer,
+        private readonly EntityManagerInterface $emi,
+        private readonly TranslatorInterface    $translator,
+        private readonly MailerInterface        $mailer,
         #[Autowire(env: 'EXPORTS_LOCATION')]
-        private string $exportLocation,
+        private readonly string                 $exportLocation,
+        #[Autowire(env: 'TIMELAPSES_LOCATION')]
+        private readonly string                 $timelapseLocation,
+        #[Autowire(env: 'PUBLIC_URL')]
+        string                                  $baseUrl,
     )
     {
+        $this->baseUrl = \rtrim($baseUrl, '/');
     }
 
     private function setStatus(ExportProgress $progress): void
@@ -47,7 +59,7 @@ readonly class EventExporter
     /**
      * @throws \Exception
      */
-    public function exportEvent(Event $event): void
+    public function exportEvent(Event $event, bool $shouldSendMail = false): void
     {
         $this->event = $event;
         $this->export = ($event->getExport() ?? (new Export()))
@@ -55,8 +67,7 @@ readonly class EventExporter
             ->setStartedAt(new \DateTimeImmutable())
             ->setEndedAt(null)
             ->setStatus(ExportStatus::STARTED)
-            ->setProgress(ExportProgress::STARTED)
-        ;
+            ->setProgress(ExportProgress::STARTED);
 
         $this->event->setExport($this->export);
         $this->emi->persist($this->export);
@@ -85,6 +96,13 @@ readonly class EventExporter
 
             $this->logger->info('Saving export', ['event' => $event->getId()->toString()]);
             $this->saveExport();
+
+            if ($shouldSendMail) {
+                $this->sendEmail();
+                $this->logger->info('Email sent to participants', ['event' => $event->getId()->toString()]);
+            } else {
+                $this->logger->info('Email should not be sent so skipping...', ['event' => $event->getId()->toString()]);
+            }
         } catch (\Exception $e) {
             $this->logger->error('Failed to export event', ['exception' => $e]);
 
@@ -180,6 +198,13 @@ readonly class EventExporter
         ));
 
         $this->fs->remove($listFile);
+
+        // We copy the timelapse to the path where the webui will download it
+        $this->fs->mkdir($this->timelapseLocation);
+        $timelapseServedLocation = Path::join($this->timelapseLocation, \sprintf("%s.mp4", $this->event->getId()->toString()));
+        $this->fs->remove($timelapseServedLocation);
+        $this->fs->copy($outFile, $timelapseServedLocation);
+
         $this->logger->info('Timelapse added', ['event' => $this->event->getId()->toString()]);
     }
 
@@ -235,5 +260,33 @@ readonly class EventExporter
         $this->export->setStatus(ExportStatus::COMPLETE);
         $this->emi->persist($this->export);
         $this->emi->flush();
+    }
+
+    private function sendEmail(): void
+    {
+        $users = [
+            $this->event->getOwner(),
+            ...$this->event->getParticipants()->toArray(),
+        ];
+
+        foreach ($users as $user) {
+            $mail = (new TemplatedEmail())
+                ->to($user->getEmail())
+                ->subject('[PartyHall] ' . $this->translator->trans(
+                        'emails.event_concluded.subject',
+                        parameters: [
+                            '%event_name%' => $this->event->getName(),
+                        ],
+                        locale: $user->getLanguage()),
+                )
+                ->htmlTemplate('emails/event_exported.html.twig')
+                ->locale($user->getLanguage())
+                ->context([
+                    'event' => $this->event,
+                    'link' => $this->baseUrl . '/events/' . $this->event->getId()->toString(),
+                ]);
+
+            $this->mailer->send($mail);
+        }
     }
 }

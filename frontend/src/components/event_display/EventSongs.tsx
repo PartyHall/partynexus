@@ -7,7 +7,7 @@ export default function EventSongs({ event }: { event: PnEvent }) {
     const { t } = useTranslation();
 
     return <Flex vertical gap={8}>
-        <Typography.Title>{t('event.karaoke.sessions')}</Typography.Title>
+        <Typography.Title className="red-glow ml1-2">{t('event.karaoke.sessions')}</Typography.Title>
         <Typography.Text>{t('event.karaoke.no_sung_songs')}</Typography.Text>
     </Flex>
 }

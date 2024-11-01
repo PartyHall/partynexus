@@ -1,4 +1,4 @@
-.PHONY: tests migrations export
+.PHONY: tests migrations export consume-mails consume-export
 
 USER := $(shell id -u):$(shell id -g)
 
@@ -23,11 +23,19 @@ reset-db:
 	docker compose exec app bin/console doctrine:schema:drop --force --full-database
 	docker compose exec app bin/console doctrine:schema:drop --env=test --force --full-database
 	$(MAKE) migrate
+	docker compose exec app rm -rf /app/var/uploaded_pictures /app/var/exports /app/var/timelapses
 	docker compose exec app bin/console doctrine:fixtures:load --no-interaction
 	docker compose exec app bin/console doctrine:fixtures:load --env=test --no-interaction
+	$(MAKE) export
 
 export:
-	docker compose exec app bin/console event:export 0192e458-6c42-718f-a0a2-0841c2caacc5 -vvv
+	docker compose exec app bin/console event:export 0192bf5a-67d8-7d9d-8a5e-962b23aceeaa -vvv
+
+consume-mails:
+	docker compose exec app bin/console messenger:consume emails -vvv
+
+consume-export:
+	docker compose exec app bin/console messenger:consume export -vvv
 
 lint:
 	docker compose exec app vendor/bin/php-cs-fixer fix --dry-run -vv --diff

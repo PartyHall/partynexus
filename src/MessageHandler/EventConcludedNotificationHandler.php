@@ -30,7 +30,7 @@ readonly class EventConcludedNotificationHandler
         }
 
         try {
-            $this->eventExporter->exportEvent($event);
+            $this->eventExporter->exportEvent($event, $notification->shouldSendEmail());
         } catch (\Exception $e) {
             $this->logger->error('Failed to export event', ['event_id' => $notification->getEventId(), 'error' => $e]);
         }

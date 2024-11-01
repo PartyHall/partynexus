@@ -1,7 +1,7 @@
 framework:
     messenger:
         transports:
-            async:
+            emails:
                 dsn: 'doctrine://default'
                 options:
                     queue_name: 'emails'
@@ -11,6 +11,6 @@ framework:
                     queue_name: 'exports'
 
         routing:
-            'App\Message\MagicLinkNotification': 'async'
-            'App\Message\UserRegisteredNotification': 'async'
+            'App\Message\MagicLinkNotification': 'emails'
+            'App\Message\UserRegisteredNotification': 'emails'
             'App\Message\EventConcludedNotification': 'export'

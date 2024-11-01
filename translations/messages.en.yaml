@@ -11,7 +11,11 @@ emails:
         text1: 'An administrator created an account for you on PartyHall!'
         link: "Let's login!"
         warning: 'If you did not request this, please contact your PartyHall administrator.'
-        
+    event_concluded:
+        subject: '%event_name% is now over. Watch the event again!'
+        text1: "Now that %event_name% is over, you can see all the pictures taken and a timelapse!"
+        text2: "Let's go on this link to check this out!"
+        link: "See the event" 
 users:
     login:
         banned: 'You are banned.'

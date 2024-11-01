@@ -37,6 +37,7 @@ use Symfony\Component\Validator\Constraints as Assert;
                     fromClass: Event::class, // On veut pointer VERS LA CLASSE AUQUEL eventId FAIT REFERENCE (fromClass event d'après symfonycasts)
                 )
             ],
+            paginationEnabled: false,
             order: ['takenAt' => 'ASC'],
         ),
         new Get(),
