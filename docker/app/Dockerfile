@@ -61,6 +61,9 @@ ENV APP_ENV=dev XDEBUG_MODE=off
 
 RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
 
+COPY ./docker/app/frankenphp/xdebug /usr/bin/xdebug
+RUN chmod +x /usr/bin/xdebug
+
 RUN set -eux; \
 	install-php-extensions \
 		xdebug \

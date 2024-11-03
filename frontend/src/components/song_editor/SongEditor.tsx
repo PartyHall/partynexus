@@ -4,6 +4,8 @@ import SongEditorForm from "./SongEditorForm";
 import SongFileUploader from "./SongFileUploader";
 import Title from "antd/es/typography/Title";
 
+import { useAuth } from "../../hooks/auth";
+import useNotification from "antd/es/notification/useNotification";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -14,7 +16,39 @@ type Props = {
 export default function SongEditor({ song: initialSong }: Props) {
     const [song, setSong] = useState<PnSong | null>(initialSong);
     const { t } = useTranslation();
+    const { api } = useAuth();
+    const [notif, notifCtx] = useNotification();
     const isCreating = !initialSong;
+
+    const [compileInProgress, setCompileInProgress] = useState<boolean>(false);
+
+    const doCompile = async () => {
+        setCompileInProgress(true);
+
+        let newSong: PnSong | null = null;
+
+        try {
+            if (song?.ready) {
+                newSong = await api.karaoke.decompile(song);
+            } else if (song) {
+                newSong = await api.karaoke.compile(song);
+            }
+
+            setSong(newSong);
+            notif.info({
+                message: t(`karaoke.editor.compile.success_${song?.ready ? 'decompile' : 'compile'}.title`),
+                description: t(`karaoke.editor.compile.success_${song?.ready ? 'decompile' : 'compile'}.description`),
+            });
+        } catch (e) {
+            console.error(e);
+            notif.error({
+                message: t(`karaoke.editor.compile.failure_${song?.ready ? 'decompile' : 'compile'}.title`),
+                description: t(`karaoke.editor.compile.failure_${song?.ready ? 'decompile' : 'compile'}.description`),
+            });
+        }
+
+        setCompileInProgress(false);
+    };
 
     return <Flex vertical gap={16}>
         <Typography.Title className="blue-glow">
@@ -26,17 +60,42 @@ export default function SongEditor({ song: initialSong }: Props) {
         {
             !isCreating && song &&
             <>
-                <Flex vertical gap={8}>
-                    <Title className="blue-glow" style={{ margin: 0 }}>{t('karaoke.editor.song_files')}</Title>
+                {
+                    !song.ready && <>
+                        <Flex vertical gap={8}>
+                            <Title className="blue-glow" style={{ margin: 0 }}>{t('karaoke.editor.song_files')}</Title>
 
-                    <SongFileUploader type="instrumental" song={song} />
-                    {
-                        song?.format === 'cdg' &&
-                        <SongFileUploader type="lyrics" song={song} />
-                    }
-                    <SongFileUploader type="vocals" song={song} />
-                    <SongFileUploader type="full" song={song} />
-                </Flex>
+                            <SongFileUploader
+                                type="instrumental"
+                                song={song}
+                                mimetypes={song.format?.toLowerCase() === 'video' ? ['video/webm'] : ['audio/mpeg']}
+                                extensions={song.format?.toLowerCase() === 'video' ? ['.webm'] : ['.mp3']}
+                            />
+                            {
+                                song?.format === 'cdg' &&
+                                <SongFileUploader
+                                    type="lyrics"
+                                    song={song}
+                                    mimetypes={['application/cdg']}
+                                    extensions={['.cdg']}
+                                />
+                            }
+                            <SongFileUploader
+                                type="vocals"
+                                song={song}
+                                mimetypes={['audio/mpeg']}
+                                extensions={['.mp3']}
+                            />
+
+                            <SongFileUploader
+                                type="full"
+                                song={song}
+                                mimetypes={['audio/mpeg']}
+                                extensions={['.mp3']}
+                            />
+                        </Flex>
+                    </>
+                }
 
                 <Flex vertical>
                     <Title className="blue-glow">{t('karaoke.editor.compile.title')}</Title>
@@ -45,11 +104,14 @@ export default function SongEditor({ song: initialSong }: Props) {
                     <Typography.Paragraph>{t('karaoke.editor.compile.text3')}</Typography.Paragraph>
 
                     <Flex align="center" justify="center">
-                        <Button>{t('karaoke.editor.compile.request_' + (song?.ready ? 'decompile' : 'compile'))}</Button>
+                        <Button disabled={compileInProgress} onClick={() => doCompile()}>
+                            {t('karaoke.editor.compile.request_' + (song?.ready ? 'decompile' : 'compile'))}
+                        </Button>
                     </Flex>
                 </Flex>
             </>
         }
 
+        {notifCtx}
     </Flex>
 }

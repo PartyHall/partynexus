@@ -1,9 +1,10 @@
-import { Card, Flex, Typography } from "antd";
-import { AudioLines } from "lucide-react";
+import { Card, Flex, Tooltip, Typography } from "antd";
+import { IconMicrophone, IconPiano, IconVinyl } from '@tabler/icons-react';
 import { Link } from "react-router-dom";
 import PnSong from "../sdk/responses/song";
 import Title from "antd/es/typography/Title";
 import { useTranslation } from "react-i18next";
+
 
 export default function SongCard({ song }: { song: PnSong }) {
     const { t } = useTranslation();
@@ -12,14 +13,6 @@ export default function SongCard({ song }: { song: PnSong }) {
     if (song.coverUrl) {
         url = song.coverUrl;
     }
-
-    const getIconColor = (type: string) => {
-        if (song.files && type == 'instrumental') {
-            return '#FFF';
-        }
-
-        return '#000';
-    };
 
     return <Card
         size="small"
@@ -35,14 +28,22 @@ export default function SongCard({ song }: { song: PnSong }) {
                 alt={`${song.title} - ${song.artist}`}
             />
 
-            <Flex vertical style={{flex: '1'}}>
-                <Typography.Text><Title level={2} style={{margin: 0}}>{song.title}</Title></Typography.Text>
+            <Flex vertical style={{ flex: '1' }}>
+                <Typography.Text><Title level={2} style={{ margin: 0 }}>{song.title}</Title></Typography.Text>
                 <Typography.Text>{t('karaoke.by', { artist: song.artist })}</Typography.Text>
-                <Link to={`/karaoke/${song.id}`} style={{fontSize: '.8em'}}>Edit</Link>
+                <Link to={`/karaoke/${song.id}`} style={{ fontSize: '.8em' }}>Edit</Link>
             </Flex>
 
-            <Flex vertical>
-                <AudioLines color={getIconColor('instrumental')} />
+            <Flex vertical gap={4}>
+                <Tooltip title={t('karaoke.files.instrumental')}>
+                    <IconPiano size={20} color="#fafa" />
+                </Tooltip>
+                <Tooltip title={t('karaoke.files.vocals')}>
+                    <IconMicrophone size={20} color={song.vocals ? "#fafa" : "#777"} />
+                </Tooltip>
+                <Tooltip title={t('karaoke.files.mixed')}>
+                    <IconVinyl size={20} color={song.full ? "#fafa" : "#777"} />
+                </Tooltip>
             </Flex>
         </Flex>
     </Card>;

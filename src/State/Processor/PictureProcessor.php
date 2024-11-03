@@ -21,6 +21,9 @@ readonly class PictureProcessor implements ProcessorInterface
     {
     }
 
+    /**
+     * @throws \Exception
+     */
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): Picture
     {
         $user = $this->security->getUser();

@@ -2,9 +2,9 @@
 
 namespace App\DataFixtures;
 
-use App\ApiResource\SongFormat;
-use App\ApiResource\SongQuality;
 use App\Entity\Song;
+use App\Enum\SongFormat;
+use App\Enum\SongQuality;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory as FakerFactory;
@@ -48,7 +48,7 @@ class SongFixture extends Fixture
                 ->setTitle($song['title'])
                 ->setArtist($song['artist'])
                 ->setMusicBrainzId(Uuid::fromString($song['mbid']))
-                ->setCoverFile($this->getCover($song['cover']))
+                // ->setCoverFile($this->getCover($song['cover']))
                 ->setFormat(SongFormat::from($song['format']))
                 ->setQuality(SongQuality::from($song['quality']))
                 ->setSpotifyId(array_key_exists('spotify', $song) ? $song['spotify'] : null)

@@ -1,5 +1,5 @@
 import { Collection } from "./responses/collection";
-import PnSong from "./responses/song";
+import PnSong, { PnExternalSong } from "./responses/song";
 import { SDK } from ".";
 
 export default class Karaoke {
@@ -40,8 +40,8 @@ export default class Karaoke {
             'hotspot': song.hotspot,
         };
 
-        if (song.musicbrainzId && song.musicbrainzId.length > 0) {
-            body['musicBrainzId'] = song.musicbrainzId
+        if (song.musicBrainzId && song.musicBrainzId.length > 0) {
+            body['musicBrainzId'] = song.musicBrainzId
         }
 
         if (song.spotifyId && song.spotifyId.length > 0) {
@@ -55,7 +55,26 @@ export default class Karaoke {
     }
 
     async updateSong(song: PnSong): Promise<PnSong|null> {
-        return null;
+        const body: any = {
+            'title': song.title,
+            'artist': song.artist,
+            'format': song.format,
+            'quality': song.quality,
+            'hotspot': song.hotspot,
+        };
+
+        if (song.musicBrainzId && song.musicBrainzId.length > 0) {
+            body['musicBrainzId'] = song.musicBrainzId
+        }
+
+        if (song.spotifyId && song.spotifyId.length > 0) {
+            body['spotifyId'] = song.spotifyId
+        }
+
+        const resp = await this.sdk.patch(`/api/songs/${song.id}`, body);
+        const data = await resp.json();
+
+        return PnSong.fromJson(data);
     }
 
     async upsertSong(song: PnSong): Promise<PnSong|null> {
@@ -64,5 +83,46 @@ export default class Karaoke {
         }
 
         return this.createSong(song);
+    }
+
+    async searchExternal(provider: string, artist: string, title: string): Promise<Collection<PnExternalSong>|null> {
+        const resp = await this.sdk.get(`/api/external/${provider.toLowerCase()}/${artist}/${title}`)
+        const data = await resp.json();
+        
+        return PnExternalSong.fromCollection(data);
+    }
+
+    async compile(song: PnSong): Promise<PnSong|null> {
+        const resp = await this.sdk.patch(`/api/songs/${song.id}/compile`, {});
+        const data = await resp.json();
+
+        return PnSong.fromJson(data);
+    }
+
+    async decompile(song: PnSong): Promise<PnSong|null> {
+        const resp = await this.sdk.patch(`/api/songs/${song.id}/decompile`, {});
+        const data = await resp.json();
+
+        return PnSong.fromJson(data);
+    }
+
+    async uploadFile(song: PnSong, filetype: string, file: any) {
+        const fd = new FormData();
+        fd.set('file', file);
+
+        const resp = await this.sdk.request(
+            `/api/songs/${song.id}/upload-file/${filetype}?XDEBUG_TRIGGER=1`,
+            {
+                method: 'POST',
+                headers: {
+                    Authorization: 'Bearer ' + this.sdk.token,
+                },
+                body: fd,
+            }
+        );
+
+        const data = await resp.json();
+
+        return PnSong.fromJson(data);
     }
 }

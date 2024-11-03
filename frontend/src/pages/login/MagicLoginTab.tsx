@@ -1,6 +1,6 @@
 import { Button, Flex, Form, Input, Typography } from "antd";
+import { IconLogin, IconMail } from "@tabler/icons-react";
 import { FormItem } from "react-hook-form-antd";
-import { MailOutlined } from '@ant-design/icons';
 
 import { useAuth } from "../../hooks/auth";
 import { useForm } from "react-hook-form";
@@ -50,15 +50,19 @@ export default function MagicLinkLoginTab() {
                 !submitted && <>
                     <Typography.Text>{t('login.magic_login.desc')}</Typography.Text>
 
-                    <FormItem control={control} name="email" style={{marginBottom: 0}}>
-                        <Input prefix={<MailOutlined />} placeholder={t('generic.email')} required />
+                    <FormItem control={control} name="email" style={{ marginBottom: 0 }}>
+                        <Input prefix={<IconMail size={20} />} placeholder={t('generic.email')} required />
                     </FormItem>
 
                     {error && <Typography.Text className="red-glow">{t(error)}</Typography.Text>}
 
                     <Flex align="center" justify="center">
                         <Form.Item>
-                            <Button type="primary" htmlType="submit">
+                            <Button
+                                type="primary"
+                                htmlType="submit"
+                                icon={<IconLogin size={20} />}
+                            >
                                 {t('login.login_bt')}
                             </Button>
                         </Form.Item>

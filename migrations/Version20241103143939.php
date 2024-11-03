@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20241031195718 extends AbstractMigration
+final class Version20241103143939 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -38,10 +38,11 @@ final class Version20241031195718 extends AbstractMigration
         $this->addSql('CREATE INDEX IDX_92589AE271F7E88B ON event_user (event_id)');
         $this->addSql('CREATE INDEX IDX_92589AE2A76ED395 ON event_user (user_id)');
         $this->addSql('COMMENT ON COLUMN event_user.event_id IS \'(DC2Type:uuid)\'');
-        $this->addSql('CREATE TABLE export (id INT NOT NULL, event_id UUID NOT NULL, started_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, status VARCHAR(255) DEFAULT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE TABLE export (id INT NOT NULL, event_id UUID NOT NULL, started_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, ended_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, progress VARCHAR(255) NOT NULL, status VARCHAR(255) NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_428C169471F7E88B ON export (event_id)');
         $this->addSql('COMMENT ON COLUMN export.event_id IS \'(DC2Type:uuid)\'');
         $this->addSql('COMMENT ON COLUMN export.started_at IS \'(DC2Type:datetime_immutable)\'');
+        $this->addSql('COMMENT ON COLUMN export.ended_at IS \'(DC2Type:datetime_immutable)\'');
         $this->addSql('CREATE TABLE magic_link (id INT NOT NULL, user_id INT DEFAULT NULL, created_at TIMESTAMP(0) WITH TIME ZONE NOT NULL, code VARCHAR(255) NOT NULL, used BOOLEAN NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX IDX_6B40B1C6A76ED395 ON magic_link (user_id)');
         $this->addSql('COMMENT ON COLUMN magic_link.created_at IS \'(DC2Type:datetimetz_immutable)\'');
@@ -57,15 +58,11 @@ final class Version20241031195718 extends AbstractMigration
         $this->addSql('COMMENT ON COLUMN picture.appliance_uuid IS \'(DC2Type:uuid)\'');
         $this->addSql('CREATE TABLE refresh_tokens (id INT NOT NULL, refresh_token VARCHAR(128) NOT NULL, username VARCHAR(255) NOT NULL, valid TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_9BACE7E1C74F2195 ON refresh_tokens (refresh_token)');
-        $this->addSql('CREATE TABLE song (id INT NOT NULL, title VARCHAR(255) NOT NULL, artist VARCHAR(255) NOT NULL, cover_name VARCHAR(255) DEFAULT NULL, format VARCHAR(20) NOT NULL, quality VARCHAR(20) NOT NULL, music_brainz_id UUID DEFAULT NULL, spotify_id VARCHAR(255) DEFAULT NULL, nexus_build_id UUID DEFAULT NULL, hotspot INT DEFAULT NULL, ready BOOLEAN DEFAULT false NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE TABLE song (id INT NOT NULL, title VARCHAR(255) NOT NULL, artist VARCHAR(255) NOT NULL, cover_name VARCHAR(255) DEFAULT NULL, format VARCHAR(20) NOT NULL, quality VARCHAR(20) NOT NULL, music_brainz_id UUID DEFAULT NULL, spotify_id VARCHAR(255) DEFAULT NULL, nexus_build_id UUID DEFAULT NULL, hotspot INT DEFAULT NULL, ready BOOLEAN DEFAULT false NOT NULL, cover BOOLEAN DEFAULT false NOT NULL, vocals BOOLEAN DEFAULT false NOT NULL, combined BOOLEAN DEFAULT false NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, PRIMARY KEY(id))');
         $this->addSql('COMMENT ON COLUMN song.music_brainz_id IS \'(DC2Type:uuid)\'');
         $this->addSql('COMMENT ON COLUMN song.nexus_build_id IS \'(DC2Type:uuid)\'');
         $this->addSql('COMMENT ON COLUMN song.created_at IS \'(DC2Type:datetime_immutable)\'');
         $this->addSql('COMMENT ON COLUMN song.updated_at IS \'(DC2Type:datetime_immutable)\'');
-        $this->addSql('CREATE TABLE song_file (type VARCHAR(64) NOT NULL, song_id INT NOT NULL, filename VARCHAR(255) DEFAULT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, PRIMARY KEY(song_id, type))');
-        $this->addSql('CREATE INDEX IDX_FF0CE0E5A0BDB2F3 ON song_file (song_id)');
-        $this->addSql('COMMENT ON COLUMN song_file.created_at IS \'(DC2Type:datetime_immutable)\'');
-        $this->addSql('COMMENT ON COLUMN song_file.updated_at IS \'(DC2Type:datetime_immutable)\'');
         $this->addSql('CREATE TABLE messenger_messages (id BIGSERIAL NOT NULL, body TEXT NOT NULL, headers TEXT NOT NULL, queue_name VARCHAR(190) NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, available_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, delivered_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX IDX_75EA56E0FB7336F0 ON messenger_messages (queue_name)');
         $this->addSql('CREATE INDEX IDX_75EA56E0E3BD61CE ON messenger_messages (available_at)');
@@ -88,7 +85,6 @@ final class Version20241031195718 extends AbstractMigration
         $this->addSql('ALTER TABLE export ADD CONSTRAINT FK_428C169471F7E88B FOREIGN KEY (event_id) REFERENCES event (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE magic_link ADD CONSTRAINT FK_6B40B1C6A76ED395 FOREIGN KEY (user_id) REFERENCES nexus_user (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE picture ADD CONSTRAINT FK_16DB4F8971F7E88B FOREIGN KEY (event_id) REFERENCES event (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
-        $this->addSql('ALTER TABLE song_file ADD CONSTRAINT FK_FF0CE0E5A0BDB2F3 FOREIGN KEY (song_id) REFERENCES song (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
     }
 
     public function down(Schema $schema): void
@@ -108,7 +104,6 @@ final class Version20241031195718 extends AbstractMigration
         $this->addSql('ALTER TABLE export DROP CONSTRAINT FK_428C169471F7E88B');
         $this->addSql('ALTER TABLE magic_link DROP CONSTRAINT FK_6B40B1C6A76ED395');
         $this->addSql('ALTER TABLE picture DROP CONSTRAINT FK_16DB4F8971F7E88B');
-        $this->addSql('ALTER TABLE song_file DROP CONSTRAINT FK_FF0CE0E5A0BDB2F3');
         $this->addSql('DROP TABLE appliance');
         $this->addSql('DROP TABLE event');
         $this->addSql('DROP TABLE event_user');
@@ -118,7 +113,6 @@ final class Version20241031195718 extends AbstractMigration
         $this->addSql('DROP TABLE picture');
         $this->addSql('DROP TABLE refresh_tokens');
         $this->addSql('DROP TABLE song');
-        $this->addSql('DROP TABLE song_file');
         $this->addSql('DROP TABLE messenger_messages');
     }
 }

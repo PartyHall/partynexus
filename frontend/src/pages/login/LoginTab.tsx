@@ -1,5 +1,5 @@
 import { Button, Flex, Form, Input, Typography } from "antd";
-import { LockOutlined, UserOutlined } from '@ant-design/icons';
+import { IconLock, IconLogin, IconUser } from "@tabler/icons-react";
 import { FormItem } from "react-hook-form-antd";
 import { SdkError } from "../../sdk/responses/error";
 import { useAuth } from "../../hooks/auth";
@@ -42,11 +42,11 @@ export default function LoginTab() {
         onFinish={handleSubmit(doLogin)}
     >
         <FormItem control={control} name="username">
-            <Input prefix={<UserOutlined />} placeholder={t('generic.username')} required />
+            <Input prefix={<IconUser size={20} />} placeholder={t('generic.username')} required />
         </FormItem>
 
         <FormItem control={control} name="password">
-            <Input.Password prefix={<LockOutlined />} placeholder={t('generic.password')} required />
+            <Input.Password prefix={<IconLock size={20} />} placeholder={t('generic.password')} required />
         </FormItem>
 
         {
@@ -57,7 +57,12 @@ export default function LoginTab() {
 
         <Flex align="center" justify="center" style={{marginTop: 32}}>
             <Form.Item>
-                <Button type="primary" htmlType="submit" disabled={loading}>
+                <Button
+                    type="primary"
+                    htmlType="submit"
+                    disabled={loading}
+                    icon={<IconLogin size={20} />}
+                >
                     {t('login.login_bt')}
                 </Button>
             </Form.Item>

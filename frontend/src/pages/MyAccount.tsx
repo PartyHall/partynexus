@@ -2,6 +2,7 @@ import { Button, Flex, Typography } from "antd";
 import { useAsyncEffect, useTitle } from "ahooks";
 
 import AccountEditor from "../components/AccountEditor";
+import { IconLogout, IconUser } from "@tabler/icons-react";
 import Loader from "../components/Loader";
 import { User } from "../sdk/responses/user";
 
@@ -45,10 +46,20 @@ export default function MyAccountPage() {
             </Flex>
 
             {
-                isGranted('ROLE_ADMIN') && <Button onClick={() => navigate('/admin/users')}>{t('my_account.user_management')}</Button>
+                isGranted('ROLE_ADMIN') && <Button
+                    onClick={() => navigate('/admin/users')}
+                    icon={<IconUser size={20} />}
+                >
+                    {t('my_account.user_management')}
+                </Button>
             }
 
-            <Button onClick={logout}>{t('my_account.logout')}</Button>
+            <Button
+                onClick={logout}
+                icon={<IconLogout size={20} />}
+            >
+                {t('my_account.logout')}
+            </Button>
         </Loader>
     </Flex>
 }

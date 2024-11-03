@@ -8,6 +8,7 @@ import EventInfos from "../components/event_display/EventInfos";
 import EventPictureBar from "../components/event_display/EventPictureBar";
 import EventSongs from "../components/event_display/EventSongs";
 
+import { IconEdit } from "@tabler/icons-react";
 import Loader from "../components/Loader";
 import { PnEvent } from "../sdk/responses/event";
 import { SdkError } from "../sdk/responses/error";
@@ -76,7 +77,14 @@ export default function ShowEventPage() {
             !error && event && <>
                 <Flex justify="space-between" align="center" style={{ marginRight: '1em' }}>
                     <Typography.Title className="blue-glow">{event.name}</Typography.Title>
-                    {displayOwnerStuff && <Button onClick={() => navigate(`/events/${event.id}/edit`)}>{t('event.edit')}</Button>}
+                    {
+                        displayOwnerStuff && <Button
+                            onClick={() => navigate(`/events/${event.id}/edit`)}
+                            icon={<IconEdit size={20}/>}
+                        >
+                            {t('event.edit')}
+                        </Button>
+                    }
                 </Flex>
 
                 <Collapse items={infosItems} defaultActiveKey={'infos'} />

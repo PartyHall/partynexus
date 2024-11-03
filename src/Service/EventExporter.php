@@ -226,6 +226,9 @@ class EventExporter
         $this->logger->info("Metadata added to the export", ['event' => $this->event->getId()->toString()]);
     }
 
+    /**
+     * @throws \Exception
+     */
     private function buildZip(): void
     {
         $this->setStatus(ExportProgress::BUILDING_ZIP);

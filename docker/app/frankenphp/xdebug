@@ -1,0 +1,2 @@
+#!/bin/bash
+PHP_IDE_CONFIG="serverName=localhost" XDEBUG_TRIGGER=1 php -dxdebug.remote_host=host.docker.internal -dxdebug.client_port=9003 "$@"

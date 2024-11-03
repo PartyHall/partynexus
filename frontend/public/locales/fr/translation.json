@@ -99,6 +99,11 @@
         "song_count": "{{total}} musiques",
         "new_song": "Créer une musique",
         "request_song": "Demander une musique",
+        "files": {
+            "instrumental": "Instrumentale",
+            "vocals": "Voix",
+            "mixed": "Mixés"
+        },
         "editor": {
             "title_edit": "Modification de {{title}}",
             "title_new": "Nouvelle musique",
@@ -108,13 +113,56 @@
             "quality": "Qualité",
             "save": "Sauvegarder",
             "song_files": "Fichiers de la musique",
+            "cover": {
+                "bad_format": {
+                    "title": "Ce format est invalide",
+                    "description": "Merci d'utiliser uniquement des jpeg, png ou webp"
+                },
+                "failed": {
+                    "title": "Échec du changement de cover",
+                    "description": "La cover n'a pas été mise à jour. Voir la console pour plus d'infos."
+                }
+            },
+            "upload": {
+                "choose_bt": "Choisir un fichier",
+                "bad_format": {
+                    "title": "Le format est invalide",
+                    "description": "Merci d'utiliser le bon format en fonction du fichier."
+                },
+                "failed": {
+                    "title": "Échec de l'upload",
+                    "description": "L'envoie à échoué. Voir la console pour plus d'infos."
+                }
+            },
             "compile": {
                 "title": "Paramètres de compilation",
                 "text1": "Une musique peut être décompilée (extraite, prête à être édité) ou compilé (un fichier .phk est généré et l'édition est bloquée).",
                 "text2": "Vous pouvez ici demander une compilation / décompilation de votre musique",
                 "text3": "Nb: Décompiler une musique va la supprimer de tous vos appareils qui l'ont synchronisé. Si vous recompilez, les appareils pourront la resynchroniser.",
                 "request_compile": "Lancer la compilation",
-                "request_decompile": "Lancer la décompilation"
+                "request_decompile": "Lancer la décompilation",
+                "success_compile": {
+                    "title": "Musique compilée",
+                    "description": "La musique à été correctement compilée"
+                },
+                "failure_compile": {
+                    "title": "Échec de la compilation",
+                    "description": "La musique n'a pas été compilée, voir la console pour plus d'infos"
+                },
+                "success_decompile": {
+                    "title": "Musique décompilée",
+                    "description": "La musique à été correctement décompilée"
+                },
+                "failure_decompile": {
+                    "title": "Échec de la décompilation",
+                    "description": "La musique n'a pas été décompilée, voir la console pour plus d'infos"
+                }
+            },
+            "search_external": {
+                "title": "Recherche de metadata sur {{provider}}",
+                "artist": "Artiste",
+                "track": "Nom",
+                "id": "ID"
             }
         }
     },
