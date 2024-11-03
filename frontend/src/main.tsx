@@ -3,26 +3,26 @@ import './assets/css/index.scss';
 import { ConfigProvider, theme } from 'antd';
 import { I18nextProvider, initReactI18next } from 'react-i18next';
 import { RouterProvider, createBrowserRouter, redirect } from 'react-router-dom';
+import AdminLayout from './layout/AdminLayout.tsx';
+import AdminNewUserPage from './pages/admin/new_user.tsx';
+import AdminUsersPage from './pages/admin/users.tsx';
 import AuthProvider from './hooks/auth.tsx';
 import AuthenticatedLayout from './layout/AuthenticatedLayout.tsx';
 import Backend from 'i18next-http-backend';
 import EditEventPage from './pages/EditEvent.tsx';
+import EditSongPage from './pages/karaoke/EditSong.tsx';
 import EventsPage from './pages/Events.tsx';
 import LoginPage from './pages/login/index.tsx';
+import MagicLoginPage from './pages/login/MagicLoginCallback.tsx';
 import MyAccountPage from './pages/MyAccount.tsx';
 import NewEventPage from './pages/NewEvent.tsx';
+import NewSongPage from './pages/karaoke/NewSong.tsx';
 import ShowEventPage from './pages/ShowEvent.tsx';
+import SongListingPage from './pages/karaoke/SongListing.tsx';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import detector from "i18next-browser-languagedetector";
 import i18n from "i18next";
-import SongListingPage from './pages/karaoke/SongListing.tsx';
-import NewSongPage from './pages/karaoke/NewSong.tsx';
-import EditSongPage from './pages/karaoke/EditSong.tsx';
-import MagicLoginPage from './pages/login/MagicLoginCallback.tsx';
-import AdminLayout from './layout/AdminLayout.tsx';
-import AdminUsersPage from './pages/admin/users.tsx';
-import AdminNewUserPage from './pages/admin/new_user.tsx';
 
 i18n
     .use(Backend)
@@ -30,6 +30,9 @@ i18n
     .use(initReactI18next)
     .init({
         fallbackLng: 'en',
+        interpolation: {
+            escapeValue: false,
+        }
     });
 
 const router = createBrowserRouter([

@@ -1,15 +1,14 @@
 <?php
 
-namespace App\ApiResource;
+namespace App\Enum;
 
 use ApiPlatform\Metadata\Operation;
 
-enum SongQuality: string
+enum SongFormat: string
 {
-    case BAD = 'bad';
-    case OK = 'ok';
-    case GOOD = 'good';
-    case PERFECT = 'perfect';
+    case VIDEO = 'video';
+    case CDG = 'cdg';
+    case TRANSPARENT_VIDEO = 'transparent_video';
 
     public static function getCases(): array
     {

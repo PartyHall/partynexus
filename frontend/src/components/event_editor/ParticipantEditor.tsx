@@ -1,5 +1,5 @@
 import { AutoComplete, Button, Card, Flex, Popconfirm, Typography } from "antd";
-import { CircleX } from "lucide-react";
+import { IconUserX } from "@tabler/icons-react";
 import { PnEvent } from "../../sdk/responses/event";
 import { useAuth } from "../../hooks/auth";
 import { useDebounceFn } from "ahooks";
@@ -135,7 +135,7 @@ export default function ParticipantsEditor({ event, setEvent }: { event: PnEvent
                             okText={t('event.editor.delete.yes')}
                             cancelText={t('event.editor.delete.cancel')}
                         >
-                            <Button type="primary" shape="circle" icon={<CircleX />} />
+                            <Button type="primary" shape="circle" icon={<IconUserX size={20} />} />
                         </Popconfirm>
                     </Flex>
                 </Card>)

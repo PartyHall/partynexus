@@ -1,5 +1,5 @@
 import { Button, Flex, Popconfirm } from "antd";
-import { FolderInput, HardDriveDownload } from "lucide-react";
+import { IconCheckbox, IconCloudDownload, IconFileArrowRight } from "@tabler/icons-react";
 import { PnEvent } from "../../sdk/responses/event";
 import { useAuth } from "../../hooks/auth";
 import useNotification from "antd/es/notification/useNotification";
@@ -55,17 +55,17 @@ export default function EventActionBar({ event, displayOwnerStuff, setEvent }: P
                 okText={t('event.conclude.yes')}
                 cancelText={t('event.conclude.cancel')}
             >
-                <Button icon={<FolderInput />}>{t('event.conclude.bt')}</Button>
+                <Button icon={<IconCheckbox />}>{t('event.conclude.bt')}</Button>
             </Popconfirm>
         }
         {
             displayOwnerStuff &&
             event.over &&
-            <Button icon={<FolderInput />} onClick={onConclude}>{t('event.force_export')}</Button>
+            <Button icon={<IconFileArrowRight />} onClick={onConclude}>{t('event.force_export')}</Button>
         }
         {
             event.export &&
-            <Button icon={<HardDriveDownload />} onClick={onDownload}>
+            <Button icon={<IconCloudDownload />} onClick={onDownload}>
                 {t('event.download_export')}
             </Button>
         }

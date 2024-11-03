@@ -10,13 +10,14 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
-use App\ApiResource\SongFormat;
-use App\ApiResource\SongQuality;
+use App\Enum\SongFormat;
+use App\Enum\SongQuality;
 use App\Filter\FullTextSearchFilter;
 use App\Interface\HasTimestamps;
 use App\Interface\Impl\HasTimestampsTrait;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use App\Repository\SongRepository;
+use App\State\Processor\SongCompileProcessor;
+use App\State\Processor\SongDecompileProcessor;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Types\UuidType;
@@ -26,22 +27,19 @@ use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
-// @TODO: A built song should have nothing extracted from .phk that can be exported by the admin and that is used by the
-// appliance to sync songs
+/**
+ * @TODO: When a video is uploaded it should be ran through ffmpeg to get it in vp9/webm
+ * This means that we should have a way of telling on the frontend that this is in progress
+ * thus preventing the compilation.
+ */
 
 /**
  * @see App\Doctrine\FilterSongOnReadinessExtension
  */
 #[ApiResource(
     operations: [
-        new GetCollection(
-            normalizationContext: ['groups' => [self::API_GET_COLLECTION]],
-        ),
-        new Get(
-            normalizationContext: ['groups' => [self::API_GET_ITEM]],
-        ),
-        // Add an operation called "add-file with parameter to choose the file-kind to add
-        // Add an operation called "build" that generates the .phk, mark the song as ready to make it accessible for appliances
+        new GetCollection(normalizationContext: ['groups' => [self::API_GET_COLLECTION]]),
+        new Get(normalizationContext: ['groups' => [self::API_GET_ITEM]]),
         new Post(
             normalizationContext: ['groups' => [self::API_GET_ITEM]],
             denormalizationContext: ['groups' => [self::API_CREATE]],
@@ -50,18 +48,28 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
         new Patch(
             normalizationContext: ['groups' => [self::API_GET_ITEM]],
             denormalizationContext: ['groups' => [self::API_UPDATE]],
-            security: 'is_granted("ROLE_ADMIN") AND NOT object.ready',
-            // @TODO: EventListener if the object goes to ready, block everything and compile the file
-            // @TODO: Not sure how I want to handle this, maybe any edit unready it
+            security: 'is_granted("ROLE_ADMIN") and not object.ready',
         ),
-        new Delete(
+        new Patch(
+            uriTemplate: '/songs/{id}/compile',
+            normalizationContext: ['groups' => [self::API_GET_ITEM]],
+            denormalizationContext: ['groups' => [self::API_COMPILE]],
             security: 'is_granted("ROLE_ADMIN")',
+            processor: SongCompileProcessor::class,
         ),
+        new Patch(
+            uriTemplate: '/songs/{id}/decompile',
+            normalizationContext: ['groups' => [self::API_GET_ITEM]],
+            denormalizationContext: ['groups' => [self::API_COMPILE]],
+            security: 'is_granted("ROLE_ADMIN")',
+            processor: SongDecompileProcessor::class,
+        ),
+        new Delete(security: 'is_granted("ROLE_ADMIN")'),
     ]
 )]
 #[ApiFilter(BooleanFilter::class, properties: ['ready'])]
 #[ApiFilter(FullTextSearchFilter::class, properties: ['title' => 'partial', 'artist' => 'partial'])]
-#[ORM\Entity]
+#[ORM\Entity(repositoryClass: SongRepository::class)]
 #[Vich\Uploadable]
 class Song implements HasTimestamps
 {
@@ -71,6 +79,16 @@ class Song implements HasTimestamps
     public const string API_GET_COLLECTION = 'api:song:get-collection';
     public const string API_CREATE = 'api:song:create';
     public const string API_UPDATE = 'api:song:create';
+    public const string API_COMPILE = 'api:song:compile';
+    public const string COMPILE_METADATA = 'compile:metadata';
+
+    public static array $ALLOWED_FILETYPES = [
+        'cover',
+        'instrumental',
+        'lyrics',
+        'vocals',
+        'full',
+    ];
 
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'SEQUENCE')]
@@ -81,28 +99,24 @@ class Song implements HasTimestamps
     ])]
     private int $id;
 
-    /**
-     * The title of the song
-     */
     #[ORM\Column(type: Types::STRING, length: 255)]
     #[Groups([
         self::API_CREATE,
         self::API_UPDATE,
         self::API_GET_ITEM,
         self::API_GET_COLLECTION,
+        self::COMPILE_METADATA,
     ])]
     #[Assert\NotBlank]
     private string $title;
 
-    /**
-     * The artist that made the song
-     */
     #[ORM\Column(type: Types::STRING, length: 255)]
     #[Groups([
         self::API_CREATE,
         self::API_UPDATE,
         self::API_GET_ITEM,
         self::API_GET_COLLECTION,
+        self::COMPILE_METADATA,
     ])]
     #[Assert\NotBlank]
     private string $artist;
@@ -110,37 +124,27 @@ class Song implements HasTimestamps
     #[Vich\UploadableField(mapping: 'song_covers', fileNameProperty: 'coverName')]
     private ?File $coverFile = null;
 
-    #[ORM\Column(nullable: true)]
+    #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
     private ?string $coverName = null;
 
-    #[Groups([
-        self::API_GET_ITEM,
-        self::API_GET_COLLECTION,
-    ])]
-    public ?string $coverUrl = null;
-
-    /**
-     * The file format used in the phk file
-     */
     #[ORM\Column(type: Types::STRING, length: 20, enumType: SongFormat::class)]
     #[Groups([
         self::API_CREATE,
         self::API_UPDATE,
         self::API_GET_ITEM,
         self::API_GET_COLLECTION,
+        self::COMPILE_METADATA,
     ])]
     #[Assert\NotBlank]
     private SongFormat $format;
 
-    /**
-     * When a video, the quality of the video
-     */
     #[ORM\Column(type: Types::STRING, length: 20, enumType: SongQuality::class)]
     #[Groups([
         self::API_CREATE,
         self::API_UPDATE,
         self::API_GET_ITEM,
         self::API_GET_COLLECTION,
+        self::COMPILE_METADATA,
     ])]
     #[Assert\NotBlank]
     private SongQuality $quality;
@@ -153,6 +157,7 @@ class Song implements HasTimestamps
         self::API_CREATE,
         self::API_UPDATE,
         self::API_GET_ITEM,
+        self::COMPILE_METADATA,
     ])]
     #[Assert\Uuid]
     private ?Uuid $musicBrainzId = null;
@@ -166,6 +171,7 @@ class Song implements HasTimestamps
         self::API_UPDATE,
         self::API_GET_ITEM,
         self::API_GET_COLLECTION,
+        self::COMPILE_METADATA,
     ])]
     private ?string $spotifyId = null;
 
@@ -180,6 +186,7 @@ class Song implements HasTimestamps
     #[ORM\Column(type: UuidType::NAME, nullable: true)]
     #[Groups([
         self::API_GET_ITEM,
+        self::COMPILE_METADATA,
     ])]
     #[Assert\Uuid]
     private ?Uuid $nexusBuildId;
@@ -194,6 +201,7 @@ class Song implements HasTimestamps
         self::API_CREATE,
         self::API_UPDATE,
         self::API_GET_ITEM,
+        self::COMPILE_METADATA,
     ])]
     #[Assert\PositiveOrZero]
     private ?int $hotspot = null;
@@ -204,23 +212,40 @@ class Song implements HasTimestamps
      */
     #[ORM\Column(type: Types::BOOLEAN, options: ['default' => false])]
     #[Groups([
-        self::API_UPDATE,
         self::API_GET_ITEM,
         self::API_GET_COLLECTION,
     ])]
-    public bool $ready = false;
+    public bool $ready = false; // ??? Why can't I set it to private as I have getter & setter?
 
-    #[ORM\OneToMany(targetEntity: SongFile::class, mappedBy: 'song', cascade: ['persist'], orphanRemoval: true)]
+    #[ORM\Column(type: Types::BOOLEAN, options: ['default' => false])]
     #[Groups([
-        self::API_UPDATE,
         self::API_GET_ITEM,
         self::API_GET_COLLECTION,
     ])]
-    public Collection $files;
+    private bool $cover = false;
+
+    #[Groups([
+        self::API_GET_COLLECTION,
+        self::API_GET_ITEM,
+    ])]
+    public ?string $coverUrl = null;
+
+    #[ORM\Column(type: Types::BOOLEAN, options: ['default' => false])]
+    #[Groups([
+        self::API_GET_ITEM,
+        self::API_GET_COLLECTION,
+    ])]
+    private bool $vocals = false;
+
+    #[ORM\Column(type: Types::BOOLEAN, options: ['default' => false])]
+    #[Groups([
+        self::API_GET_ITEM,
+        self::API_GET_COLLECTION,
+    ])]
+    private bool $combined = false;
 
     public function __construct()
     {
-        $this->files = new ArrayCollection();
         $this->setCreatedAt(new \DateTimeImmutable());
     }
 
@@ -267,18 +292,6 @@ class Song implements HasTimestamps
             // otherwise the event listeners won't be called and the file is lost
             $this->updatedAt = new \DateTimeImmutable();
         }
-
-        return $this;
-    }
-
-    public function getCoverName(): ?string
-    {
-        return $this->coverName;
-    }
-
-    public function setCoverName(?string $coverName): self
-    {
-        $this->coverName = $coverName;
 
         return $this;
     }
@@ -367,22 +380,49 @@ class Song implements HasTimestamps
         return $this;
     }
 
-    public function getCoverUrl(): ?string
+    public function isCover(): bool
     {
-        return $this->coverUrl;
+        return $this->cover;
     }
 
-    public function getFiles(): Collection
+    public function setCover(bool $cover): self
     {
-        return $this->files;
+        $this->cover = $cover;
+
+        return $this;
     }
 
-    public function setFiles(Collection|array $files): void
+    public function isVocals(): bool
     {
-        if (is_array($files)) {
-            $files = new ArrayCollection($files);
-        }
+        return $this->vocals;
+    }
 
-        $this->files = $files;
+    public function setVocals(bool $vocals): self
+    {
+        $this->vocals = $vocals;
+
+        return $this;
+    }
+
+    public function isCombined(): bool
+    {
+        return $this->combined;
+    }
+
+    public function setCombined(bool $combined): self
+    {
+        $this->combined = $combined;
+
+        return $this;
+    }
+
+    public function getCoverName(): ?string
+    {
+        return $this->coverName;
+    }
+
+    public function setCoverName(?string $coverName): void
+    {
+        $this->coverName = $coverName;
     }
 }

@@ -1,5 +1,5 @@
-import { Ban, Undo2 } from "lucide-react";
 import { Button, Card, Flex, Popconfirm, Tooltip, Typography } from "antd";
+import { IconBan, IconArrowBackUp } from "@tabler/icons-react";
 import { PnListUser } from "../../sdk/responses/user";
 import { useAuth } from "../../hooks/auth";
 import useNotification from "antd/es/notification/useNotification";
@@ -73,7 +73,7 @@ export default function UserListCard({ user: listUser }: { user: PnListUser }) {
                     <Flex align="center" justify="center" gap={16}>
                         <Typography.Text>{user.bannedAt.format('YYYY-MM-DD HH:mm:ss')}</Typography.Text>
                         <Tooltip title={t('users.unban.tooltip')}>
-                            <Button icon={<Undo2 />} />
+                            <Button icon={<IconArrowBackUp size={20} />} />
                         </Tooltip>
                     </Flex>
                 </Popconfirm>
@@ -88,7 +88,7 @@ export default function UserListCard({ user: listUser }: { user: PnListUser }) {
                     cancelText={t('users.ban.confirm.cancel')}
                 >
                     <Tooltip title={t('users.ban.tooltip')}>
-                        <Button icon={<Ban />} />
+                        <Button icon={<IconBan size={20} />} />
                     </Tooltip>
                 </Popconfirm>
             }

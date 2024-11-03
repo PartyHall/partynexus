@@ -1,6 +1,6 @@
-import { AudioOutlined, CalendarOutlined, MenuOutlined, UserOutlined } from '@ant-design/icons';
 import { Content, Footer, Header } from 'antd/es/layout/layout';
 import { Flex, Layout, Menu, Typography } from 'antd';
+import { IconCalendar, IconMenu, IconMicrophone2, IconUser } from '@tabler/icons-react';
 import { Outlet, useNavigate } from 'react-router-dom';
 import React, { useEffect } from 'react';
 import PhLogo from '../assets/ph_logo_sd.webp';
@@ -13,9 +13,9 @@ export default function AuthenticatedLayout() {
   const navigate = useNavigate();
 
   const menuItems = [
-    { key: '/', label: t('menu.events'), icon: <CalendarOutlined /> },
-    { 'key': '/karaoke', label: t('menu.karaoke'), icon: <AudioOutlined /> },
-    { key: '/me', label: t('menu.my_account'), icon: <UserOutlined /> },
+    { key: '/', label: t('menu.events'), icon: <IconCalendar size={20} /> },
+    { 'key': '/karaoke', label: t('menu.karaoke'), icon: <IconMicrophone2 size={20} /> },
+    { key: '/me', label: t('menu.my_account'), icon: <IconUser size={20} /> },
   ];
 
   useEffect(() => {
@@ -49,7 +49,7 @@ export default function AuthenticatedLayout() {
           items={menuItems}
           selectedKeys={['/me']} // We want to highlight the acount and nothing else so lets just reuse this
           style={{ flex: 1, minWidth: 0, justifyContent: 'end', gap: 8 }}
-          overflowedIndicator={<MenuOutlined />}
+          overflowedIndicator={<IconMenu size={20} />}
           onClick={(menuitem) => {
             if (menuitem) {
               navigate(menuitem.key);

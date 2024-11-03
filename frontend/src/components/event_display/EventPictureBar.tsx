@@ -1,12 +1,13 @@
 import { Button, Flex, Image, Modal, Typography } from "antd";
-import {
-    DownloadOutlined,
-    RotateLeftOutlined,
-    RotateRightOutlined,
-    ZoomInOutlined,
-    ZoomOutOutlined,
-} from '@ant-design/icons';
 
+import {
+    IconDownload,
+    IconRotate,
+    IconRotateClockwise,
+    IconVideo,
+    IconZoomIn,
+    IconZoomOut
+} from '@tabler/icons-react';
 import Loader from "../Loader";
 import PictureCard from "../PictureCard";
 import { PnEvent } from "../../sdk/responses/event";
@@ -70,6 +71,8 @@ export default function EventPictureBar({ event }: { event: PnEvent }) {
             });
     };
 
+    // @TODO: Tooltip on iconbar in the picture displayer
+
     return <Flex vertical gap={8}>
         <Typography.Title className="red-glow ml1-2">{t('event.pictures.title')}</Typography.Title>
         <Loader loading={loadingPictures}>
@@ -88,11 +91,11 @@ export default function EventPictureBar({ event }: { event: PnEvent }) {
                                     },
                                 ) => (
                                     <Flex gap={16} className="ant-image-preview-operations" style={{ padding: '.5em' }}>
-                                        <Button shape="circle" icon={<RotateLeftOutlined />} onClick={onRotateLeft} />
-                                        <Button shape="circle" icon={<RotateRightOutlined />} onClick={onRotateRight} />
-                                        <Button shape="circle" icon={<ZoomOutOutlined />} disabled={scale === 1} onClick={onZoomOut} />
-                                        <Button shape="circle" icon={<ZoomInOutlined />} disabled={scale === 50} onClick={onZoomIn} />
-                                        <Button shape="circle" icon={<DownloadOutlined />} onClick={() => onDownload(url)} />
+                                        <Button shape="circle" icon={<IconRotate size={18} />} onClick={onRotateLeft} />
+                                        <Button shape="circle" icon={<IconRotateClockwise size={18} />} onClick={onRotateRight} />
+                                        <Button shape="circle" icon={<IconZoomIn size={18} />} disabled={scale === 1} onClick={onZoomOut} />
+                                        <Button shape="circle" icon={<IconZoomOut size={18} />} disabled={scale === 50} onClick={onZoomIn} />
+                                        <Button shape="circle" icon={<IconDownload size={18} />} onClick={() => onDownload(url)} />
                                     </Flex>
                                 ),
                             }}
@@ -113,7 +116,7 @@ export default function EventPictureBar({ event }: { event: PnEvent }) {
             </Flex>
         </Loader>
         <Flex align="center" justify="center">
-            <Button onClick={() => setTimelapseShown(true)}>{t('event.show_timelapse_bt')}</Button>
+            <Button icon={<IconVideo />} onClick={() => setTimelapseShown(true)}>{t('event.show_timelapse_bt')}</Button>
         </Flex>
 
         <Modal

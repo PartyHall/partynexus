@@ -3,8 +3,8 @@ import { useAsyncEffect, useTitle } from "ahooks";
 
 import { Collection } from "../sdk/responses/collection";
 import EventCard from "../components/EventCard";
+import { IconSquareRoundedPlus } from "@tabler/icons-react";
 import Loader from "../components/Loader";
-import { PlusOutlined } from '@ant-design/icons';
 import { PnListEvent } from "../sdk/responses/event";
 import SearchablePaginatedList from "../components/SearchablePaginatedList";
 
@@ -35,7 +35,7 @@ export default function EventsPage() {
         menu.push({
             label: t('event.create_bt'),
             key: '/events/new',
-            icon: <PlusOutlined />
+            icon: <IconSquareRoundedPlus size={20} />
         });
     }
 

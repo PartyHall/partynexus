@@ -24,7 +24,7 @@ class DirectoryUtils
      *     endless loops).
      * @return string|bool Full path to newly-created dir, or false on failure.
      */
-    public static function tempdir($dir = null, $prefix = 'tmp_', $mode = 0700, $maxAttempts = 1000)
+    public static function tempdir(?string $dir = null, string $prefix = 'tmp_', int $mode = 0700, int $maxAttempts = 1000): bool|string
     {
         /* Use the system temp dir by default. */
         if (is_null($dir)) {

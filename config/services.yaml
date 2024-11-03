@@ -1,11 +1,17 @@
 parameters:
+    PARTYNEXUS_VERSION: 'indev'
+    PARTYNEXUS_COMMIT: 'INDEV'
     env(MAGIC_LINK_EXPIRATION): '15 minutes'
     env(PICTURES_LOCATION): '%kernel.project_dir%/var/uploaded_pictures'
     env(TIMELAPSES_LOCATION): '%kernel.project_dir%/var/timelapses'
     env(EXPORTS_LOCATION): '%kernel.project_dir%/var/exports'
     env(SONG_EXTRACT_LOCATION): '%kernel.project_dir%/var/wip_songs'
+    env(SONG_LOCATION): '%kernel.project_dir%/var/songs'
     env(PUBLIC_URL): 'https://partyhall.example.com'
-
+    env(SPOTIFY_CLIENT_ID): ''
+    env(SPOTIFY_CLIENT_SECRET): ''
+    env(CACHE_REDIS_PROVIDER): '%env(MESSENGER_TRANSPORT_DSN)%'
+    
 services:
     _defaults:
         autowire: true

@@ -1,4 +1,5 @@
 import { Button, Flex, Input, Pagination, Switch, Typography } from "antd";
+import { IconSquareRoundedPlus, IconZoomQuestion } from "@tabler/icons-react";
 import { useAsyncEffect, useDebounce, useTitle } from "ahooks";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
@@ -116,10 +117,20 @@ export default function SongListingPage() {
                     onChange={x => setCtx(old => ({ ...old, page: x.valueOf() }))}
                 />
 
-                <Button onClick={() => navigate('/karaoke/request')}>{t('karaoke.request_song')}</Button>
+                <Button
+                    onClick={() => navigate('/karaoke/request')}
+                    icon={<IconZoomQuestion  size={20} />}
+                >
+                    {t('karaoke.request_song')}
+                </Button>
                 {
                     isGranted('ROLE_ADMIN') &&
-                    <Button onClick={() => navigate('/karaoke/new')}>{t('karaoke.new_song')}</Button>
+                    <Button
+                        onClick={() => navigate('/karaoke/new')}
+                        icon={<IconSquareRoundedPlus size={20} />}
+                    >
+                        {t('karaoke.new_song')}
+                    </Button>
                 }
             </Flex>
         </Flex>

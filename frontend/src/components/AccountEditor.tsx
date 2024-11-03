@@ -1,12 +1,13 @@
 import { Button, Flex, Form, Input, Select } from "antd";
 import { FormItem } from "react-hook-form-antd";
+import { IconDeviceFloppy } from "@tabler/icons-react";
 import { User } from "../sdk/responses/user";
+import { ValidationErrors } from "../sdk/responses/validation_error";
+import { useAuth } from "../hooks/auth";
 import { useForm } from "react-hook-form";
+import useNotification from "antd/es/notification/useNotification";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useAuth } from "../hooks/auth";
-import { ValidationErrors } from "../sdk/responses/validation_error";
-import useNotification from "antd/es/notification/useNotification";
 
 type Props = {
     user: User;
@@ -80,7 +81,12 @@ export default function AccountEditor({ user: initialUser }: Props) {
 
         <Flex align="center" justify="center" style={{ marginTop: 32 }}>
             <Form.Item>
-                <Button type="primary" htmlType="submit" disabled={formState.isSubmitting}>
+                <Button
+                    type="primary"
+                    htmlType="submit"
+                    disabled={formState.isSubmitting}
+                    icon={<IconDeviceFloppy size={20} />}
+                >
                     {t('users.editor.save')}
                 </Button>
             </Form.Item>
