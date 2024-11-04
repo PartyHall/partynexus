@@ -12,9 +12,13 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
+/**
+ * @implements ProcessorInterface<\App\Entity\Appliance, \App\Entity\Appliance>
+ */
 readonly class ApplianceProcessor implements ProcessorInterface
 {
     public function __construct(
+        /** @var ProcessorInterface<object, object> $processor */
         #[Autowire(service: PersistProcessor::class)]
         private ProcessorInterface $processor,
         private Security $security,

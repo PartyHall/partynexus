@@ -7,17 +7,13 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class UserSecurityTest extends AuthenticatedTestCase
 {
-    private EntityManagerInterface $emi;
-
     protected function setUp(): void
     {
         parent::setUp();
-
-        $this->emi = $this->getContainer()->get(EntityManagerInterface::class);
     }
 
     // Get collection appliance (403)
-    public function test_user_getcollection_appliance()
+    public function test_user_getcollection_appliance(): void
     {
         $response = static::createClient()->request('GET', '/api/users', [
             'headers' => [
@@ -30,7 +26,7 @@ class UserSecurityTest extends AuthenticatedTestCase
     }
 
     // Get item appliance (403)
-    public function test_user_get_appliance()
+    public function test_user_get_appliance(): void
     {
         $response = static::createClient()->request('GET', '/api/users/3', [
             'headers' => [

@@ -38,8 +38,17 @@ consume-export:
 	docker compose exec app bin/console messenger:consume export -vvv
 
 lint:
-	docker compose exec app vendor/bin/php-cs-fixer fix --dry-run -vv --diff
+	$(MAKE) phpcsfixer
+	$(MAKE) phpstan
+
+phpstan:
 	docker compose exec app php -d memory_limit=8G vendor/bin/phpstan analyse
+
+phpcsfixer:
+	docker compose exec app vendor/bin/php-cs-fixer fix --dry-run -vv --diff
+
+phpcsfixer-fix:
+	docker compose exec app vendor/bin/php-cs-fixer fix -vv --diff
 
 lint-fix:
 	docker compose exec app vendor/bin/php-cs-fixer fix -vv --diff

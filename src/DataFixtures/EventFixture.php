@@ -27,6 +27,7 @@ class EventFixture extends Fixture implements DependentFixtureInterface
     {
         $faker = FakerFactory::create();
 
+        /** @var ClassMetadata<Event> $metadata */
         $metadata = $manager->getClassMetaData(Event::class);
         $metadata->setIdGeneratorType(ClassMetadata::GENERATOR_TYPE_NONE);
         $metadata->setIdGenerator(new AssignedGenerator());
@@ -54,6 +55,7 @@ class EventFixture extends Fixture implements DependentFixtureInterface
         $manager->persist($event);
         $manager->flush();
 
+        /** @var ClassMetadata<Event> $metadata */
         $metadata = $manager->getClassMetaData(Event::class);
         $metadata->setIdGeneratorType(ClassMetadata::GENERATOR_TYPE_CUSTOM);
         $metadata->setIdGenerator(new UuidGenerator());

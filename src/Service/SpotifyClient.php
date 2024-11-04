@@ -4,7 +4,6 @@ namespace App\Service;
 
 use App\ApiResource\ExternalSong;
 use App\Interface\ExternalSongService;
-use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Cache\ItemInterface;
@@ -17,7 +16,6 @@ class SpotifyClient implements ExternalSongService
     private const string QUERY = '%s %s';
 
     public function __construct(
-        private readonly LoggerInterface $logger,
         private readonly HttpClientInterface $client,
         private readonly CacheInterface $cacheItem,
         #[Autowire(param: 'PARTYNEXUS_VERSION')]

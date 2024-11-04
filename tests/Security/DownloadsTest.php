@@ -8,24 +8,20 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class DownloadsTest extends AuthenticatedTestCase
 {
-    private EntityManagerInterface $emi;
-
     protected function setUp(): void
     {
         parent::setUp();
-
-        $this->emi = $this->getContainer()->get(EntityManagerInterface::class);
     }
 
     // Download picture (unauthenticated)
-    public function test_download_picture_unauthenticated()
+    public function test_download_picture_unauthenticated(): void
     {
         $resp = static::createClient()->request('GET', '/api/pictures/1019b299-d7c8-4670-aff3-9ebf6f9293d2/download');
         $this->assertEquals(401, $resp->getStatusCode());
     }
 
     // Download picture (Not participant)
-    public function test_download_picture_not_participant()
+    public function test_download_picture_not_participant(): void
     {
         $token = $this->authenticate('noevents', 'password');
 
@@ -37,7 +33,7 @@ class DownloadsTest extends AuthenticatedTestCase
     }
 
     // Download picture (Participant)
-    public function test_download_picture_participant()
+    public function test_download_picture_participant(): void
     {
         $token = $this->authenticate('user', 'password');
 
@@ -49,7 +45,7 @@ class DownloadsTest extends AuthenticatedTestCase
     }
 
     // Download picture (Owner)
-    public function test_download_picture_owner()
+    public function test_download_picture_owner(): void
     {
         $token = $this->authenticate('admin', 'password');
 
@@ -61,7 +57,7 @@ class DownloadsTest extends AuthenticatedTestCase
     }
 
     // Download timelapse (unauthenticated)
-    public function test_download_timelapse_unauthenticated()
+    public function test_download_timelapse_unauthenticated(): void
     {
         $resp = static::createClient()->request('GET', '/api/events/0192bf5a-67d8-7d9d-8a5e-962b23aceeaa/timelapse');
 
@@ -69,7 +65,7 @@ class DownloadsTest extends AuthenticatedTestCase
     }
 
     // Download timelapse (Not participant)
-    public function test_download_timelapse_not_participant()
+    public function test_download_timelapse_not_participant(): void
     {
         $token = $this->authenticate('noevents', 'password');
 
@@ -81,7 +77,7 @@ class DownloadsTest extends AuthenticatedTestCase
     }
 
     // Download timelapse (Participant)
-    public function test_download_timelapse_participant()
+    public function test_download_timelapse_participant(): void
     {
         $token = $this->authenticate('user', 'password');
 
@@ -93,7 +89,7 @@ class DownloadsTest extends AuthenticatedTestCase
     }
 
     // Download timelapse (Owner)
-    public function test_download_timelapse_owner()
+    public function test_download_timelapse_owner(): void
     {
         $token = $this->authenticate('admin', 'password');
 
@@ -105,7 +101,7 @@ class DownloadsTest extends AuthenticatedTestCase
     }
 
     // Download export (unauthenticated)
-    public function test_download_export_unauthenticated()
+    public function test_download_export_unauthenticated(): void
     {
         $resp = static::createClient()->request('GET', '/api/events/0192bf5a-67d8-7d9d-8a5e-962b23aceeaa/export');
 
@@ -113,7 +109,7 @@ class DownloadsTest extends AuthenticatedTestCase
     }
 
     // Download export (Not participant)
-    public function test_download_export_not_participant()
+    public function test_download_export_not_participant(): void
     {
         $token = $this->authenticate('noevents', 'password');
 
@@ -125,7 +121,7 @@ class DownloadsTest extends AuthenticatedTestCase
     }
 
     // Download export (Participant)
-    public function test_download_export_participant()
+    public function test_download_export_participant(): void
     {
         $token = $this->authenticate('user', 'password');
 
@@ -137,7 +133,7 @@ class DownloadsTest extends AuthenticatedTestCase
     }
 
     // Download export (Owner)
-    public function test_download_export_owner()
+    public function test_download_export_owner(): void
     {
         $token = $this->authenticate('admin', 'password');
 

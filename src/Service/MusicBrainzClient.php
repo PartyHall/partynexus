@@ -26,9 +26,11 @@ class MusicBrainzClient implements ExternalSongService
     }
 
     /**
-     * @var array<mixed>
+     * @param array<mixed> $song
      *
      * @throws InvalidArgumentException
+     *
+     * @phpstan-ignore method.unused
      */
     private function fetchCover(array $song): ?string
     {

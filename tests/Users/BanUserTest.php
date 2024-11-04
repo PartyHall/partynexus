@@ -9,8 +9,10 @@ use Doctrine\ORM\EntityRepository;
 
 class BanUserTest extends AuthenticatedTestCase
 {
-    private readonly EntityManagerInterface $emi;
-    private readonly EntityRepository $userRepository;
+    private EntityManagerInterface $emi;
+
+    /** @var EntityRepository<User> */
+    private EntityRepository $userRepository;
 
     protected function setUp(): void
     {
@@ -20,7 +22,7 @@ class BanUserTest extends AuthenticatedTestCase
     }
 
     // Ban a user (user account) => 403
-    public function test_ban_by_user()
+    public function test_ban_by_user(): void
     {
         $token = self::authenticate('user', 'password');
 
@@ -32,7 +34,7 @@ class BanUserTest extends AuthenticatedTestCase
     }
 
     // Ban a user (user account) => 403
-    public function test_unban_by_user()
+    public function test_unban_by_user(): void
     {
         $token = self::authenticate('user', 'password');
 
@@ -44,7 +46,7 @@ class BanUserTest extends AuthenticatedTestCase
     }
 
     // Test ban an existing user => 201, re-banning them should not change the datetime
-    public function test_ban_admin_again()
+    public function test_ban_admin_again(): void
     {
         $token = self::authenticate('admin', 'password');
 
@@ -78,7 +80,7 @@ class BanUserTest extends AuthenticatedTestCase
      * For some reason if the assertNull/assertNotNull are not exactly in these places
      * the test fail. I should debug at some point to understand
      */
-    public function test_unban_admin()
+    public function test_unban_admin(): void
     {
         /** @var User $user */
         $user = $this->userRepository->find(3);
@@ -105,7 +107,7 @@ class BanUserTest extends AuthenticatedTestCase
     }
 
     // Test unban an unbanned user => 201, no changes
-    public function test_unban_admin_not_banned()
+    public function test_unban_admin_not_banned(): void
     {
         $token = self::authenticate('admin', 'password');
 
@@ -122,7 +124,7 @@ class BanUserTest extends AuthenticatedTestCase
     }
 
     // A banned user should not be able to login (username+password)
-    public function test_banned_login_usernamepassword()
+    public function test_banned_login_usernamepassword(): void
     {
 
     }

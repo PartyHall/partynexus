@@ -42,9 +42,12 @@ class FullTextSearchFilter extends AbstractFilter implements SearchFilterInterfa
         return 'string';
     }
 
+    /**
+     * @param array<mixed> $context
+     */
     protected function filterProperty(
         string $property,
-        $value,
+        mixed $value,
         QueryBuilder $queryBuilder,
         QueryNameGeneratorInterface $queryNameGenerator,
         string $resourceClass,
@@ -140,7 +143,7 @@ class FullTextSearchFilter extends AbstractFilter implements SearchFilterInterfa
         QueryNameGeneratorInterface $queryNameGenerator,
         string $alias,
         string $field,
-        $value,
+        mixed $value,
         bool $caseSensitive,
     ): Orx|Comparison {
         $wrapCase = $this->createWrapCase($caseSensitive);
@@ -150,7 +153,7 @@ class FullTextSearchFilter extends AbstractFilter implements SearchFilterInterfa
         $queryBuilder->setParameter($valueParameter, $value);
 
         return match ($strategy) {
-            null, self::STRATEGY_EXACT => $exprBuilder->eq(
+            self::STRATEGY_EXACT => $exprBuilder->eq(
                 $wrapCase("{$alias}.{$field}"),
                 $wrapCase(":{$valueParameter}"),
             ),

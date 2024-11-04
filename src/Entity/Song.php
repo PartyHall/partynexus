@@ -82,6 +82,7 @@ class Song implements HasTimestamps
     public const string API_COMPILE = 'api:song:compile';
     public const string COMPILE_METADATA = 'compile:metadata';
 
+    /** @var string[] */
     public static array $ALLOWED_FILETYPES = [
         'cover',
         'instrumental',

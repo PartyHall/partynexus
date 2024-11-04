@@ -20,7 +20,10 @@ class SongNormalizer implements NormalizerInterface
     }
 
     /**
-     * @param Song $object
+     * @param Song         $object
+     * @param array<mixed> $context
+     *
+     * @return array<mixed>|string|int|float|bool|\ArrayObject<int, mixed>|null
      *
      * @throws ExceptionInterface
      */
@@ -33,6 +36,9 @@ class SongNormalizer implements NormalizerInterface
         return $this->normalizer->normalize($object, $format, $context);
     }
 
+    /**
+     * @param array<mixed> $context
+     */
     public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
     {
         if (isset($context[self::ALREADY_CALLED])) {
@@ -42,6 +48,9 @@ class SongNormalizer implements NormalizerInterface
         return $data instanceof Song;
     }
 
+    /**
+     * @return array<mixed>
+     */
     public function getSupportedTypes(?string $format): array
     {
         return [

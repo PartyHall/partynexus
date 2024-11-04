@@ -46,7 +46,7 @@ class SongUploadFileController extends AbstractController
             return new JsonResponse(['error' => 'Invalid filetype'], status: 400);
         }
 
-        /** @var UploadedFile $file */
+        /** @var UploadedFile|null $file */
         $file = $request->files->get('file');
         if (!$file) {
             return new JsonResponse(['error' => 'Invalid file provided'], status: 400);

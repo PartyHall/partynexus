@@ -139,6 +139,7 @@ class Event
     ])]
     private bool $over = false;
 
+    /** @var Collection<int, Picture> $pictures */
     #[ORM\OneToMany(targetEntity: Picture::class, mappedBy: 'event')]
     private Collection $pictures;
 
@@ -148,6 +149,7 @@ class Event
     ])]
     private ?Export $export = null;
 
+    /** @var Collection<int, User> $participants */
     #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'participatingEvents')]
     #[Groups([
         self::API_GET_ITEM,
@@ -160,6 +162,7 @@ class Event
     public function __construct()
     {
         $this->pictures = new ArrayCollection();
+        $this->participants = new ArrayCollection();
     }
 
     public function getId(): Uuid
@@ -240,24 +243,31 @@ class Event
         return $this;
     }
 
-    /** @return Collection<Picture> */
+    /**
+     * @return Collection<int, Picture>
+     */
     public function getPictures(): Collection
     {
         return $this->pictures;
     }
 
     /**
-     * @param Picture[]|Collection<Picture> $pictures
+     * @param array<Picture>|Collection<int, Picture> $pictures
      */
-    public function setPictures(array|Collection $pictures): void
+    public function setPictures(array|Collection $pictures): self
     {
         if (\is_array($pictures)) {
             $pictures = new ArrayCollection($pictures);
         }
 
         $this->pictures = $pictures;
+
+        return $this;
     }
 
+    /**
+     * @return Collection<int, User>
+     */
     public function getParticipants(): Collection
     {
         return $this->participants;
@@ -273,7 +283,7 @@ class Event
     }
 
     /**
-     * @param User[]|Collection<User> $participants
+     * @param array<User>|Collection<int, User> $participants
      */
     public function setParticipants(array|Collection $participants): self
     {

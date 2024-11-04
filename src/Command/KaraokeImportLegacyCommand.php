@@ -140,7 +140,7 @@ class KaraokeImportLegacyCommand extends Command
             // Now the song is at its proper place
             $outDir = Path::join(
                 $this->wipLocation,
-                $song->getId(),
+                \sprintf('%s', $song->getId()),
             );
             $this->fs->remove($outDir);
             $this->fs->rename(

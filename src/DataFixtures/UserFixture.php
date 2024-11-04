@@ -16,6 +16,9 @@ class UserFixture extends Fixture
     ) {
     }
 
+    /**
+     * @param string[] $roles
+     */
     private function createUser(int $id, string $username, array $roles = []): void
     {
         $user = (new User())

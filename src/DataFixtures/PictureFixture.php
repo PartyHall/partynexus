@@ -61,6 +61,7 @@ class PictureFixture extends Fixture implements DependentFixtureInterface
 
     public function load(ObjectManager $manager): void
     {
+        /** @var ClassMetadata<Picture> $metadata */
         $metadata = $manager->getClassMetaData(Picture::class);
         $metadata->setIdGeneratorType(ClassMetadata::GENERATOR_TYPE_NONE);
         $metadata->setIdGenerator(new AssignedGenerator());

@@ -13,6 +13,9 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
+/**
+ * @implements ProviderInterface<Response>
+ */
 readonly class PictureDownloadProvider implements ProviderInterface
 {
     public function __construct(
@@ -27,7 +30,7 @@ readonly class PictureDownloadProvider implements ProviderInterface
     {
         $id = $uriVariables['id'] ?? null;
 
-        /** @var Picture $picture */
+        /** @var Picture|null $picture */
         $picture = $this->repo->find($id);
         if (!$picture) {
             throw HttpException::fromStatusCode(Response::HTTP_NOT_FOUND);

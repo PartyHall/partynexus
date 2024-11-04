@@ -6,6 +6,9 @@ use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use App\Service\SpotifyClient;
 
+/**
+ * @implements ProviderInterface<\App\ApiResource\ExternalSong>
+ */
 readonly class ExternalSpotifySongProvider implements ProviderInterface
 {
     public function __construct(

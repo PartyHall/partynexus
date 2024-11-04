@@ -23,11 +23,12 @@ class SongFixture extends Fixture
     ];
 
     public function __construct(
-        #[Autowire('%kernel.project_dir%/src/DataFixtures/covers')]
-        private readonly string $kernelBaseDir,
+        // #[Autowire('%kernel.project_dir%/src/DataFixtures/covers')]
+        // private readonly string $kernelBaseDir,
     ) {
     }
 
+    /*
     private function getCover(string $filename): ?ReplacingFile
     {
         $imgPath = implode('/', [$this->kernelBaseDir, $filename.'.jpg']);
@@ -37,6 +38,7 @@ class SongFixture extends Fixture
 
         return new ReplacingFile($imgPath);
     }
+    */
 
     public function load(ObjectManager $manager): void
     {
@@ -53,7 +55,7 @@ class SongFixture extends Fixture
                 ->setSpotifyId(array_key_exists('spotify', $song) ? $song['spotify'] : null)
             ;
 
-            if (array_key_exists('buildid', $song) && $song['buildid']) {
+            if (array_key_exists('buildid', $song)) {
                 $s->setReady(true)->setNexusBuildId(Uuid::fromString($song['buildid']));
             }
 

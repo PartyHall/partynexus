@@ -13,6 +13,9 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
+/**
+ * @implements ProviderInterface<Response>
+ */
 readonly class TimelapseDownloadProvider implements ProviderInterface
 {
     public function __construct(
@@ -27,7 +30,7 @@ readonly class TimelapseDownloadProvider implements ProviderInterface
     {
         $id = $uriVariables['id'] ?? null;
 
-        /** @var Event $event */
+        /** @var Event|null $event */
         $event = $this->repo->find($id);
         if (!$event) {
             throw HttpException::fromStatusCode(Response::HTTP_NOT_FOUND);
