@@ -17,8 +17,7 @@ readonly class PictureProcessor implements ProcessorInterface
         #[Autowire(service: PersistProcessor::class)]
         private ProcessorInterface $processor,
         private Security $security,
-    )
-    {
+    ) {
     }
 
     /**
@@ -31,8 +30,7 @@ readonly class PictureProcessor implements ProcessorInterface
             throw new \Exception('This processor only supports instances of Picture sent from Appliances');
         }
 
-        if ($data->getEvent()->getOwner() !== $user->getOwner())
-        {
+        if ($data->getEvent()->getOwner() !== $user->getOwner()) {
             throw new AccessDeniedException();
         }
 

@@ -10,8 +10,7 @@ readonly class ExternalSpotifySongProvider implements ProviderInterface
 {
     public function __construct(
         private SpotifyClient $client,
-    )
-    {
+    ) {
     }
 
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): object|array|null

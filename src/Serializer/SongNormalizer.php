@@ -16,12 +16,12 @@ class SongNormalizer implements NormalizerInterface
         #[Autowire(service: 'api_platform.jsonld.normalizer.item')]
         private readonly NormalizerInterface $normalizer,
         private readonly StorageInterface $storage,
-    )
-    {
+    ) {
     }
 
     /**
      * @param Song $object
+     *
      * @throws ExceptionInterface
      */
     public function normalize(mixed $object, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null

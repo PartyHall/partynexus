@@ -12,8 +12,7 @@ readonly class CustomJwtListener
 {
     public function __construct(
         private IriConverterInterface $iriConverter,
-    )
-    {
+    ) {
     }
 
     public function onJWTCreated(JWTCreatedEvent $event): void

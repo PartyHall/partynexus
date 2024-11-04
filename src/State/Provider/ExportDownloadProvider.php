@@ -5,12 +5,8 @@ namespace App\State\Provider;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use App\Entity\Event;
-use App\Entity\Export;
-use App\Entity\Picture;
 use App\Entity\User;
 use App\Repository\EventRepository;
-use App\Repository\ExportRepository;
-use App\Repository\PictureRepository;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -21,11 +17,10 @@ readonly class ExportDownloadProvider implements ProviderInterface
 {
     public function __construct(
         private EventRepository $repo,
-        private Security        $security,
+        private Security $security,
         #[Autowire(env: 'EXPORTS_LOCATION')]
-        private string          $basePath,
-    )
-    {
+        private string $basePath,
+    ) {
     }
 
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): object|array|null

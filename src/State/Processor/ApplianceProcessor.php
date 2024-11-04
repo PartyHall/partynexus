@@ -17,9 +17,8 @@ readonly class ApplianceProcessor implements ProcessorInterface
     public function __construct(
         #[Autowire(service: PersistProcessor::class)]
         private ProcessorInterface $processor,
-        private Security           $security,
-    )
-    {
+        private Security $security,
+    ) {
     }
 
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): mixed

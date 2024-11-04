@@ -63,7 +63,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 )]
 #[ApiFilter(SearchFilter::class, properties: ['name' => 'ipartial'])]
 #[ORM\Entity(repositoryClass: EventRepository::class)]
-class Event {
+class Event
+{
     public const string API_GET_COLLECTION = 'api:event:get-collection';
     public const string API_GET_ITEM = 'api:event:get';
     public const string API_CREATE = 'api:event:create';

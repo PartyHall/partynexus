@@ -16,17 +16,17 @@ class PictureUploadDenormalizer extends AbstractItemNormalizer implements Denorm
 
         foreach ($data as $k => $v) {
             if (\is_string($v)) {
-                if (filter_var($v, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) !== null) {
+                if (null !== filter_var($v, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE)) {
                     $data[$k] = filter_var($v, FILTER_VALIDATE_BOOLEAN);
                     continue;
                 }
 
-                if (filter_var($v, FILTER_VALIDATE_INT) !== false) {
+                if (false !== filter_var($v, FILTER_VALIDATE_INT)) {
                     $data[$k] = filter_var($v, FILTER_VALIDATE_INT);
                     continue;
                 }
 
-                if (filter_var($v, FILTER_VALIDATE_FLOAT) !== false) {
+                if (false !== filter_var($v, FILTER_VALIDATE_FLOAT)) {
                     $data[$k] = filter_var($v, FILTER_VALIDATE_FLOAT);
                     continue;
                 }
@@ -38,7 +38,7 @@ class PictureUploadDenormalizer extends AbstractItemNormalizer implements Denorm
 
     public function supportsDenormalization(mixed $data, string $type, ?string $format = null, array $context = []): bool
     {
-        return $type === Picture::class;
+        return Picture::class === $type;
     }
 
     public function getSupportedTypes(?string $format): array

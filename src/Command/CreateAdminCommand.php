@@ -11,22 +11,21 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-#[AsCommand("users:create:admin")]
+#[AsCommand('users:create:admin')]
 class CreateAdminCommand extends Command
 {
     public function __construct(
         private readonly EntityManagerInterface $emi,
-    )
-    {
+    ) {
         parent::__construct();
     }
 
     protected function configure(): void
     {
         $this
-            ->addArgument("email", InputArgument::REQUIRED, "Email")
-            ->addArgument("username", InputArgument::REQUIRED, "Username")
-            ->addArgument("language", InputArgument::OPTIONAL, "Language")
+            ->addArgument('email', InputArgument::REQUIRED, 'Email')
+            ->addArgument('username', InputArgument::REQUIRED, 'Username')
+            ->addArgument('language', InputArgument::OPTIONAL, 'Language')
         ;
     }
 
@@ -34,7 +33,7 @@ class CreateAdminCommand extends Command
     {
         $style = new SymfonyStyle($input, $output);
 
-        $style->title("Creating admin user...");
+        $style->title('Creating admin user...');
 
         $user = (new User())
             ->setUsername($input->getArgument('username'))

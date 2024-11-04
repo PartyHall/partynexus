@@ -19,11 +19,12 @@ use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Uid\Uuid;
-use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Symfony\Component\Validator\Constraints as Assert;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
  * @TODO: Get, GetCollection only for appliance that owns the event AND the users that are in the event
+ *
  * @TODO: Download => Only the users that are in the event
  */
 #[Vich\Uploadable]
@@ -35,7 +36,7 @@ use Symfony\Component\Validator\Constraints as Assert;
                 'eventId' => new Link(
                     fromProperty: 'pictures',
                     fromClass: Event::class, // On veut pointer VERS LA CLASSE AUQUEL eventId FAIT REFERENCE (fromClass event d'après symfonycasts)
-                )
+                ),
             ],
             paginationEnabled: false,
             order: ['takenAt' => 'ASC'],
@@ -53,11 +54,11 @@ use Symfony\Component\Validator\Constraints as Assert;
                 'eventId' => new Link(
                     fromProperty: 'pictures',
                     fromClass: Event::class, // On veut pointer VERS LA CLASSE AUQUEL eventId FAIT REFERENCE (fromClass event d'après symfonycasts)
-                )
+                ),
             ],
             denormalizationContext: ['groups' => ['api:picture:create']],
             processor: PictureProcessor::class,
-        )
+        ),
     ],
     normalizationContext: ['groups' => ['api:picture:get_item']],
 )]
@@ -178,8 +179,6 @@ class Picture
      * bundle's configuration parameter 'inject_on_load' is set to 'true' this setter
      * must be able to accept an instance of 'File' as the bundle will inject one here
      * during Doctrine hydration.
-     *
-     * @param File|UploadedFile|null $file
      */
     public function setFile(File|UploadedFile|null $file = null): self
     {

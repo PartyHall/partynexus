@@ -9,7 +9,6 @@ use ApiPlatform\Metadata\Operation;
 use App\Entity\Appliance;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Bundle\SecurityBundle\Security;
-use Symfony\Component\HttpFoundation\Request;
 
 // https://api-platform.com/docs/core/extensions/
 // Apparently we don't care about the user id in the query
@@ -17,8 +16,7 @@ final readonly class FilterApplianceOnOwnerExtension implements QueryCollectionE
 {
     public function __construct(
         private Security $security,
-    )
-    {
+    ) {
     }
 
     public function applyToCollection(QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, ?Operation $operation = null, array $context = []): void

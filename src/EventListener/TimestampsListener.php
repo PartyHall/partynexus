@@ -12,7 +12,6 @@ use Doctrine\ORM\Events;
 #[AsDoctrineListener(Events::preUpdate)]
 class TimestampsListener
 {
-
     public function prePersist(PrePersistEventArgs $args): void
     {
         $obj = $args->getObject();
@@ -22,7 +21,6 @@ class TimestampsListener
 
         $obj->setCreatedAt(new \DateTimeImmutable());
     }
-
 
     public function preUpdate(PreUpdateEventArgs $args): void
     {

@@ -16,8 +16,7 @@ readonly class SongCompileProcessor implements ProcessorInterface
         private SongCompilator $compilator,
         #[Autowire(service: PersistProcessor::class)]
         private ProcessorInterface $processor,
-    )
-    {
+    ) {
     }
 
     /**

@@ -10,7 +10,7 @@ use Doctrine\ORM\Events;
 use Doctrine\ORM\PersistentCollection;
 
 /**
- * When the participant list was updated on an event
+ * When the participant list was updated on an event.
  */
 #[AsDoctrineListener(Events::onFlush)]
 class EventParticipantsUpdatedListener
@@ -35,14 +35,14 @@ class EventParticipantsUpdatedListener
                 ->getQuery()
                 ->getResult();
 
-            $currentParticipantIds = array_map(fn($user) => $user->getId(), $currentParticipants);
-            $newParticipantIds = array_map(fn($user) => $user->getId(), $update->toArray());
+            $currentParticipantIds = array_map(fn ($user) => $user->getId(), $currentParticipants);
+            $newParticipantIds = array_map(fn ($user) => $user->getId(), $update->toArray());
 
             $addedParticipantIds = array_diff($newParticipantIds, $currentParticipantIds);
             $removedParticipantIds = array_diff($currentParticipantIds, $newParticipantIds);
 
-            $addedParticipants = array_filter($update->toArray(), fn($user) => in_array($user->getId(), $addedParticipantIds));
-            $removedParticipants = array_filter($currentParticipants, fn($user) => in_array($user->getId(), $removedParticipantIds));
+            $addedParticipants = array_filter($update->toArray(), fn ($user) => in_array($user->getId(), $addedParticipantIds));
+            $removedParticipants = array_filter($currentParticipants, fn ($user) => in_array($user->getId(), $removedParticipantIds));
 
             // @TODO: Send mail when added / removed
         }

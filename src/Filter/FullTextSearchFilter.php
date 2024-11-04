@@ -13,12 +13,11 @@ use Doctrine\ORM\Query\Expr\Comparison;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\Query\Expr\Orx;
 use Doctrine\ORM\QueryBuilder;
-use InvalidArgumentException;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
 /**
  * Stolen from
- * https://gist.github.com/alexislefebvre/fcbbb9104c787b9ccb739ce3bb5cfe06
+ * https://gist.github.com/alexislefebvre/fcbbb9104c787b9ccb739ce3bb5cfe06.
  */
 class FullTextSearchFilter extends AbstractFilter implements SearchFilterInterface
 {
@@ -44,15 +43,14 @@ class FullTextSearchFilter extends AbstractFilter implements SearchFilterInterfa
     }
 
     protected function filterProperty(
-        string                      $property,
-                                    $value,
-        QueryBuilder                $queryBuilder,
+        string $property,
+        $value,
+        QueryBuilder $queryBuilder,
         QueryNameGeneratorInterface $queryNameGenerator,
-        string                      $resourceClass,
-        Operation                   $operation = null,
-        array                       $context = [],
-    ): void
-    {
+        string $resourceClass,
+        ?Operation $operation = null,
+        array $context = [],
+    ): void {
         // This filter will work with the 'search'-query-parameter only.
         if (self::PROPERTY_NAME !== $property) {
             return;
@@ -91,9 +89,9 @@ class FullTextSearchFilter extends AbstractFilter implements SearchFilterInterfa
                         $term = $this->getIdFromValue($term);
                     }
 
-                    if (!$this->hasValidValues((array)$term, $this->getDoctrineFieldType($property, $resourceClass))) {
+                    if (!$this->hasValidValues((array) $term, $this->getDoctrineFieldType($property, $resourceClass))) {
                         $this->logger->notice('Invalid filter ignored', [
-                            'exception' => new InvalidArgumentException(
+                            'exception' => new \InvalidArgumentException(
                                 sprintf('Values for field "%s" are not valid according to the doctrine type.', $field),
                             ),
                         ]);
@@ -137,15 +135,14 @@ class FullTextSearchFilter extends AbstractFilter implements SearchFilterInterfa
     }
 
     protected function addWhereByStrategy(
-        string                      $strategy,
-        QueryBuilder                $queryBuilder,
+        string $strategy,
+        QueryBuilder $queryBuilder,
         QueryNameGeneratorInterface $queryNameGenerator,
-        string                      $alias,
-        string                      $field,
-                                    $value,
-        bool                        $caseSensitive,
-    ): Orx|Comparison
-    {
+        string $alias,
+        string $field,
+        $value,
+        bool $caseSensitive,
+    ): Orx|Comparison {
         $wrapCase = $this->createWrapCase($caseSensitive);
         $valueParameter = $queryNameGenerator->generateParameterName($field);
         $exprBuilder = $queryBuilder->expr();
@@ -179,7 +176,7 @@ class FullTextSearchFilter extends AbstractFilter implements SearchFilterInterfa
                     $exprBuilder->concat("'%'", $wrapCase(":{$valueParameter}")),
                 ),
             ),
-            default => throw new InvalidArgumentException(sprintf('strategy %s does not exist.', $strategy)),
+            default => throw new \InvalidArgumentException(sprintf('strategy %s does not exist.', $strategy)),
         };
     }
 

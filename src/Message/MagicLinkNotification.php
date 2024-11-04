@@ -9,8 +9,7 @@ readonly class MagicLinkNotification
         private string $username,
         private string $userEmail,
         private string $code,
-    )
-    {
+    ) {
     }
 
     public function getLanguage(): string

@@ -21,7 +21,7 @@ enum SongQuality: string
     {
         $name = $uriVariables['id'] ?? null;
 
-        return constant(self::class . "::$name");
+        return constant(self::class."::$name");
     }
 
     public static function values(): array

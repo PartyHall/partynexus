@@ -14,8 +14,7 @@ readonly class UserRegisteredListener
 {
     public function __construct(
         private MessageBusInterface $messageBus,
-    )
-    {
+    ) {
     }
 
     public function prePersist(PrePersistEventArgs $args): void

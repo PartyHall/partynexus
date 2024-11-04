@@ -12,8 +12,7 @@ readonly class UserChecker implements UserCheckerInterface
 {
     public function __construct(
         private TranslatorInterface $translator,
-    )
-    {
+    ) {
     }
 
     public function checkPreAuth(UserInterface $user): void
@@ -22,7 +21,7 @@ readonly class UserChecker implements UserCheckerInterface
             return;
         }
 
-        if ($user->getBannedAt() !== null) {
+        if (null !== $user->getBannedAt()) {
             throw new AccountExpiredException($this->translator->trans('users.login.banned', locale: $user->getLanguage()));
         }
     }

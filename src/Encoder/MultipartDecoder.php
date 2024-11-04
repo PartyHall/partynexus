@@ -11,8 +11,7 @@ final class MultipartDecoder implements DecoderInterface
 
     public function __construct(
         private readonly RequestStack $requestStack,
-    )
-    {
+    ) {
     }
 
     public function decode(string $data, string $format, array $context = []): ?array
@@ -24,10 +23,10 @@ final class MultipartDecoder implements DecoderInterface
         }
 
         return array_map(static function (string $element) {
-                $decoded = json_decode($element, true);
+            $decoded = json_decode($element, true);
 
-                return \is_array($decoded) ? $decoded : $element;
-            }, $request->request->all()) + $request->files->all();
+            return \is_array($decoded) ? $decoded : $element;
+        }, $request->request->all()) + $request->files->all();
     }
 
     public function supportsDecoding(string $format): bool

@@ -17,19 +17,18 @@ class SpotifyClient implements ExternalSongService
     private const string QUERY = '%s %s';
 
     public function __construct(
-        private readonly LoggerInterface     $logger,
+        private readonly LoggerInterface $logger,
         private readonly HttpClientInterface $client,
-        private readonly CacheInterface      $cacheItem,
+        private readonly CacheInterface $cacheItem,
         #[Autowire(param: 'PARTYNEXUS_VERSION')]
-        private readonly string              $version,
+        private readonly string $version,
         #[Autowire(param: 'PARTYNEXUS_COMMIT')]
-        private readonly string              $commit,
+        private readonly string $commit,
         #[Autowire(env: 'SPOTIFY_CLIENT_ID')]
-        private readonly string              $spotifyId,
+        private readonly string $spotifyId,
         #[Autowire(env: 'SPOTIFY_CLIENT_SECRET')]
-        private readonly string              $spotifySecret,
-    )
-    {
+        private readonly string $spotifySecret,
+    ) {
     }
 
     public function authenticate(): string
@@ -37,9 +36,9 @@ class SpotifyClient implements ExternalSongService
         return $this->cacheItem->get('spotify_auth_token', function (ItemInterface $item): string {
             $resp = $this->client->request('POST', self::AUTH_URL, [
                 'headers' => [
-                    'Authorization' => 'Basic ' . base64_encode($this->spotifyId . ':' . $this->spotifySecret),
+                    'Authorization' => 'Basic '.base64_encode($this->spotifyId.':'.$this->spotifySecret),
                 ],
-                'body' => ['grant_type' => 'client_credentials']
+                'body' => ['grant_type' => 'client_credentials'],
             ]);
 
             $data = json_decode($resp->getContent(), true);
@@ -55,14 +54,14 @@ class SpotifyClient implements ExternalSongService
     {
         $resp = $this->client->request(
             method: 'GET',
-            url: self::BASE_URL . \rawurlencode(\sprintf(
+            url: self::BASE_URL.\rawurlencode(\sprintf(
                 self::QUERY,
                 $artist,
                 $track,
             )),
             options: [
                 'headers' => [
-                    'Authorization' => 'Bearer ' . $this->authenticate(),
+                    'Authorization' => 'Bearer '.$this->authenticate(),
                     'User-Agent' => \sprintf(
                         'PartyNexus/%s-%s (https://github.com/partyhall/partynexus)',
                         $this->version,
@@ -73,11 +72,11 @@ class SpotifyClient implements ExternalSongService
         );
 
         return \array_map(
-            function($x) {
+            function ($x) {
                 $itm = new ExternalSong();
                 $itm->id = $x['id'];
                 $itm->title = $x['name'];
-                $itm->artist = \join(', ', \array_map(fn($y) => $y['name'], $x['artists']));
+                $itm->artist = \join(', ', \array_map(fn ($y) => $y['name'], $x['artists']));
                 $itm->cover = $x['album']['images'][0]['url'];
 
                 return $itm;

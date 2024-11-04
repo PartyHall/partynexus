@@ -22,15 +22,14 @@ use Symfony\Component\Serializer\SerializerInterface;
 class SongUploadFileController extends AbstractController
 {
     public function __construct(
-        private readonly Security               $security,
+        private readonly Security $security,
         private readonly EntityManagerInterface $emi,
-        private readonly SongRepository         $songRepository,
-        private readonly Filesystem             $fs,
-        private readonly SerializerInterface    $serializer,
+        private readonly SongRepository $songRepository,
+        private readonly Filesystem $fs,
+        private readonly SerializerInterface $serializer,
         #[Autowire(env: 'SONG_EXTRACT_LOCATION')]
-        private readonly string                 $wipLocation,
-    )
-    {
+        private readonly string $wipLocation,
+    ) {
     }
 
     #[Route(
@@ -64,7 +63,7 @@ class SongUploadFileController extends AbstractController
 
         // The cover is a special case as it should be both in the
         // zip file and in the vich folder
-        if ($filetype === 'cover') {
+        if ('cover' === $filetype) {
             $outdir = Path::join($this->wipLocation, \sprintf('%s/cover.jpg', $song->getId()));
             $this->fs->remove($outdir);
 
@@ -79,15 +78,15 @@ class SongUploadFileController extends AbstractController
             $this->emi->persist($song);
             $this->emi->flush();
         } else {
-            if ($filetype === 'instrumental') {
+            if ('instrumental' === $filetype) {
                 $outFile = Path::join($this->wipLocation, \sprintf('%s/instrumental.', $song->getId()));
 
                 $this->fs->remove([
-                    $outFile . 'webm',
-                    $outFile . 'mp3',
+                    $outFile.'webm',
+                    $outFile.'mp3',
                 ]);
 
-                if ($song->getFormat() === SongFormat::CDG) {
+                if (SongFormat::CDG === $song->getFormat()) {
                     $ext = 'mp3';
                 } else {
                     $ext = 'webm';
@@ -105,9 +104,9 @@ class SongUploadFileController extends AbstractController
                 ));
             }
 
-            if ($filetype === 'vocals') {
+            if ('vocals' === $filetype) {
                 $song->setVocals(true);
-            } else if ($filetype === 'full') {
+            } elseif ('full' === $filetype) {
                 $song->setCombined(true);
             }
 
@@ -116,7 +115,7 @@ class SongUploadFileController extends AbstractController
 
             $file->move(
                 Path::join($this->wipLocation, \sprintf('%s', $song->getId())),
-                $filetype . '.' . $ext,
+                $filetype.'.'.$ext,
             );
         }
 

@@ -5,9 +5,9 @@ namespace App\Entity;
 use App\Enum\ExportProgress;
 use App\Enum\ExportStatus;
 use Doctrine\DBAL\Types\Types;
+use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\JoinColumn;
 use Symfony\Component\Serializer\Annotation\Groups;
-use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
 class Export

@@ -8,6 +8,7 @@ use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @method findOneBy(array $criteria, ?array $orderBy = null): ?MagicLink
+ *
  * @extends ServiceEntityRepository<MagicLink>
  */
 class MagicLinkRepository extends ServiceEntityRepository
@@ -29,5 +30,4 @@ class MagicLinkRepository extends ServiceEntityRepository
             ->getQuery()
             ->getOneOrNullResult();
     }
-
 }

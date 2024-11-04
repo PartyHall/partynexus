@@ -8,11 +8,7 @@ use ApiPlatform\Metadata\Patch;
 use ApiPlatform\State\ProcessorInterface;
 use App\Entity\Song;
 use App\Service\SongCompilator;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
-use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Filesystem\Path;
-use ZipArchive;
 
 readonly class SongDecompileProcessor implements ProcessorInterface
 {
@@ -20,8 +16,7 @@ readonly class SongDecompileProcessor implements ProcessorInterface
         #[Autowire(service: PersistProcessor::class)]
         private ProcessorInterface $processor,
         private SongCompilator $compilator,
-    )
-    {
+    ) {
     }
 
     /**

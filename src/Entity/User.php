@@ -5,7 +5,6 @@ namespace App\Entity;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
-use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
@@ -17,9 +16,9 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ApiResource(
     operations: [
@@ -130,7 +129,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: MagicLink::class, mappedBy: 'user', cascade: ['PERSIST'])]
     private Collection $magicLinks;
 
-    /** @var Collection<Appliance> $appliances  */
+    /** @var Collection<Appliance> $appliances */
     #[ORM\OneToMany(targetEntity: Appliance::class, mappedBy: 'owner')]
     private Collection $appliances;
 
@@ -249,7 +248,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $role = strtoupper($role);
 
         if (!str_starts_with($role, 'ROLE_')) {
-            $role = 'ROLE_' . $role;
+            $role = 'ROLE_'.$role;
         }
 
         if (!in_array($role, $this->roles)) {
@@ -264,15 +263,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $role = strtoupper($role);
 
         if (!str_starts_with($role, 'ROLE_')) {
-            $role = 'ROLE_' . $role;
+            $role = 'ROLE_'.$role;
         }
 
-        $this->roles = array_filter($this->roles, fn($x) => $x !== $role);
+        $this->roles = array_filter($this->roles, fn ($x) => $x !== $role);
 
         return $this;
     }
 
-    public function eraseCredentials(): void {}
+    public function eraseCredentials(): void
+    {
+    }
 
     public function getUserIdentifier(): string
     {

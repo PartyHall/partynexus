@@ -150,7 +150,7 @@ class Song implements HasTimestamps
     private SongQuality $quality;
 
     /**
-     * The unique MBID for the song, when it exists
+     * The unique MBID for the song, when it exists.
      */
     #[ORM\Column(type: UuidType::NAME, nullable: true)]
     #[Groups([
@@ -163,7 +163,7 @@ class Song implements HasTimestamps
     private ?Uuid $musicBrainzId = null;
 
     /**
-     * The id to quickly listen to it on Spotify
+     * The id to quickly listen to it on Spotify.
      */
     #[ORM\Column(type: Types::STRING, nullable: true)]
     #[Groups([
@@ -177,7 +177,7 @@ class Song implements HasTimestamps
 
     /**
      * The build id is the version of the song.
-     * This let you update the song and the appliance fetch the new version
+     * This let you update the song and the appliance fetch the new version.
      *
      * e.g. you have a homemade ugly version but then you buy the mp3+cdg
      * thus you can update the song file and force the appliance to
@@ -194,7 +194,7 @@ class Song implements HasTimestamps
     /**
      * The 10 seconds that are the most recognizable
      * Not sure if it will be used as PHv1 did a timelapse with this
-     * and this was not great
+     * and this was not great.
      */
     #[ORM\Column(type: Types::INTEGER, nullable: true)]
     #[Groups([
@@ -208,7 +208,7 @@ class Song implements HasTimestamps
 
     /**
      * Whether the song has been compiled as a phk file
-     * and is ready for the appliances to be fetched
+     * and is ready for the appliances to be fetched.
      */
     #[ORM\Column(type: Types::BOOLEAN, options: ['default' => false])]
     #[Groups([

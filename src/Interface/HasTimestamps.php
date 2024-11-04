@@ -4,9 +4,11 @@ namespace App\Interface;
 
 interface HasTimestamps
 {
-    function getCreatedAt(): \DateTimeImmutable;
-    function setCreatedAt(\DateTimeImmutable $createdAt): void;
+    public function getCreatedAt(): \DateTimeImmutable;
 
-    function getUpdatedAt(): ?\DateTimeImmutable;
-    function setUpdatedAt(?\DateTimeImmutable $updatedAt): void;
+    public function setCreatedAt(\DateTimeImmutable $createdAt): void;
+
+    public function getUpdatedAt(): ?\DateTimeImmutable;
+
+    public function setUpdatedAt(?\DateTimeImmutable $updatedAt): void;
 }

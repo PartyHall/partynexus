@@ -16,8 +16,7 @@ readonly class EventConcludedNotificationHandler
         private LoggerInterface $logger,
         private EventRepository $eventRepository,
         private EventExporter $eventExporter,
-    )
-    {
+    ) {
     }
 
     public function __invoke(EventConcludedNotification $notification): void
@@ -26,6 +25,7 @@ readonly class EventConcludedNotificationHandler
         $event = $this->eventRepository->find($notification->getEventId());
         if (!$event) {
             $this->logger->error('Failed to find event', ['event_id' => $notification->getEventId()]);
+
             return;
         }
 

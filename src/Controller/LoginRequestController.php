@@ -6,12 +6,10 @@ use App\Entity\MagicLink;
 use App\Entity\User;
 use App\Message\MagicLinkNotification;
 use App\Repository\MagicLinkRepository;
-use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Lexik\Bundle\JWTAuthenticationBundle\Security\Http\Authentication\AuthenticationSuccessHandler;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -23,12 +21,11 @@ class LoginRequestController extends AbstractController
     #[Route('/api/magic-login', name: 'magic-login')]
     public function requestLoginLink(
         #[Autowire(service: 'limiter.magic_link')]
-        RateLimiterFactory     $magicLinkApiLimiter,
-        MessageBusInterface    $messageBus,
+        RateLimiterFactory $magicLinkApiLimiter,
+        MessageBusInterface $messageBus,
         EntityManagerInterface $entityManager,
-        Request                $request,
-    ): Response
-    {
+        Request $request,
+    ): Response {
         if (!$request->isMethod('POST')) {
             return new Response(status: 405);
         }
@@ -70,14 +67,13 @@ class LoginRequestController extends AbstractController
 
     #[Route('/api/magic-login-callback')]
     public function doAuthenticate(
-        Request                      $request,
-        EntityManagerInterface       $entityManager,
-        MagicLinkRepository          $magicLinkRepo,
+        Request $request,
+        EntityManagerInterface $entityManager,
+        MagicLinkRepository $magicLinkRepo,
         AuthenticationSuccessHandler $authenticationSuccessHandler,
         #[Autowire(env: 'MAGIC_LINK_EXPIRATION')]
-        string                       $linkExpiry,
-    ): Response
-    {
+        string $linkExpiry,
+    ): Response {
         $payload = $request->getPayload();
 
         if (!$payload->has('email') || !$payload->has('code')) {
@@ -97,7 +93,7 @@ class LoginRequestController extends AbstractController
         }
 
         $now = new \DateTimeImmutable();
-        if ($magicLink->getCreatedAt()->modify('+' . $linkExpiry) < $now) {
+        if ($magicLink->getCreatedAt()->modify('+'.$linkExpiry) < $now) {
             return new Response(status: 410);
         }
 

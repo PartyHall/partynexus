@@ -25,8 +25,7 @@ class SongFixture extends Fixture
     public function __construct(
         #[Autowire('%kernel.project_dir%/src/DataFixtures/covers')]
         private readonly string $kernelBaseDir,
-    )
-    {
+    ) {
     }
 
     private function getCover(string $filename): ?ReplacingFile
@@ -64,7 +63,7 @@ class SongFixture extends Fixture
 
         // Random songs
         $faker = FakerFactory::create();
-        for($i = 0; $i < 150; $i++) {
+        for ($i = 0; $i < 150; ++$i) {
             $song = new Song();
 
             $song->setTitle($faker->words(5, true));
@@ -78,7 +77,7 @@ class SongFixture extends Fixture
 
             $manager->persist($song);
 
-            if ($i%15 === 0) {
+            if (0 === $i % 15) {
                 $manager->flush();
             }
         }

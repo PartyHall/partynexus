@@ -5,7 +5,6 @@ namespace App\Service;
 use App\Entity\Song;
 use App\Enum\SongFormat;
 use Doctrine\ORM\EntityManagerInterface;
-use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Filesystem\Path;
@@ -28,15 +27,14 @@ class SongCompilator
     ];
 
     public function __construct(
-        private readonly Filesystem             $fs,
+        private readonly Filesystem $fs,
         private readonly EntityManagerInterface $emi,
-        private readonly SerializerInterface    $serializer,
+        private readonly SerializerInterface $serializer,
         #[Autowire(env: 'SONG_EXTRACT_LOCATION')]
-        private readonly string                 $wipLocation,
+        private readonly string $wipLocation,
         #[Autowire(env: 'SONG_LOCATION')]
-        private readonly string                 $compiledLocation,
-    )
-    {
+        private readonly string $compiledLocation,
+    ) {
     }
 
     /**
@@ -44,7 +42,7 @@ class SongCompilator
      */
     public function decompile(Song $song): void
     {
-        $compiledFile = Path::join($this->compiledLocation, $song->getId() . '.phk');
+        $compiledFile = Path::join($this->compiledLocation, $song->getId().'.phk');
         if (!$this->fs->exists($compiledFile)) {
             throw new \Exception('The compiled file is missing');
         }
@@ -53,9 +51,8 @@ class SongCompilator
         $this->fs->remove($wipDir);
         $this->fs->mkdir($wipDir);
 
-
         $zip = new \ZipArchive();
-        if ($zip->open($compiledFile) === true) {
+        if (true === $zip->open($compiledFile)) {
             $zip->extractTo($wipDir);
             $zip->close();
         } else {
@@ -79,7 +76,7 @@ class SongCompilator
             throw new \Exception('The decompiled files are missing');
         }
 
-        $compiledFile = Path::join($this->compiledLocation, $song->getId() . '.phk');
+        $compiledFile = Path::join($this->compiledLocation, $song->getId().'.phk');
         $this->fs->mkdir($this->compiledLocation);
         $this->fs->remove($compiledFile);
 
@@ -101,7 +98,7 @@ class SongCompilator
             ));
         }
 
-        if ($song->getFormat() === SongFormat::CDG) {
+        if (SongFormat::CDG === $song->getFormat()) {
             $instrumental = Path::join($wipDir, 'instrumental.mp3');
             $cdg = Path::join($wipDir, 'lyrics.cdg');
 

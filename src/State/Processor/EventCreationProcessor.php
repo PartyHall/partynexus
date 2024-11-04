@@ -18,9 +18,8 @@ readonly class EventCreationProcessor implements ProcessorInterface
     public function __construct(
         #[Autowire(service: PersistProcessor::class)]
         private ProcessorInterface $processor,
-        private Security           $security,
-    )
-    {
+        private Security $security,
+    ) {
     }
 
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): mixed
@@ -30,7 +29,7 @@ readonly class EventCreationProcessor implements ProcessorInterface
 
             if ($user instanceof User) {
                 $data->setOwner($user);
-            } else if ($user instanceof Appliance) {
+            } elseif ($user instanceof Appliance) {
                 $data->setOwner($user->getOwner());
             } else {
                 throw new BadRequestHttpException('Event can only be created by user or appliance');

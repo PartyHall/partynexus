@@ -14,7 +14,6 @@ use Symfony\Component\Uid\Uuid;
 
 class PictureFixture extends Fixture implements DependentFixtureInterface
 {
-
     public function getDependencies(): array
     {
         return [
@@ -29,10 +28,9 @@ class PictureFixture extends Fixture implements DependentFixtureInterface
         Event $event,
         string $filename,
         bool $unattended = false,
-    ): void
-    {
-        $src = __DIR__ . '/pictures/' . $filename;
-        $src2 = '/tmp/' .$filename;
+    ): void {
+        $src = __DIR__.'/pictures/'.$filename;
+        $src2 = '/tmp/'.$filename;
         copy($src, $src2);
 
         $uploadedFile = new UploadedFile(
@@ -88,6 +86,5 @@ class PictureFixture extends Fixture implements DependentFixtureInterface
         $this->addPicture($manager, 'c035787f-9766-4421-b6fe-3a77ee502442', $event, '12.jpg', true);
         $this->addPicture($manager, '0cbac9c4-13bb-4005-b1bd-5899317ba8a8', $event, '13.jpg', true);
         $this->addPicture($manager, '91e0a5e7-9cd6-45b4-a660-7226bffa5b4d', $event, '14.jpg', true);
-
     }
 }

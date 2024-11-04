@@ -12,17 +12,18 @@ class DirectoryUtils
      * Created dir will begin with the specified prefix, followed by random
      * numbers.
      *
-     * @link https://php.net/manual/en/function.tempnam.php
+     * @see https://php.net/manual/en/function.tempnam.php
      *
-     * @param string|null $dir Base directory under which to create temp dir.
-     *     If null, the default system temp dir (sys_get_temp_dir()) will be
-     *     used.
-     * @param string $prefix String with which to prefix created dirs.
-     * @param int $mode Octal file permission mask for the newly-created dir.
-     *     Should begin with a 0.
-     * @param int $maxAttempts Maximum attempts before giving up (to prevent
-     *     endless loops).
-     * @return string|bool Full path to newly-created dir, or false on failure.
+     * @param string|null $dir         Base directory under which to create temp dir.
+     *                                 If null, the default system temp dir (sys_get_temp_dir()) will be
+     *                                 used.
+     * @param string      $prefix      string with which to prefix created dirs
+     * @param int         $mode        Octal file permission mask for the newly-created dir.
+     *                                 Should begin with a 0.
+     * @param int         $maxAttempts maximum attempts before giving up (to prevent
+     *                                 endless loops)
+     *
+     * @return string|bool full path to newly-created dir, or false on failure
      */
     public static function tempdir(?string $dir = null, string $prefix = 'tmp_', int $mode = 0700, int $maxAttempts = 1000): bool|string
     {
@@ -42,7 +43,7 @@ class DirectoryUtils
         }
 
         /* Make sure characters in prefix are safe. */
-        if (strpbrk($prefix, '\\/:*?"<>|') !== false) {
+        if (false !== strpbrk($prefix, '\\/:*?"<>|')) {
             return false;
         }
 
@@ -54,8 +55,8 @@ class DirectoryUtils
         do {
             $path = sprintf('%s%s%s%s', $dir, DIRECTORY_SEPARATOR, $prefix, mt_rand(100000, mt_getrandmax()));
         } while (
-            !mkdir($path, $mode) &&
-            $attempts++ < $maxAttempts
+            !mkdir($path, $mode)
+            && $attempts++ < $maxAttempts
         );
 
         return $path;

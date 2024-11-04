@@ -12,8 +12,7 @@ readonly class EventConcludedNotification
     public function __construct(
         Event $event,
         private bool $shouldSendEmail,
-    )
-    {
+    ) {
         $this->eventId = $event->getId();
     }
 

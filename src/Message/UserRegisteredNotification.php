@@ -8,8 +8,7 @@ readonly class UserRegisteredNotification
         private string $language,
         private string $username,
         private string $userEmail,
-    )
-    {
+    ) {
     }
 
     public function getLanguage(): string

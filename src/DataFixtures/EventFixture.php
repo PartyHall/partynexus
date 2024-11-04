@@ -59,7 +59,7 @@ class EventFixture extends Fixture implements DependentFixtureInterface
         $metadata->setIdGenerator(new UuidGenerator());
         $manager->flush();
 
-        for ($i = 0; $i < 100; $i++) {
+        for ($i = 0; $i < 100; ++$i) {
             $event = (new Event())
                 ->setName($faker->words(3, true))
                 ->setAuthor($faker->name())
@@ -68,10 +68,9 @@ class EventFixture extends Fixture implements DependentFixtureInterface
                 ->setOwner($this->getReference('user__user'));
 
             $manager->persist($event);
-            $this->addReference('event__user__' . ($i + 2), $event);
+            $this->addReference('event__user__'.($i + 2), $event);
         }
 
         $manager->flush();
-
     }
 }

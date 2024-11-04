@@ -18,8 +18,7 @@ class ApplianceAuthenticator extends AbstractAuthenticator
 {
     public function __construct(
         private readonly ApplianceRepository $repository,
-    )
-    {
+    ) {
     }
 
     public function supports(Request $request): ?bool

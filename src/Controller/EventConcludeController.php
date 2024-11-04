@@ -18,8 +18,7 @@ class EventConcludeController extends AbstractController
         private readonly MessageBusInterface $messageBus,
         private readonly EntityManagerInterface $emi,
         private readonly Security $security,
-    )
-    {
+    ) {
     }
 
     public function __invoke(Event $event): Event

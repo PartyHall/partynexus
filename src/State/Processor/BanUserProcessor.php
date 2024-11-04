@@ -15,19 +15,18 @@ readonly class BanUserProcessor implements ProcessorInterface
     public function __construct(
         #[Autowire(service: PersistProcessor::class)]
         private ProcessorInterface $processor,
-        private Security           $security,
-    )
-    {
+        private Security $security,
+    ) {
     }
 
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): User|Response
     {
-        if ($data instanceof User){
+        if ($data instanceof User) {
             if ($this->security->getUser()->getUserIdentifier() === $data->getUserIdentifier()) {
                 return new Response('You cannot ban / unban yourself', status: 400); // @TODO: Proper reponse
             }
 
-            switch($operation->getName()) {
+            switch ($operation->getName()) {
                 case User::BAN_USER_ROUTE:
                     if (!$data->getBannedAt()) {
                         $data->setBannedAt(new \DateTimeImmutable());

@@ -17,11 +17,10 @@ readonly class PictureDownloadProvider implements ProviderInterface
 {
     public function __construct(
         private PictureRepository $repo,
-        private Security          $security,
+        private Security $security,
         #[Autowire(env: 'PICTURES_LOCATION')]
-        private string            $basePath,
-    )
-    {
+        private string $basePath,
+    ) {
     }
 
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): object|array|null

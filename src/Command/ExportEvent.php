@@ -18,8 +18,7 @@ class ExportEvent extends Command
     public function __construct(
         private readonly EventRepository $eventRepository,
         private readonly EventExporter $eventExporter,
-    )
-    {
+    ) {
         parent::__construct();
     }
 
@@ -38,6 +37,7 @@ class ExportEvent extends Command
 
         if (!$event) {
             $style->error(\sprintf('Event %s not found.', $uuid));
+
             return Command::FAILURE;
         }
 
@@ -47,9 +47,9 @@ class ExportEvent extends Command
             $this->eventExporter->exportEvent($event);
 
             // @TODO: Print success + filepath to the zip
-
         } catch (\Exception $e) {
             $style->error(\sprintf('Event %s export error: %s', $event->getName(), $e->getMessage()));
+
             return Command::FAILURE;
         }
 

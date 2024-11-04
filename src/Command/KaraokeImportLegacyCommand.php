@@ -22,13 +22,12 @@ use Symfony\Component\Filesystem\Path;
 class KaraokeImportLegacyCommand extends Command
 {
     public function __construct(
-        private readonly Filesystem             $fs,
-        private readonly SongCompilator         $compilator,
+        private readonly Filesystem $fs,
+        private readonly SongCompilator $compilator,
         private readonly EntityManagerInterface $emi,
         #[Autowire(env: 'SONG_EXTRACT_LOCATION')]
-        private readonly string                 $wipLocation,
-    )
-    {
+        private readonly string $wipLocation,
+    ) {
         parent::__construct();
     }
 
@@ -51,11 +50,12 @@ class KaraokeImportLegacyCommand extends Command
 
         if (!$this->fs->exists($basePath)) {
             $style->error('The path does not exist!');
+
             return Command::FAILURE;
         }
 
         if (\is_dir($basePath)) {
-            $files = array_diff(scandir($basePath), array('..', '.'));
+            $files = array_diff(scandir($basePath), ['..', '.']);
             foreach ($files as $file) {
                 $this->importSong($style, Path::join($basePath, $file));
             }
@@ -71,12 +71,13 @@ class KaraokeImportLegacyCommand extends Command
      */
     private function importSong(SymfonyStyle $style, string $path): void
     {
-        if (\strtolower(\pathinfo($path, PATHINFO_EXTENSION)) !== 'phk') {
+        if ('phk' !== \strtolower(\pathinfo($path, PATHINFO_EXTENSION))) {
             $style->error("The file is not a phk file. Are you sure it's in the correct format?");
+
             return;
         }
 
-        $style->info('Importing Song: ' . $path);
+        $style->info('Importing Song: '.$path);
         $tempDir = DirectoryUtils::tempdir(prefix: 'legsongimp');
 
         if (!$tempDir) {
@@ -115,12 +116,12 @@ class KaraokeImportLegacyCommand extends Command
             }
 
             $format = \strtoupper($meta['format']);
-            if ($format === 'CDG') {
+            if ('CDG' === $format) {
                 $song->setFormat(SongFormat::CDG);
-            } else if ($format === 'WEBM' || $format === 'MP4') {
+            } elseif ('WEBM' === $format || 'MP4' === $format) {
                 $song->setFormat(SongFormat::VIDEO);
             } else {
-                throw new \Exception('Unknown format: ' . $meta['format']);
+                throw new \Exception('Unknown format: '.$meta['format']);
             }
 
             // The quality wasn't a real thing at this time so defaulting to OK
