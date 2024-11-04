@@ -16,7 +16,10 @@ emails:
         text1: "Maintenant que %event_name% est terminé, vous pouvez revoir toutes les photos prises sur le photomaton durant la soirée ainsi qu'un timelapse !"
         text2: "Rendez-vous sur ce lien pour consulter tout ça !"
         link: "Voir l'évènement"
-        
+    new_song_request:
+        subject: 'Nouvelle demande de musique'
+        text1: 'Une musique à été demandée par %requested_by%'
+        text2: "Il s'agît de %title% par %artist%"        
 users:
     login:
         banned: 'Vous êtes bannis.'

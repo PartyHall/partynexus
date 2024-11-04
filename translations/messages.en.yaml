@@ -16,6 +16,10 @@ emails:
         text1: "Now that %event_name% is over, you can see all the pictures taken and a timelapse!"
         text2: "Let's go on this link to check this out!"
         link: "See the event" 
+    new_song_request:
+        subject: 'New song request'
+        text1: 'New song request by %requested_by%'
+        text2: 'They want to get %title% by %artist%'
 users:
     login:
         banned: 'You are banned.'

@@ -1,5 +1,6 @@
+import PnSong, { PnExternalSong, PnSongRequest } from "./responses/song";
+
 import { Collection } from "./responses/collection";
-import PnSong, { PnExternalSong } from "./responses/song";
 import { SDK } from ".";
 
 export default class Karaoke {
@@ -124,5 +125,33 @@ export default class Karaoke {
         const data = await resp.json();
 
         return PnSong.fromJson(data);
+    }
+
+    async requestMusic(title: string, artist: string) {
+        const resp = await this.sdk.post(`/api/song_requests`, { title, artist });
+        const data = await resp.json();
+
+        return PnSongRequest.fromJson(data);
+    }
+
+    async getRequestedMusics(page: number = 1, query: string = '') {
+        const rq = new URLSearchParams();
+
+        if (query.length > 0) {
+            rq.set('query', query);
+        }
+
+        if (page > 1) {
+            rq.set('page', `${page}`);
+        }
+
+        const resp = await this.sdk.get(`/api/song_requests?` + rq.toString());
+        const data = await resp.json();
+
+        return Collection.fromJson(data, x => PnSongRequest.fromJson(x));
+    }
+
+    async markRequestAsDone(rq: PnSongRequest) {
+        await this.sdk.delete(`/api/song_requests/${rq.id}`);
     }
 }

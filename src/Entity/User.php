@@ -143,12 +143,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToMany(targetEntity: Event::class, mappedBy: 'participants', cascade: ['PERSIST'])]
     private Collection $participatingEvents;
 
+    #[ORM\OneToMany(targetEntity: SongRequest::class, mappedBy: 'user')]
+    private Collection $songRequests;
+
     public function __construct()
     {
         $this->magicLinks = new ArrayCollection();
         $this->appliances = new ArrayCollection();
         $this->userEvents = new ArrayCollection();
         $this->participatingEvents = new ArrayCollection();
+        $this->songRequests = new ArrayCollection();
     }
 
     public function getId(): int

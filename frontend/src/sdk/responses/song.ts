@@ -1,4 +1,6 @@
+import dayjs from "dayjs";
 import { Collection } from "./collection";
+import { User } from "./user";
 
 export default class PnSong {
     iri: string;
@@ -80,5 +82,31 @@ export class PnExternalSong {
         }
 
         return Collection.fromJson<PnExternalSong>(data, x => PnExternalSong.fromJson(x));
+    }
+}
+
+export class PnSongRequest {
+    id: number;
+    title: string;
+    artist: string;
+    requestedBy: User|null;
+    createdAt: dayjs.Dayjs;
+    updatedAt: dayjs.Dayjs|null;
+
+    constructor(data: Record<string, any>) {
+        this.id = data['id'];
+        this.title = data['title'];
+        this.artist = data['artist'];
+        this.requestedBy = User.fromJson(data['requestedBy']);
+        this.createdAt = dayjs(data['createdAt']);
+        this.updatedAt = dayjs(data['updatedAt']);
+    }
+
+    static fromJson(data: Record<string, any>|null) {
+        if (!data) {
+            return null;
+        }
+
+        return new PnSongRequest(data);
     }
 }

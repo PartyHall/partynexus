@@ -23,6 +23,7 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import detector from "i18next-browser-languagedetector";
 import i18n from "i18next";
+import RequestSong from './pages/karaoke/RequestSong.tsx';
 
 i18n
     .use(Backend)
@@ -85,6 +86,10 @@ const router = createBrowserRouter([
             {
                 path: '/karaoke',
                 element: <SongListingPage />,
+            },
+            {
+                path: '/karaoke/request',
+                element: <RequestSong />,
             },
             {
                 path: '/karaoke/new',
