@@ -10,9 +10,13 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * @implements ProcessorInterface<\App\Entity\User, \App\Entity\User>
+ */
 readonly class BanUserProcessor implements ProcessorInterface
 {
     public function __construct(
+        /** @var ProcessorInterface<object, object> $processor */
         #[Autowire(service: PersistProcessor::class)]
         private ProcessorInterface $processor,
         private Security $security,

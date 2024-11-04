@@ -11,9 +11,13 @@ use App\Entity\Picture;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
+/**
+ * @implements ProcessorInterface<\App\Entity\Picture, \App\Entity\Picture>
+ */
 readonly class PictureProcessor implements ProcessorInterface
 {
     public function __construct(
+        /** @var ProcessorInterface<object, object> $processor */
         #[Autowire(service: PersistProcessor::class)]
         private ProcessorInterface $processor,
         private Security $security,

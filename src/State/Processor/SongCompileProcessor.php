@@ -10,12 +10,16 @@ use App\Entity\Song;
 use App\Service\SongCompilator;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
+/**
+ * @implements ProcessorInterface<\App\Entity\Song, \App\Entity\Song>
+ */
 readonly class SongCompileProcessor implements ProcessorInterface
 {
     public function __construct(
-        private SongCompilator $compilator,
+        /** @var ProcessorInterface<object, object> $processor */
         #[Autowire(service: PersistProcessor::class)]
         private ProcessorInterface $processor,
+        private SongCompilator $compilator,
     ) {
     }
 

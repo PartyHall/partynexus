@@ -116,6 +116,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     ])]
     private string $language;
 
+    /** @var string[] $roles */
     #[ORM\Column(type: Types::JSON)]
     private array $roles = [];
 
@@ -126,16 +127,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     ])]
     private ?\DateTimeImmutable $bannedAt = null;
 
+    /** @var Collection<int, MagicLink> $magicLinks */
     #[ORM\OneToMany(targetEntity: MagicLink::class, mappedBy: 'user', cascade: ['PERSIST'])]
     private Collection $magicLinks;
 
-    /** @var Collection<Appliance> $appliances */
+    /** @var Collection<int, Appliance> $appliances */
     #[ORM\OneToMany(targetEntity: Appliance::class, mappedBy: 'owner')]
     private Collection $appliances;
 
+    /** @var Collection<int, Event> */
     #[ORM\OneToMany(targetEntity: Event::class, mappedBy: 'owner', cascade: ['PERSIST'])]
     private Collection $userEvents;
 
+    /** @var Collection<int, Event> */
     #[ORM\ManyToMany(targetEntity: Event::class, mappedBy: 'participants', cascade: ['PERSIST'])]
     private Collection $participatingEvents;
 
@@ -189,7 +193,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @return Collection<MagicLink>
+     * @return Collection<int, MagicLink>
      */
     public function getMagicLinks(): Collection
     {
@@ -215,7 +219,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    /** @returns Collection<Appliance> */
+    /**
+     * @return Collection<int, Appliance>
+     */
     public function getAppliances(): Collection
     {
         return $this->appliances;
@@ -227,7 +233,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @param Appliance[]|Collection<Appliance> $appliances
+     * @param array<Appliance>|Collection<int, Appliance> $appliances
      */
     public function setAppliances(array|Collection $appliances): void
     {
@@ -281,7 +287,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @return Collection<User>
+     * @return Collection<int, Event>
      */
     public function getUserEvents(): Collection
     {
@@ -289,7 +295,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @param User[]|Collection<User> $userEvents
+     * @param array<Event>|Collection<int, Event> $userEvents
      */
     public function setUserEvents(array|Collection $userEvents): self
     {
@@ -312,7 +318,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @return Collection<User>
+     * @return Collection<int, Event>
      */
     public function getParticipatingEvents(): Collection
     {
@@ -320,7 +326,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @param User[]|Collection<User> $participatingEvents
+     * @param array<Event>|Collection<int, User> $participatingEvents
      */
     public function setParticipatingEvents(array|Collection $participatingEvents): self
     {

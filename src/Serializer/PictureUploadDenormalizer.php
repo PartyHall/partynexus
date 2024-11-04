@@ -4,10 +4,17 @@ namespace App\Serializer;
 
 use ApiPlatform\Serializer\AbstractItemNormalizer;
 use App\Entity\Picture;
+use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
 class PictureUploadDenormalizer extends AbstractItemNormalizer implements DenormalizerInterface
 {
+    /**
+     * @param array<mixed> $data
+     * @param array<mixed> $context
+     *
+     * @throws ExceptionInterface
+     */
     public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): mixed
     {
         if (!\is_array($data)) {
@@ -36,6 +43,9 @@ class PictureUploadDenormalizer extends AbstractItemNormalizer implements Denorm
         return parent::denormalize($data, Picture::class, $format, $context);
     }
 
+    /**
+     * @param array<mixed> $context
+     */
     public function supportsDenormalization(mixed $data, string $type, ?string $format = null, array $context = []): bool
     {
         return Picture::class === $type;

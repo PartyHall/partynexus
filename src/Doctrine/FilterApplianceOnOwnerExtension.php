@@ -7,6 +7,7 @@ use ApiPlatform\Doctrine\Orm\Extension\QueryItemExtensionInterface;
 use ApiPlatform\Doctrine\Orm\Util\QueryNameGeneratorInterface;
 use ApiPlatform\Metadata\Operation;
 use App\Entity\Appliance;
+use App\Entity\User;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Bundle\SecurityBundle\Security;
 
@@ -35,6 +36,7 @@ final readonly class FilterApplianceOnOwnerExtension implements QueryCollectionE
             Appliance::class !== $resourceClass
             || null === ($user = $this->security->getUser())
             || $this->security->isGranted('ROLE_ADMIN')
+            || !$user instanceof User
         ) {
             return;
         }

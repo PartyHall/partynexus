@@ -6,6 +6,9 @@ use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use App\Service\MusicBrainzClient;
 
+/**
+ * @implements ProviderInterface<\App\ApiResource\ExternalSong>
+ */
 readonly class ExternalMusicBrainzSongProvider implements ProviderInterface
 {
     public function __construct(

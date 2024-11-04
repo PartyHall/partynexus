@@ -12,28 +12,16 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Uid\Uuid;
 
-class SongCompilator
+readonly class SongCompilator
 {
-    public array $ZIP_ERROR = [
-        \ZipArchive::ER_EXISTS => 'File already exists.',
-        \ZipArchive::ER_INCONS => 'Zip archive inconsistent.',
-        \ZipArchive::ER_INVAL => 'Invalid argument.',
-        \ZipArchive::ER_MEMORY => 'Malloc failure.',
-        \ZipArchive::ER_NOENT => 'No such file.',
-        \ZipArchive::ER_NOZIP => 'Not a zip archive.',
-        \ZipArchive::ER_OPEN => "Can't open file.",
-        \ZipArchive::ER_READ => 'Read error.',
-        \ZipArchive::ER_SEEK => 'Seek error.',
-    ];
-
     public function __construct(
-        private readonly Filesystem $fs,
-        private readonly EntityManagerInterface $emi,
-        private readonly SerializerInterface $serializer,
+        private Filesystem $fs,
+        private EntityManagerInterface $emi,
+        private SerializerInterface $serializer,
         #[Autowire(env: 'SONG_EXTRACT_LOCATION')]
-        private readonly string $wipLocation,
+        private string $wipLocation,
         #[Autowire(env: 'SONG_LOCATION')]
-        private readonly string $compiledLocation,
+        private string $compiledLocation,
     ) {
     }
 
@@ -47,7 +35,7 @@ class SongCompilator
             throw new \Exception('The compiled file is missing');
         }
 
-        $wipDir = Path::join($this->wipLocation, $song->getId());
+        $wipDir = Path::join($this->wipLocation, \sprintf('%s', $song->getId()));
         $this->fs->remove($wipDir);
         $this->fs->mkdir($wipDir);
 
@@ -71,7 +59,7 @@ class SongCompilator
      */
     public function compile(Song $song): void
     {
-        $wipDir = Path::join($this->wipLocation, $song->getId());
+        $wipDir = Path::join($this->wipLocation, \sprintf('%s', $song->getId()));
         if (!$this->fs->exists($wipDir)) {
             throw new \Exception('The decompiled files are missing');
         }

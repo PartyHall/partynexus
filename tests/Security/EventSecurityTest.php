@@ -209,14 +209,14 @@ class EventSecurityTest extends AuthenticatedTestCase
     }
 
     // Get (Unauthenticated)
-    public function test_event_get_unauthenticated()
+    public function test_event_get_unauthenticated(): void
     {
         $resp = static::createClient()->request('GET', '/api/events/0192bf5a-67d8-7d9d-8a5e-962b23aceeaa');
         $this->assertEquals(401, $resp->getStatusCode());
     }
 
     // Get (Not in event)
-    public function test_event_get_not_participant()
+    public function test_event_get_not_participant(): void
     {
         $token = $this->authenticate('noevents', 'password');
 
@@ -230,7 +230,7 @@ class EventSecurityTest extends AuthenticatedTestCase
     }
 
     // Get (appliance owner)
-    public function test_event_get_appliance_owner()
+    public function test_event_get_appliance_owner(): void
     {
         $resp = static::createClient()->request('GET', '/api/events/0192bf5a-67d8-7d9d-8a5e-962b23aceeaa', [
             'headers' => [
@@ -244,7 +244,7 @@ class EventSecurityTest extends AuthenticatedTestCase
     }
 
     // Get (appliance not owner)
-    public function test_event_get_appliance_not_owner()
+    public function test_event_get_appliance_not_owner(): void
     {
         $resp = static::createClient()->request('GET', '/api/events/0192bf5a-67d8-7d9d-8a5e-962b23aceeaa', [
             'headers' => [
@@ -257,7 +257,7 @@ class EventSecurityTest extends AuthenticatedTestCase
     }
 
     // Get (owner)
-    public function test_event_get_owner()
+    public function test_event_get_owner(): void
     {
         $token = $this->authenticate('admin', 'password');
 
@@ -272,7 +272,7 @@ class EventSecurityTest extends AuthenticatedTestCase
     }
 
     // Get (participant)
-    public function test_event_get_participant()
+    public function test_event_get_participant(): void
     {
         $token = $this->authenticate('user', 'password');
 
@@ -296,14 +296,14 @@ class EventSecurityTest extends AuthenticatedTestCase
     // @TODO
 
     // Conclude event (unauthenticated)
-    public function test_event_conclude_unauthenticated()
+    public function test_event_conclude_unauthenticated(): void
     {
         $resp = static::createClient()->request('POST', '/api/events/0192bf5a-67d8-7d9d-8a5e-962b23aceeaa/conclude', ['json' => []]);
         $this->assertEquals(401, $resp->getStatusCode());
     }
 
     // Conclude event (Not owner)
-    public function test_event_conclude_participant()
+    public function test_event_conclude_participant(): void
     {
         $token = $this->authenticate('user', 'password');
 
@@ -316,7 +316,7 @@ class EventSecurityTest extends AuthenticatedTestCase
     }
 
     // Conclude event (Owner)
-    public function test_event_conclude_owner()
+    public function test_event_conclude_owner(): void
     {
         $token = $this->authenticate('admin', 'password');
 
