@@ -5,7 +5,7 @@ import { Collection } from "../../sdk/responses/collection";
 import { PnExternalSong } from "../../sdk/responses/song";
 
 import { useAuth } from "../../hooks/auth";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 type Props = {
@@ -13,6 +13,9 @@ type Props = {
     shown: boolean;
     close: () => void;
     setId: (id: string) => void;
+
+    getTitle: () => string;
+    getArtist: () => string;
 };
 
 function DisplayExternalSong({song, onClick}: {song: PnExternalSong, onClick: () => void}) {
@@ -30,7 +33,7 @@ function DisplayExternalSong({song, onClick}: {song: PnExternalSong, onClick: ()
     </Card>
 }
 
-export default function ExternalSongSearch({ shown, close, setId, provider }: Props) {
+export default function ExternalSongSearch({ shown, close, setId, provider, getTitle, getArtist }: Props) {
     const { t } = useTranslation();
     const { api } = useAuth();
 
@@ -42,8 +45,17 @@ export default function ExternalSongSearch({ shown, close, setId, provider }: Pr
     const artistDebounced = useDebounce(artist, { wait: 500 });
     const trackDebounced = useDebounce(track, { wait: 500 });
 
+    useEffect(() => {
+        if (!shown) {
+            return;
+        }
+
+        setArtist(getArtist());
+        setTrack(getTitle());
+    }, [shown]);
+
     useAsyncEffect(async () => {
-        if (artistDebounced.length === 0 || trackDebounced.length === 0) {
+        if (!shown || artistDebounced.length === 0 || trackDebounced.length === 0) {
             return;
         }
 
@@ -54,7 +66,7 @@ export default function ExternalSongSearch({ shown, close, setId, provider }: Pr
         );
 
         setSongs(data);
-    }, [artistDebounced, trackDebounced]);
+    }, [shown, artistDebounced, trackDebounced]);
 
     return <Modal
         open={shown}

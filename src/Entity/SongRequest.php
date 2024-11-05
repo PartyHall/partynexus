@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
@@ -27,6 +28,7 @@ use Symfony\Component\Validator\Constraints as Assert;
             denormalizationContext: ['groups' => [self::API_CREATE]],
             processor: SongRequestProcessor::class,
         ),
+        new Delete(security: 'is_granted("ROLE_ADMIN")'),
     ],
 )]
 #[ApiFilter(FullTextSearchFilter::class, properties: ['title', 'artist', 'requestedBy'])]

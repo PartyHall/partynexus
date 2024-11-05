@@ -1,8 +1,8 @@
 mercure:
     hubs:
         default:
-            url: '%env(MERCURE_URL)%'
-            public_url: '%env(MERCURE_PUBLIC_URL)%'
+            url: '%env(MERCURE_BASE_URL)%/.well-known/mercure'
+            public_url: '%env(PUBLIC_URL)%/.well-known/mercure'
             jwt:
-                secret: '%env(MERCURE_JWT_SECRET)%'
+                secret: '%env(JWT_SECRET_KEY)%'
                 publish: '*'

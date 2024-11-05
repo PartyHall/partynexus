@@ -1,5 +1,5 @@
 import { Flex, Input, Pagination } from "antd";
-import { ReactNode, useState } from "react";
+import { MutableRefObject, ReactNode, useEffect, useState } from "react";
 import { useAsyncEffect, useDebounce } from "ahooks";
 
 import { Collection } from "../sdk/responses/collection";
@@ -11,7 +11,7 @@ import { useTranslation } from "react-i18next";
 
 type Props<T> = {
     searchParameterName?: string | null;
-    doSearch: (query: string, page: number) => Promise<Collection<T>|null>;
+    doSearch: (query: string, page: number) => Promise<Collection<T> | null>;
     renderElement: (element: T) => ReactNode;
     extraFilters?: ReactNode;
     extraActions?: ReactNode;
@@ -20,6 +20,7 @@ type Props<T> = {
     countTranslationKey?: string | null;
 
     className?: string;
+    requestRefresh?: MutableRefObject<(() => Promise<void>)|undefined>;
 };
 
 type State<T> = {
@@ -56,16 +57,7 @@ export default function SearchablePaginatedList<T>(props: Props<T>) {
 
     const classNames = className ?? '';
 
-    useAsyncEffect(async () => {
-        const params: any = { page: ctx.page + '' }
-        if (ctx.search) {
-            params[searchParameterName ?? 'search'] = ctx.search
-        }
-
-        setSearchParams(params);
-
-        setCtx(oldCtx => ({ ...oldCtx, loading: true }));
-
+    const refresh = async () => {
         try {
             const results = await doSearch(debouncedSearch, ctx.page);
             setCtx(oldCtx => ({ ...oldCtx, loading: false, results }));
@@ -76,7 +68,26 @@ export default function SearchablePaginatedList<T>(props: Props<T>) {
                 description: t('generic.error.unknown_desc'),
             });
         }
+    };
+
+    useAsyncEffect(async () => {
+        const params: any = { page: ctx.page + '' }
+        if (ctx.search) {
+            params[searchParameterName ?? 'search'] = ctx.search
+        }
+
+        setSearchParams(params);
+
+        setCtx(oldCtx => ({ ...oldCtx, loading: true }));
+
+        await refresh();
     }, [debouncedSearch, ctx.page]);
+
+    useEffect(() => {
+        if (props.requestRefresh) {
+            props.requestRefresh.current = refresh;
+        }
+    }, []);
 
     return <Flex vertical style={{ flex: '100%', overflow: 'auto' }} gap={8}>
         <Flex gap={8}>
@@ -85,7 +96,7 @@ export default function SearchablePaginatedList<T>(props: Props<T>) {
                 value={ctx.search}
                 onChange={x => setCtx(old => ({ ...old, search: x.target.value, page: 1 }))}
             />
-            { extraFilters }
+            {extraFilters}
         </Flex>
 
         <Flex vertical gap={16} align="stretch" style={{ overflowY: 'scroll', flex: '1' }} className={classNames}>
@@ -105,7 +116,7 @@ export default function SearchablePaginatedList<T>(props: Props<T>) {
                 onChange={x => setCtx(old => ({ ...old, page: x.valueOf() }))}
             />
 
-            { extraActions }
+            {extraActions}
         </Flex>
 
         {notifCtx}

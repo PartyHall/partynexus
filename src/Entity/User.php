@@ -364,4 +364,24 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $this->bannedAt = $bannedAt;
     }
+
+    /**
+     * @return Collection<SongRequest>
+     */
+    public function getSongRequests(): Collection
+    {
+        return $this->songRequests;
+    }
+
+    /**
+     * @param SongRequest[]|Collection<SongRequest> $songRequests
+     */
+    public function setSongRequests(array|Collection $songRequests): void
+    {
+        if (\is_array($songRequests)) {
+            $songRequests = new ArrayCollection($songRequests);
+        }
+
+        $this->songRequests = $songRequests;
+    }
 }

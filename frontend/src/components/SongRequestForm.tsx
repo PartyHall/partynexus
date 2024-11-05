@@ -11,11 +11,11 @@ type FormProps = {
     artist: string;
 };
 
-export default function SongRequestForm() {
+export default function SongRequestForm({onRequested}: {onRequested: () => void}) {
     const { t } = useTranslation();
     const {api} = useAuth();
     const [notif, notifCtx] = useNotification();
-    const { control, handleSubmit, formState } = useForm<FormProps>({
+    const { control, handleSubmit, formState, reset } = useForm<FormProps>({
         defaultValues: {
             title: '',
             artist: '',
@@ -29,6 +29,9 @@ export default function SongRequestForm() {
                 message: t('karaoke.request.success.title'),
                 description: t('karaoke.request.success.description'),
             })
+
+            reset();
+            onRequested();
         } catch (e) {
             console.error(e);
             notif.error({
