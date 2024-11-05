@@ -10,7 +10,10 @@ parameters:
     env(PUBLIC_URL): 'https://partyhall.example.com'
     env(SPOTIFY_CLIENT_ID): ''
     env(SPOTIFY_CLIENT_SECRET): ''
-    env(CACHE_REDIS_PROVIDER): '%env(MESSENGER_TRANSPORT_DSN)%'
+    env(MESSENGER_TRANSPORT_DSN): '%env(REDIS_DSN)%'
+    env(CACHE_REDIS_PROVIDER): '%env(REDIS_DSN)%'
+    env(LOCK_DSN): '%env(REDIS_DSN)%'
+    env(MERCURE_BASE_URL): 'http://app'
     
 services:
     _defaults:

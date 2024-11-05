@@ -99,6 +99,22 @@
         "song_count": "{{total}} musiques",
         "new_song": "Créer une musique",
         "request_song": "Demander une musique",
+        "request": {
+            "title": "Demander une musique",
+            "song_title": "Titre",
+            "song_artist": "Artiste",
+            "requested_by": "Demandé par",
+            "mark_done": "Marqué comme fait",
+            "create": "Demander",
+            "success": {
+                "title": "Musique demandée",
+                "description": "Les admins ont étés contactés et traiterons votre demande."
+            },
+            "error": {
+                "title": "Échec de la demande de musique",
+                "description": "Une erreur est survenue lors de la demande de musique. Voir la console pour plus d'infos ou contactez un admin."
+            }
+        },
         "files": {
             "instrumental": "Instrumentale",
             "vocals": "Voix",

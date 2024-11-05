@@ -1,10 +1,10 @@
-import { Button, Flex, Form, Input, InputNumber, Select, Upload } from "antd";
-import { IconDeviceFloppy, IconSearch, IconUpload } from "@tabler/icons-react";
+import { Button, Flex, Form, Input, InputNumber, Select } from "antd";
+import { IconDeviceFloppy, IconSearch } from "@tabler/icons-react";
 
 import ExternalSongSearch from "./ExternalSongSearch";
 import { FormItem } from "react-hook-form-antd";
-import PlaceholderCover from '../../assets/placeholder_cover.webp';
 import PnSong from "../../sdk/responses/song";
+import SongEditorImage from "./SongEditorImage";
 import { ValidationErrors } from "../../sdk/responses/validation_error";
 
 import { useAuth } from "../../hooks/auth";
@@ -20,22 +20,16 @@ type Props = {
     setSong: (song: PnSong | null) => void;
 }
 
-/**
- * @TODO: Display on the left the cover
- * and the form on the right
- * On small screen the cover goes under the form (Or on top? to test)
- */
 export default function SongEditorForm({ isCreating, song, setSong }: Props) {
     const [notif, ctxNotif] = useNotification();
     const { t } = useTranslation();
     const { api } = useAuth();
     const navigate = useNavigate();
 
-    const [coverUploading, setCoverUploading] = useState<boolean>(false);
     const [showMusicBrainzSearch, setShowMusicBrainzSearch] = useState<boolean>(false);
     const [showSpotifySearch, setShowSpotifySearch] = useState<boolean>(false);
 
-    const { control, handleSubmit, setError, formState, setValue } = useForm<PnSong>({
+    const { control, handleSubmit, setError, formState, setValue, getValues } = useForm<PnSong>({
         defaultValues: {
             id: song?.id,
             title: song?.title,
@@ -74,65 +68,8 @@ export default function SongEditorForm({ isCreating, song, setSong }: Props) {
     };
     return <Flex className="SongEditorForm" align="start" gap={16}>
         {
-            <Flex className="SongEditor__Image">
-                <img
-                    src={song?.coverUrl ? song.coverUrl : PlaceholderCover}
-                    alt="song cover"
-                />
-
-                <Upload
-                    accept=".jpg,.jpeg,.webp,.png"
-                    showUploadList={false}
-                    beforeUpload={file => {
-                        const isValid = [
-                            'image/jpeg',
-                            'image/webp',
-                            'image/png',
-                        ].includes(file.type);
-
-                        if (!isValid) {
-                            notif.error({
-                                message: t('karaoke.editor.cover.bad_format.title'),
-                                description: t('karaoke.editor.cover.bad_format.description'),
-                            })
-                        }
-
-                        return isValid;
-                    }}
-                    customRequest={async (x) => {
-                        if (!song) {
-                            return;
-                        }
-
-                        try {
-                            setCoverUploading(true);
-
-                            const newSong = await api.karaoke.uploadFile(
-                                song,
-                                'cover',
-                                x.file,
-                            );
-
-                            setSong(newSong);
-                            setCoverUploading(false);
-                        } catch (e) {
-                            setCoverUploading(false);
-
-                            console.error(e);
-                            notif.error({
-                                message: t('karaoke.editor.cover.failed.title'),
-                                description: t('karaoke.editor.cover.failed.description'),
-                            });
-                        }
-                    }}>
-                    <Button
-                        type="primary"
-                        icon={<IconUpload size={20} />}
-                        shape="circle"
-                        disabled={song?.ready || coverUploading}
-                    />
-                </Upload>
-            </Flex>
+            !isCreating && song &&
+            <SongEditorImage song={song} setSong={setSong} />
         }
 
         <Form
@@ -175,7 +112,7 @@ export default function SongEditorForm({ isCreating, song, setSong }: Props) {
                 @TODO: Fix, the buttons is not aligned with textbox but I can't put the input inside
                 because RHF+antd sucks
             */}
-            <Flex gap={8} align="center">
+            <Flex gap={8} align="center" justify="end">
                 <FormItem control={control} name="musicBrainzId" label="MusicBrainz ID" style={{ flex: 1 }}>
                     <Input disabled={formState.isSubmitting || song?.ready} />
                 </FormItem>
@@ -189,6 +126,8 @@ export default function SongEditorForm({ isCreating, song, setSong }: Props) {
                     shown={showMusicBrainzSearch}
                     close={() => setShowMusicBrainzSearch(false)}
                     setId={(id: string) => setValue('musicBrainzId', id, { shouldDirty: true })}
+                    getTitle={() => getValues().title}
+                    getArtist={() => getValues().artist}
                 />
             </Flex>
 
@@ -206,6 +145,8 @@ export default function SongEditorForm({ isCreating, song, setSong }: Props) {
                     shown={showSpotifySearch}
                     close={() => setShowSpotifySearch(false)}
                     setId={(id: string) => setValue('spotifyId', id, { shouldDirty: true })}
+                    getTitle={() => getValues().title}
+                    getArtist={() => getValues().artist}
                 />
             </Flex>
 

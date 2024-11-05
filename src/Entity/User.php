@@ -143,12 +143,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToMany(targetEntity: Event::class, mappedBy: 'participants', cascade: ['PERSIST'])]
     private Collection $participatingEvents;
 
+    #[ORM\OneToMany(targetEntity: SongRequest::class, mappedBy: 'user')]
+    private Collection $songRequests;
+
     public function __construct()
     {
         $this->magicLinks = new ArrayCollection();
         $this->appliances = new ArrayCollection();
         $this->userEvents = new ArrayCollection();
         $this->participatingEvents = new ArrayCollection();
+        $this->songRequests = new ArrayCollection();
     }
 
     public function getId(): int
@@ -359,5 +363,25 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setBannedAt(?\DateTimeImmutable $bannedAt): void
     {
         $this->bannedAt = $bannedAt;
+    }
+
+    /**
+     * @return Collection<SongRequest>
+     */
+    public function getSongRequests(): Collection
+    {
+        return $this->songRequests;
+    }
+
+    /**
+     * @param SongRequest[]|Collection<SongRequest> $songRequests
+     */
+    public function setSongRequests(array|Collection $songRequests): void
+    {
+        if (\is_array($songRequests)) {
+            $songRequests = new ArrayCollection($songRequests);
+        }
+
+        $this->songRequests = $songRequests;
     }
 }

@@ -103,6 +103,22 @@
             "vocals": "Vocals",
             "mixed": "Mixed"
         },
+        "request": {
+            "title": "Request a song",
+            "song_title": "Title",
+            "song_artist": "Artist",
+            "create": "Request",
+            "requested_by": "Requested by",
+            "mark_done": "Mark as done",
+            "success": {
+                "title": "Song requested",
+                "description": "The admins are contacted and will review your song request."
+            },
+            "error": {
+                "title": "Failed to request song",
+                "description": "An issue occured while requesting the song. See console for more info or contact the admin."
+            }
+        },
         "editor": {
             "title_edit": "Editing {{title}}",
             "title_new": "New song",

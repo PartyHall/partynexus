@@ -74,6 +74,9 @@ COPY --link ./docker/app/frankenphp/conf.d/20-app.dev.ini $PHP_INI_DIR/app.conf.
 CMD [ "frankenphp", "run", "--config", "/etc/caddy/Caddyfile", "--watch" ]
 
 # Prod FrankenPHP image
+# @TODO: Build the frontend and include it in the prod image
+# custom caddy config required in this case
+# @TODO: Inject the version/commit in services.yaml
 FROM frankenphp_base AS frankenphp_prod
 
 ENV APP_ENV=prod
