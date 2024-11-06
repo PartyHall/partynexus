@@ -126,9 +126,22 @@ class BanUserTest extends AuthenticatedTestCase
     // A banned user should not be able to login (username+password)
     public function test_banned_login_usernamepassword(): void
     {
+        /** @var User $user */
+        $user = $this->userRepository->find(3);
+        $user->setBannedAt(new \DateTimeImmutable());
+        $this->emi->persist($user);
+        $this->emi->flush();
 
+        $resp = static::createClient()->request('POST', '/api/login', [
+            'json' => [
+                'username' => 'user',
+                'password' => 'password',
+            ]
+        ]);
+
+        $this->assertEquals(401, $resp->getStatusCode());
     }
 
-    // A banned user should not be able to login (magic link)
-    // IDK how to fake mails I need to learn
+    // @TODO: A banned user should not be able to login (magic link)
+    // IDK how to fake mails I need to learn (regarding workers too!)
 }

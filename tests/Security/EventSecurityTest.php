@@ -287,23 +287,27 @@ class EventSecurityTest extends AuthenticatedTestCase
     }
 
     // Get collection (unauthenticated)
-    public function test_event_getcollection_unauthenticated()
+    public function test_event_getcollection_unauthenticated(): void
     {
         $resp = static::createClient()->request('GET', '/api/events');
         $this->assertEquals(401, $resp->getStatusCode());
     }
 
-    // GetCollection (Not admin, can only see which event he's participating/own)
+    // @TODO: GetCollection (Not admin, can only see which event he's participating/own)
+    /*
     public function test_event_getcollection_user()
     {
 
     }
+    */
 
-    // GetCollection (admin, can search either all event or its own / participating)
+    // @TODO: GetCollection (admin, can search either all event or its own / participating)
+    /*
     public function test_event_getcollection_admin()
     {
 
     }
+    */
 
     // Conclude event (unauthenticated)
     public function test_event_conclude_unauthenticated(): void

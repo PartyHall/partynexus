@@ -12,12 +12,11 @@ class SongSessionFixture extends Fixture implements DependentFixtureInterface
 {
     public function __construct(
         private SongRepository $repository,
-    )
-    {
+    ) {
     }
 
     /**
-     * @return \class-string[]
+     * @return array<string>
      */
     public function getDependencies(): array
     {

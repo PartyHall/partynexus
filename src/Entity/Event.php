@@ -160,6 +160,7 @@ class Event
     ])]
     private Collection $participants;
 
+    /** @var Collection<int, SongSession>  */
     #[ORM\OneToMany(targetEntity: SongSession::class, mappedBy: 'event')]
     #[Groups([
         self::API_EXPORT,
@@ -314,6 +315,9 @@ class Event
         $this->export = $export;
     }
 
+    /**
+     * @return Collection<int, SongSession>
+     */
     public function getSongSessions(): Collection
     {
         return $this->songSessions;

@@ -110,4 +110,52 @@ class UserSecurityTest extends AuthenticatedTestCase
 
         $this->assertEquals(403, $response->getStatusCode());
     }
+
+    // Test create user unauthenticated
+    public function test_user_register_unauthenticated(): void
+    {
+        $response = static::createClient()->request('POST', '/api/users', [
+            'json' => [
+                'username' => 'toto',
+                'email' => 'toto@tutu.fr',
+                'language' => 'en_US',
+            ],
+        ]);
+
+        $this->assertEquals(401, $response->getStatusCode());
+    }
+
+    // Test create user by user
+    public function test_user_register_user(): void
+    {
+        $token = $this->authenticate('user', 'password');
+
+        $response = static::createClient()->request('POST', '/api/users', [
+            'headers' => ['Authorization' => $token],
+            'json' => [
+                'username' => 'toto',
+                'email' => 'toto@tutu.fr',
+                'language' => 'en_US',
+            ],
+        ]);
+
+        $this->assertEquals(403, $response->getStatusCode());
+    }
+
+    // Test create user by admin
+    public function test_user_register_admin(): void
+    {
+        $token = $this->authenticate('admin', 'password');
+
+        $response = static::createClient()->request('POST', '/api/users', [
+            'headers' => ['Authorization' => $token],
+            'json' => [
+                'username' => 'toto',
+                'email' => 'toto@tutu.fr',
+                'language' => 'en_US',
+            ],
+        ]);
+
+        $this->assertEquals(201, $response->getStatusCode());
+    }
 }
