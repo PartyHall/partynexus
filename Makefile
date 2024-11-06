@@ -2,6 +2,9 @@
 
 USER := $(shell id -u):$(shell id -g)
 
+VERSION = 0.1
+COMMIT = $(shell git rev-parse --short HEAD)
+
 up:
 	docker compose up --build -d --remove-orphans
 	$(MAKE) reset-db
@@ -19,11 +22,15 @@ migrate:
 clear:
 	docker compose exec app php bin/console cache:clear -v --env=dev
 
-reset-db:
+reset-no-fixtures:
 	docker compose exec app bin/console doctrine:schema:drop --force --full-database
 	docker compose exec app bin/console doctrine:schema:drop --env=test --force --full-database
 	$(MAKE) migrate
 	docker compose exec app rm -rf /app/var/uploaded_pictures /app/var/exports /app/var/timelapses
+
+
+reset-db:
+	$(MAKE) reset-no-fixtures
 	docker compose exec app bin/console doctrine:fixtures:load --no-interaction
 	docker compose exec app bin/console doctrine:fixtures:load --env=test --no-interaction
 	$(MAKE) export
@@ -66,3 +73,6 @@ lint-ts:
 tests:
 	@docker compose exec app bin/phpunit
 
+build-release:
+	@rm -rf config/jwt
+	@docker build --no-cache --file ./docker/app/Dockerfile --build-arg PARTYNEXUS_VERSION=$(VERSION) --build-arg PARTYNEXUS_COMMIT=$(COMMIT) --target frankenphp_prod --tag partynexus .

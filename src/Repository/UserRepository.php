@@ -18,7 +18,7 @@ class UserRepository extends ServiceEntityRepository
 
     /**
      * /!\ POSTGRES SPECIFIC /!\
-     * This should probably be rewritten with some doctrine ext or idk
+     * This should probably be rewritten with some doctrine ext or idk.
      *
      * @return array<User>
      */

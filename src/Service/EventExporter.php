@@ -16,6 +16,7 @@ use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Filesystem\Path;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\MimeTypesInterface;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Vich\UploaderBundle\Storage\StorageInterface;
@@ -85,7 +86,7 @@ class EventExporter
             $this->addPictures();
 
             $this->logger->info('Generating timelapse', ['event' => $event->getId()->toString()]);
-            $this->addTimelapse();
+            $this->export->setTimelapse($this->addTimelapse());
 
             $this->logger->info('Adding metadata file', ['event' => $event->getId()->toString()]);
             $this->addMetadata();
@@ -152,7 +153,7 @@ class EventExporter
         }
     }
 
-    private function addTimelapse(): void
+    private function addTimelapse(): bool
     {
         $this->setStatus(ExportProgress::GENERATING_TIMELAPSE);
         $unattendedPictures = $this
@@ -164,7 +165,7 @@ class EventExporter
         if (0 === $amtPictures) {
             $this->logger->warning('No unattended picture found, skipping timelapse generation', ['event' => $this->event->getId()->toString()]);
 
-            return;
+            return false;
         }
 
         \usort($unattendedPictures, fn (Picture $a, Picture $b) => $a->getTakenAt() <=> $b->getTakenAt());
@@ -206,6 +207,8 @@ class EventExporter
         $this->fs->copy($outFile, $timelapseServedLocation);
 
         $this->logger->info('Timelapse added', ['event' => $this->event->getId()->toString()]);
+
+        return true;
     }
 
     private function addMetadata(): void
@@ -215,7 +218,7 @@ class EventExporter
             $this->event,
             'json',
             [
-                'groups' => [Event::API_EXPORT],
+                AbstractNormalizer::GROUPS => [Event::API_EXPORT],
                 'json_encode_options' => JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_PRESERVE_ZERO_FRACTION,
             ],
         );

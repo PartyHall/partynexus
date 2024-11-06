@@ -5,8 +5,10 @@ namespace App\Entity;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use App\Repository\ApplianceRepository;
@@ -16,6 +18,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Types\UuidType;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Attribute\Groups;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -24,19 +27,20 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 #[ApiResource(
     operations: [
-        new GetCollection(normalizationContext: ['groups' => [Appliance::API_GET_COLLECTION]]),
-        new Get(normalizationContext: ['groups' => [Appliance::API_GET_ITEM]]),
+        new GetCollection(normalizationContext: [AbstractNormalizer::GROUPS => [Appliance::API_GET_COLLECTION]]),
+        new Get(normalizationContext: [AbstractNormalizer::GROUPS => [Appliance::API_GET_ITEM]]),
         new Post(
-            normalizationContext: ['groups' => [Appliance::API_GET_ITEM]],
-            denormalizationContext: ['groups' => [Appliance::API_CREATE]],
+            normalizationContext: [AbstractNormalizer::GROUPS => [Appliance::API_GET_ITEM]],
+            denormalizationContext: [AbstractNormalizer::GROUPS => [Appliance::API_CREATE]],
             security: 'is_granted("ROLE_ADMIN")',
             processor: ApplianceProcessor::class,
         ),
-        new Put(
-            normalizationContext: ['groups' => [Appliance::API_GET_ITEM]],
-            denormalizationContext: ['groups' => [Appliance::API_UPDATE]],
-            security: 'object.owner == user or is_granted("ROLE_ADMIN")'
+        new Patch(
+            normalizationContext: [AbstractNormalizer::GROUPS => [Appliance::API_GET_ITEM]],
+            denormalizationContext: [AbstractNormalizer::GROUPS => [Appliance::API_UPDATE]],
+            security: 'object.getOwner() == user or is_granted("ROLE_ADMIN")'
         ),
+        new Delete(security: 'object.getOwner() == user or is_granted("ROLE_ADMIN")'),
     ],
 )]
 #[ApiFilter(SearchFilter::class, properties: ['owner' => 'exact'])]
@@ -51,7 +55,11 @@ class Appliance implements UserInterface
     #[ORM\Id]
     #[ORM\Column(type: Types::INTEGER)]
     #[ORM\GeneratedValue(strategy: 'SEQUENCE')]
-    #[Groups([self::API_GET_COLLECTION, self::API_GET_ITEM])]
+    #[Groups([
+        self::API_GET_COLLECTION,
+        self::API_GET_ITEM,
+        User::API_GET_ITEM_SELF,
+    ])]
     private int $id;
 
     #[ORM\Column(type: Types::STRING, length: 32)]
@@ -62,6 +70,7 @@ class Appliance implements UserInterface
         self::API_GET_ITEM,
         self::API_CREATE,
         self::API_UPDATE,
+        User::API_GET_ITEM_SELF,
     ])]
     private string $name;
 
@@ -70,15 +79,24 @@ class Appliance implements UserInterface
     private User $owner;
 
     #[ORM\Column(type: UuidType::NAME, length: 512)]
-    #[Groups([self::API_GET_ITEM])]
+    #[Groups([
+        self::API_GET_ITEM,
+        User::API_GET_ITEM_SELF,
+    ])]
     private Uuid $hardwareId;
 
     #[ORM\Column(type: Types::STRING, length: 512)]
-    #[Groups([self::API_GET_ITEM])]
+    #[Groups([
+        self::API_GET_ITEM,
+        User::API_GET_ITEM_SELF,
+    ])]
     private string $apiToken;
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
-    #[Groups([self::API_GET_ITEM])]
+    #[Groups([
+        self::API_GET_ITEM,
+        User::API_GET_ITEM_SELF,
+    ])]
     private \DateTimeImmutable $lastSeen;
 
     public function __construct()

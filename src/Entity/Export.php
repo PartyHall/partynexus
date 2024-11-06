@@ -65,6 +65,14 @@ class Export
     ])]
     private ExportStatus $status;
 
+    #[ORM\Column(type: Types::BOOLEAN, options: ['default' => false])]
+    #[Groups([
+        self::API_GET_COLLECTION,
+        self::API_GET_ITEM,
+        Event::API_GET_ITEM,
+    ])]
+    private bool $timelapse;
+
     public function getId(): int
     {
         return $this->id;
@@ -126,6 +134,18 @@ class Export
     public function setStatus(ExportStatus $status): self
     {
         $this->status = $status;
+
+        return $this;
+    }
+
+    public function isTimelapse(): bool
+    {
+        return $this->timelapse;
+    }
+
+    public function setTimelapse(bool $timelapse): self
+    {
+        $this->timelapse = $timelapse;
 
         return $this;
     }

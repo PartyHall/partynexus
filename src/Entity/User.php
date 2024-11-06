@@ -18,38 +18,39 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Attribute\Groups;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
     operations: [
         new Get(
-            normalizationContext: ['groups' => [self::API_GET_ITEM]],
+            normalizationContext: [AbstractNormalizer::GROUPS => [self::API_GET_ITEM]],
             security: 'object == user or is_granted("ROLE_ADMIN")',
         ),
         new GetCollection(
-            normalizationContext: ['groups' => [self::API_GET_COLLECTION]],
+            normalizationContext: [AbstractNormalizer::GROUPS => [self::API_GET_COLLECTION]],
             security: 'is_granted("ROLE_ADMIN")',
         ),
         new Post(
-            normalizationContext: ['groups' => [self::API_GET_ITEM]],
-            denormalizationContext: ['groups' => [self::API_CREATE]],
+            normalizationContext: [AbstractNormalizer::GROUPS => [self::API_GET_ITEM]],
+            denormalizationContext: [AbstractNormalizer::GROUPS => [self::API_CREATE]],
             security: 'is_granted("ROLE_ADMIN")',
         ),
         new Patch(
-            normalizationContext: ['groups' => [self::API_GET_ITEM]],
-            denormalizationContext: ['groups' => [self::API_UPDATE]],
+            normalizationContext: [AbstractNormalizer::GROUPS => [self::API_GET_ITEM]],
+            denormalizationContext: [AbstractNormalizer::GROUPS => [self::API_UPDATE]],
             security: 'is_granted("ROLE_ADMIN") or user === object',
         ),
         new Post(
             uriTemplate: '/users/{id}/ban',
-            normalizationContext: ['groups' => [self::API_GET_ITEM]],
+            normalizationContext: [AbstractNormalizer::GROUPS => [self::API_GET_ITEM]],
             security: 'is_granted("ROLE_ADMIN")',
             name: self::BAN_USER_ROUTE,
             processor: BanUserProcessor::class,
         ),
         new Post(
             uriTemplate: '/users/{id}/unban',
-            normalizationContext: ['groups' => [self::API_GET_ITEM]],
+            normalizationContext: [AbstractNormalizer::GROUPS => [self::API_GET_ITEM]],
             security: 'is_granted("ROLE_ADMIN")',
             name: self::UNBAN_USER_ROUTE,
             processor: BanUserProcessor::class,
@@ -68,6 +69,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public const string API_GET_COLLECTION = 'api:user:get-collection';
     public const string API_GET_ITEM = 'api:user:get';
+    public const string API_GET_ITEM_SELF = 'api:user:get-self';
     public const string API_CREATE = 'api:user:create';
     public const string API_UPDATE = 'api:user:update';
 
@@ -133,6 +135,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /** @var Collection<int, Appliance> $appliances */
     #[ORM\OneToMany(targetEntity: Appliance::class, mappedBy: 'owner')]
+    #[Groups([
+        self::API_GET_ITEM_SELF,
+    ])]
     private Collection $appliances;
 
     /** @var Collection<int, Event> */
@@ -143,6 +148,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToMany(targetEntity: Event::class, mappedBy: 'participants', cascade: ['PERSIST'])]
     private Collection $participatingEvents;
 
+    /** @var Collection<int, SongRequest> */
     #[ORM\OneToMany(targetEntity: SongRequest::class, mappedBy: 'user')]
     private Collection $songRequests;
 
@@ -366,7 +372,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @return Collection<SongRequest>
+     * @return Collection<int, SongRequest>
      */
     public function getSongRequests(): Collection
     {
@@ -374,7 +380,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @param SongRequest[]|Collection<SongRequest> $songRequests
+     * @param array<SongRequest>|Collection<int, SongRequest> $songRequests
      */
     public function setSongRequests(array|Collection $songRequests): void
     {

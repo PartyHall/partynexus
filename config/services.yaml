@@ -14,6 +14,7 @@ parameters:
     env(CACHE_REDIS_PROVIDER): '%env(REDIS_DSN)%'
     env(LOCK_DSN): '%env(REDIS_DSN)%'
     env(MERCURE_BASE_URL): 'http://app'
+    env(JWT_PASSPHRASE): 'partynexus_default_passphrase'
     
 services:
     _defaults:

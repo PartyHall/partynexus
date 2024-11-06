@@ -1,4 +1,5 @@
 import ValidationError, { ValidationErrors } from "./responses/validation_error";
+import { Appliances } from "./appliances";
 import Auth from "./auth";
 import { Events } from "./events";
 import Karaoke from "./karaoke";
@@ -30,6 +31,7 @@ export class SDK {
     public events: Events;
     public karaoke: Karaoke;
     public users: Users;
+    public appliances: Appliances;
 
     public constructor(
         baseUrl: string,
@@ -46,6 +48,7 @@ export class SDK {
         this.events = new Events(this);
         this.karaoke = new Karaoke(this);
         this.users = new Users(this);
+        this.appliances = new Appliances(this);
 
         this.storeToken = storeToken || (() => {});
         this.setOnExpired(onExpired);

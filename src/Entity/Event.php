@@ -21,6 +21,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Types\UuidType;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Attribute\Groups;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -31,28 +32,28 @@ use Symfony\Component\Validator\Constraints as Assert;
     operations: [
         new GetCollection(
             order: ['datetime' => 'DESC'],
-            normalizationContext: ['groups' => [self::API_GET_COLLECTION]],
+            normalizationContext: [AbstractNormalizer::GROUPS => [self::API_GET_COLLECTION]],
         ),
         new Get(
-            normalizationContext: ['groups' => [self::API_GET_ITEM]],
+            normalizationContext: [AbstractNormalizer::GROUPS => [self::API_GET_ITEM]],
             security: 'is_granted("ROLE_ADMIN") or object.getOwner().hasAppliance(user) or object.hasParticipant(user)'
         ),
         new Post(
-            normalizationContext: ['groups' => [self::API_GET_ITEM]],
-            denormalizationContext: ['groups' => [self::API_CREATE]],
+            normalizationContext: [AbstractNormalizer::GROUPS => [self::API_GET_ITEM]],
+            denormalizationContext: [AbstractNormalizer::GROUPS => [self::API_CREATE]],
             security: 'is_granted("ROLE_APPLIANCE") or is_granted("ROLE_ADMIN")',
             processor: EventCreationProcessor::class,
         ),
         new Patch(
-            normalizationContext: ['groups' => [self::API_GET_ITEM]],
-            denormalizationContext: ['groups' => [self::API_UPDATE]],
+            normalizationContext: [AbstractNormalizer::GROUPS => [self::API_GET_ITEM]],
+            denormalizationContext: [AbstractNormalizer::GROUPS => [self::API_UPDATE]],
             security: 'is_granted("ROLE_ADMIN") or user == object.getOwner()'
         ),
         new Post(
             uriTemplate: '/events/{id}/conclude',
             controller: EventConcludeController::class,
-            normalizationContext: ['groups' => [self::API_GET_ITEM]],
-            denormalizationContext: ['groups' => []],
+            normalizationContext: [AbstractNormalizer::GROUPS => [self::API_GET_ITEM]],
+            denormalizationContext: [AbstractNormalizer::GROUPS => []],
             // security: 'is_granted("ROLE_ADMIN") or user == object.getOwner()', // Handled in the controller temporarly
             read: false,
             validate: false,
@@ -159,10 +160,17 @@ class Event
     ])]
     private Collection $participants;
 
+    #[ORM\OneToMany(targetEntity: SongSession::class, mappedBy: 'event')]
+    #[Groups([
+        self::API_EXPORT,
+    ])]
+    private Collection $songSessions;
+
     public function __construct()
     {
         $this->pictures = new ArrayCollection();
         $this->participants = new ArrayCollection();
+        $this->songSessions = new ArrayCollection();
     }
 
     public function getId(): Uuid
@@ -304,5 +312,10 @@ class Event
     public function setExport(?Export $export): void
     {
         $this->export = $export;
+    }
+
+    public function getSongSessions(): Collection
+    {
+        return $this->songSessions;
     }
 }

@@ -15,10 +15,9 @@ readonly class NewSongRequestNotificationHandler
 {
     public function __construct(
         private TranslatorInterface $translator,
-        private MailerInterface     $mailer,
-        private UserRepository      $userRepository,
-    )
-    {
+        private MailerInterface $mailer,
+        private UserRepository $userRepository,
+    ) {
     }
 
     public function __invoke(NewSongRequestNotification $notification): void
@@ -29,7 +28,7 @@ readonly class NewSongRequestNotificationHandler
         foreach ($admins as $admin) {
             $mail = (new TemplatedEmail())
                 ->to($admin->getEmail())
-                ->subject('[PartyHall] ' . $this->translator->trans('emails.new_song_request.subject', locale: $admin->getLanguage()))
+                ->subject('[PartyHall] '.$this->translator->trans('emails.new_song_request.subject', locale: $admin->getLanguage()))
                 ->htmlTemplate('emails/new_song_request.html.twig')
                 ->locale($admin->getLanguage())
                 ->context([

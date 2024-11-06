@@ -23,6 +23,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Types\UuidType;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Serializer\Attribute\Groups;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
@@ -38,29 +39,29 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  */
 #[ApiResource(
     operations: [
-        new GetCollection(normalizationContext: ['groups' => [self::API_GET_COLLECTION]]),
-        new Get(normalizationContext: ['groups' => [self::API_GET_ITEM]]),
+        new GetCollection(normalizationContext: [AbstractNormalizer::GROUPS => [self::API_GET_COLLECTION]]),
+        new Get(normalizationContext: [AbstractNormalizer::GROUPS => [self::API_GET_ITEM]]),
         new Post(
-            normalizationContext: ['groups' => [self::API_GET_ITEM]],
-            denormalizationContext: ['groups' => [self::API_CREATE]],
+            normalizationContext: [AbstractNormalizer::GROUPS => [self::API_GET_ITEM]],
+            denormalizationContext: [AbstractNormalizer::GROUPS => [self::API_CREATE]],
             security: 'is_granted("ROLE_ADMIN")',
         ),
         new Patch(
-            normalizationContext: ['groups' => [self::API_GET_ITEM]],
-            denormalizationContext: ['groups' => [self::API_UPDATE]],
+            normalizationContext: [AbstractNormalizer::GROUPS => [self::API_GET_ITEM]],
+            denormalizationContext: [AbstractNormalizer::GROUPS => [self::API_UPDATE]],
             security: 'is_granted("ROLE_ADMIN") and not object.ready',
         ),
         new Patch(
             uriTemplate: '/songs/{id}/compile',
-            normalizationContext: ['groups' => [self::API_GET_ITEM]],
-            denormalizationContext: ['groups' => [self::API_COMPILE]],
+            normalizationContext: [AbstractNormalizer::GROUPS => [self::API_GET_ITEM]],
+            denormalizationContext: [AbstractNormalizer::GROUPS => [self::API_COMPILE]],
             security: 'is_granted("ROLE_ADMIN")',
             processor: SongCompileProcessor::class,
         ),
         new Patch(
             uriTemplate: '/songs/{id}/decompile',
-            normalizationContext: ['groups' => [self::API_GET_ITEM]],
-            denormalizationContext: ['groups' => [self::API_COMPILE]],
+            normalizationContext: [AbstractNormalizer::GROUPS => [self::API_GET_ITEM]],
+            denormalizationContext: [AbstractNormalizer::GROUPS => [self::API_COMPILE]],
             security: 'is_granted("ROLE_ADMIN")',
             processor: SongDecompileProcessor::class,
         ),

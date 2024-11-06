@@ -66,10 +66,18 @@ export default function EventsPage() {
 
         {
             (!events || events.total === 0) &&
-            <Flex justify="center" style={{ width: '100%', paddingTop: '15em' }}>
+            <Flex vertical align="center" justify="center" style={{ width: '100%', paddingTop: '15em' }}>
                 <Typography.Title type="danger">
                     {t('event.no_events')}
                 </Typography.Title>
+                {
+                    (isGranted('ROLE_ADMIN')) && <Menu
+                        mode="horizontal"
+                        items={menu}
+                        style={{ justifyContent: 'center' }}
+                        onClick={x => navigate(x.key)}
+                    />
+                }
             </Flex>
         }
     </Loader>;

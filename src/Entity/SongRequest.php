@@ -14,18 +14,18 @@ use App\Interface\Impl\HasTimestampsTrait;
 use App\State\Processor\SongRequestProcessor;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-
 use Symfony\Component\Serializer\Attribute\Groups;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity]
 #[ApiResource(
     operations: [
-        new Get(normalizationContext: ['groups' => [self::API_GET_ITEM, HasTimestamps::API_GET, User::API_GET_ITEM]]),
-        new GetCollection(normalizationContext: ['groups' => [self::API_GET_ITEM, HasTimestamps::API_GET, User::API_GET_ITEM]]),
+        new Get(normalizationContext: [AbstractNormalizer::GROUPS => [self::API_GET_ITEM, HasTimestamps::API_GET, User::API_GET_ITEM]]),
+        new GetCollection(normalizationContext: [AbstractNormalizer::GROUPS => [self::API_GET_ITEM, HasTimestamps::API_GET, User::API_GET_ITEM]]),
         new Post(
-            normalizationContext: ['groups' => [self::API_GET_ITEM, HasTimestamps::API_GET, User::API_GET_ITEM]],
-            denormalizationContext: ['groups' => [self::API_CREATE]],
+            normalizationContext: [AbstractNormalizer::GROUPS => [self::API_GET_ITEM, HasTimestamps::API_GET, User::API_GET_ITEM]],
+            denormalizationContext: [AbstractNormalizer::GROUPS => [self::API_CREATE]],
             processor: SongRequestProcessor::class,
         ),
         new Delete(security: 'is_granted("ROLE_ADMIN")'),

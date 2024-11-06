@@ -8,8 +8,7 @@ readonly class NewSongRequestNotification
         private string $title,
         private string $artist,
         private string $requestedBy,
-    )
-    {
+    ) {
     }
 
     public function getTitle(): string

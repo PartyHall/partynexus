@@ -9,7 +9,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
 
 trait HasTimestampsTrait
 {
-
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
     #[Groups([HasTimestamps::API_GET])]
     private \DateTimeImmutable $createdAt;

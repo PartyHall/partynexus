@@ -2,9 +2,9 @@ import { Content, Footer, Header } from 'antd/es/layout/layout';
 import { Flex, Layout, Menu, Typography } from 'antd';
 import { IconCalendar, IconMenu, IconMicrophone2, IconUser } from '@tabler/icons-react';
 import { Outlet, useNavigate } from 'react-router-dom';
-import React, { useEffect } from 'react';
 import PhLogo from '../assets/ph_logo_sd.webp';
 import { useAuth } from '../hooks/auth';
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
 export default function AuthenticatedLayout() {

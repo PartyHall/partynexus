@@ -3,8 +3,9 @@ import { ReactNode, createContext, useCallback, useContext, useState } from 'rea
 import Cookies from 'js-cookie';
 import { PnEvent } from '../sdk/responses/event';
 import { SDK } from '../sdk';
+import { User } from '../sdk/responses/user';
 
-const BASE_URL = import.meta.env.VITE_API_URL;
+const BASE_URL = import.meta.env.VITE_API_URL ?? '';
 
 const TOKEN = localStorage.getItem('token');
 const REFRESH_TOKEN = localStorage.getItem('refresh_token');
@@ -30,6 +31,8 @@ const storeToken = (token: string | null, refresh: string | null) => {
 type AuthProps = {
     loaded: boolean;
     api: SDK;
+
+    user: User | null;
 };
 
 type AuthContextProps = AuthProps & {
@@ -38,13 +41,15 @@ type AuthContextProps = AuthProps & {
     setToken: (token: string, refresh: string) => void;
     isLoggedIn: () => boolean;
     isGranted: (role: string) => boolean;
-    isAdminOrEventOwner: (event?: PnEvent|null) => boolean;
+    isAdminOrEventOwner: (event?: PnEvent | null) => boolean;
+    refreshUser: () => Promise<void>;
     logout: () => void;
 };
 
 const defaultProps: AuthProps = {
     loaded: false,
     api: new SDK(BASE_URL, TOKEN, REFRESH_TOKEN, storeToken, () => storeToken(null, null)),
+    user: null,
 };
 
 const AuthContext = createContext<AuthContextProps>({
@@ -55,6 +60,7 @@ const AuthContext = createContext<AuthContextProps>({
     isGranted: () => false,
     isAdminOrEventOwner: () => false,
     isLoggedIn: () => false,
+    refreshUser: async () => { },
     logout: () => { },
 });
 
@@ -114,7 +120,7 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
         return context.api.tokenUser.roles.includes(role);
     }
 
-    const isAdminOrEventOwner = (event?: PnEvent|null) => {
+    const isAdminOrEventOwner = (event?: PnEvent | null) => {
         if (isGranted('ROLE_ADMIN')) {
             return true;
         }
@@ -126,6 +132,19 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
         return event.owner.iri === context.api.tokenUser?.iri;
     }
 
+    const refreshUser = async () => {
+        if (!context.api.tokenUser) {
+            return;
+        }
+
+        const user = await context.api.users.getFromIri(context.api.tokenUser.iri);
+
+        setContext(x => ({
+            ...x,
+            user,
+        }));
+    };
+
     return (
         <AuthContext.Provider
             value={{
@@ -136,6 +155,7 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
                 isGranted,
                 isAdminOrEventOwner,
                 isLoggedIn,
+                refreshUser,
                 logout,
             }}
         >

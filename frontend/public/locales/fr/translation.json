@@ -6,6 +6,7 @@
         "email": "Email",
         "search": "Rechercher...",
         "list_count": "Total: {{total}}",
+        "no_results": "Aucun résultats",
         "error": {
             "unknown": "Une erreur inconnue s'est produite",
             "unknown_desc": "Il y a eu un soucis. Regardez la console pour plus d'infos",
@@ -45,7 +46,23 @@
     "my_account": {
         "title": "Mon compte",
         "logout": "Déconnexion",
-        "user_management": "Administration des utilisateurs"
+        "user_management": "Administration des utilisateurs",
+        "my_appliances": "Mes appareils",
+        "new": "Nouveau",
+        "edit": "Éditer",
+        "delete": "Supprimer",
+        "delete_appliance": {
+            "name": "Supprimer",
+            "title": "Supprimer cet appareil ?",
+            "cancel": "Annuler",
+            "yes": "Je suis sûr(e)"
+        },
+        "appliance_editor": {
+            "title": "Éditer l'appareil",
+            "title_create": "Créer un appareil",
+            "name": "Nom",
+            "save": "Sauvegarder"
+        }
     },
     "users": {
         "title": "Utilisateurs",
@@ -259,7 +276,13 @@
         },
         "karaoke": {
             "sessions": "Musiques chantées",
-            "no_sung_songs": "Pas encore de musique chantées !"
+            "no_sung_songs": "Pas encore de musique chantées !",
+            "session": {
+                "title": "Titre",
+                "artist": "Artiste",
+                "sung_at": "Chanté à",
+                "singer": "Chanteur"
+            }
         }
     }
 }

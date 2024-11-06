@@ -22,7 +22,7 @@ export default function AdminNewUserPage() {
 
     useTitle(`${t('users.new_user_bt')} - PartyHall`)
 
-    const { control, formState, handleSubmit, setError } = useForm<UserCreationProps>({
+    const { control, formState, handleSubmit, setError, reset } = useForm<UserCreationProps>({
         defaultValues: {
             username: '',
             email: '',
@@ -36,7 +36,9 @@ export default function AdminNewUserPage() {
             notif.success({
                 message: t('users.new.success.title'),
                 description: t('users.new.success.desc', {'username': user?.username ?? data.username}),
-            })
+            });
+
+            reset();
         } catch (e: any) {
             if (e instanceof ValidationErrors) {
                 // @ts-expect-error BECAUSE THIS FUCKING LANGUAGE SUCKS

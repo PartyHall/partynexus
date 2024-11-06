@@ -16,6 +16,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\SerializerInterface;
 
 #[AsController]
@@ -120,7 +121,7 @@ class SongUploadFileController extends AbstractController
         }
 
         $songData = $this->serializer->serialize($song, 'json', [
-            'groups' => [Song::API_GET_ITEM],
+            AbstractNormalizer::GROUPS => [Song::API_GET_ITEM],
         ]);
 
         return new JsonResponse($songData, json: true);

@@ -2,17 +2,10 @@
 
 namespace App\Tests\Security;
 
-use App\Entity\Event;
 use App\Tests\AuthenticatedTestCase;
-use Doctrine\ORM\EntityManagerInterface;
 
-class DownloadsTest extends AuthenticatedTestCase
+class DownloadsSecurityTest extends AuthenticatedTestCase
 {
-    protected function setUp(): void
-    {
-        parent::setUp();
-    }
-
     // Download picture (unauthenticated)
     public function test_download_picture_unauthenticated(): void
     {

@@ -111,13 +111,16 @@ export default function EventPictureBar({ event }: { event: PnEvent }) {
                 }
 
                 {
-                    pictures.length === 0 && <Typography.Text>{t('event.pictures.no_pictures')}</Typography.Text>
+                    pictures.length === 0 && <Typography.Title level={3}>{t('event.pictures.no_pictures')}</Typography.Title>
                 }
             </Flex>
         </Loader>
-        <Flex align="center" justify="center">
-            <Button icon={<IconVideo />} onClick={() => setTimelapseShown(true)}>{t('event.show_timelapse_bt')}</Button>
-        </Flex>
+        {
+            event.export && event.export.timelapse
+            && <Flex align="center" justify="center">
+                <Button icon={<IconVideo />} onClick={() => setTimelapseShown(true)}>{t('event.show_timelapse_bt')}</Button>
+            </Flex>
+        }
 
         <Modal
             title={t('event.pictures.timelapse')}

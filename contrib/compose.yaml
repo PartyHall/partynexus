@@ -1,0 +1,26 @@
+services:
+  database:
+    image: 'postgres:16-alpine'
+    environment:
+      POSTGRES_DB: 'partynexus'
+      POSTGRES_PASSWORD: 'partynexus'
+      POSTGRES_USER: 'partynexus'
+    healthcheck:
+      test: ["CMD", "pg_isready", "-d", "partynexus", "-U", "partynexus"]
+      timeout: '5s'
+      start_period: '60s'
+      retries: 5
+
+  redis:
+    image: 'redis:7.4.1-bookworm'
+
+  app:
+    image: 'partynexus:latest'
+    restart: 'unless-stopped'
+    tty: true
+    env_file: './.env'
+    volumes:
+      - './jwt_keys:/app/config/jwt'
+      - './data:/app/var'
+    ports:
+      - '80:80'

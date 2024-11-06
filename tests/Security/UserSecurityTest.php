@@ -3,15 +3,9 @@
 namespace App\Tests\Security;
 
 use App\Tests\AuthenticatedTestCase;
-use Doctrine\ORM\EntityManagerInterface;
 
 class UserSecurityTest extends AuthenticatedTestCase
 {
-    protected function setUp(): void
-    {
-        parent::setUp();
-    }
-
     // Get collection appliance (403)
     public function test_user_getcollection_appliance(): void
     {

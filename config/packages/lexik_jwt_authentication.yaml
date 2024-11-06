@@ -1,5 +1,7 @@
 lexik_jwt_authentication:
-    secret_key: '%env(JWT_SECRET_KEY)%'
+    secret_key: '/app/config/jwt/private.pem'
+    public_key: '/app/config/jwt/public.pem'
+    pass_phrase: 'default_passphrase'
     token_ttl: 900
 
     token_extractors:

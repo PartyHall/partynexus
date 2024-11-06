@@ -38,3 +38,6 @@
 ###> phpstan/phpstan ###
 phpstan.neon
 ###< phpstan/phpstan ###
+
+contrib/.env
+supervisord.pid

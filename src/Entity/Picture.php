@@ -18,14 +18,13 @@ use Symfony\Bridge\Doctrine\Types\UuidType;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
  * @TODO: Get, GetCollection only for appliance that owns the event AND the users that are in the event
- *
- * @TODO: Download => Only the users that are in the event
  */
 #[Vich\Uploadable]
 #[ApiResource(
@@ -56,11 +55,11 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
                     fromClass: Event::class, // On veut pointer VERS LA CLASSE AUQUEL eventId FAIT REFERENCE (fromClass event d'après symfonycasts)
                 ),
             ],
-            denormalizationContext: ['groups' => ['api:picture:create']],
+            denormalizationContext: [AbstractNormalizer::GROUPS => ['api:picture:create']],
             processor: PictureProcessor::class,
         ),
     ],
-    normalizationContext: ['groups' => ['api:picture:get_item']],
+    normalizationContext: [AbstractNormalizer::GROUPS => ['api:picture:get_item']],
 )]
 #[ApiFilter(BooleanFilter::class, properties: ['unattended'])]
 #[ORM\Entity(repositoryClass: PictureRepository::class)]

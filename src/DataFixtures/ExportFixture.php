@@ -28,6 +28,7 @@ class ExportFixture extends Fixture implements DependentFixtureInterface
             ->setEndedAt(new \DateTimeImmutable('2024-09-01T01:20:00'))
             ->setProgress(ExportProgress::BUILDING_ZIP)
             ->setStatus(ExportStatus::COMPLETE)
+            ->setTimelapse(true)
         ;
 
         $manager->persist($export);

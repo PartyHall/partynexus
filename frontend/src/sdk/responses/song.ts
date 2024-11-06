@@ -1,6 +1,6 @@
-import dayjs from "dayjs";
 import { Collection } from "./collection";
 import { User } from "./user";
+import dayjs from "dayjs";
 
 export default class PnSong {
     iri: string;
@@ -108,5 +108,33 @@ export class PnSongRequest {
         }
 
         return new PnSongRequest(data);
+    }
+}
+
+export class PnSongSession {
+    id: number;
+    title: string;
+    artist: string;
+    song: string|null;
+    singer: string;
+    applianceId: number|null;
+    sungAt: dayjs.Dayjs;
+
+    constructor(data: Record<string, any>) {
+        this.id = data['id'];
+        this.title = data['title'];
+        this.artist = data['artist'];
+        this.song = data['song'] ?? null;
+        this.singer = data['singer'];
+        this.applianceId = data['applianceId'] ?? null;
+        this.sungAt = dayjs(data['sungAt']);
+    }
+
+    static fromJson(data: Record<string, any>|null) {
+        if (!data) {
+            return null;
+        }
+
+        return new PnSongSession(data);
     }
 }

@@ -1,3 +1,4 @@
+import PnAppliance from "./appliance";
 import dayjs from "dayjs";
 
 export class User {
@@ -6,6 +7,7 @@ export class User {
     username: string;
     email: string;
     language: string;
+    appliances: PnAppliance[];
 
     constructor(data: Record<string, any>) {
         this.iri = data['@id'];
@@ -13,9 +15,10 @@ export class User {
         this.username = data['username'];
         this.email = data['email'];
         this.language = data['language'];
+        this.appliances = PnAppliance.fromArray(data['appliances']);
     }
 
-    static fromJson(data: Record<string, any>|null) {
+    static fromJson(data: Record<string, any> | null) {
         if (!data) {
             return null;
         }
@@ -42,7 +45,7 @@ export class PnListUser {
     id: number;
     username: string;
     email: string;
-    bannedAt: dayjs.Dayjs|null;
+    bannedAt: dayjs.Dayjs | null;
 
     constructor(data: Record<string, any>) {
         this.iri = data['@id'];
@@ -52,8 +55,7 @@ export class PnListUser {
         this.bannedAt = data['bannedAt'] ? dayjs(data['bannedAt']) : null;
     }
 
-    static fromJson(data: Record<string, any>|null): PnListUser|null
-    {
+    static fromJson(data: Record<string, any> | null): PnListUser | null {
         if (!data) {
             return null;
         }

@@ -1,6 +1,7 @@
 import { PnEvent, PnListEvent } from "./responses/event";
 import { Collection } from "./responses/collection";
 import PnPicture from "./responses/picture";
+import { PnSongSession } from "./responses/song";
 import { SDK } from ".";
 
 export class Events {
@@ -95,5 +96,12 @@ export class Events {
         const data = await resp.json();
 
         return PnEvent.fromJson(data);
+    }
+
+    async getSongSessions(event: PnEvent, page: number): Promise<Collection<PnSongSession>|null> {
+        const resp = await this.sdk.get(`/api/events/${event.id}/song-sessions?page=${page}`);
+        const data = await resp.json();
+
+        return Collection.fromJson(data, x => PnSongSession.fromJson(x));
     }
 }

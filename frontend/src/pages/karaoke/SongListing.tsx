@@ -100,7 +100,8 @@ export default function SongListingPage() {
                 }
             </Flex>
 
-            <Flex vertical gap={16} align="stretch" style={{ overflowY: 'scroll', flex: '1' }}>
+            <Flex vertical gap={16} align="stretch" style={{ overflowY: 'scroll', flex: '100%' }}>
+                <span></span> {/* Bypass the :empty of antd, will be fixed once we go on SearchablePaginatedList*/}
                 <Loader loading={ctx.loading}>
                     {ctx.songs?.items.map(x => <SongCard key={x.iri} song={x} />)}
                 </Loader >

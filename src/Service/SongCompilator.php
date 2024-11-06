@@ -115,7 +115,7 @@ readonly class SongCompilator
             $song,
             'json',
             [
-                'groups' => [Song::COMPILE_METADATA],
+                AbstractNormalizer::GROUPS => [Song::COMPILE_METADATA],
                 'json_encode_options' => JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT,
             ]
         );

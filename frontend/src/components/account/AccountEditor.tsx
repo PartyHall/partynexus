@@ -1,9 +1,9 @@
 import { Button, Flex, Form, Input, Select } from "antd";
 import { FormItem } from "react-hook-form-antd";
 import { IconDeviceFloppy } from "@tabler/icons-react";
-import { User } from "../sdk/responses/user";
-import { ValidationErrors } from "../sdk/responses/validation_error";
-import { useAuth } from "../hooks/auth";
+import { User } from "../../sdk/responses/user";
+import { ValidationErrors } from "../../sdk/responses/validation_error";
+import { useAuth } from "../../hooks/auth";
 import { useForm } from "react-hook-form";
 import useNotification from "antd/es/notification/useNotification";
 import { useState } from "react";

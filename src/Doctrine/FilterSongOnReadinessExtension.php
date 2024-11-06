@@ -37,7 +37,7 @@ final readonly class FilterSongOnReadinessExtension implements QueryCollectionEx
         // If we are not an admin, we are forced to be filtered on ready songs
         if (!$this->security->isGranted('ROLE_ADMIN')) {
             $rootAlias = $queryBuilder->getRootAliases()[0];
-            $queryBuilder->andWhere(sprintf('%s.ready IS TRUE', $rootAlias));
+            $queryBuilder->andWhere(sprintf('%s.ready = TRUE', $rootAlias));
         }
     }
 }
