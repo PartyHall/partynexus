@@ -12,7 +12,7 @@ use Doctrine\Persistence\ManagerRegistry;
 /**
  * @extends ServiceEntityRepository<Event>
  */
-class EventRepository extends ServiceEntityRepository
+class EventRepository extends ServiceEntityRepository implements ParticipantFilterableInterface
 {
     public function __construct(ManagerRegistry $registry)
     {

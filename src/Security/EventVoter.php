@@ -2,13 +2,15 @@
 
 namespace App\Security;
 
+use App\Entity\Appliance;
+use App\Entity\Event;
 use App\Interface\HasEvent;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
 /**
- * @extends Voter<string, HasEvent>
+ * @extends Voter<string, HasEvent|Event>
  */
 class EventVoter extends Voter
 {
@@ -39,17 +41,29 @@ class EventVoter extends Voter
             return false;
         }
 
+        $isAppliance = false;
+        if ($user instanceof Appliance) {
+            $user = $user->getOwner();
+            $isAppliance = true;
+        }
+
         if ($this->security->isGranted('ROLE_ADMIN')) {
             return true;
         }
 
-        if ($subject->getEvent()->getOwner() === $user) {
+        $event = $subject instanceof Event ? $subject : $subject->getEvent();
+
+        if ($event->getOwner() === $user) {
             return true;
         }
 
-        foreach ($subject->getEvent()->getParticipants() as $participant) {
-            if ($participant === $user) {
-                return true;
+        // When we are on an appliance
+        // It must be the appliance of the owner of the event
+        if (!$isAppliance) {
+            foreach ($event->getParticipants() as $participant) {
+                if ($participant === $user) {
+                    return true;
+                }
             }
         }
 

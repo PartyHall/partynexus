@@ -1,4 +1,4 @@
-=> Non testés / incomplets:
+=> Untested / incomplete:
     -- Events --
     _api_/events{._format}_get_collection                        GET     /api/events.{_format}
 
@@ -33,28 +33,24 @@
     _api_/appliances/{id}{._format}_delete                       DELETE  /api/appliances/{id}.{_format}
 
     -- Picture --
-    _api_/events/{eventId}/pictures_get_collection               GET     /api/events/{eventId}/pictures
     _api_/pictures{._format}_post                                POST    /api/pictures.{_format}
 
-    -- Users --
-    _api_/users/{id}{._format}_patch                             PATCH   /api/users/{id}.{_format}
-
-=> In progress:
-    _api_/songs{._format}_get_collection                         GET     /api/songs.{_format}
-
-=> Niquel:
+=> Security tested:
     _api_/users{._format}_post                                   POST    /api/users.{_format} (+ unauthenticated)
     _api_/events/{id}/conclude_post                              POST    /api/events/{id}/conclude
     _api_/events{._format}_post                                  POST    /api/events.{_format}
     _api_/events/{id}{._format}_get                              GET     /api/events/{id}.{_format}
     _api_/users{._format}_get_collection                         GET     /api/users.{_format}
     _api_/users/{id}{._format}_get                               GET     /api/users/{id}.{_format}
+    _api_/users/{id}{._format}_patch                             PATCH   /api/users/{id}.{_format}
+    ban_user                                                     POST    /api/users/{id}/ban
+    unban_user                                                   POST    /api/users/{id}/unban
     _api_/events/{id}{._format}_patch                            PATCH   /api/events/{id}.{_format}
     _api_/pictures/{id}{._format}_get                            GET     /api/pictures/{id}.{_format}
     _api_/pictures/{id}/download_get                             GET     /api/pictures/{id}/download
     _api_/events/{id}/timelapse_get                              GET     /api/events/{id}/timelapse
     _api_/events/{id}/export_get                                 GET     /api/events/{id}/export
     _api_/songs/{id}{._format}_get                               GET     /api/songs/{id}.{_format}
-    ban_user                                                     POST    /api/users/{id}/ban
-    unban_user                                                   POST    /api/users/{id}/unban
+    _api_/songs{._format}_get_collection                         GET     /api/songs.{_format}
     _api_/songs{._format}_post                                   POST    /api/songs.{_format}
+    _api_/events/{eventId}/pictures_get_collection               GET     /api/events/{eventId}/pictures

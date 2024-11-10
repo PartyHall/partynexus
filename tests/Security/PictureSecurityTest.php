@@ -8,12 +8,6 @@ class PictureSecurityTest extends AuthenticatedTestCase
 {
     /**
      * @TODO:
-     * - Not authenticated + get collection = 401
-     * - User not in event + get collection = 403
-     * - User in event + get collection = 200
-     * - Appliance in event = 200
-     * - Appliance not in event = 403
-     *
      * - Post picture in event + unauthenticated = 401
      * - Post picture in event + not participant = 403
      * - Post picture in event + participant = 403
@@ -44,7 +38,7 @@ class PictureSecurityTest extends AuthenticatedTestCase
             ['headers' => ['Authorization' => $token]]
         );
 
-        $this->assertEquals(403, $resp->getStatusCode());
+        $this->assertEquals(404, $resp->getStatusCode());
     }
 
     // Get item and participant
@@ -89,7 +83,7 @@ class PictureSecurityTest extends AuthenticatedTestCase
             ],
         );
 
-        $this->assertEquals(403, $resp->getStatusCode());
+        $this->assertEquals(200, $resp->getStatusCode());
     }
 
     // Get item appliance not in event
@@ -107,5 +101,131 @@ class PictureSecurityTest extends AuthenticatedTestCase
         );
 
         $this->assertEquals(403, $resp->getStatusCode());
+    }
+
+    public function test_picture_getcollection_unauthenticated(): void
+    {
+        $resp = static::createClient()->request('GET', '/api/events/0192bf5a-67d8-7d9d-8a5e-962b23aceeaa/pictures');
+        $this->assertEquals(401, $resp->getStatusCode());
+    }
+
+    public function test_picture_getcollection_not_in_event(): void
+    {
+        $token = $this->authenticate('noevents', 'password');
+
+        $resp = static::createClient()->request('GET', '/api/events/0192bf5a-67d8-7d9d-8a5e-962b23aceeaa/pictures', [
+            'headers' => ['Authorization' => $token],
+        ]);
+
+        $this->assertEquals(403, $resp->getStatusCode());
+    }
+
+    public function test_picture_getcollection_in_event(): void
+    {
+        $token = $this->authenticate('user', 'password');
+
+        $resp = static::createClient()->request('GET', '/api/events/0192bf5a-67d8-7d9d-8a5e-962b23aceeaa/pictures', [
+            'headers' => ['Authorization' => $token],
+        ]);
+
+        $this->assertEquals(200, $resp->getStatusCode());
+
+        $data = json_decode($resp->getContent(), true);
+        $this->assertEquals(5, $data['totalItems']);
+
+        foreach($data['member'] as $picture) {
+            $this->assertEquals(false, $picture['unattended']);
+        }
+    }
+
+    public function test_picture_getcollection_in_event_unattended(): void
+    {
+        $token = $this->authenticate('user', 'password');
+
+        $resp = static::createClient()->request('GET', '/api/events/0192bf5a-67d8-7d9d-8a5e-962b23aceeaa/pictures?unattended=true', [
+            'headers' => ['Authorization' => $token],
+        ]);
+
+        $this->assertEquals(200, $resp->getStatusCode());
+
+        $data = json_decode($resp->getContent(), true);
+        $this->assertEquals(0, $data['totalItems']);
+    }
+
+    public function test_picture_getcollection_owner(): void
+    {
+        $token = $this->authenticate('admin', 'password');
+
+        $resp = static::createClient()->request('GET', '/api/events/0192bf5a-67d8-7d9d-8a5e-962b23aceeaa/pictures', [
+            'headers' => ['Authorization' => $token],
+        ]);
+
+        $this->assertEquals(200, $resp->getStatusCode());
+
+        $data = json_decode($resp->getContent(), true);
+        $this->assertEquals(14, $data['totalItems']);
+    }
+
+    public function test_picture_getcollection_owner_handtaken(): void
+    {
+        $token = $this->authenticate('admin', 'password');
+
+        $resp = static::createClient()->request('GET', '/api/events/0192bf5a-67d8-7d9d-8a5e-962b23aceeaa/pictures?unattended=false', [
+            'headers' => ['Authorization' => $token],
+        ]);
+
+        $this->assertEquals(200, $resp->getStatusCode());
+
+        $data = json_decode($resp->getContent(), true);
+        $this->assertEquals(5, $data['totalItems']);
+
+        foreach($data['member'] as $picture) {
+            $this->assertEquals(false, $picture['unattended']);
+        }
+    }
+
+    public function test_picture_getcollection_owner_unattended(): void
+    {
+        $token = $this->authenticate('admin', 'password');
+
+        $resp = static::createClient()->request('GET', '/api/events/0192bf5a-67d8-7d9d-8a5e-962b23aceeaa/pictures?unattended=true', [
+            'headers' => ['Authorization' => $token],
+        ]);
+
+        $this->assertEquals(200, $resp->getStatusCode());
+
+        $data = json_decode($resp->getContent(), true);
+        $this->assertEquals(9, $data['totalItems']);
+
+        foreach($data['member'] as $picture) {
+            $this->assertEquals(true, $picture['unattended']);
+        }
+    }
+
+    public function test_picture_getcollection_appliance_not_in_event(): void
+    {
+        $resp = static::createClient()->request('GET', '/api/events/0192bf5a-67d8-7d9d-8a5e-962b23aceeaa/pictures', [
+            'headers' => [
+                'X-HARDWARE-ID' => self::APPLIANCE_NOT_OWNER_KEY,
+                'X-API-TOKEN' => self::APPLIANCE_NOT_OWNER_SECRET,
+            ],
+        ]);
+
+        $this->assertEquals(403, $resp->getStatusCode());
+    }
+
+    public function test_picture_getcollection_appliance_in_event(): void
+    {
+        $resp = static::createClient()->request('GET', '/api/events/0192bf5a-67d8-7d9d-8a5e-962b23aceeaa/pictures', [
+            'headers' => [
+                'X-HARDWARE-ID' => self::APPLIANCE_KEY,
+                'X-API-TOKEN' => self::APPLIANCE_SECRET,
+            ],
+        ]);
+
+        $this->assertEquals(200, $resp->getStatusCode());
+
+        $data = json_decode($resp->getContent(), true);
+        $this->assertEquals(14, $data['totalItems']);
     }
 }

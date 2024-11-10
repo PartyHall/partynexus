@@ -289,6 +289,24 @@ class UserSecurityTest extends AuthenticatedTestCase
         $this->assertEquals('en_US', $user->getLanguage());
     }
 
+    public function test_user_update_appliance(): void
+    {
+        $response = static::createClient()->request('PATCH', '/api/users/2', [
+            'json' => [
+                'username' => 'toto',
+                'email' => 'toto@tutu.fr',
+                'language' => 'en_US',
+            ],
+            'headers' => [
+                'Content-Type' => 'application/merge-patch+json',
+                'X-HARDWARE-ID' => self::APPLIANCE_KEY,
+                'X-API-TOKEN' => self::APPLIANCE_SECRET,
+            ],
+        ]);
+
+        $this->assertEquals(403, $response->getStatusCode());
+    }
+
     public function test_ban_unauthorized(): void
     {
         $response = static::createClient()->request('POST', '/api/users/2/ban', [
