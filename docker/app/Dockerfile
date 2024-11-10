@@ -132,4 +132,4 @@ RUN sed -i \
     -e "s/PARTYNEXUS_COMMIT: 'INDEV'/PARTYNEXUS_COMMIT: '${PARTYNEXUS_COMMIT}'/" \
     /app/config/services.yaml
 
-CMD [ "supervisord", "-n" ]
+CMD [ "/usr/bin/supervisord", "-c", "/etc/supervisor/supervisord.conf" ]
