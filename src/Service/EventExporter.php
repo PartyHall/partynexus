@@ -31,21 +31,22 @@ class EventExporter
     private string $outPath;
 
     public function __construct(
-        private readonly LoggerInterface $logger,
-        private readonly Filesystem $fs,
-        private readonly StorageInterface $storage,
-        private readonly MimeTypesInterface $mimeTypes,
-        private readonly SerializerInterface $serializer,
+        private readonly LoggerInterface        $logger,
+        private readonly Filesystem             $fs,
+        private readonly StorageInterface       $storage,
+        private readonly MimeTypesInterface     $mimeTypes,
+        private readonly SerializerInterface    $serializer,
         private readonly EntityManagerInterface $emi,
-        private readonly TranslatorInterface $translator,
-        private readonly MailerInterface $mailer,
+        private readonly TranslatorInterface    $translator,
+        private readonly MailerInterface        $mailer,
         #[Autowire(env: 'EXPORTS_LOCATION')]
-        private readonly string $exportLocation,
+        private readonly string                 $exportLocation,
         #[Autowire(env: 'TIMELAPSES_LOCATION')]
-        private readonly string $timelapseLocation,
+        private readonly string                 $timelapseLocation,
         #[Autowire(env: 'PUBLIC_URL')]
-        string $baseUrl,
-    ) {
+        string                                  $baseUrl,
+    )
+    {
         $this->baseUrl = \rtrim($baseUrl, '/');
     }
 
@@ -67,13 +68,14 @@ class EventExporter
             ->setStartedAt(new \DateTimeImmutable())
             ->setEndedAt(null)
             ->setStatus(ExportStatus::STARTED)
-            ->setProgress(ExportProgress::STARTED);
+            ->setProgress(ExportProgress::STARTED)
+            ->setTimelapse(false);
 
         $this->event->setExport($this->export);
         $this->emi->persist($this->export);
         $this->emi->flush();
 
-        $this->outPath = Path::join($this->exportLocation, $this->event->getId()->toString().'.zip');
+        $this->outPath = Path::join($this->exportLocation, $this->event->getId()->toString() . '.zip');
         $this->fs->mkdir($this->exportLocation);
 
         $this->logger->info('Exporting event', ['event' => $event->getId()->toString()]);
@@ -159,7 +161,7 @@ class EventExporter
         $unattendedPictures = $this
             ->event
             ->getPictures()
-            ->filter(fn (Picture $picture) => $picture->isUnattended())
+            ->filter(fn(Picture $picture) => $picture->isUnattended())
             ->toArray();
         $amtPictures = \count($unattendedPictures);
         if (0 === $amtPictures) {
@@ -168,10 +170,10 @@ class EventExporter
             return false;
         }
 
-        \usort($unattendedPictures, fn (Picture $a, Picture $b) => $a->getTakenAt() <=> $b->getTakenAt());
+        \usort($unattendedPictures, fn(Picture $a, Picture $b) => $a->getTakenAt() <=> $b->getTakenAt());
 
         $files = \array_map(
-            fn (Picture $p) => \sprintf("file '%s'", $this->storage->resolvePath($p, 'file')),
+            fn(Picture $p) => \sprintf("file '%s'", $this->storage->resolvePath($p, 'file')),
             $unattendedPictures,
         );
 
@@ -187,7 +189,7 @@ class EventExporter
 
         // We clamp the framerate between 6fps and 15fps to have
         // a nice timelapse
-        $framerate = (int) floor(max(min(15, $framerate), 6));
+        $framerate = (int)floor(max(min(15, $framerate), 6));
 
         // @TODO: Do properly ?
         exec(\sprintf(
@@ -278,18 +280,18 @@ class EventExporter
         foreach ($users as $user) {
             $mail = (new TemplatedEmail())
                 ->to($user->getEmail())
-                ->subject('[PartyHall] '.$this->translator->trans(
-                    'emails.event_concluded.subject',
-                    parameters: [
-                        '%event_name%' => $this->event->getName(),
-                    ],
-                    locale: $user->getLanguage()),
+                ->subject('[PartyHall] ' . $this->translator->trans(
+                        'emails.event_concluded.subject',
+                        parameters: [
+                            '%event_name%' => $this->event->getName(),
+                        ],
+                        locale: $user->getLanguage()),
                 )
                 ->htmlTemplate('emails/event_exported.html.twig')
                 ->locale($user->getLanguage())
                 ->context([
                     'event' => $this->event,
-                    'link' => $this->baseUrl.'/events/'.$this->event->getId()->toString(),
+                    'link' => $this->baseUrl . '/events/' . $this->event->getId()->toString(),
                 ]);
 
             $this->mailer->send($mail);

@@ -50,7 +50,7 @@ final readonly class FilterPictureEventParticipantsExtension implements QueryCol
 
         $this->repository
             ->filterParticipatingEvents($queryBuilder, $user)
-            ->orderBy("$rootAlias.takenAt", 'DESC');
+            ->orderBy("$rootAlias.takenAt", 'ASC');
 
         if (!$this->security->isGranted('ROLE_ADMIN') && !$user instanceof Appliance) {
             $unattended = false;
