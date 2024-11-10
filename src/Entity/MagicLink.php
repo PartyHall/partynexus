@@ -10,7 +10,7 @@ class MagicLink
 {
     #[ORM\Id]
     #[ORM\Column(type: Types::INTEGER)]
-    #[ORM\GeneratedValue(strategy: 'SEQUENCE')]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     private int $id;
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'magicLinks')]

@@ -7,6 +7,8 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Link;
 use ApiPlatform\Metadata\Post;
+use App\Interface\HasEvent;
+use App\Security\EventVoter;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Attribute\Groups;
@@ -17,6 +19,7 @@ use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
     operations: [
         new Get(
             normalizationContext: [AbstractNormalizer::GROUPS => [self::API_GET_ITEM]],
+            security: 'is_granted("'.EventVoter::PARTICIPANT.'", object)',
         ),
         new GetCollection(
             uriTemplate: '/events/{eventId}/song-sessions',
@@ -35,14 +38,14 @@ use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
         ),
     ],
 )]
-class SongSession
+class SongSession implements HasEvent
 {
     public const string API_GET_ITEM = 'api:song_session:get';
     public const string API_GET_COLLECTION = 'api:song_session:get-collection';
     public const string API_CREATE = 'api:song_session:create';
 
     #[ORM\Id]
-    #[ORM\GeneratedValue(strategy: 'AUTO')]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     #[ORM\Column(type: Types::INTEGER)]
     #[Groups([
         self::API_GET_ITEM,

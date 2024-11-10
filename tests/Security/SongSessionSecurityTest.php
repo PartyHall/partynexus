@@ -2,7 +2,9 @@
 
 namespace App\Tests\Security;
 
-class SongSessionSecurityTest
+use App\Tests\AuthenticatedTestCase;
+
+class SongSessionSecurityTest extends AuthenticatedTestCase
 {
     /**
      * @TODO:

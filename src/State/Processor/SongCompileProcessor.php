@@ -26,7 +26,7 @@ readonly class SongCompileProcessor implements ProcessorInterface
     /**
      * @throws \Exception
      */
-    public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = [])
+    public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): Song
     {
         if (!$data instanceof Song || !$operation instanceof Patch) {
             throw new \Exception('The SongCompileProcessor should only be used on Patch operation for song');

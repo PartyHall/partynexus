@@ -5,6 +5,8 @@ namespace App\Doctrine;
 use ApiPlatform\Doctrine\Orm\Extension\QueryCollectionExtensionInterface;
 use ApiPlatform\Doctrine\Orm\Extension\QueryItemExtensionInterface;
 use ApiPlatform\Doctrine\Orm\Util\QueryNameGeneratorInterface;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Operation;
 use App\Entity\Song;
 use Doctrine\ORM\QueryBuilder;
@@ -18,26 +20,50 @@ final readonly class FilterSongOnReadinessExtension implements QueryCollectionEx
     ) {
     }
 
-    public function applyToCollection(QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, ?Operation $operation = null, array $context = []): void
+    private function addCondition(QueryBuilder $queryBuilder, bool $val): void
     {
-        $this->addWhere($queryBuilder, $resourceClass);
+        $rootAlias = $queryBuilder->getRootAliases()[0];
+
+        $queryBuilder
+            ->andWhere(sprintf('%s.ready = :ready', $rootAlias))
+            ->setParameter('ready', $val);
     }
 
-    public function applyToItem(QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, array $identifiers, ?Operation $operation = null, array $context = []): void
-    {
-        $this->addWhere($queryBuilder, $resourceClass);
-    }
-
-    private function addWhere(QueryBuilder $queryBuilder, string $resourceClass): void
-    {
-        if (Song::class !== $resourceClass || null === $this->security->getUser()) {
+    public function applyToCollection(
+        QueryBuilder $queryBuilder,
+        QueryNameGeneratorInterface $queryNameGenerator,
+        string $resourceClass,
+        ?Operation $operation = null,
+        array $context = [],
+    ): void {
+        if (!$operation instanceof GetCollection || Song::class !== $resourceClass) {
             return;
         }
 
-        // If we are not an admin, we are forced to be filtered on ready songs
+        $isAdmin = $this->security->isGranted('ROLE_ADMIN');
+        $param = 'true' === \strtolower($context['request']->query->get('ready') ?? 'true');
+
+        if (!$isAdmin) {
+            $this->addCondition($queryBuilder, true);
+        } else {
+            $this->addCondition($queryBuilder, $param);
+        }
+    }
+
+    public function applyToItem(
+        QueryBuilder $queryBuilder,
+        QueryNameGeneratorInterface $queryNameGenerator,
+        string $resourceClass,
+        array $identifiers,
+        ?Operation $operation = null,
+        array $context = [],
+    ): void {
+        if (!$operation instanceof Get || Song::class !== $resourceClass) {
+            return;
+        }
+
         if (!$this->security->isGranted('ROLE_ADMIN')) {
-            $rootAlias = $queryBuilder->getRootAliases()[0];
-            $queryBuilder->andWhere(sprintf('%s.ready = TRUE', $rootAlias));
+            $this->addCondition($queryBuilder, true);
         }
     }
 }

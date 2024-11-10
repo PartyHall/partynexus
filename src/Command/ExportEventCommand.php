@@ -13,7 +13,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 #[AsCommand('event:export')]
-class ExportEvent extends Command
+class ExportEventCommand extends Command
 {
     public function __construct(
         private readonly EventRepository $eventRepository,

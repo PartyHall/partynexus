@@ -45,6 +45,12 @@
 		php_server
 	}
 
+	handle /_profiler* {
+		root * /app/public
+		encode zstd br gzip
+		php_server
+	}
+
 	handle /bundles/* {
 		root * /app/public
 		file_server

@@ -49,6 +49,32 @@ class DownloadsSecurityTest extends AuthenticatedTestCase
         $this->assertEquals(200, $resp->getStatusCode());
     }
 
+    // Download picture (Appliance / Not owner)
+    public function test_download_picture_appliance_not_owner(): void
+    {
+        $resp = static::createClient()->request('GET', '/api/pictures/1019b299-d7c8-4670-aff3-9ebf6f9293d2/download', [
+            'headers' => [
+                'X-HARDWARE-ID' => self::APPLIANCE_NOT_OWNER_KEY,
+                'X-API-TOKEN' => self::APPLIANCE_NOT_OWNER_SECRET,
+            ]
+        ]);
+
+        $this->assertEquals(403, $resp->getStatusCode());
+    }
+
+    // Download picture (Appliance / Owner)
+    public function test_download_picture_appliance_owner(): void
+    {
+        $resp = static::createClient()->request('GET', '/api/pictures/1019b299-d7c8-4670-aff3-9ebf6f9293d2/download', [
+            'headers' => [
+                'X-HARDWARE-ID' => self::APPLIANCE_KEY,
+                'X-API-TOKEN' => self::APPLIANCE_SECRET,
+            ]
+        ]);
+
+        $this->assertEquals(403, $resp->getStatusCode());
+    }
+
     // Download timelapse (unauthenticated)
     public function test_download_timelapse_unauthenticated(): void
     {
@@ -93,6 +119,32 @@ class DownloadsSecurityTest extends AuthenticatedTestCase
         $this->assertEquals(200, $resp->getStatusCode());
     }
 
+    // Download timelapse (Appliance / Not owner)
+    public function test_download_timelapse_appliance_not_owner(): void
+    {
+        $resp = static::createClient()->request('GET', '/api/events/0192bf5a-67d8-7d9d-8a5e-962b23aceeaa/timelapse', [
+            'headers' => [
+                'X-HARDWARE-ID' => self::APPLIANCE_NOT_OWNER_KEY,
+                'X-API-TOKEN' => self::APPLIANCE_NOT_OWNER_SECRET,
+            ],
+        ]);
+
+        $this->assertEquals(403, $resp->getStatusCode());
+    }
+
+    // Download timelapse (Appliance / Owner)
+    public function test_download_timelapse_appliance_owner(): void
+    {
+        $resp = static::createClient()->request('GET', '/api/events/0192bf5a-67d8-7d9d-8a5e-962b23aceeaa/timelapse', [
+            'headers' => [
+                'X-HARDWARE-ID' => self::APPLIANCE_KEY,
+                'X-API-TOKEN' => self::APPLIANCE_SECRET,
+            ],
+        ]);
+
+        $this->assertEquals(403, $resp->getStatusCode());
+    }
+
     // Download export (unauthenticated)
     public function test_download_export_unauthenticated(): void
     {
@@ -135,5 +187,31 @@ class DownloadsSecurityTest extends AuthenticatedTestCase
         ]);
 
         $this->assertEquals(200, $resp->getStatusCode());
+    }
+
+    // Download export (Appliance / Not owner)
+    public function test_download_export_appliance_not_owner(): void
+    {
+        $resp = static::createClient()->request('GET', '/api/events/0192bf5a-67d8-7d9d-8a5e-962b23aceeaa/export', [
+            'headers' => [
+                'X-HARDWARE-ID' => self::APPLIANCE_NOT_OWNER_KEY,
+                'X-API-TOKEN' => self::APPLIANCE_NOT_OWNER_SECRET,
+            ],
+        ]);
+
+        $this->assertEquals(403, $resp->getStatusCode());
+    }
+
+    // Download export (Appliance / Owner)
+    public function test_download_export_appliance_owner(): void
+    {
+        $resp = static::createClient()->request('GET', '/api/events/0192bf5a-67d8-7d9d-8a5e-962b23aceeaa/export', [
+            'headers' => [
+                'X-HARDWARE-ID' => self::APPLIANCE_KEY,
+                'X-API-TOKEN' => self::APPLIANCE_SECRET,
+            ],
+        ]);
+
+        $this->assertEquals(403, $resp->getStatusCode());
     }
 }

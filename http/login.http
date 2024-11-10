@@ -1,0 +1,12 @@
+### Authenticate
+POST {{baseUrl}}/login
+Content-Type: application/json
+
+{
+    "username": "{{username}}",
+    "password": "password"
+}
+
+GET {{baseUrl}}/pictures/1019b299-d7c8-4670-aff3-9ebf6f9293d2
+Content-Type: application/json
+

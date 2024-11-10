@@ -11,12 +11,16 @@ export class Events {
         this.sdk = sdk;
     }
 
-    async getCollection(page: number, name: string|null = null): Promise<Collection<PnListEvent> | null> {
+    async getCollection(page: number, name: string|null = null, mine: boolean = true): Promise<Collection<PnListEvent> | null> {
         const searchParams = new URLSearchParams();
         searchParams.set('page', `${page}`);
 
         if (name) {
             searchParams.set('name', name);
+        }
+
+        if (mine) {
+            searchParams.set('mine', 'true');
         }
 
         const resp = await this.sdk.get(`/api/events?${searchParams.toString()}`);

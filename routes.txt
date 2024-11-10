@@ -1,0 +1,60 @@
+=> Non testés / incomplets:
+    -- Events --
+    _api_/events{._format}_get_collection                        GET     /api/events.{_format}
+
+    -- Song sessions --
+    _api_/song_sessions{._format}_post                           POST    /api/song_sessions.{_format}
+    _api_/song_sessions/{id}{._format}_get                       GET     /api/song_sessions/{id}.{_format}
+    _api_/events/{eventId}/song-sessions_get_collection          GET     /api/events/{eventId}/song-sessions
+
+    -- Song --
+    _api_/songs/{id}{._format}_patch                             PATCH   /api/songs/{id}.{_format}
+    _api_/songs/{id}/compile_patch                               PATCH   /api/songs/{id}/compile
+    _api_/songs/{id}/decompile_patch                             PATCH   /api/songs/{id}/decompile
+    _api_/songs/{id}{._format}_delete                            DELETE  /api/songs/{id}.{_format}
+    app_songuploadfile__invoke                                   POST    /api/songs/{id}/upload-file/{filetype}
+
+    -- Song request --
+    _api_/song_requests/{id}{._format}_get                       GET     /api/song_requests/{id}.{_format}
+    _api_/song_requests{._format}_get_collection                 GET     /api/song_requests.{_format}
+    _api_/song_requests{._format}_post                           POST    /api/song_requests.{_format}
+    _api_/song_requests/{id}{._format}_delete                    DELETE  /api/song_requests/{id}.{_format}
+
+    -- External song query --
+    _api_/external/spotify/{artist}/{track}_get_collection       GET     /api/external/spotify/{artist}/{track}
+    _api_/external/musicbrainz/{artist}/{track}_get_collection   GET     /api/external/musicbrainz/{artist}/{track}
+    _api_/external_songs/{id}{._format}_get                      GET     /api/external_songs/{id}.{_format}
+
+    -- Appliances--
+    _api_/appliances{._format}_get_collection                    GET     /api/appliances.{_format}
+    _api_/appliances/{id}{._format}_get                          GET     /api/appliances/{id}.{_format}
+    _api_/appliances{._format}_post                              POST    /api/appliances.{_format}
+    _api_/appliances/{id}{._format}_patch                        PATCH   /api/appliances/{id}.{_format}
+    _api_/appliances/{id}{._format}_delete                       DELETE  /api/appliances/{id}.{_format}
+
+    -- Picture --
+    _api_/events/{eventId}/pictures_get_collection               GET     /api/events/{eventId}/pictures
+    _api_/pictures{._format}_post                                POST    /api/pictures.{_format}
+
+    -- Users --
+    _api_/users/{id}{._format}_patch                             PATCH   /api/users/{id}.{_format}
+
+=> In progress:
+    _api_/songs{._format}_get_collection                         GET     /api/songs.{_format}
+
+=> Niquel:
+    _api_/users{._format}_post                                   POST    /api/users.{_format} (+ unauthenticated)
+    _api_/events/{id}/conclude_post                              POST    /api/events/{id}/conclude
+    _api_/events{._format}_post                                  POST    /api/events.{_format}
+    _api_/events/{id}{._format}_get                              GET     /api/events/{id}.{_format}
+    _api_/users{._format}_get_collection                         GET     /api/users.{_format}
+    _api_/users/{id}{._format}_get                               GET     /api/users/{id}.{_format}
+    _api_/events/{id}{._format}_patch                            PATCH   /api/events/{id}.{_format}
+    _api_/pictures/{id}{._format}_get                            GET     /api/pictures/{id}.{_format}
+    _api_/pictures/{id}/download_get                             GET     /api/pictures/{id}/download
+    _api_/events/{id}/timelapse_get                              GET     /api/events/{id}/timelapse
+    _api_/events/{id}/export_get                                 GET     /api/events/{id}/export
+    _api_/songs/{id}{._format}_get                               GET     /api/songs/{id}.{_format}
+    ban_user                                                     POST    /api/users/{id}/ban
+    unban_user                                                   POST    /api/users/{id}/unban
+    _api_/songs{._format}_post                                   POST    /api/songs.{_format}
