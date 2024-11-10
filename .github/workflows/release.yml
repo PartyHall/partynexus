@@ -1,0 +1,52 @@
+name: 'Release'
+
+on:
+  push:
+    tags:
+      - v*
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    if: github.actor == 'oxodao' # @TODO: Do something proper at some point
+    steps:
+      - name: 'Checking out the repository'
+        uses: actions/checkout@v4
+
+      - name: 'Setting up QEMU'
+        uses: docker/setup-qemu-action@v3
+
+      - name: 'Setting up Docker Buildx'
+        uses: docker/setup-buildx-action@v3
+
+      - name: 'Extract tag name'
+        run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_ENV
+
+      - name: 'Get short SHA'
+        run: echo "COMMIT=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+
+      - name: 'Get lowercase repository name'
+        run: echo "REPO_LC=${GITHUB_REPOSITORY,,}" >> $GITHUB_ENV
+
+      - name: 'Login to GitHub Container Registry'
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 'Build and push Docker image'
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ./docker/app/Dockerfile
+          push: true
+          target: frankenphp_prod
+          build-args: |
+            PARTYNEXUS_VERSION=${{ env.VERSION }}
+            PARTYNEXUS_COMMIT=${{ env.COMMIT }}
+          tags: |
+            ghcr.io/${{ env.REPO_LC }}:latest
+            ghcr.io/${{ env.REPO_LC }}:${{ env.VERSION }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
