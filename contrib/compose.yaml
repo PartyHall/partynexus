@@ -5,6 +5,9 @@ services:
       POSTGRES_DB: 'partynexus'
       POSTGRES_PASSWORD: 'partynexus'
       POSTGRES_USER: 'partynexus'
+      PGDATA: '/var/lib/postgresql/data/pgdata'
+    volumes:
+      - './db_data:/var/lib/postgresql/data'
     healthcheck:
       test: ["CMD", "pg_isready", "-d", "partynexus", "-U", "partynexus"]
       timeout: '5s'
@@ -22,5 +25,6 @@ services:
     volumes:
       - './jwt_keys:/app/config/jwt'
       - './data:/app/var'
+      - './supervisor_logs:/var/log/supervisor/'
     ports:
       - '80:80'
