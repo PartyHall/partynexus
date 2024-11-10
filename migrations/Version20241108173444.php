@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20241106211344 extends AbstractMigration
+final class Version20241108173444 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -20,15 +20,8 @@ final class Version20241106211344 extends AbstractMigration
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('CREATE SEQUENCE appliance_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
-        $this->addSql('CREATE SEQUENCE export_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
-        $this->addSql('CREATE SEQUENCE magic_link_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
-        $this->addSql('CREATE SEQUENCE nexus_user_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('CREATE SEQUENCE refresh_tokens_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
-        $this->addSql('CREATE SEQUENCE song_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
-        $this->addSql('CREATE SEQUENCE song_request_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
-        $this->addSql('CREATE SEQUENCE song_session_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
-        $this->addSql('CREATE TABLE appliance (id INT NOT NULL, owner_id INT DEFAULT NULL, name VARCHAR(32) NOT NULL, hardware_id UUID NOT NULL, api_token VARCHAR(512) NOT NULL, last_seen TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE TABLE appliance (id SERIAL NOT NULL, owner_id INT DEFAULT NULL, name VARCHAR(32) NOT NULL, hardware_id UUID NOT NULL, api_token VARCHAR(512) NOT NULL, last_seen TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX IDX_B4E6C1107E3C61F9 ON appliance (owner_id)');
         $this->addSql('COMMENT ON COLUMN appliance.hardware_id IS \'(DC2Type:uuid)\'');
         $this->addSql('COMMENT ON COLUMN appliance.last_seen IS \'(DC2Type:datetime_immutable)\'');
@@ -40,15 +33,15 @@ final class Version20241106211344 extends AbstractMigration
         $this->addSql('CREATE INDEX IDX_92589AE271F7E88B ON event_user (event_id)');
         $this->addSql('CREATE INDEX IDX_92589AE2A76ED395 ON event_user (user_id)');
         $this->addSql('COMMENT ON COLUMN event_user.event_id IS \'(DC2Type:uuid)\'');
-        $this->addSql('CREATE TABLE export (id INT NOT NULL, event_id UUID NOT NULL, started_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, ended_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, progress VARCHAR(255) NOT NULL, status VARCHAR(255) NOT NULL, timelapse BOOLEAN DEFAULT false NOT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE TABLE export (id SERIAL NOT NULL, event_id UUID NOT NULL, started_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, ended_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, progress VARCHAR(255) NOT NULL, status VARCHAR(255) NOT NULL, timelapse BOOLEAN DEFAULT false NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_428C169471F7E88B ON export (event_id)');
         $this->addSql('COMMENT ON COLUMN export.event_id IS \'(DC2Type:uuid)\'');
         $this->addSql('COMMENT ON COLUMN export.started_at IS \'(DC2Type:datetime_immutable)\'');
         $this->addSql('COMMENT ON COLUMN export.ended_at IS \'(DC2Type:datetime_immutable)\'');
-        $this->addSql('CREATE TABLE magic_link (id INT NOT NULL, user_id INT DEFAULT NULL, created_at TIMESTAMP(0) WITH TIME ZONE NOT NULL, code VARCHAR(255) NOT NULL, used BOOLEAN NOT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE TABLE magic_link (id SERIAL NOT NULL, user_id INT DEFAULT NULL, created_at TIMESTAMP(0) WITH TIME ZONE NOT NULL, code VARCHAR(255) NOT NULL, used BOOLEAN NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX IDX_6B40B1C6A76ED395 ON magic_link (user_id)');
         $this->addSql('COMMENT ON COLUMN magic_link.created_at IS \'(DC2Type:datetimetz_immutable)\'');
-        $this->addSql('CREATE TABLE nexus_user (id INT NOT NULL, username VARCHAR(32) NOT NULL, password VARCHAR(512) DEFAULT NULL, email VARCHAR(255) NOT NULL, language VARCHAR(255) DEFAULT \'en_US\' NOT NULL, roles JSON NOT NULL, banned_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE TABLE nexus_user (id SERIAL NOT NULL, username VARCHAR(32) NOT NULL, password VARCHAR(512) DEFAULT NULL, email VARCHAR(255) NOT NULL, language VARCHAR(255) DEFAULT \'en_US\' NOT NULL, roles JSON NOT NULL, banned_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_6097C3D7F85E0677 ON nexus_user (username)');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_6097C3D7E7927C74 ON nexus_user (email)');
         $this->addSql('COMMENT ON COLUMN nexus_user.banned_at IS \'(DC2Type:datetime_immutable)\'');
@@ -60,16 +53,16 @@ final class Version20241106211344 extends AbstractMigration
         $this->addSql('COMMENT ON COLUMN picture.appliance_uuid IS \'(DC2Type:uuid)\'');
         $this->addSql('CREATE TABLE refresh_tokens (id INT NOT NULL, refresh_token VARCHAR(128) NOT NULL, username VARCHAR(255) NOT NULL, valid TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_9BACE7E1C74F2195 ON refresh_tokens (refresh_token)');
-        $this->addSql('CREATE TABLE song (id INT NOT NULL, title VARCHAR(255) NOT NULL, artist VARCHAR(255) NOT NULL, cover_name VARCHAR(255) DEFAULT NULL, format VARCHAR(20) NOT NULL, quality VARCHAR(20) NOT NULL, music_brainz_id UUID DEFAULT NULL, spotify_id VARCHAR(255) DEFAULT NULL, nexus_build_id UUID DEFAULT NULL, hotspot INT DEFAULT NULL, ready BOOLEAN DEFAULT false NOT NULL, cover BOOLEAN DEFAULT false NOT NULL, vocals BOOLEAN DEFAULT false NOT NULL, combined BOOLEAN DEFAULT false NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE TABLE song (id SERIAL NOT NULL, title VARCHAR(255) NOT NULL, artist VARCHAR(255) NOT NULL, cover_name VARCHAR(255) DEFAULT NULL, format VARCHAR(20) NOT NULL, quality VARCHAR(20) NOT NULL, music_brainz_id UUID DEFAULT NULL, spotify_id VARCHAR(255) DEFAULT NULL, nexus_build_id UUID DEFAULT NULL, hotspot INT DEFAULT NULL, ready BOOLEAN DEFAULT false NOT NULL, cover BOOLEAN DEFAULT false NOT NULL, vocals BOOLEAN DEFAULT false NOT NULL, combined BOOLEAN DEFAULT false NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, PRIMARY KEY(id))');
         $this->addSql('COMMENT ON COLUMN song.music_brainz_id IS \'(DC2Type:uuid)\'');
         $this->addSql('COMMENT ON COLUMN song.nexus_build_id IS \'(DC2Type:uuid)\'');
         $this->addSql('COMMENT ON COLUMN song.created_at IS \'(DC2Type:datetime_immutable)\'');
         $this->addSql('COMMENT ON COLUMN song.updated_at IS \'(DC2Type:datetime_immutable)\'');
-        $this->addSql('CREATE TABLE song_request (id INT NOT NULL, requested_by_id INT DEFAULT NULL, title VARCHAR(255) NOT NULL, artist VARCHAR(255) NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE TABLE song_request (id SERIAL NOT NULL, requested_by_id INT DEFAULT NULL, title VARCHAR(255) NOT NULL, artist VARCHAR(255) NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX IDX_36FC9EB04DA1E751 ON song_request (requested_by_id)');
         $this->addSql('COMMENT ON COLUMN song_request.created_at IS \'(DC2Type:datetime_immutable)\'');
         $this->addSql('COMMENT ON COLUMN song_request.updated_at IS \'(DC2Type:datetime_immutable)\'');
-        $this->addSql('CREATE TABLE song_session (id INT NOT NULL, song_id INT DEFAULT NULL, event_id UUID NOT NULL, title VARCHAR(255) NOT NULL, artist VARCHAR(255) NOT NULL, sung_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, singer VARCHAR(255) NOT NULL, appliace_id INT NOT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE TABLE song_session (id SERIAL NOT NULL, song_id INT DEFAULT NULL, event_id UUID NOT NULL, title VARCHAR(255) NOT NULL, artist VARCHAR(255) NOT NULL, sung_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, singer VARCHAR(255) NOT NULL, appliace_id INT NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX IDX_DD2FC4FBA0BDB2F3 ON song_session (song_id)');
         $this->addSql('CREATE INDEX IDX_DD2FC4FB71F7E88B ON song_session (event_id)');
         $this->addSql('COMMENT ON COLUMN song_session.event_id IS \'(DC2Type:uuid)\'');
@@ -105,14 +98,7 @@ final class Version20241106211344 extends AbstractMigration
     {
         // this down() migration is auto-generated, please modify it to your needs
         $this->addSql('CREATE SCHEMA public');
-        $this->addSql('DROP SEQUENCE appliance_id_seq CASCADE');
-        $this->addSql('DROP SEQUENCE export_id_seq CASCADE');
-        $this->addSql('DROP SEQUENCE magic_link_id_seq CASCADE');
-        $this->addSql('DROP SEQUENCE nexus_user_id_seq CASCADE');
         $this->addSql('DROP SEQUENCE refresh_tokens_id_seq CASCADE');
-        $this->addSql('DROP SEQUENCE song_id_seq CASCADE');
-        $this->addSql('DROP SEQUENCE song_request_id_seq CASCADE');
-        $this->addSql('DROP SEQUENCE song_session_id_seq CASCADE');
         $this->addSql('ALTER TABLE appliance DROP CONSTRAINT FK_B4E6C1107E3C61F9');
         $this->addSql('ALTER TABLE event DROP CONSTRAINT FK_3BAE0AA77E3C61F9');
         $this->addSql('ALTER TABLE event_user DROP CONSTRAINT FK_92589AE271F7E88B');

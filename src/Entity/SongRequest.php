@@ -41,7 +41,7 @@ class SongRequest implements HasTimestamps
     public const string API_CREATE = 'api:song_request:create';
 
     #[ORM\Id]
-    #[ORM\GeneratedValue(strategy: 'AUTO')]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     #[ORM\Column(type: Types::INTEGER)]
     #[Groups([
         self::API_GET_ITEM,

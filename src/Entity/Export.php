@@ -4,20 +4,21 @@ namespace App\Entity;
 
 use App\Enum\ExportProgress;
 use App\Enum\ExportStatus;
+use App\Interface\HasEvent;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\JoinColumn;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity]
-class Export
+class Export implements HasEvent
 {
     public const string API_GET_COLLECTION = 'api:export:get_collection';
     public const string API_GET_ITEM = 'api:export:get_item';
 
     #[ORM\Id]
     #[ORM\Column(type: Types::INTEGER)]
-    #[ORM\GeneratedValue(strategy: 'SEQUENCE')]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     #[Groups([
         self::API_GET_COLLECTION,
         self::API_GET_ITEM,

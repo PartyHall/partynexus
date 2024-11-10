@@ -9,6 +9,7 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\QueryParameter;
 use App\Controller\EventConcludeController;
 use App\Repository\EventRepository;
 use App\State\Processor\EventCreationProcessor;
@@ -51,6 +52,7 @@ use Symfony\Component\Validator\Constraints as Assert;
         ),
         new Post(
             uriTemplate: '/events/{id}/conclude',
+            status: 200,
             controller: EventConcludeController::class,
             normalizationContext: [AbstractNormalizer::GROUPS => [self::API_GET_ITEM]],
             denormalizationContext: [AbstractNormalizer::GROUPS => []],
@@ -64,6 +66,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 )]
 #[ApiFilter(SearchFilter::class, properties: ['name' => 'ipartial'])]
 #[ORM\Entity(repositoryClass: EventRepository::class)]
+#[QueryParameter('mine')]
 class Event
 {
     public const string API_GET_COLLECTION = 'api:event:get-collection';
@@ -160,7 +163,7 @@ class Event
     ])]
     private Collection $participants;
 
-    /** @var Collection<int, SongSession>  */
+    /** @var Collection<int, SongSession> */
     #[ORM\OneToMany(targetEntity: SongSession::class, mappedBy: 'event')]
     #[Groups([
         self::API_EXPORT,

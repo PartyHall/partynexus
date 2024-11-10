@@ -2,7 +2,6 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Doctrine\Orm\Filter\BooleanFilter;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
@@ -10,6 +9,7 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\QueryParameter;
 use App\Enum\SongFormat;
 use App\Enum\SongQuality;
 use App\Filter\FullTextSearchFilter;
@@ -68,7 +68,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
         new Delete(security: 'is_granted("ROLE_ADMIN")'),
     ]
 )]
-#[ApiFilter(BooleanFilter::class, properties: ['ready'])]
+#[QueryParameter('ready')]
 #[ApiFilter(FullTextSearchFilter::class, properties: ['title' => 'partial', 'artist' => 'partial'])]
 #[ORM\Entity(repositoryClass: SongRepository::class)]
 #[Vich\Uploadable]
@@ -93,7 +93,7 @@ class Song implements HasTimestamps
     ];
 
     #[ORM\Id]
-    #[ORM\GeneratedValue(strategy: 'SEQUENCE')]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     #[ORM\Column(type: Types::INTEGER)]
     #[Groups([
         self::API_GET_ITEM,

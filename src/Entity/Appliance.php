@@ -10,6 +10,7 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\QueryParameter;
 use App\Repository\ApplianceRepository;
 use App\State\Processor\ApplianceProcessor;
 use Doctrine\DBAL\Types\Types;
@@ -43,6 +44,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     ],
 )]
 #[ApiFilter(SearchFilter::class, properties: ['owner' => 'exact'])]
+#[QueryParameter('mine')]
 #[ORM\Entity(repositoryClass: ApplianceRepository::class)]
 class Appliance implements UserInterface
 {
@@ -53,7 +55,7 @@ class Appliance implements UserInterface
 
     #[ORM\Id]
     #[ORM\Column(type: Types::INTEGER)]
-    #[ORM\GeneratedValue(strategy: 'SEQUENCE')]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     #[Groups([
         self::API_GET_COLLECTION,
         self::API_GET_ITEM,

@@ -43,6 +43,7 @@ use Symfony\Component\Validator\Constraints as Assert;
         ),
         new Post(
             uriTemplate: '/users/{id}/ban',
+            status: 201,
             normalizationContext: [AbstractNormalizer::GROUPS => [self::API_GET_ITEM]],
             security: 'is_granted("ROLE_ADMIN")',
             name: self::BAN_USER_ROUTE,
@@ -50,6 +51,7 @@ use Symfony\Component\Validator\Constraints as Assert;
         ),
         new Post(
             uriTemplate: '/users/{id}/unban',
+            status: 201,
             normalizationContext: [AbstractNormalizer::GROUPS => [self::API_GET_ITEM]],
             security: 'is_granted("ROLE_ADMIN")',
             name: self::UNBAN_USER_ROUTE,
@@ -75,7 +77,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Id]
     #[ORM\Column(type: Types::INTEGER)]
-    #[ORM\GeneratedValue(strategy: 'SEQUENCE')]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     #[Groups([
         self::API_GET_ITEM,
         self::API_GET_COLLECTION,

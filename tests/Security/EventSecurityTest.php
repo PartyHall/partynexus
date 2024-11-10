@@ -4,6 +4,7 @@ namespace App\Tests\Security;
 
 use App\Entity\Appliance;
 use App\Entity\Event;
+use App\Repository\ApplianceRepository;
 use App\Repository\EventRepository;
 use App\Tests\AuthenticatedTestCase;
 use Doctrine\ORM\EntityManagerInterface;
@@ -160,7 +161,30 @@ class EventSecurityTest extends AuthenticatedTestCase
         $this->assertEquals(403, $resp->getStatusCode());
     }
 
-    // Update event (appliance)
+    // Update event (appliance not owner)
+    public function test_event_patch_not_owner_appliance(): void
+    {
+        $repository = $this->getContainer()->get(EventRepository::class);
+        $repositoryAppliance = $this->getContainer()->get(ApplianceRepository::class);
+
+        /** @var Event $event */
+        $event = $repository->find('0192bf5a-67d8-7d9d-8a5e-962b23aceeaa');
+        /** @var Appliance $appliance */
+        $appliance = $repositoryAppliance->find(2);
+
+        $resp = static::createClient()->request('PATCH', '/api/events/' . $event->getId(), [
+            'headers' => [
+                'Content-Type' => 'application/merge-patch+json',
+                'X-HARDWARE-ID' => $appliance->getHardwareId(),
+                'X-API-TOKEN' => $appliance->getApiToken(),
+            ],
+            'json' => self::EVENT_UPDATE_DATA,
+        ]);
+
+        $this->assertEquals(403, $resp->getStatusCode());
+    }
+
+    // Update event (appliance owner)
     public function test_event_patch_owner_appliance(): void
     {
         $repository = $this->getContainer()->get(EventRepository::class);
@@ -226,7 +250,7 @@ class EventSecurityTest extends AuthenticatedTestCase
             ]
         ]);
 
-        $this->assertEquals(403, $resp->getStatusCode());
+        $this->assertEquals(404, $resp->getStatusCode());
     }
 
     // Get (appliance owner)
@@ -339,6 +363,34 @@ class EventSecurityTest extends AuthenticatedTestCase
             'json' => [],
         ]);
 
-        $this->assertEquals(201, $resp->getStatusCode());
+        $this->assertEquals(200, $resp->getStatusCode());
+    }
+
+    // Conclude event (Appliance / Not owner)
+    public function test_event_conclude_appliance_not_owner(): void
+    {
+        $resp = static::createClient()->request('POST', '/api/events/0192bf5a-67d8-7d9d-8a5e-962b23aceeaa/conclude', [
+            'headers' => [
+                'X-HARDWARE-ID' => self::APPLIANCE_NOT_OWNER_KEY,
+                'X-API-TOKEN' => self::APPLIANCE_NOT_OWNER_SECRET,
+            ],
+            'json' => [],
+        ]);
+
+        $this->assertEquals(403, $resp->getStatusCode());
+    }
+
+    // Conclude event (Appliance / Owner)
+    public function test_event_conclude_appliance_owner(): void
+    {
+        $resp = static::createClient()->request('POST', '/api/events/0192bf5a-67d8-7d9d-8a5e-962b23aceeaa/conclude', [
+            'headers' => [
+                'X-HARDWARE-ID' => self::APPLIANCE_KEY,
+                'X-API-TOKEN' => self::APPLIANCE_SECRET,
+            ],
+            'json' => [],
+        ]);
+
+        $this->assertEquals(403, $resp->getStatusCode());
     }
 }

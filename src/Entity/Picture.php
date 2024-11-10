@@ -9,8 +9,12 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Link;
 use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\QueryParameter;
+use App\Interface\HasEvent;
 use App\Repository\PictureRepository;
+use App\Security\EventVoter;
 use App\State\Processor\PictureProcessor;
+use App\State\Provider\PictureCollectionProvider;
 use App\State\Provider\PictureDownloadProvider;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -23,9 +27,6 @@ use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
-/**
- * @TODO: Get, GetCollection only for appliance that owns the event AND the users that are in the event
- */
 #[Vich\Uploadable]
 #[ApiResource(
     operations: [
@@ -39,8 +40,11 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
             ],
             paginationEnabled: false,
             order: ['takenAt' => 'ASC'],
+            provider: PictureCollectionProvider::class,
         ),
-        new Get(),
+        new Get(
+            security: 'is_granted("'.EventVoter::PARTICIPANT.'", object)',
+        ),
         new Get(
             uriTemplate: '/pictures/{id}/download',
             provider: PictureDownloadProvider::class,
@@ -63,7 +67,8 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 )]
 #[ApiFilter(BooleanFilter::class, properties: ['unattended'])]
 #[ORM\Entity(repositoryClass: PictureRepository::class)]
-class Picture
+#[QueryParameter('unattended')]
+class Picture implements HasEvent
 {
     public const string API_GET_COLLECTION = 'api:picture:get_collection';
     public const string API_GET_ITEM = 'api:picture:get_item';

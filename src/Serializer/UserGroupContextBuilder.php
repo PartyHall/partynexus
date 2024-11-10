@@ -20,9 +20,8 @@ readonly class UserGroupContextBuilder implements SerializerContextBuilderInterf
     }
 
     /**
-     * @param Request $request
-     * @param bool $normalization
      * @param ?array<mixed> $extractedAttributes
+     *
      * @return array<mixed>
      */
     public function createFromRequest(Request $request, bool $normalization, ?array $extractedAttributes = null): array
