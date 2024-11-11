@@ -69,7 +69,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
     ]
 )]
 #[QueryParameter('ready')]
-#[ApiFilter(FullTextSearchFilter::class, properties: ['title' => 'partial', 'artist' => 'partial'])]
+#[ApiFilter(FullTextSearchFilter::class, properties: ['title' => 'ipartial', 'artist' => 'ipartial'])]
 #[ORM\Entity(repositoryClass: SongRepository::class)]
 #[Vich\Uploadable]
 class Song implements HasTimestamps
