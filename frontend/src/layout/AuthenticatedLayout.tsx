@@ -64,7 +64,7 @@ export default function AuthenticatedLayout() {
         </Flex>
       </Content>
 
-      <Footer style={{ textAlign: 'center' }}>
+      <Footer style={{ textAlign: 'center', padding: '.25em' }}>
         <Typography>
           PartyHall -{' '}
           <a
