@@ -26,5 +26,6 @@ services:
       - './jwt_keys:/app/config/jwt'
       - './data:/app/var'
       - './supervisor_logs:/var/log/supervisor/'
+      - './song_covers:/app/public/song_covers'
     ports:
       - '80:80'
