@@ -52,8 +52,8 @@ export default function EventActionBar({ event, displayOwnerStuff, setEvent }: P
                 title={t('event.conclude.title')}
                 description={t('event.conclude.description')}
                 onConfirm={onConclude}
-                okText={t('event.conclude.yes')}
-                cancelText={t('event.conclude.cancel')}
+                okText={t('generic.modal_im_sure')}
+                cancelText={t('generic.cancel')}
             >
                 <Button icon={<IconCheckbox />}>{t('event.conclude.bt')}</Button>
             </Popconfirm>

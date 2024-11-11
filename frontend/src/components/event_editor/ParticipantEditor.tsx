@@ -1,4 +1,4 @@
-import { AutoComplete, Button, Card, Flex, Popconfirm, Typography } from "antd";
+import { AutoComplete, Button, Card, Flex, Modal, Popconfirm, Typography } from "antd";
 import { IconUserX } from "@tabler/icons-react";
 import { PnEvent } from "../../sdk/responses/event";
 import { useAuth } from "../../hooks/auth";
@@ -120,7 +120,14 @@ export default function ParticipantsEditor({ event, setEvent }: { event: PnEvent
                     debouncedSearch(val);
                 }}
                 onChange={val => setSearchText(val)}
-                onSelect={val => addUser(val)}
+                onSelect={(val, ot) => Modal.confirm({
+                    title: t('event.editor.add.title'),
+                    content: t('event.editor.add.confirm', {'participant': ot.label}),
+                    onOk: () => {addUser(val)},
+                    onCancel: () => setSearchText(''),
+                    okText: t('generic.modal_im_sure'),
+                    cancelText: t('generic.cancel'),
+                })}
             />
         </Flex>
         <Flex gap={8} wrap="wrap" align="center" justify="center">
@@ -132,8 +139,8 @@ export default function ParticipantsEditor({ event, setEvent }: { event: PnEvent
                             title={t('event.editor.delete.title')}
                             description={t('event.editor.delete.description', { name: x.username })}
                             onConfirm={() => deleteUser(x.username, x.iri)}
-                            okText={t('event.editor.delete.yes')}
-                            cancelText={t('event.editor.delete.cancel')}
+                            okText={t('generic.modal_im_sure')}
+                            cancelText={t('generic.cancel')}
                         >
                             <Button type="primary" shape="circle" icon={<IconUserX size={18} />} />
                         </Popconfirm>

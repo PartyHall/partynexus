@@ -9,23 +9,23 @@ import AdminUsersPage from './pages/admin/users.tsx';
 import AuthProvider from './hooks/auth.tsx';
 import AuthenticatedLayout from './layout/AuthenticatedLayout.tsx';
 import Backend from 'i18next-http-backend';
+import EditAppliancePage from './pages/appliances/EditAppliance.tsx';
 import EditEventPage from './pages/EditEvent.tsx';
 import EditSongPage from './pages/karaoke/EditSong.tsx';
 import EventsPage from './pages/Events.tsx';
 import LoginPage from './pages/login/index.tsx';
 import MagicLoginPage from './pages/login/MagicLoginCallback.tsx';
 import MyAccountPage from './pages/MyAccount.tsx';
+import NewAppliancePage from './pages/appliances/NewAppliance.tsx';
 import NewEventPage from './pages/NewEvent.tsx';
 import NewSongPage from './pages/karaoke/NewSong.tsx';
+import RequestSong from './pages/karaoke/RequestSong.tsx';
 import ShowEventPage from './pages/ShowEvent.tsx';
 import SongListingPage from './pages/karaoke/SongListing.tsx';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import detector from "i18next-browser-languagedetector";
 import i18n from "i18next";
-import RequestSong from './pages/karaoke/RequestSong.tsx';
-import NewAppliancePage from './pages/appliances/NewAppliance.tsx';
-import EditAppliancePage from './pages/appliances/EditAppliance.tsx';
 
 i18n
     .use(Backend)
@@ -144,6 +144,9 @@ const phTheme = {
         Menu: {
             darkItemBg: 'rgb(23,21,32)',
         },
+        Modal: {
+            contentBg: 'rgb(23,21,32)',
+        }
     },
     algorithm: [theme.darkAlgorithm, theme.compactAlgorithm],
 };

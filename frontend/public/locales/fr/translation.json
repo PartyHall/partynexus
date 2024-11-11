@@ -7,6 +7,8 @@
         "search": "Rechercher...",
         "list_count": "Total: {{total}}",
         "no_results": "Aucun résultats",
+        "modal_im_sure": "Je suis sûr(e)",
+        "cancel": "Annuler",
         "error": {
             "unknown": "Une erreur inconnue s'est produite",
             "unknown_desc": "Il y a eu un soucis. Regardez la console pour plus d'infos",
@@ -53,9 +55,7 @@
         "delete": "Supprimer",
         "delete_appliance": {
             "name": "Supprimer",
-            "title": "Supprimer cet appareil ?",
-            "cancel": "Annuler",
-            "yes": "Je suis sûr(e)"
+            "title": "Supprimer cet appareil ?"
         },
         "appliance_editor": {
             "title": "Éditer l'appareil",
@@ -81,9 +81,7 @@
             "tooltip": "Bannir cet utilisateur",
             "confirm": {
                 "title": "Vous tentez de bannir {{username}}",
-                "desc": "Cette personne ne pourra plus se connecter. Les tokens seront encore valides 15 minutes",
-                "yes": "Je suis sûr(e)",
-                "cancel": "Annuler"
+                "desc": "Cette personne ne pourra plus se connecter. Les tokens seront encore valides 15 minutes"
             },
             "success_title": "Utilisateur banni",
             "success_desc": "L'utilisateur {{username}} a été banni !",
@@ -94,9 +92,7 @@
             "tooltip": "Dé-bannir cet utilisateur",
             "confirm": {
                 "title": "Vous tentez de débannir {{username}}",
-                "desc": "Il pourra à nouveau se connecter.",
-                "yes": "Je suis sûr(e)",
-                "cancel": "Annuler"
+                "desc": "Il pourra à nouveau se connecter."
             },
             "success_title": "Utilisateur dé-banni",
             "success_desc": "L'utilisateur {{username}} a été débanni !",
@@ -220,8 +216,6 @@
             "bt": "Marquer \"terminé\"",
             "title": "Vous aller conclure l'évènement",
             "description": "Cela provoquera l'export de l'évènement et il ne pourra plus être modifié. Il faut le faire après l'évènement uniquement.",
-            "yes": "Je suis sûr(e)",
-            "cancel": "Annuler",
             "success": {
                 "title": "L'évènement est terminé !",
                 "description": "Il va maintenant être exporté. Un email sera envoyé aux participants quand ce sera terminé."
@@ -239,7 +233,6 @@
             "delete": {
                 "title": "Expulser un utilisateur",
                 "description": "Vous allez expulser {{name}} de l'évènement.",
-                "cancel": "Annuler",
                 "yes": "Expulser",
                 "failure": {
                     "title": "Échec de l'expulsion",
@@ -248,6 +241,7 @@
             },
             "add": {
                 "title": "Ajouter un participant",
+                "confirm": "Vous essayez d'ajouter {{participant}} à l'évènement, êtes-vous sûr(e) ?",
                 "failure": {
                     "title": "Échec de l'ajout",
                     "description": "Une erreur est survenue lors de l'ajout d'un participant."

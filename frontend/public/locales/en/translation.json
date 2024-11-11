@@ -7,6 +7,8 @@
         "search": "Search...",
         "list_count": "Total: {{total}}",
         "no_results": "No results",
+        "modal_im_sure": "I'm sure!",
+        "cancel": "Cancel",
         "error": {
             "unknown": "An unknown error has occured",
             "unknown_desc": "There was an issue, see the console for more info",
@@ -54,9 +56,7 @@
         "delete": "Delete",
         "delete_appliance": {
             "name": "Delete",
-            "title": "Delete this appliance?",
-            "cancel": "Cancel",
-            "yes": "I'm sure"
+            "title": "Delete this appliance?"
         },
         "appliance_editor": {
             "title": "Edit appliance",
@@ -82,9 +82,7 @@
             "tooltip": "Ban this user",
             "confirm": {
                 "title": "You are trying to ban {{username}}",
-                "desc": "They will no longer be able to login. Existing tokens will still work for 15 minutes.",
-                "yes": "I'm sure",
-                "cancel": "Cancel"
+                "desc": "They will no longer be able to login. Existing tokens will still work for 15 minutes."
             },
             "success_title": "User banned",
             "success_desc": "The user {{username}} was banned!",
@@ -95,9 +93,7 @@
             "tooltip": "Unban this user",
             "confirm": {
                 "title": "You are trying to unban {{username}}",
-                "desc": "They will be able to login again.",
-                "yes": "I'm sure",
-                "cancel": "Cancel"
+                "desc": "They will be able to login again."
             },
             "success_title": "User unbanned",
             "success_desc": "The user {{username}} was unbanned!",
@@ -218,8 +214,6 @@
             "bt": "Mark as \"over\"",
             "title": "You are going to conclude the event",
             "description": "This will start the export of the event and it will be locked for modification. You must do this only after the event is over.",
-            "yes": "I'm sure",
-            "cancel": "Cancel",
             "success": {
                 "title": "The event is concluded",
                 "description": "The event will now be exported. Please wait, an email will be sent to participant once ready."
@@ -237,7 +231,6 @@
             "delete": {
                 "title": "Kicking a user",
                 "description": "You are going to kick {{name}} from the event.",
-                "cancel": "Cancel",
                 "yes": "Remove",
                 "failure": {
                     "title": "Kick failed",
@@ -246,6 +239,7 @@
             },
             "add": {
                 "title": "Add participant",
+                "confirm": "You are trying to add {{participant}} to the event, are you sure?",
                 "failure": {
                     "title": "Adding failed",
                     "description": "An error occured while adding the user to the event."

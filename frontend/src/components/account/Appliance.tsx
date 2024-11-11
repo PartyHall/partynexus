@@ -26,8 +26,8 @@ export default function Appliance({ appliance }: { appliance: PnAppliance }) {
 
                 <Popconfirm
                     title={t('my_account.delete_appliance.title')}
-                    cancelText={t('my_account.delete_appliance.cancel')}
-                    okText={t('my_account.delete_appliance.yes')}
+                    cancelText={t('generic.cancel')}
+                    okText={t('generic.modal_im_sure')}
                     onConfirm={onDelete}
                 >
                     <Tooltip title={t('my_account.delete_appliance.name')}>

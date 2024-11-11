@@ -67,8 +67,8 @@ export default function UserListCard({ user: listUser }: { user: PnListUser }) {
                     title={t('users.unban.confirm.title', { username: user.username })}
                     description={t('users.unban.confirm.desc')}
                     onConfirm={() => unbanUser(user.username, user.iri)}
-                    okText={t('users.unban.confirm.yes')}
-                    cancelText={t('users.unban.confirm.cancel')}
+                    okText={t('generic.modal_im_sure')}
+                    cancelText={t('generic.cancel')}
                 >
                     <Flex align="center" justify="center" gap={16}>
                         <Typography.Text>{user.bannedAt.format('YYYY-MM-DD HH:mm:ss')}</Typography.Text>
@@ -84,8 +84,8 @@ export default function UserListCard({ user: listUser }: { user: PnListUser }) {
                     title={t('users.ban.confirm.title', { username: user.username })}
                     description={t('users.ban.confirm.desc')}
                     onConfirm={() => banUser(user.username, user.iri)}
-                    okText={t('users.ban.confirm.yes')}
-                    cancelText={t('users.ban.confirm.cancel')}
+                    okText={t('generic.modal_im_sure')}
+                    cancelText={t('generic.cancel')}
                 >
                     <Tooltip title={t('users.ban.tooltip')}>
                         <Button icon={<IconBan size={20} />} />
