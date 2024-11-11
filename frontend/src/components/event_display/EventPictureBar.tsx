@@ -24,6 +24,8 @@ export default function EventPictureBar({ event }: { event: PnEvent }) {
     const [timelapseShown, setTimelapseShown] = useState<boolean>(false);
     const [loadingPictures, setLoadingPictures] = useState<boolean>(true);
 
+    const [carrousel, setCarrousel] = useState<boolean>(false);
+
     const [firstThreePictures, setFirstThreePictures] = useState<PnPicture[]>([]);
     const [pictures, setPictures] = useState<PnPicture[]>([]);
 
@@ -82,6 +84,8 @@ export default function EventPictureBar({ event }: { event: PnEvent }) {
                         <Image.PreviewGroup
                             items={pictures.map(x => `/api/pictures/${x.id}/download`)}
                             preview={{
+                                visible: carrousel,
+                                onVisibleChange: (val) => setCarrousel(val),
                                 toolbarRender: (
                                     _,
                                     {
@@ -104,8 +108,7 @@ export default function EventPictureBar({ event }: { event: PnEvent }) {
                         </Image.PreviewGroup>
                         {
                             pictures.length !== firstThreePictures.length &&
-                            <Typography.Link>{t('event.pictures.more')}</Typography.Link>
-                            // @TODO: The link should be clickable
+                            <Typography.Link onClick={() => setCarrousel(true)}>{t('event.pictures.more')}</Typography.Link>
                         }
                     </>
                 }
