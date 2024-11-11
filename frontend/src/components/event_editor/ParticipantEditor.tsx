@@ -123,10 +123,10 @@ export default function ParticipantsEditor({ event, setEvent }: { event: PnEvent
                 onSelect={val => addUser(val)}
             />
         </Flex>
-        <Flex gap={8}>
+        <Flex gap={8} wrap="wrap" align="center" justify="center">
             {
-                event?.participants.sort((a, b) => a.username.localeCompare(b.username)).map(x => <Card style={{ width: 200 }} key={x.iri}>
-                    <Flex justify="space-between" align="center">
+                event?.participants.sort((a, b) => a.username.localeCompare(b.username)).map(x => <Card className="EventEditor__Participant" key={x.iri}>
+                    <Flex justify="space-between" align="center" gap={10}>
                         <p>{x.username}</p>
                         <Popconfirm
                             title={t('event.editor.delete.title')}
@@ -135,7 +135,7 @@ export default function ParticipantsEditor({ event, setEvent }: { event: PnEvent
                             okText={t('event.editor.delete.yes')}
                             cancelText={t('event.editor.delete.cancel')}
                         >
-                            <Button type="primary" shape="circle" icon={<IconUserX size={20} />} />
+                            <Button type="primary" shape="circle" icon={<IconUserX size={18} />} />
                         </Popconfirm>
                     </Flex>
                 </Card>)

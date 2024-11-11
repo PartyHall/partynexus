@@ -107,7 +107,7 @@ export default function SongListingPage() {
                 </Loader >
             </Flex>
 
-            <Flex align="center" justify="space-between">
+            <Flex className="SongListing__pagination" align="center" justify="space-between" wrap='wrap'>
                 <Pagination
                     align="center"
                     total={ctx.songs?.total ?? 10}
