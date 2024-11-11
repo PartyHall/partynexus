@@ -51,6 +51,12 @@
 		php_server
 	}
 
+	handle /song_covers* {
+		root * /app/public
+		encode zstd br gzip
+		php_server
+	}
+
 	handle /bundles/* {
 		root * /app/public
 		file_server
