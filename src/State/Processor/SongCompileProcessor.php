@@ -32,6 +32,8 @@ readonly class SongCompileProcessor implements ProcessorInterface
             throw new \Exception('The SongCompileProcessor should only be used on Patch operation for song');
         }
 
+        // @TODO:
+        // Maybe this should be put in a worker?
         if (!$data->isReady()) {
             $this->compilator->compile($data);
         }

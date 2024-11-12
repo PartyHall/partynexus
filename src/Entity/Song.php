@@ -18,6 +18,7 @@ use App\Interface\Impl\HasTimestampsTrait;
 use App\Repository\SongRepository;
 use App\State\Processor\SongCompileProcessor;
 use App\State\Processor\SongDecompileProcessor;
+use App\State\Provider\SongDownloadProvider;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Types\UuidType;
@@ -66,6 +67,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
             processor: SongDecompileProcessor::class,
         ),
         new Delete(security: 'is_granted("ROLE_ADMIN")'),
+        new Get(uriTemplate: '/songs/{id}/download', provider: SongDownloadProvider::class),
     ]
 )]
 #[QueryParameter('ready')]
