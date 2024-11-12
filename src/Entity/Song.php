@@ -188,6 +188,7 @@ class Song implements HasTimestamps
     #[ORM\Column(type: UuidType::NAME, nullable: true)]
     #[Groups([
         self::API_GET_ITEM,
+        self::API_GET_COLLECTION,
         self::COMPILE_METADATA,
     ])]
     #[Assert\Uuid]
