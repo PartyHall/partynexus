@@ -211,6 +211,14 @@ class Song implements HasTimestamps
     #[Assert\PositiveOrZero]
     private ?int $hotspot = null;
 
+    #[ORM\Column(type: Types::STRING, length: 255)]
+    #[Groups([
+        self::API_GET_ITEM,
+        self::API_GET_COLLECTION,
+        self::COMPILE_METADATA,
+    ])]
+    private int $duration = 0;
+
     /**
      * Whether the song has been compiled as a phk file
      * and is ready for the appliances to be fetched.
@@ -429,5 +437,17 @@ class Song implements HasTimestamps
     public function setCoverName(?string $coverName): void
     {
         $this->coverName = $coverName;
+    }
+
+    public function getDuration(): int
+    {
+        return $this->duration;
+    }
+
+    public function setDuration(int $duration): self
+    {
+        $this->duration = $duration;
+
+        return $this;
     }
 }
