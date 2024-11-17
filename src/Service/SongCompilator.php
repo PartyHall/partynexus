@@ -4,6 +4,7 @@ namespace App\Service;
 
 use App\Entity\Song;
 use App\Enum\SongFormat;
+use App\Utils\MediaUtils;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Filesystem\Filesystem;
@@ -94,12 +95,26 @@ readonly class SongCompilator
             if (!\file_exists($instrumental) || !\file_exists($cdg)) {
                 throw new \Exception('The instrumental file / lyrics file is missing');
             }
-        } else {
-            $instru = Path::join($wipDir, 'instrumental.webm');
 
-            if (!\file_exists($instru)) {
+            $duration = MediaUtils::getMediaDuration($instrumental);
+            if (false === $duration) {
+                throw new \Exception('Failed to get the media duration!');
+            }
+
+            $song->setDuration($duration);
+        } else {
+            $instrumental = Path::join($wipDir, 'instrumental.webm');
+
+            if (!\file_exists($instrumental)) {
                 throw new \Exception('The instrumental file / lyrics file is missing');
             }
+
+            $duration = MediaUtils::getMediaDuration($instrumental);
+            if (false === $duration) {
+                throw new \Exception('Failed to get the media duration!');
+            }
+
+            $song->setDuration($duration);
         }
 
         $vocals = Path::join($wipDir, 'vocals.mp3');
