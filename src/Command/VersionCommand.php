@@ -11,10 +11,17 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 #[AsCommand('version')]
 class VersionCommand extends Command
 {
+    // @TODO
+    // For some reason, when using param with the ones injected
+    // this does not work and use the same every time
+    // Meanwhile we'll just use the env var injected by Dockerfile
+    // that's not that bad since the only supported flow is with docker
+    // but it should be corrected nontheless
+
     public function __construct(
-        #[Autowire(param: 'PARTYNEXUS_VERSION')]
+        #[Autowire(env: 'PARTYNEXUS_VERSION')]
         private readonly string $partynexusVersion,
-        #[Autowire(param: 'PARTYNEXUS_COMMIT')]
+        #[Autowire(env: 'PARTYNEXUS_COMMIT')]
         private readonly string $partynexusCommit,
     ) {
         parent::__construct();
