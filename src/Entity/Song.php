@@ -211,7 +211,7 @@ class Song implements HasTimestamps
     #[Assert\PositiveOrZero]
     private ?int $hotspot = null;
 
-    #[ORM\Column(type: Types::STRING, length: 255)]
+    #[ORM\Column(type: Types::INTEGER, options: ['default' => 0])]
     #[Groups([
         self::API_GET_ITEM,
         self::API_GET_COLLECTION,

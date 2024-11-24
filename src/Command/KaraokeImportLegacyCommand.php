@@ -103,7 +103,8 @@ class KaraokeImportLegacyCommand extends Command
             $song = (new Song())
                 ->setTitle($meta['title'])
                 ->setArtist($meta['artist'])
-                ->setSpotifyId($meta['spotify_id']);
+                ->setSpotifyId($meta['spotify_id'])
+                ->setDuration(0);
 
             if ($meta['hotspot']) {
                 list($h, $m, $s) = explode(':', $meta['hotspot']);
