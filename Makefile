@@ -2,7 +2,7 @@
 
 USER := $(shell id -u):$(shell id -g)
 
-VERSION = 0.1.9
+VERSION = 0.1.11
 COMMIT = $(shell git rev-parse --short HEAD)
 
 up:
