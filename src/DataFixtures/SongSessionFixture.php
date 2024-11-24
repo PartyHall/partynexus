@@ -3,18 +3,12 @@
 namespace App\DataFixtures;
 
 use App\Entity\SongSession;
-use App\Repository\SongRepository;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 
 class SongSessionFixture extends Fixture implements DependentFixtureInterface
 {
-    public function __construct(
-        private SongRepository $repository,
-    ) {
-    }
-
     /**
      * @return array<string>
      */
@@ -35,19 +29,13 @@ class SongSessionFixture extends Fixture implements DependentFixtureInterface
                 ->setArtist('Some artist')
                 ->setSinger('admin')
                 ->setEvent($this->getReference('event__1'))
-                ->setSungAt(new \DateTimeImmutable('-2 days'))
-                ->setAppliaceId(1),
+                ->setSungAt(new \DateTimeImmutable('-2 days')),
             (new SongSession())
                 ->setTitle('Some other song')
                 ->setArtist('Some other artist')
                 ->setSinger('user')
                 ->setSungAt(new \DateTimeImmutable('-1 days'))
-                ->setSong($this->repository->findBy([
-                    'title' => 'The backup',
-                    'artist' => '2080',
-                ])[0])
-                ->setEvent($this->getReference('event__1'))
-                ->setAppliaceId(2),
+                ->setEvent($this->getReference('event__1')),
         ];
 
         foreach ($sessions as $s) {

@@ -13,6 +13,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity]
 #[ApiResource(
@@ -60,6 +61,7 @@ class SongSession implements HasEvent
         self::API_CREATE,
         Event::API_EXPORT,
     ])]
+    #[Assert\NotBlank]
     private string $title;
 
     #[ORM\Column(type: Types::STRING, length: 255)]
@@ -69,14 +71,13 @@ class SongSession implements HasEvent
         self::API_CREATE,
         Event::API_EXPORT,
     ])]
+    #[Assert\NotBlank]
     private string $artist;
-
-    #[ORM\ManyToOne(targetEntity: Song::class)]
-    #[ORM\JoinColumn(nullable: true)]
-    private ?Song $song;
 
     #[ORM\ManyToOne(targetEntity: Event::class, inversedBy: 'songSessions')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups([self::API_CREATE])]
+    #[Assert\NotBlank]
     private Event $event;
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
@@ -86,6 +87,7 @@ class SongSession implements HasEvent
         self::API_CREATE,
         Event::API_EXPORT,
     ])]
+    #[Assert\NotBlank]
     private \DateTimeImmutable $sungAt;
 
     #[ORM\Column(type: Types::STRING, length: 255)]
@@ -95,10 +97,8 @@ class SongSession implements HasEvent
         self::API_CREATE,
         Event::API_EXPORT,
     ])]
+    #[Assert\NotBlank]
     private string $singer;
-
-    #[ORM\Column(type: Types::INTEGER)]
-    private ?int $appliaceId;
 
     public function getId(): ?int
     {
@@ -129,18 +129,6 @@ class SongSession implements HasEvent
         return $this;
     }
 
-    public function getSong(): Song
-    {
-        return $this->song;
-    }
-
-    public function setSong(Song $song): self
-    {
-        $this->song = $song;
-
-        return $this;
-    }
-
     public function getSinger(): string
     {
         return $this->singer;
@@ -149,18 +137,6 @@ class SongSession implements HasEvent
     public function setSinger(string $singer): self
     {
         $this->singer = $singer;
-
-        return $this;
-    }
-
-    public function getAppliaceId(): ?int
-    {
-        return $this->appliaceId;
-    }
-
-    public function setAppliaceId(?int $appliaceId): self
-    {
-        $this->appliaceId = $appliaceId;
 
         return $this;
     }

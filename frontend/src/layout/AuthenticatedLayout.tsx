@@ -40,8 +40,9 @@ export default function AuthenticatedLayout() {
       >
         <img
           src={PhLogo}
-          style={{ display: 'block', height: '80%' }}
+          style={{ display: 'block', height: '80%', cursor: 'pointer' }}
           alt="PartyHall logo"
+          onClick={() => navigate('/')}
         />
         <Menu
           theme="dark"

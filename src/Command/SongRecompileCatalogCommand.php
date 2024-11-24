@@ -32,6 +32,7 @@ class SongRecompileCatalogCommand extends Command
 
         if (!$iknowwhatimdoing) {
             $style->error('Cancelling...');
+
             return Command::FAILURE;
         }
 

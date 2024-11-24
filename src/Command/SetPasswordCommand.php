@@ -37,7 +37,9 @@ class SetPasswordCommand extends Command
 
         $style = new SymfonyStyle($input, $output);
         /** @var User|null $user */
-        $user = $this->repository->find($email);
+        $user = $this->repository->findOneBy([
+            'email' => $email,
+        ]);
 
         if (!$user) {
             $style->error('No user found for the email address '.$email);
