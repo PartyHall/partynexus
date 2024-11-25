@@ -115,9 +115,7 @@ COPY --from=frontend /app/dist/ /frontend
 
 RUN set -eux; \
 	mkdir -p var/cache var/log; \
-	composer dump-autoload --classmap-authoritative --no-dev; \
-	# composer dump-env prod; \ # We don't want to use the JWT secret key specified here
-	composer run-script --no-dev post-install-cmd; \
+	composer run-script post-install-cmd; \
 	chmod +x bin/console; sync;
 
 ARG PARTYNEXUS_VERSION='indev'

@@ -14,13 +14,12 @@
 	log {
 		# Redact the authorization query parameter that can be set by Mercure
 		format filter {
-			request>uri query {
-				replace authorization REDACTED
-			}
+			wrap console
 
-			request>headers {
-				replace X-API-TOKEN REDACTED
-		    }
+			fields {
+				request>uri>query>authorization replace REDACTED
+				request>headers>X-API-TOKEN replace REDACTED
+			}
 		}
 	}
 
