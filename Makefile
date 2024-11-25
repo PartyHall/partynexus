@@ -76,3 +76,7 @@ tests:
 build-release:
 	@rm -rf config/jwt
 	@docker build --no-cache --file ./docker/app/Dockerfile --build-arg PARTYNEXUS_VERSION=$(VERSION) --build-arg PARTYNEXUS_COMMIT=$(COMMIT) --target frankenphp_prod --tag partynexus .
+
+build-preprod:
+	@rm -rf config/jwt
+	@docker build --no-cache --file ./docker/app/Dockerfile --build-arg PARTYNEXUS_VERSION=$(VERSION) --build-arg PARTYNEXUS_COMMIT=$(COMMIT) --target frankenphp_preprod --tag partynexus:preprod .
