@@ -84,7 +84,7 @@ COPY --link ./frontend /app
 
 RUN cd /app && npm install && npm run build
 
-# Prod FrankenPHP image
+# Preprod FrankenPHP image
 FROM frankenphp_base AS frankenphp_preprod
 
 ENV APP_ENV=dev
@@ -105,7 +105,7 @@ COPY --link ./docker/app/frankenphp/worker.Caddyfile /etc/caddy/worker.Caddyfile
 # prevent the reinstallation of vendors at every changes in the source code
 COPY --link composer.* symfony.* ./
 RUN set -eux; \
-	composer install --no-cache --prefer-dist --no-dev --no-autoloader --no-scripts --no-progress
+	composer install --no-cache --prefer-dist --no-autoloader --no-scripts --no-progress
 
 # copy sources
 COPY --link ../.. ./
@@ -131,7 +131,6 @@ RUN sed -i \
     /app/config/services.yaml
 
 CMD [ "/usr/bin/supervisord", "-c", "/etc/supervisor/supervisord.conf" ]
-
 
 # Prod FrankenPHP image
 FROM frankenphp_base AS frankenphp_prod
