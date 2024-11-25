@@ -37,7 +37,7 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: 'Build and push Docker image'
+      - name: 'Build and push prod Docker image'
         uses: docker/build-push-action@v6
         with:
           context: .
@@ -55,5 +55,26 @@ jobs:
           cache-to: type=gha,mode=min,scope=${{ github.ref_name }}
           labels: |
             org.opencontainers.image.version=${{ env.VERSION }}
+            org.opencontainers.image.revision=${{ env.COMMIT }}
+            build.date=${{ github.event.repository.updated_at }}
+            
+      - name: 'Build and push preprod Docker image'
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ./docker/app/Dockerfile
+          push: true
+          target: frankenphp_preprod
+          build-args: |
+            PARTYNEXUS_VERSION=${{ env.VERSION }}
+            PARTYNEXUS_COMMIT=${{ env.COMMIT }}
+          no-cache: true # Required or it does use a cached VERSION/COMMIT
+          tags: |
+            ghcr.io/${{ env.REPO_LC }}:latest-pre
+            ghcr.io/${{ env.REPO_LC }}:${{ env.VERSION }}-pre
+          cache-from: type=gha,scope=${{ github.ref_name }}
+          cache-to: type=gha,mode=min,scope=${{ github.ref_name }}
+          labels: |
+            org.opencontainers.image.version=${{ env.VERSION }}-pre
             org.opencontainers.image.revision=${{ env.COMMIT }}
             build.date=${{ github.event.repository.updated_at }}

@@ -85,6 +85,57 @@ COPY --link ./frontend /app
 RUN cd /app && npm install && npm run build
 
 # Prod FrankenPHP image
+FROM frankenphp_base AS frankenphp_preprod
+
+ENV APP_ENV=dev
+ENV FRANKENPHP_CONFIG="import worker.Caddyfile"
+
+# hadolint ignore=DL3008
+RUN apt-get update && apt-get install -y --no-install-recommends \
+	supervisor \
+	&& rm -rf /var/lib/apt/lists/*
+
+COPY --link ./docker/app/supervisord.conf /etc/supervisor/supervisord.conf
+
+RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
+
+COPY --link ./docker/app/frankenphp/conf.d/20-app.prod.ini $PHP_INI_DIR/app.conf.d/
+COPY --link ./docker/app/frankenphp/worker.Caddyfile /etc/caddy/worker.Caddyfile
+
+# prevent the reinstallation of vendors at every changes in the source code
+COPY --link composer.* symfony.* ./
+RUN set -eux; \
+	composer install --no-cache --prefer-dist --no-dev --no-autoloader --no-scripts --no-progress
+
+# copy sources
+COPY --link ../.. ./
+RUN rm -Rf ./docker
+
+COPY --from=frontend /app/dist/ /frontend
+
+RUN set -eux; \
+	mkdir -p var/cache var/log; \
+	composer dump-autoload --classmap-authoritative --no-dev; \
+	# composer dump-env prod; \ # We don't want to use the JWT secret key specified here
+	composer run-script --no-dev post-install-cmd; \
+	chmod +x bin/console; sync;
+
+ARG PARTYNEXUS_VERSION='indev'
+ARG PARTYNEXUS_COMMIT='INDEV'
+
+ENV PARTYNEXUS_VERSION=${PARTYNEXUS_VERSION}
+ENV PARTYNEXUS_COMMIT=${PARTYNEXUS_COMMIT}
+
+# Setting the version infos
+RUN sed -i \
+    -e "s/PARTYNEXUS_VERSION: 'indev'/PARTYNEXUS_VERSION: '${PARTYNEXUS_VERSION}'/" \
+    -e "s/PARTYNEXUS_COMMIT: 'INDEV'/PARTYNEXUS_COMMIT: '${PARTYNEXUS_COMMIT}'/" \
+    /app/config/services.yaml
+
+CMD [ "/usr/bin/supervisord", "-c", "/etc/supervisor/supervisord.conf" ]
+
+
+# Prod FrankenPHP image
 FROM frankenphp_base AS frankenphp_prod
 
 ENV APP_ENV=prod
