@@ -53,11 +53,18 @@
 	handle /song_covers* {
 		root * /app/public
 		encode zstd br gzip
-		php_server
+		file_server
+	}
+
+	handle /backdrops* {
+		root * /app/public
+		encode zstd br gzip
+		file_server
 	}
 
 	handle /bundles/* {
 		root * /app/public
+		encode zstd br gzip
 		file_server
 	}
 

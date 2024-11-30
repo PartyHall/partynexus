@@ -27,7 +27,7 @@ class ApplianceFixture extends Fixture implements DependentFixtureInterface
         $appliance = (new Appliance())
             ->setName('My User Appliance')
             ->setHardwareId(Uuid::fromString('c105897f-6169-5dfc-962c-39dc56c3b3d4'))
-            ->setApiToken('my-api-token2')
+            ->setApiToken('my-api-token')
             ->setOwner($this->getReference('user__user'))
         ;
 

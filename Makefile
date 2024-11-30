@@ -31,8 +31,8 @@ reset-no-fixtures:
 
 reset-db:
 	$(MAKE) reset-no-fixtures
-	docker compose exec app bin/console doctrine:fixtures:load --no-interaction
-	docker compose exec app bin/console doctrine:fixtures:load --env=test --no-interaction
+	docker compose exec app bin/console doctrine:fixtures:load --no-interaction --append
+	docker compose exec app bin/console doctrine:fixtures:load --env=test --no-interaction --append
 	$(MAKE) export
 
 export:

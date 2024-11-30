@@ -232,89 +232,43 @@ class EventSecurityTest extends AuthenticatedTestCase
         $this->assertEquals($event->getAuthor(), self::EVENT_UPDATE_DATA['author']);
     }
 
-    // Get (Unauthenticated)
     public function test_event_get_unauthenticated(): void
     {
-        $resp = static::createClient()->request('GET', '/api/events/0192bf5a-67d8-7d9d-8a5e-962b23aceeaa');
-        $this->assertEquals(401, $resp->getStatusCode());
+        $this->getUnauthenticated('/api/events/0192bf5a-67d8-7d9d-8a5e-962b23aceeaa', 401);
     }
 
-    // Get (Not in event)
     public function test_event_get_not_participant(): void
     {
-        $token = $this->authenticate('noevents', 'password');
-
-        $resp = static::createClient()->request('GET', '/api/events/0192bf5a-67d8-7d9d-8a5e-962b23aceeaa', [
-            'headers' => [
-                'Authorization' => $token,
-            ]
-        ]);
-
-        $this->assertEquals(404, $resp->getStatusCode());
+        $this->getUser('/api/events/0192bf5a-67d8-7d9d-8a5e-962b23aceeaa', 404, 'noevents');
     }
 
-    // Get (appliance owner)
     public function test_event_get_appliance_owner(): void
     {
-        $resp = static::createClient()->request('GET', '/api/events/0192bf5a-67d8-7d9d-8a5e-962b23aceeaa', [
-            'headers' => [
-                'X-HARDWARE-ID' => self::APPLIANCE_KEY,
-                'X-API-TOKEN' => self::APPLIANCE_SECRET,
-            ]
-        ]);
-
-        $this->assertEquals(200, $resp->getStatusCode());
+        $this->getAppliance('/api/events/0192bf5a-67d8-7d9d-8a5e-962b23aceeaa', 200);
         $this->assertJsonContains(self::EVENT_CREATED_DATA);
     }
 
-    // Get (appliance not owner)
     public function test_event_get_appliance_not_owner(): void
     {
-        $resp = static::createClient()->request('GET', '/api/events/0192bf5a-67d8-7d9d-8a5e-962b23aceeaa', [
-            'headers' => [
-                'X-HARDWARE-ID' => self::APPLIANCE_NOT_OWNER_KEY,
-                'X-API-TOKEN' => self::APPLIANCE_NOT_OWNER_SECRET,
-            ]
-        ]);
-
-        $this->assertEquals(403, $resp->getStatusCode());
+        $this->getAppliance('/api/events/0192bf5a-67d8-7d9d-8a5e-962b23aceeaa', 403, self::APPLIANCE_NOT_OWNER_KEY);
     }
 
-    // Get (owner)
     public function test_event_get_owner(): void
     {
-        $token = $this->authenticate('admin', 'password');
-
-        $resp = static::createClient()->request('GET', '/api/events/0192bf5a-67d8-7d9d-8a5e-962b23aceeaa', [
-            'headers' => [
-                'Authorization' => $token,
-            ]
-        ]);
-
-        $this->assertEquals(200, $resp->getStatusCode());
+        // @TODO: Should not be an admin, just the owner
+        $this->getUser('/api/events/0192bf5a-67d8-7d9d-8a5e-962b23aceeaa', 200, 'admin');
         $this->assertJsonContains(self::EVENT_CREATED_DATA);
     }
 
-    // Get (participant)
     public function test_event_get_participant(): void
     {
-        $token = $this->authenticate('user', 'password');
-
-        $resp = static::createClient()->request('GET', '/api/events/0192bf5a-67d8-7d9d-8a5e-962b23aceeaa', [
-            'headers' => [
-                'Authorization' => $token,
-            ]
-        ]);
-
-        $this->assertEquals(200, $resp->getStatusCode());
+        $this->getUser('/api/events/0192bf5a-67d8-7d9d-8a5e-962b23aceeaa', 200, 'user');
         $this->assertJsonContains(self::EVENT_CREATED_DATA);
     }
 
-    // Get collection (unauthenticated)
     public function test_event_getcollection_unauthenticated(): void
     {
-        $resp = static::createClient()->request('GET', '/api/events');
-        $this->assertEquals(401, $resp->getStatusCode());
+        $this->getUnauthenticated('/api/events', 401);
     }
 
     // @TODO: GetCollection (Not admin, can only see which event he's participating/own)
