@@ -9,15 +9,12 @@ use Doctrine\ORM\EntityRepository;
 
 class BanUserTest extends AuthenticatedTestCase
 {
-    private EntityManagerInterface $emi;
-
     /** @var EntityRepository<User> */
     private EntityRepository $userRepository;
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->emi = static::getContainer()->get(EntityManagerInterface::class);
         $this->userRepository = $this->emi->getRepository(User::class);
     }
 

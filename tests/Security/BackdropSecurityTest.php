@@ -6,6 +6,19 @@ use App\Tests\AuthenticatedTestCase;
 
 class BackdropSecurityTest extends AuthenticatedTestCase
 {
+    private const array BACKDROP_ALBUM = [
+        'title' => 'Some backdrop album name',
+        'author' => 'The author',
+        'version' => 1,
+    ];
+
+    private const array BACKDROP_ALBUM_CREATED = [
+        'id' => 3,
+        'title' => 'Some backdrop album name',
+        'author' => 'The author',
+        'version' => 1,
+    ];
+
     public function test_backdrop_album_get_collection_unauthenticated(): void
     {
         $this->getUnauthenticated('/api/backdrop_albums', 401);
@@ -46,10 +59,50 @@ class BackdropSecurityTest extends AuthenticatedTestCase
         $this->getAppliance('/api/backdrop_albums/1', 200);
     }
 
-    // BackdropAlbum - Create - Unauthenticated = 401
-    // BackdropAlbum - Create - User = 403
-    // BackdropAlbum - Create - Admin = 200
-    // BackdropAlbum - Create - Appliance = 403
+    public function test_backdrop_album_create_unauthenticated(): void
+    {
+        $resp = self::createClient()->request('POST', '/api/backdrop_albums', [
+            'json' => self::BACKDROP_ALBUM,
+        ]);
+
+        $this->assertEquals(401, $resp->getStatusCode());
+    }
+
+    public function test_backdrop_album_create_user(): void
+    {
+        $token = $this->authenticate('user', 'password');
+
+        $resp = self::createClient()->request('POST', '/api/backdrop_albums', [
+            'headers' => ['Authorization' => $token],
+            'json' => self::BACKDROP_ALBUM,
+        ]);
+
+        $this->assertEquals(403, $resp->getStatusCode());
+    }
+
+    public function test_backdrop_album_create_admin(): void
+    {
+        $token = $this->authenticate('admin', 'password');
+
+        $resp = self::createClient()->request('POST', '/api/backdrop_albums', [
+            'headers' => ['Authorization' => $token],
+            'json' => self::BACKDROP_ALBUM,
+        ]);
+
+        $this->assertEquals(201, $resp->getStatusCode());
+        $this->assertJsonContains(self::BACKDROP_ALBUM_CREATED);
+    }
+
+
+    public function test_backdrop_album_create_appliance(): void
+    {
+        $resp = self::createClient()->request('POST', '/api/backdrop_albums', [
+            'headers' => ['X-HARDWARE-ID' => self::APPLIANCE_KEY, 'X-API-TOKEN' => self::APPLIANCE_SECRET],
+            'json' => self::BACKDROP_ALBUM,
+        ]);
+
+        $this->assertEquals(403, $resp->getStatusCode());
+    }
 
     // BackdropAlbum - Update - Unauthenticated = 401
     // BackdropAlbum - Update - User = 403

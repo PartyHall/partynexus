@@ -17,14 +17,12 @@ migrations:
 
 migrate:
 	docker compose exec app php bin/console doctrine:migrations:migrate -vv --env=dev --no-interaction
-	docker compose exec app php bin/console doctrine:migrations:migrate -vv --env=test --no-interaction
 
 clear:
 	docker compose exec app php bin/console cache:clear -v --env=dev
 
 reset-no-fixtures:
 	docker compose exec app bin/console doctrine:schema:drop --force --full-database
-	docker compose exec app bin/console doctrine:schema:drop --env=test --force --full-database
 	$(MAKE) migrate
 	docker compose exec app rm -rf /app/var/uploaded_pictures /app/var/exports /app/var/timelapses
 
@@ -32,7 +30,6 @@ reset-no-fixtures:
 reset-db:
 	$(MAKE) reset-no-fixtures
 	docker compose exec app bin/console doctrine:fixtures:load --no-interaction --append
-	docker compose exec app bin/console doctrine:fixtures:load --env=test --no-interaction --append
 	$(MAKE) export
 
 export:

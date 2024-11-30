@@ -11,8 +11,6 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class EventSecurityTest extends AuthenticatedTestCase
 {
-    private EntityManagerInterface $emi;
-
     private const array EVENT_DATA = [
         'name' => 'My event',
         'author' => 'Me',
@@ -39,13 +37,6 @@ class EventSecurityTest extends AuthenticatedTestCase
         'name' => 'My edited event',
         'author' => 'The new author',
     ];
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->emi = $this->getContainer()->get(EntityManagerInterface::class);
-    }
 
     private function assertEventEquals(?Event $dbEvent): void
     {
@@ -326,7 +317,7 @@ class EventSecurityTest extends AuthenticatedTestCase
         $resp = static::createClient()->request('POST', '/api/events/0192bf5a-67d8-7d9d-8a5e-962b23aceeaa/conclude', [
             'headers' => [
                 'X-HARDWARE-ID' => self::APPLIANCE_NOT_OWNER_KEY,
-                'X-API-TOKEN' => self::APPLIANCE_NOT_OWNER_SECRET,
+                'X-API-TOKEN' => self::APPLIANCE_SECRET,
             ],
             'json' => [],
         ]);

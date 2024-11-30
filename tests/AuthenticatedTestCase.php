@@ -3,13 +3,39 @@
 namespace App\Tests;
 
 use ApiPlatform\Symfony\Bundle\Test\ApiTestCase;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\FrameworkBundle\Console\Application;
+use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Console\Output\NullOutput;
+use Zenstruck\Foundry\Test\ResetDatabase;
 
 class AuthenticatedTestCase extends ApiTestCase
 {
+    protected EntityManagerInterface $emi;
+
+    use ResetDatabase;
+    // use Factories; // @TODO: Once fixtures are ported to factories, use this
+
     protected const string APPLIANCE_KEY = 'b094786e-5158-4ceb-861b-28cb45b2a2c3';
-    protected const string APPLIANCE_SECRET = 'my-api-token';
     protected const string APPLIANCE_NOT_OWNER_KEY = 'c105897f-6169-5dfc-962c-39dc56c3b3d4';
-    protected const string APPLIANCE_NOT_OWNER_SECRET = 'my-api-token';
+    protected const string APPLIANCE_SECRET = 'my-api-token';
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        // region Temporary until we use factories
+        $app = new Application(self::$kernel);
+        $app->setAutoExit(false);
+        $app->run(new ArrayInput([
+            'command' => 'doctrine:fixtures:load',
+            '--no-interaction' => true,
+            '--env' => 'test',
+        ]), new NullOutput());
+        // endregion
+
+        $this->emi = $this->getContainer()->get(EntityManagerInterface::class);
+    }
 
     protected function authenticate(string $username, string $password): string
     {
@@ -17,12 +43,12 @@ class AuthenticatedTestCase extends ApiTestCase
             'json' => [
                 'username' => $username,
                 'password' => $password,
-            ]
+            ],
         ]);
 
         $data = json_decode($resp->getContent(), true);
 
-        return 'Bearer ' . $data['token'];
+        return 'Bearer '.$data['token'];
     }
 
     protected function getUnauthenticated(string $url, int $statusCode): void

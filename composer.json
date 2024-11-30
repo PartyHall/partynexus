@@ -101,17 +101,20 @@
         }
     },
     "require-dev": {
-        "dama/doctrine-test-bundle": "^8.2",
+        "dama/doctrine-test-bundle": "*",
         "doctrine/doctrine-fixtures-bundle": "^3.6",
         "friendsofphp/php-cs-fixer": "^3.64",
         "phpstan/phpstan": "^1.12",
-        "phpunit/phpunit": "^9.5",
+        "phpstan/phpstan-doctrine": "^1.5",
+        "phpstan/phpstan-symfony": "^1.4",
+        "phpunit/phpunit": "^11",
         "symfony/browser-kit": "7.1.*",
         "symfony/css-selector": "7.1.*",
         "symfony/debug-bundle": "7.1.*",
         "symfony/phpunit-bridge": "^7.1",
         "symfony/stopwatch": "7.1.*",
         "symfony/web-profiler-bundle": "7.1.*",
+        "ticketswap/phpstan-error-formatter": "^1.1",
         "zenstruck/foundry": "^2.2"
     }
 }
