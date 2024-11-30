@@ -3,8 +3,10 @@
 namespace App\Serializer;
 
 use App\Entity\Backdrop;
+use App\Entity\BackdropAlbum;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Vich\UploaderBundle\Storage\StorageInterface;
 
@@ -44,7 +46,13 @@ class BackdropNormalizer implements NormalizerInterface
      */
     public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
     {
-        if (isset($context[self::ALREADY_CALLED])) {
+        if (
+            isset($context[self::ALREADY_CALLED])
+            || (
+                \array_key_exists(AbstractNormalizer::GROUPS, $context)
+                && \in_array(BackdropAlbum::EXPORT, $context[AbstractNormalizer::GROUPS])
+            )
+        ) {
             return false;
         }
 

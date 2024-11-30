@@ -8,7 +8,6 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Link;
 use ApiPlatform\Metadata\Post;
-use App\State\Processor\BackdropPostProcessor;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
@@ -88,6 +87,7 @@ class Backdrop
         self::API_GET_ITEM,
         self::API_CREATE,
         BackdropAlbum::API_GET_ITEM,
+        BackdropAlbum::EXPORT,
     ])]
     #[Assert\NotBlank]
     private string $title;
@@ -114,6 +114,9 @@ class Backdrop
     private ?File $file = null;
 
     #[ORM\Column(type: Types::STRING, nullable: true)]
+    #[Groups([
+        BackdropAlbum::EXPORT,
+    ])]
     private ?string $filepath = null;
 
     #[Groups([

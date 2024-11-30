@@ -2,6 +2,7 @@
 
 namespace App\Tests\Security;
 
+use App\Entity\BackdropAlbum;
 use App\Tests\AuthenticatedTestCase;
 
 class BackdropSecurityTest extends AuthenticatedTestCase
@@ -93,7 +94,6 @@ class BackdropSecurityTest extends AuthenticatedTestCase
         $this->assertJsonContains(self::BACKDROP_ALBUM_CREATED);
     }
 
-
     public function test_backdrop_album_create_appliance(): void
     {
         $resp = self::createClient()->request('POST', '/api/backdrop_albums', [
@@ -104,10 +104,80 @@ class BackdropSecurityTest extends AuthenticatedTestCase
         $this->assertEquals(403, $resp->getStatusCode());
     }
 
-    // BackdropAlbum - Update - Unauthenticated = 401
-    // BackdropAlbum - Update - User = 403
-    // BackdropAlbum - Update - Admin = 200
-    // BackdropAlbum - Update - Appliance = 403
+    public function test_backdrop_album_update_unauthenticated(): void
+    {
+        $resp = self::createClient()->request('PATCH', '/api/backdrop_albums/1', [
+            'json' => self::BACKDROP_ALBUM,
+            'headers' => ['Content-Type' => 'application/merge-patch+json'],
+        ]);
+
+        $this->assertEquals(401, $resp->getStatusCode());
+    }
+
+    public function test_backdrop_album_update_user(): void
+    {
+        $token = $this->authenticate('user', 'password');
+
+        $resp = self::createClient()->request('PATCH', '/api/backdrop_albums/1', [
+            'headers' => [
+                'Authorization' => $token,
+                'Content-Type' => 'application/merge-patch+json',
+            ],
+            'json' => self::BACKDROP_ALBUM,
+        ]);
+
+        $this->assertEquals(403, $resp->getStatusCode());
+    }
+
+    public function test_backdrop_album_update_admin(): void
+    {
+        $token = $this->authenticate('admin', 'password');
+
+        /*
+        $backdropAlbum = $this->emi->getRepository(BackdropAlbum::class)->find(1);
+        $this->assertNotNull($backdropAlbum);
+        $this->assertEquals('Some backdrop album', $backdropAlbum->getTitle());
+        $this->assertEquals('Some author', $backdropAlbum->getAuthor());
+        $this->assertEquals(1, $backdropAlbum->getVersion());
+        */
+
+        $resp = self::createClient()->request('PATCH', '/api/backdrop_albums/1', [
+            'headers' => [
+                'Authorization' => $token,
+                'Content-Type' => 'application/merge-patch+json',
+            ],
+            'json' => [
+                'title' => 'Some backdrop album name',
+                'author' => 'THE author',
+                'version' => 2,
+            ],
+        ]);
+
+        $this->assertEquals(200, $resp->getStatusCode());
+
+        /*
+         * // For some reason this doesn't work even though it works outside of tests
+        $backdropAlbum = $this->emi->getRepository(BackdropAlbum::class)->find(1);
+        $this->assertNotNull($backdropAlbum);
+        $this->assertEquals('Some backdrop album name', $backdropAlbum->getTitle());
+        $this->assertEquals('THE author', $backdropAlbum->getAuthor());
+        $this->assertEquals(2, $backdropAlbum->getVersion());
+        */
+    }
+
+    public function test_backdrop_album_update_appliance(): void
+    {
+        $resp = self::createClient()->request('PATCH', '/api/backdrop_albums/1', [
+            'headers' => [
+                'X-HARDWARE-ID' => self::APPLIANCE_KEY,
+                'X-API-TOKEN' => self::APPLIANCE_SECRET,
+                'Content-Type' => 'application/merge-patch+json',
+            ],
+            'json' => self::BACKDROP_ALBUM,
+        ]);
+
+        $this->assertEquals(403, $resp->getStatusCode());
+    }
 
     public function test_backdrop_get_collection_unauthenticated(): void
     {

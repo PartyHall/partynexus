@@ -47,6 +47,8 @@ class BackdropAlbum
     public const string API_GET_ITEM = 'api:backdrop_album:get';
     public const string API_CREATE = 'api:backdrop_album:create';
     public const string API_UPDATE = 'api:backdrop_album:update';
+    public const string IMPORT = 'import:backdrop_album';
+    public const string EXPORT = 'export:backdrop_album';
 
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
@@ -64,6 +66,8 @@ class BackdropAlbum
         self::API_GET_ITEM,
         self::API_CREATE,
         self::API_UPDATE,
+        self::IMPORT,
+        self::EXPORT,
     ])]
     private string $title;
 
@@ -74,6 +78,8 @@ class BackdropAlbum
         self::API_GET_ITEM,
         self::API_CREATE,
         self::API_UPDATE,
+        self::IMPORT,
+        self::EXPORT,
     ])]
     private string $author;
 
@@ -84,6 +90,8 @@ class BackdropAlbum
         self::API_GET_ITEM,
         self::API_CREATE,
         self::API_UPDATE,
+        self::IMPORT,
+        self::EXPORT,
     ])]
     private int $version;
 
@@ -100,8 +108,14 @@ class BackdropAlbum
     #[ORM\OrderBy(['title' => 'ASC'])]
     #[Groups([
         self::API_GET_ITEM,
+        self::EXPORT,
     ])]
     private Collection $backdrops;
+
+    public function __construct()
+    {
+        $this->backdrops = new ArrayCollection();
+    }
 
     public function getId(): int
     {
