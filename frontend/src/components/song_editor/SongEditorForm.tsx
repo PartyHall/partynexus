@@ -164,7 +164,7 @@ export default function SongEditorForm({ isCreating, song, setSong }: Props) {
                             disabled={formState.isSubmitting}
                             icon={<IconDeviceFloppy size={20}/>}
                         >
-                            {t('karaoke.editor.save')}
+                            {t('generic.save')}
                         </Button>
                     </Form.Item>
                 </Flex>

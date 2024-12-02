@@ -9,6 +9,11 @@
         "no_results": "No results",
         "modal_im_sure": "I'm sure!",
         "cancel": "Cancel",
+        "no_selection": "-- Select a value --",
+        "remove": "Remove",
+        "edit": "Edit",
+        "choose": "Choose",
+        "save": "Save",
         "error": {
             "unknown": "An unknown error has occured",
             "unknown_desc": "There was an issue, see the console for more info",
@@ -20,7 +25,12 @@
     "menu": {
         "events": "Events",
         "karaoke": "Karaoke",
-        "my_account": "My account"
+        "my_account": "My account",
+        "admin": {
+            "title": "Admin",
+            "user_management": "Users",
+            "backdrop_management": "Backdrops"
+        }
     },
     "login": {
         "title": "Login",
@@ -49,7 +59,6 @@
     "my_account": {
         "title": "My account",
         "logout": "Logout",
-        "user_management": "User management",
         "my_appliances": "My appliances",
         "new": "New",
         "edit": "Edit",
@@ -61,8 +70,7 @@
         "appliance_editor": {
             "title": "Edit appliance",
             "title_create": "Create an appliance",
-            "name": "Name",
-            "save": "Save"
+            "name": "Name"
         }
     },
     "users": {
@@ -102,8 +110,7 @@
         },
         "editor": {
             "username": "My username",
-            "email": "My email",
-            "save_bt": "Save"
+            "email": "My email"
         }
     },
     "karaoke": {
@@ -139,7 +146,6 @@
             "artist": "Artist",
             "format": "Format",
             "quality": "Quality",
-            "save": "Save",
             "song_files": "Song files",
             "cover": {
                 "bad_format": {
@@ -226,7 +232,6 @@
         "editor": {
             "create_title": "Create an event",
             "edit_title": "Editing {{title}}",
-            "save": "Save",
             "participants": "Participants",
             "delete": {
                 "title": "Kicking a user",
@@ -276,5 +281,28 @@
                 "singer": "Singer"
             }
         }
+    },
+    "backdrops": {
+        "title": "Backdrops",
+        "title_and_author": "{{title}} by {{author}}",
+        "create": "New album",
+        "delete_album": {
+            "title": "Delete album",
+            "description": "You're going to remove the album {{title}}, every backdrops in it will be removed too."
+        },
+        "add_backdrop": {
+            "title": "Add backdrop"
+        },
+        "edit_album": {
+            "title": "Edit album",
+            "album_title": "Title",
+            "album_author": "Author",
+            "album_version": "Version"
+        },
+        "edit_backdrop": {
+            "backdrop_title": "Title",
+            "backdrop_file": "File"
+        },
+        "delete_backdrop": "Remove the backdrop {{title}}."
     }
 }

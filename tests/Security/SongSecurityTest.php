@@ -17,11 +17,9 @@ class SongSecurityTest extends AuthenticatedTestCase
         'hotspot' => 32,
     ];
 
-    // Get all songs (Unauthenticated)
     public function test_get_songcollection_unauthenticated(): void
     {
-        $resp = static::createClient()->request('GET', '/api/songs');
-        $this->assertEquals(401, $resp->getStatusCode());
+        $this->getUnauthenticated('/api/songs', 401);
     }
 
     // Get all songs (Authenticated)
@@ -116,29 +114,19 @@ class SongSecurityTest extends AuthenticatedTestCase
         }
     }
 
-    // Get one song (Unauthenticated, not ready)
     public function test_get_song_unauthenticated_not_ready(): void
     {
-        $resp = static::createClient()->request('GET', '/api/songs/3');
-        $this->assertEquals(401, $resp->getStatusCode());
+        $this->getUnauthenticated('/api/songs/3', 401);
     }
 
-    // Get one song (Unauthenticated, ready)
     public function test_get_song_unauthenticated_ready(): void
     {
-        $resp = static::createClient()->request('GET', '/api/songs/1');
-        $this->assertEquals(401, $resp->getStatusCode());
+        $this->getUnauthenticated('/api/songs/1', 401);
     }
 
-    // Get one song (Authenticated, not ready)
     public function test_get_song_authenticated_not_ready(): void
     {
-        $token = $this->authenticate('user', 'password');
-
-        $resp = static::createClient()->request('GET', '/api/songs/3', [
-            'headers' => ['Authorization' => $token],
-        ]);
-        $this->assertEquals(404, $resp->getStatusCode());
+        $this->getUser('/api/songs/3', 404, 'user');
     }
 
     // Get one song (Authenticated, ready)
@@ -153,16 +141,9 @@ class SongSecurityTest extends AuthenticatedTestCase
         // @TODO: check response
     }
 
-    // Get one song (Appliance, not ready)
     public function test_get_song_appliance_not_ready(): void
     {
-        $resp = static::createClient()->request('GET', '/api/songs/3', [
-            'headers' => [
-                'X-HARDWARE-ID' => self::APPLIANCE_KEY,
-                'X-API-TOKEN' => self::APPLIANCE_SECRET,
-            ],
-        ]);
-        $this->assertEquals(404, $resp->getStatusCode());
+        $this->getAppliance('/api/songs/3', 404);
     }
 
     // Get one song (Appliance, ready)

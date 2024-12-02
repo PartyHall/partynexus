@@ -1,0 +1,7 @@
+# Pixabay search terms: friends
+
+1.png: https://pixabay.com/photos/people-students-university-campus-6027028/
+2.png: https://pixabay.com/photos/women-beauty-outdoors-casual-8509637/
+3.png: https://pixabay.com/photos/friendship-day-black-women-portrait-3104635/
+4.png: https://pixabay.com/photos/men-fashion-happy-people-smile-1835901/
+5.png: https://pixabay.com/photos/friend-smile-happy-young-2575047/

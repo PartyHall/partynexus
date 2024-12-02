@@ -15,9 +15,4 @@ class SongSessionSecurityTest extends AuthenticatedTestCase
      * - User not in event + get collection = 403
      * - User in event + get collection = 200
      */
-
-    public function test_songsession_getitem_unauthenticated(): void
-    {
-
-    }
 }

@@ -6,65 +6,58 @@ VERSION = 0.1.12
 COMMIT = $(shell git rev-parse --short HEAD)
 
 up:
-	docker compose up --build -d --remove-orphans
+	@docker compose up --build -d --remove-orphans
 	$(MAKE) reset-db
 
 shell:
-	docker compose exec app bash
+	@docker compose exec app bash
 
 migrations:
-	docker compose exec app php bin/console doctrine:migrations:diff
+	@docker compose exec app php bin/console doctrine:migrations:diff
 
 migrate:
-	docker compose exec app php bin/console doctrine:migrations:migrate -vv --env=dev --no-interaction
-	docker compose exec app php bin/console doctrine:migrations:migrate -vv --env=test --no-interaction
+	@docker compose exec app php bin/console doctrine:migrations:migrate -vv --env=dev --no-interaction
 
 clear:
-	docker compose exec app php bin/console cache:clear -v --env=dev
-
-reset-no-fixtures:
-	docker compose exec app bin/console doctrine:schema:drop --force --full-database
-	docker compose exec app bin/console doctrine:schema:drop --env=test --force --full-database
-	$(MAKE) migrate
-	docker compose exec app rm -rf /app/var/uploaded_pictures /app/var/exports /app/var/timelapses
-
+	@docker compose exec app php bin/console cache:clear -v --env=dev
 
 reset-db:
-	$(MAKE) reset-no-fixtures
-	docker compose exec app bin/console doctrine:fixtures:load --no-interaction
-	docker compose exec app bin/console doctrine:fixtures:load --env=test --no-interaction
+	@docker compose exec app bin/console doctrine:schema:drop --force --full-database
+	$(MAKE) migrate
+	@docker compose exec app rm -rf /app/var/uploaded_pictures /app/var/exports /app/var/timelapses /app/public/backdrops/* /app/public/song_covers/*
+	@docker compose exec app bin/console doctrine:fixtures:load --no-interaction --append
 	$(MAKE) export
 
 export:
-	docker compose exec app bin/console event:export 0192bf5a-67d8-7d9d-8a5e-962b23aceeaa -vvv
+	@docker compose exec app bin/console event:export 0192bf5a-67d8-7d9d-8a5e-962b23aceeaa -vvv
 
 consume-mails:
-	docker compose exec app bin/console messenger:consume emails -vvv
+	@docker compose exec app bin/console messenger:consume emails -vvv
 
 consume-export:
-	docker compose exec app bin/console messenger:consume export -vvv
+	@docker compose exec app bin/console messenger:consume export -vvv
 
 lint:
 	$(MAKE) phpcsfixer
 	$(MAKE) phpstan
 
 phpstan:
-	docker compose exec app php -d memory_limit=8G vendor/bin/phpstan analyse
+	@docker compose exec app php -d memory_limit=8G vendor/bin/phpstan analyse
 
 phpcsfixer:
-	docker compose exec app vendor/bin/php-cs-fixer fix --dry-run -vv --diff
+	@docker compose exec app vendor/bin/php-cs-fixer fix --dry-run -vv --diff
 
 phpcsfixer-fix:
-	docker compose exec app vendor/bin/php-cs-fixer fix -vv --diff
+	@docker compose exec app vendor/bin/php-cs-fixer fix -vv --diff
 
 lint-fix:
-	docker compose exec app vendor/bin/php-cs-fixer fix -vv --diff
+	@docker compose exec app vendor/bin/php-cs-fixer fix -vv --diff
 
 fix-perms:
 	sudo chown -R "$(USER)" .
 
 gen-key:
-	docker compose exec app bin/console lexik:jwt:generate-keypair # @TODO: Only during init, if not exist
+	@docker compose exec app bin/console lexik:jwt:generate-keypair # @TODO: Only during init, if not exist
 
 lint-ts:
 	@docker compose exec frontend npx prettier . --write

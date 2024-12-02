@@ -95,7 +95,7 @@ export default function ApplianceEditor({ appliance: initialAppliance }: Props) 
                         disabled={formState.isSubmitting}
                         icon={<IconDeviceFloppy size={20} />}
                     >
-                        {t('my_account.appliance_editor.save')}
+                        {t('generic.save')}
                     </Button>
                 </Form.Item>
             </Flex>

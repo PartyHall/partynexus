@@ -8,6 +8,7 @@ import { SdkError } from "./responses/error";
 import Users from "./users";
 
 import dayjs from "dayjs";
+import { Backdrops } from "./backdrops";
 
 export type StoreToken = (
     token: string | null,
@@ -32,6 +33,7 @@ export class SDK {
     public karaoke: Karaoke;
     public users: Users;
     public appliances: Appliances;
+    public backdrops: Backdrops;
 
     public constructor(
         baseUrl: string,
@@ -49,6 +51,7 @@ export class SDK {
         this.karaoke = new Karaoke(this);
         this.users = new Users(this);
         this.appliances = new Appliances(this);
+        this.backdrops = new Backdrops(this);
 
         this.storeToken = storeToken || (() => {});
         this.setOnExpired(onExpired);
