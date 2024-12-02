@@ -7,6 +7,7 @@ use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Link;
+use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -43,6 +44,18 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
             denormalizationContext: [AbstractNormalizer::GROUPS => [self::API_CREATE]],
             security: 'is_granted("ROLE_ADMIN")',
         ),
+        new Patch(
+            uriTemplate: '/backdrop_albums/{albumId}/backdrops/{id}',
+            uriVariables: [
+                'albumId' => new Link(
+                    fromProperty: 'backdrops',
+                    fromClass: BackdropAlbum::class, // On veut pointer VERS LA CLASSE AUQUEL eventId FAIT REFERENCE (fromClass event d'après symfonycasts)
+                ),
+                'id' => new Link(fromClass: self::class),
+            ],
+            denormalizationContext: [AbstractNormalizer::GROUPS => [self::API_UPDATE]],
+            security: 'is_granted("ROLE_ADMIN")',
+        ),
         new Delete(
             uriTemplate: '/backdrop_albums/{albumId}/backdrops/{id}',
             uriVariables: [
@@ -70,6 +83,7 @@ class Backdrop
     public const string API_GET_COLLECTION = 'api:backdrops:get_collection';
     public const string API_GET_ITEM = 'api:backdrops:get';
     public const string API_CREATE = 'api:backdrops:create';
+    public const string API_UPDATE = 'api:backdrops:update';
 
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
@@ -86,6 +100,7 @@ class Backdrop
         self::API_GET_COLLECTION,
         self::API_GET_ITEM,
         self::API_CREATE,
+        self::API_UPDATE,
         BackdropAlbum::API_GET_ITEM,
         BackdropAlbum::EXPORT,
     ])]
@@ -105,7 +120,7 @@ class Backdrop
         fileNameProperty: 'filepath',
     )]
     #[Groups([self::API_CREATE])]
-    #[Assert\NotNull]
+    #[Assert\NotNull(groups: [self::API_CREATE])]
     #[Assert\Image(
         maxSize: '5M',
         mimeTypes: ['image/jpeg', 'image/png', 'image/webp'],

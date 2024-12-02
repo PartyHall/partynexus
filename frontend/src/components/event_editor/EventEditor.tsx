@@ -103,7 +103,7 @@ export default function EventEditor({ event: initialEvent }: Props) {
             <Flex align="center" justify="center" style={{ marginTop: 32 }}>
                 <Form.Item>
                     <Button type="primary" htmlType="submit" disabled={formState.isSubmitting}>
-                        {t('event.editor.save')}
+                        {t('generic.save')}
                     </Button>
                 </Form.Item>
             </Flex>

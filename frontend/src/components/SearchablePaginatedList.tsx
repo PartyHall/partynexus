@@ -74,7 +74,11 @@ export default function SearchablePaginatedList<T>(props: Props<T>) {
     };
 
     useAsyncEffect(async () => {
-        const params: any = { page: ctx.page + '' }
+        const params: any = { }
+        if (ctx.page > 1) {
+            params['page'] = ctx.page + '';
+        }
+
         if (ctx.search) {
             params[searchParameterName ?? 'search'] = ctx.search
         }
@@ -105,7 +109,7 @@ export default function SearchablePaginatedList<T>(props: Props<T>) {
             </Flex>
         }
 
-        <Flex vertical gap={16} align="stretch" style={{ overflowY: 'scroll', flex: '1' }} className={classNames}>
+        <Flex vertical gap={16} align="stretch" style={{ overflowY: 'auto', flex: '1' }} className={classNames}>
             <Loader loading={ctx.loading}>
                 {
                     ctx.results?.items.length !== 0

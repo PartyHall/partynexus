@@ -1,7 +1,7 @@
 import { Button, Flex, Typography } from "antd";
 import { PnListUser } from "../../sdk/responses/user";
 import SearchablePaginatedList from "../../components/SearchablePaginatedList";
-import UserListCard from "../../components/admin/user_list_card";
+import UserListCard from "../../components/admin/UserListCard";
 
 import { useAuth } from "../../hooks/auth";
 import { useNavigate } from "react-router-dom";

@@ -3,6 +3,7 @@ import './assets/css/index.scss';
 import { ConfigProvider, theme } from 'antd';
 import { I18nextProvider, initReactI18next } from 'react-i18next';
 import { RouterProvider, createBrowserRouter, redirect } from 'react-router-dom';
+import AdminBackdropsPage from './pages/admin/backdrops.tsx';
 import AdminLayout from './layout/AdminLayout.tsx';
 import AdminNewUserPage from './pages/admin/new_user.tsx';
 import AdminUsersPage from './pages/admin/users.tsx';
@@ -26,6 +27,7 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import detector from "i18next-browser-languagedetector";
 import i18n from "i18next";
+import AdminIndexPage from './pages/admin/index.tsx';
 
 i18n
     .use(Backend)
@@ -60,12 +62,20 @@ const router = createBrowserRouter([
                 element: <AdminLayout />,
                 children: [
                     {
+                        path: '',
+                        element: <AdminIndexPage />
+                    },
+                    {
                         path: '/admin/users/new',
                         element: <AdminNewUserPage />
                     },
                     {
                         path: '/admin/users',
                         element: <AdminUsersPage />
+                    },
+                    {
+                        path: '/admin/backdrops',
+                        element: <AdminBackdropsPage />
                     },
                 ],
             },

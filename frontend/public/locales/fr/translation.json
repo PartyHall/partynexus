@@ -9,6 +9,11 @@
         "no_results": "Aucun résultats",
         "modal_im_sure": "Je suis sûr(e)",
         "cancel": "Annuler",
+        "no_selection": "-- Choisir une valeur --",
+        "remove": "Supprimer",
+        "edit": "Éditer",
+        "choose": "Choisir",
+        "save": "Sauvegarder",
         "error": {
             "unknown": "Une erreur inconnue s'est produite",
             "unknown_desc": "Il y a eu un soucis. Regardez la console pour plus d'infos",
@@ -20,7 +25,12 @@
     "menu": {
         "events": "Évènements",
         "karaoke": "Karaoké",
-        "my_account": "Mon compte"
+        "my_account": "Mon compte",
+        "admin": {
+            "title": "Administration",
+            "user_management": "Utilisateurs",
+            "backdrop_management": "Passe-têtes"
+        }
     },
     "login": {
         "tab_login": "Connexion",
@@ -48,7 +58,6 @@
     "my_account": {
         "title": "Mon compte",
         "logout": "Déconnexion",
-        "user_management": "Administration des utilisateurs",
         "my_appliances": "Mes appareils",
         "new": "Nouveau",
         "edit": "Éditer",
@@ -60,8 +69,7 @@
         "appliance_editor": {
             "title": "Éditer l'appareil",
             "title_create": "Créer un appareil",
-            "name": "Nom",
-            "save": "Sauvegarder"
+            "name": "Nom"
         }
     },
     "users": {
@@ -101,8 +109,7 @@
         },
         "editor": {
             "username": "Mon pseudo",
-            "email": "Mon email",
-            "save": "Sauvegarder"
+            "email": "Mon email"
         }
     },
     "karaoke": {
@@ -140,7 +147,6 @@
             "artist": "Artiste",
             "format": "Format",
             "quality": "Qualité",
-            "save": "Sauvegarder",
             "song_files": "Fichiers de la musique",
             "cover": {
                 "bad_format": {
@@ -228,7 +234,6 @@
         "editor": {
             "create_title": "Créer un évènement",
             "edit_title": "Édition de {{title}}",
-            "save": "Sauvegarder",
             "participants": "Participants",
             "delete": {
                 "title": "Expulser un utilisateur",
@@ -278,5 +283,28 @@
                 "singer": "Chanteur"
             }
         }
+    },
+    "backdrops": {
+        "title": "Passe-têtes",
+        "title_and_author": "{{title}} par {{author}}",
+        "create": "Nouvel album",
+        "delete_album": {
+            "title": "Supprimer l'album",
+            "description": "Vous allez supprimer l'album {{title}}, tous les passes-têtes dedans seront supprimés aussi."
+        },
+        "add_backdrop": {
+            "title": "Ajouter un passe-tête"
+        },
+        "edit_album": {
+            "title": "Éditer l'album",
+            "album_title": "Titre",
+            "album_author": "Auteur",
+            "album_version": "Version"
+        },
+        "edit_backdrop": {
+            "backdrop_title": "Titre",
+            "backdrop_file": "Fichier"
+        },
+        "delete_backdrop": "Vous allez supprimer le passe-tête {{title}}."
     }
 }

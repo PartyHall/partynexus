@@ -78,7 +78,7 @@ export default function EventPictureBar({ event }: { event: PnEvent }) {
     return <Flex vertical gap={8}>
         <Typography.Title className="red-glow ml1-2">{t('event.pictures.title')}</Typography.Title>
         <Loader loading={loadingPictures}>
-            <Flex gap={8} align="center" justify="start" style={{ overflowX: 'scroll' }}> {/* @TODO: scroll not working */}
+            <Flex gap={8} align="center" justify="start" style={{ overflowX: 'auto' }}> {/* @TODO: scroll not working */}
                 {
                     pictures.length > 0 && <>
                         <Image.PreviewGroup

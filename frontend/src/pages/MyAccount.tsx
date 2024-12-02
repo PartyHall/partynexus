@@ -1,5 +1,5 @@
 import { Button, Flex, Typography } from "antd";
-import { IconLogout, IconUser } from "@tabler/icons-react";
+import { IconAdjustmentsAlt, IconLogout } from "@tabler/icons-react";
 import { useAsyncEffect, useTitle } from "ahooks";
 
 import AccountEditor from "../components/account/AccountEditor";
@@ -50,10 +50,10 @@ export default function MyAccountPage() {
 
             {
                 isGranted('ROLE_ADMIN') && <Button
-                    onClick={() => navigate('/admin/users')}
-                    icon={<IconUser size={20} />}
+                    onClick={() => navigate('/admin')}
+                    icon={<IconAdjustmentsAlt size={20} />}
                 >
-                    {t('my_account.user_management')}
+                    {t('menu.admin.title')}
                 </Button>
             }
 

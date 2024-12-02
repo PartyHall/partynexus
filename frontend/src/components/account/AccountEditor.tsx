@@ -87,7 +87,7 @@ export default function AccountEditor({ user: initialUser }: Props) {
                     disabled={formState.isSubmitting}
                     icon={<IconDeviceFloppy size={20} />}
                 >
-                    {t('users.editor.save')}
+                    {t('generic.save')}
                 </Button>
             </Form.Item>
         </Flex>
