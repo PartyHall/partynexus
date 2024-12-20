@@ -16,7 +16,7 @@ class SongRecompileCatalogCommand extends Command
 {
     public function __construct(
         private readonly SongRepository $repository,
-        private readonly SongCompiler   $compilator,
+        private readonly SongCompiler $compilator,
     ) {
         parent::__construct();
     }

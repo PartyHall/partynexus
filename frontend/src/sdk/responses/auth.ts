@@ -1,24 +1,29 @@
-import dayjs from "dayjs";
+import dayjs from 'dayjs';
 
 export interface AuthResponse {
     token: string;
     refresh_token: string;
-};
+}
 
 export class PnTokenUser {
     iri: string;
     username: string;
-    expiresAt: dayjs.Dayjs
-    roles: string[]
+    expiresAt: dayjs.Dayjs;
+    roles: string[];
 
-    constructor(iri: string, username: string, expiresAt: dayjs.Dayjs, roles: string[]) {
+    constructor(
+        iri: string,
+        username: string,
+        expiresAt: dayjs.Dayjs,
+        roles: string[]
+    ) {
         this.iri = iri;
         this.expiresAt = expiresAt;
         this.username = username;
         this.roles = roles;
     }
 
-    static fromToken(token: string|null) {
+    static fromToken(token: string | null) {
         if (!token) {
             return null;
         }
@@ -44,7 +49,7 @@ export class PnTokenUser {
         return PnTokenUser.fromJson(data);
     }
 
-    static fromJson(data: Record<string, any>|null) {
+    static fromJson(data: Record<string, any> | null) {
         if (!data) {
             return null;
         }
@@ -53,7 +58,7 @@ export class PnTokenUser {
             data['iri'],
             data['username'],
             dayjs.unix(data['exp']),
-            data['roles'],
+            data['roles']
         );
     }
 }

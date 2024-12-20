@@ -1,18 +1,32 @@
-import { AutoComplete, Button, Card, Flex, Modal, Popconfirm, Typography } from "antd";
-import { IconUserX } from "@tabler/icons-react";
-import { PnEvent } from "../../sdk/responses/event";
-import { useAuth } from "../../hooks/auth";
-import { useDebounceFn } from "ahooks";
-import useNotification from "antd/es/notification/useNotification";
-import { useState } from "react";
-import { useTranslation } from "react-i18next";
+import {
+    AutoComplete,
+    Button,
+    Card,
+    Flex,
+    Modal,
+    Popconfirm,
+    Typography,
+} from 'antd';
+import { IconUserX } from '@tabler/icons-react';
+import { PnEvent } from '../../sdk/responses/event';
+import { useAuth } from '../../hooks/auth';
+import { useDebounceFn } from 'ahooks';
+import useNotification from 'antd/es/notification/useNotification';
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 type OptionType = {
     value: string;
     label: string;
 };
 
-export default function ParticipantsEditor({ event, setEvent }: { event: PnEvent, setEvent: (e: PnEvent) => void }) {
+export default function ParticipantsEditor({
+    event,
+    setEvent,
+}: {
+    event: PnEvent;
+    setEvent: (e: PnEvent) => void;
+}) {
     const { t } = useTranslation();
     const { api } = useAuth();
     const [notif, notifCtx] = useNotification();
@@ -27,18 +41,21 @@ export default function ParticipantsEditor({ event, setEvent }: { event: PnEvent
         }
 
         try {
-            const currentUsers = event.participants.map(x => x.iri);
+            const currentUsers = event.participants.map((x) => x.iri);
 
             const users = await api.users.getCollection(query);
             if (users) {
                 setOptions([
-                    ...users
-                        .items
-                        .filter(x => !currentUsers.includes(x.iri) && x.iri !== api.tokenUser?.iri)
-                        .map(x => ({
+                    ...users.items
+                        .filter(
+                            (x) =>
+                                !currentUsers.includes(x.iri) &&
+                                x.iri !== api.tokenUser?.iri
+                        )
+                        .map((x) => ({
                             label: x.username,
                             value: x.iri,
-                        }))
+                        })),
                 ]);
             }
         } catch (e) {
@@ -55,16 +72,16 @@ export default function ParticipantsEditor({ event, setEvent }: { event: PnEvent
 
     // @TODO: Maybe we want to add a modal
     const addUser = async (userIri: string) => {
-        if (!event || event.participants.map(x => x.iri).includes(userIri)) {
+        if (!event || event.participants.map((x) => x.iri).includes(userIri)) {
             setSearchText('');
             return;
         }
 
         try {
-            const resp = await api.events.updateParticipants(
-                event,
-                [...event.participants.map(x => x.iri), userIri],
-            );
+            const resp = await api.events.updateParticipants(event, [
+                ...event.participants.map((x) => x.iri),
+                userIri,
+            ]);
 
             if (resp) {
                 setEvent(resp);
@@ -90,8 +107,8 @@ export default function ParticipantsEditor({ event, setEvent }: { event: PnEvent
             const resp = await api.events.updateParticipants(
                 event,
                 event.participants
-                    .map(x => x.iri)
-                    .filter(x => x !== userIri)
+                    .map((x) => x.iri)
+                    .filter((x) => x !== userIri)
             );
 
             if (resp) {
@@ -100,55 +117,84 @@ export default function ParticipantsEditor({ event, setEvent }: { event: PnEvent
         } catch (e) {
             notif.error({
                 message: t('event.editor.delete.failure.title'),
-                description: t('event.editor.delete.failure.description', { name: username }),
+                description: t('event.editor.delete.failure.description', {
+                    name: username,
+                }),
             });
 
             console.error(e);
         }
-    }
+    };
 
-    return <>
-        <Typography.Title>{t('event.editor.participants')}</Typography.Title>
-        <Flex gap={8} align="center">
-            <Typography.Text>{t('event.editor.add.title')}:</Typography.Text>
-            <AutoComplete
-                style={{ flex: 1 }}
-                options={options}
-                value={searchText}
-                onSearch={val => {
-                    setSearchText(val);
-                    debouncedSearch(val);
-                }}
-                onChange={val => setSearchText(val)}
-                onSelect={(val, ot) => Modal.confirm({
-                    title: t('event.editor.add.title'),
-                    content: t('event.editor.add.confirm', {'participant': ot.label}),
-                    onOk: () => {addUser(val)},
-                    onCancel: () => setSearchText(''),
-                    okText: t('generic.modal_im_sure'),
-                    cancelText: t('generic.cancel'),
-                })}
-            />
-        </Flex>
-        <Flex gap={8} wrap="wrap" align="center" justify="center">
-            {
-                event?.participants.sort((a, b) => a.username.localeCompare(b.username)).map(x => <Card className="EventEditor__Participant" key={x.iri}>
-                    <Flex justify="space-between" align="center" gap={10}>
-                        <p>{x.username}</p>
-                        <Popconfirm
-                            title={t('event.editor.delete.title')}
-                            description={t('event.editor.delete.description', { name: x.username })}
-                            onConfirm={() => deleteUser(x.username, x.iri)}
-                            okText={t('generic.modal_im_sure')}
-                            cancelText={t('generic.cancel')}
-                        >
-                            <Button type="primary" shape="circle" icon={<IconUserX size={18} />} />
-                        </Popconfirm>
-                    </Flex>
-                </Card>)
-            }
+    return (
+        <>
+            <Typography.Title>
+                {t('event.editor.participants')}
+            </Typography.Title>
+            <Flex gap={8} align="center">
+                <Typography.Text>
+                    {t('event.editor.add.title')}:
+                </Typography.Text>
+                <AutoComplete
+                    style={{ flex: 1 }}
+                    options={options}
+                    value={searchText}
+                    onSearch={(val) => {
+                        setSearchText(val);
+                        debouncedSearch(val);
+                    }}
+                    onChange={(val) => setSearchText(val)}
+                    onSelect={(val, ot) =>
+                        Modal.confirm({
+                            title: t('event.editor.add.title'),
+                            content: t('event.editor.add.confirm', {
+                                participant: ot.label,
+                            }),
+                            onOk: () => {
+                                addUser(val);
+                            },
+                            onCancel: () => setSearchText(''),
+                            okText: t('generic.modal_im_sure'),
+                            cancelText: t('generic.cancel'),
+                        })
+                    }
+                />
+            </Flex>
+            <Flex gap={8} wrap="wrap" align="center" justify="center">
+                {event?.participants
+                    .sort((a, b) => a.username.localeCompare(b.username))
+                    .map((x) => (
+                        <Card className="EventEditor__Participant" key={x.iri}>
+                            <Flex
+                                justify="space-between"
+                                align="center"
+                                gap={10}
+                            >
+                                <p>{x.username}</p>
+                                <Popconfirm
+                                    title={t('event.editor.delete.title')}
+                                    description={t(
+                                        'event.editor.delete.description',
+                                        { name: x.username }
+                                    )}
+                                    onConfirm={() =>
+                                        deleteUser(x.username, x.iri)
+                                    }
+                                    okText={t('generic.modal_im_sure')}
+                                    cancelText={t('generic.cancel')}
+                                >
+                                    <Button
+                                        type="primary"
+                                        shape="circle"
+                                        icon={<IconUserX size={18} />}
+                                    />
+                                </Popconfirm>
+                            </Flex>
+                        </Card>
+                    ))}
 
-            {notifCtx}
-        </Flex>
-    </>
+                {notifCtx}
+            </Flex>
+        </>
+    );
 }

@@ -1,13 +1,13 @@
-import { Flex, Input, Pagination, Typography } from "antd";
-import { MutableRefObject, ReactNode, useEffect, useState } from "react";
-import { useAsyncEffect, useDebounce } from "ahooks";
+import { Flex, Input, Pagination, Typography } from 'antd';
+import { MutableRefObject, ReactNode, useEffect, useState } from 'react';
+import { useAsyncEffect, useDebounce } from 'ahooks';
 
-import { Collection } from "../sdk/responses/collection";
-import Loader from "./Loader";
+import { Collection } from '../sdk/responses/collection';
+import Loader from './Loader';
 
-import useNotification from "antd/es/notification/useNotification";
-import { useSearchParams } from "react-router-dom";
-import { useTranslation } from "react-i18next";
+import useNotification from 'antd/es/notification/useNotification';
+import { useSearchParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 type Props<T> = {
     searchParameterName?: string | null;
@@ -63,7 +63,7 @@ export default function SearchablePaginatedList<T>(props: Props<T>) {
     const refresh = async () => {
         try {
             const results = await doSearch(debouncedSearch, ctx.page);
-            setCtx(oldCtx => ({ ...oldCtx, loading: false, results }));
+            setCtx((oldCtx) => ({ ...oldCtx, loading: false, results }));
         } catch (e) {
             console.error(e);
             notif.error({
@@ -74,18 +74,18 @@ export default function SearchablePaginatedList<T>(props: Props<T>) {
     };
 
     useAsyncEffect(async () => {
-        const params: any = { }
+        const params: any = {};
         if (ctx.page > 1) {
             params['page'] = ctx.page + '';
         }
 
         if (ctx.search) {
-            params[searchParameterName ?? 'search'] = ctx.search
+            params[searchParameterName ?? 'search'] = ctx.search;
         }
 
         setSearchParams(params);
 
-        setCtx(oldCtx => ({ ...oldCtx, loading: true }));
+        setCtx((oldCtx) => ({ ...oldCtx, loading: true }));
 
         await refresh();
     }, [debouncedSearch, ctx.page]);
@@ -96,48 +96,68 @@ export default function SearchablePaginatedList<T>(props: Props<T>) {
         }
     }, []);
 
-    return <Flex vertical style={{ flex: '100%', overflow: 'auto' }} gap={8}>
-        {
-            props.showSearch === undefined || props.showSearch === true
-            && <Flex gap={8}>
-                <Input
-                    placeholder={t(searchTranslationKey ?? 'generic.search')}
-                    value={ctx.search}
-                    onChange={x => setCtx(old => ({ ...old, search: x.target.value, page: 1 }))}
-                />
-                {extraFilters}
+    return (
+        <Flex vertical style={{ flex: '100%', overflow: 'auto' }} gap={8}>
+            {props.showSearch === undefined ||
+                (props.showSearch === true && (
+                    <Flex gap={8}>
+                        <Input
+                            placeholder={t(
+                                searchTranslationKey ?? 'generic.search'
+                            )}
+                            value={ctx.search}
+                            onChange={(x) =>
+                                setCtx((old) => ({
+                                    ...old,
+                                    search: x.target.value,
+                                    page: 1,
+                                }))
+                            }
+                        />
+                        {extraFilters}
+                    </Flex>
+                ))}
+
+            <Flex
+                vertical
+                gap={16}
+                align="stretch"
+                style={{ overflowY: 'auto', flex: '1' }}
+                className={classNames}
+            >
+                <Loader loading={ctx.loading}>
+                    {ctx.results?.items.length !== 0 &&
+                        ctx.results?.items.map(renderElement)}
+                    {ctx.results?.items.length === 0 && (
+                        <Typography.Title level={3}>
+                            {t(props.noResults ?? 'generic.no_results')}
+                        </Typography.Title>
+                    )}
+                </Loader>
             </Flex>
-        }
 
-        <Flex vertical gap={16} align="stretch" style={{ overflowY: 'auto', flex: '1' }} className={classNames}>
-            <Loader loading={ctx.loading}>
-                {
-                    ctx.results?.items.length !== 0
-                    && ctx.results?.items.map(renderElement)
-                }
-                {
-                    ctx.results?.items.length === 0
-                    && <Typography.Title level={3}>{t(props.noResults ?? 'generic.no_results')}</Typography.Title>
-                }
-            </Loader >
+            <Flex align="center" justify="space-between">
+                {ctx.results?.items.length !== 0 && (
+                    <Pagination
+                        align="center"
+                        total={ctx.results?.total ?? 10}
+                        pageSize={30} // @TODO: Default API platform one but we should add it to the hydra thing so that the front knows it
+                        showTotal={(total) =>
+                            t(countTranslationKey ?? 'generic.list_count', {
+                                total,
+                            })
+                        }
+                        showSizeChanger={false}
+                        current={ctx.page}
+                        onChange={(x) =>
+                            setCtx((old) => ({ ...old, page: x.valueOf() }))
+                        }
+                    />
+                )}
+                {extraActions}
+            </Flex>
+
+            {notifCtx}
         </Flex>
-
-        <Flex align="center" justify="space-between">
-            {
-                ctx.results?.items.length !== 0
-                && <Pagination
-                    align="center"
-                    total={ctx.results?.total ?? 10}
-                    pageSize={30} // @TODO: Default API platform one but we should add it to the hydra thing so that the front knows it
-                    showTotal={(total,) => t(countTranslationKey ?? 'generic.list_count', { total })}
-                    showSizeChanger={false}
-                    current={ctx.page}
-                    onChange={x => setCtx(old => ({ ...old, page: x.valueOf() }))}
-                />
-            }
-            {extraActions}
-        </Flex>
-
-        {notifCtx}
-    </Flex>
+    );
 }

@@ -1,4 +1,10 @@
-import { ReactNode, createContext, useCallback, useContext, useState } from 'react';
+import {
+    ReactNode,
+    createContext,
+    useCallback,
+    useContext,
+    useState,
+} from 'react';
 
 import Cookies from 'js-cookie';
 import { PnEvent } from '../sdk/responses/event';
@@ -48,20 +54,22 @@ type AuthContextProps = AuthProps & {
 
 const defaultProps: AuthProps = {
     loaded: false,
-    api: new SDK(BASE_URL, TOKEN, REFRESH_TOKEN, storeToken, () => storeToken(null, null)),
+    api: new SDK(BASE_URL, TOKEN, REFRESH_TOKEN, storeToken, () =>
+        storeToken(null, null)
+    ),
     user: null,
 };
 
 const AuthContext = createContext<AuthContextProps>({
     ...defaultProps,
-    login: async () => { },
-    magicLogin: async () => { },
-    setToken: () => { },
+    login: async () => {},
+    magicLogin: async () => {},
+    setToken: () => {},
     isGranted: () => false,
     isAdminOrEventOwner: () => false,
     isLoggedIn: () => false,
-    refreshUser: async () => { },
-    logout: () => { },
+    refreshUser: async () => {},
+    logout: () => {},
 });
 
 export default function AuthProvider({ children }: { children: ReactNode }) {
@@ -88,7 +96,9 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
                 setContext((oldCtx) => ({
                     ...oldCtx,
                     loaded: true,
-                    api: new SDK(BASE_URL, null, null, storeToken, () => storeToken(null, null)),
+                    api: new SDK(BASE_URL, null, null, storeToken, () =>
+                        storeToken(null, null)
+                    ),
                 }));
 
                 return;
@@ -97,7 +107,9 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
             setContext((oldCtx) => ({
                 ...oldCtx,
                 loaded: true,
-                api: new SDK(BASE_URL, token, refresh, storeToken, () => storeToken(null, null)),
+                api: new SDK(BASE_URL, token, refresh, storeToken, () =>
+                    storeToken(null, null)
+                ),
             }));
 
             localStorage.setItem('token', token);
@@ -118,7 +130,7 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
         }
 
         return context.api.tokenUser.roles.includes(role);
-    }
+    };
 
     const isAdminOrEventOwner = (event?: PnEvent | null) => {
         if (isGranted('ROLE_ADMIN')) {
@@ -130,16 +142,18 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
         }
 
         return event.owner.iri === context.api.tokenUser?.iri;
-    }
+    };
 
     const refreshUser = async () => {
         if (!context.api.tokenUser) {
             return;
         }
 
-        const user = await context.api.users.getFromIri(context.api.tokenUser.iri);
+        const user = await context.api.users.getFromIri(
+            context.api.tokenUser.iri
+        );
 
-        setContext(x => ({
+        setContext((x) => ({
             ...x,
             user,
         }));

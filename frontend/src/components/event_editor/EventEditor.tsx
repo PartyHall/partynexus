@@ -1,15 +1,15 @@
-import { Button, DatePicker, Flex, Form, Input, Typography } from "antd";
-import { FormItem } from "react-hook-form-antd";
-import ParticipantsEditor from "./ParticipantEditor";
-import { PnEvent } from "../../sdk/responses/event";
-import { ValidationErrors } from "../../sdk/responses/validation_error";
+import { Button, DatePicker, Flex, Form, Input, Typography } from 'antd';
+import { FormItem } from 'react-hook-form-antd';
+import ParticipantsEditor from './ParticipantEditor';
+import { PnEvent } from '../../sdk/responses/event';
+import { ValidationErrors } from '../../sdk/responses/validation_error';
 
-import { useAuth } from "../../hooks/auth";
-import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
-import useNotification from "antd/es/notification/useNotification";
-import { useState } from "react";
-import { useTranslation } from "react-i18next";
+import { useAuth } from '../../hooks/auth';
+import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
+import useNotification from 'antd/es/notification/useNotification';
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 type Props = {
     event: PnEvent | null;
@@ -38,7 +38,7 @@ export default function EventEditor({ event: initialEvent }: Props) {
             const resp = await api.events.upsert(data);
 
             if (isCreating) {
-                navigate(`/events/${resp?.id}/edit`)
+                navigate(`/events/${resp?.id}/edit`);
                 return;
             }
 
@@ -46,7 +46,12 @@ export default function EventEditor({ event: initialEvent }: Props) {
         } catch (e) {
             if (e instanceof ValidationErrors) {
                 // @ts-expect-error BECAUSE THIS FUCKING LANGUAGE SUCKS
-                e.errors.forEach(x => setError(x.fieldName, {type: 'custom', 'message': x.getText()}));
+                e.errors.forEach((x) =>
+                    setError(x.fieldName, {
+                        type: 'custom',
+                        message: x.getText(),
+                    })
+                );
                 return;
             }
 
@@ -58,58 +63,71 @@ export default function EventEditor({ event: initialEvent }: Props) {
         }
     };
 
-    return <Flex vertical gap={16}>
-        <Typography.Title className="blue-glow">
-            {t(isCreating ? 'event.editor.create_title' : 'event.editor.edit_title', { title: event?.name })}
-        </Typography.Title>
+    return (
+        <Flex vertical gap={16}>
+            <Typography.Title className="blue-glow">
+                {t(
+                    isCreating
+                        ? 'event.editor.create_title'
+                        : 'event.editor.edit_title',
+                    { title: event?.name }
+                )}
+            </Typography.Title>
 
-        <Form
-            style={{ width: 300, marginTop: 16, margin: 'auto' }}
-            layout='vertical'
-            onFinish={handleSubmit(doUpdateEvent)}
-        >
-            <FormItem
-                control={control}
-                name="name"
-                label={t('event.name')}
+            <Form
+                style={{ width: 300, marginTop: 16, margin: 'auto' }}
+                layout="vertical"
+                onFinish={handleSubmit(doUpdateEvent)}
             >
-                <Input disabled={formState.isSubmitting} />
-            </FormItem>
+                <FormItem control={control} name="name" label={t('event.name')}>
+                    <Input disabled={formState.isSubmitting} />
+                </FormItem>
 
-            <FormItem
-                control={control}
-                name="author"
-                label={t('event.author')}
-            >
-                <Input disabled={formState.isSubmitting} />
-            </FormItem>
+                <FormItem
+                    control={control}
+                    name="author"
+                    label={t('event.author')}
+                >
+                    <Input disabled={formState.isSubmitting} />
+                </FormItem>
 
-            <FormItem
-                control={control}
-                name="datetime"
-                label={t('event.datetime')}
-            >
-                <DatePicker disabled={formState.isSubmitting} required style={{ width: '100%' }} />
-            </FormItem>
+                <FormItem
+                    control={control}
+                    name="datetime"
+                    label={t('event.datetime')}
+                >
+                    <DatePicker
+                        disabled={formState.isSubmitting}
+                        required
+                        style={{ width: '100%' }}
+                    />
+                </FormItem>
 
-            <FormItem
-                control={control}
-                name="location"
-                label={t('event.location')}
-            >
-                <Input disabled={formState.isSubmitting} />
-            </FormItem>
+                <FormItem
+                    control={control}
+                    name="location"
+                    label={t('event.location')}
+                >
+                    <Input disabled={formState.isSubmitting} />
+                </FormItem>
 
-            <Flex align="center" justify="center" style={{ marginTop: 32 }}>
-                <Form.Item>
-                    <Button type="primary" htmlType="submit" disabled={formState.isSubmitting}>
-                        {t('generic.save')}
-                    </Button>
-                </Form.Item>
-            </Flex>
-        </Form>
+                <Flex align="center" justify="center" style={{ marginTop: 32 }}>
+                    <Form.Item>
+                        <Button
+                            type="primary"
+                            htmlType="submit"
+                            disabled={formState.isSubmitting}
+                        >
+                            {t('generic.save')}
+                        </Button>
+                    </Form.Item>
+                </Flex>
+            </Form>
 
-        { !isCreating && event && <ParticipantsEditor event={event} setEvent={setEvent} /> }
-        {ctxNotif}
-    </Flex>
+            {!isCreating && event && (
+                <ParticipantsEditor event={event} setEvent={setEvent} />
+            )}
+            {ctxNotif}
+        </Flex>
+    );
 }

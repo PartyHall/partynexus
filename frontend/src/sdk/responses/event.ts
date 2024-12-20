@@ -1,21 +1,29 @@
-import PnExport from "./export";
-import { User } from "./user";
-import dayjs from "dayjs";
+import PnExport from './export';
+import { User } from './user';
+import dayjs from 'dayjs';
 
 export class PnListEvent {
     iri: string;
     id: string;
     name: string;
-    author: string|null;
-    datetime: dayjs.Dayjs
-    location: string|null;
+    author: string | null;
+    datetime: dayjs.Dayjs;
+    location: string | null;
 
     owner: string;
 
-    constructor(iri: string, id: string, name: string, author: string|null, datetime: dayjs.Dayjs, location: string|null, owner: string) {
+    constructor(
+        iri: string,
+        id: string,
+        name: string,
+        author: string | null,
+        datetime: dayjs.Dayjs,
+        location: string | null,
+        owner: string
+    ) {
         this.iri = iri;
         this.id = id;
-        this.name = name; 
+        this.name = name;
         this.author = author;
         this.datetime = datetime;
         this.location = location;
@@ -23,7 +31,7 @@ export class PnListEvent {
         this.owner = owner;
     }
 
-    static fromJson(data: Record<string, any>|null): PnListEvent|null {
+    static fromJson(data: Record<string, any> | null): PnListEvent | null {
         if (!data) {
             return null;
         }
@@ -35,7 +43,7 @@ export class PnListEvent {
             data['author'],
             dayjs(data['datetime']),
             data['location'],
-            data['owner'],
+            data['owner']
         );
     }
 }
@@ -44,16 +52,16 @@ export class PnEvent {
     iri: string;
     id: string;
     name: string;
-    author: string|null;
-    datetime: dayjs.Dayjs
-    location: string|null;
+    author: string | null;
+    datetime: dayjs.Dayjs;
+    location: string | null;
 
     over: boolean;
 
     owner: User;
     participants: User[];
 
-    export: PnExport|null;
+    export: PnExport | null;
 
     constructor(data: Record<string, any>) {
         const owner = User.fromJson(data['owner']);
@@ -79,7 +87,7 @@ export class PnEvent {
          */
     }
 
-    static fromJson(data: Record<string, any>|null): PnEvent|null {
+    static fromJson(data: Record<string, any> | null): PnEvent | null {
         if (!data) {
             return null;
         }

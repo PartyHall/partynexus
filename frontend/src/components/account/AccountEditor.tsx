@@ -1,13 +1,13 @@
-import { Button, Flex, Form, Input, Select } from "antd";
-import { FormItem } from "react-hook-form-antd";
-import { IconDeviceFloppy } from "@tabler/icons-react";
-import { User } from "../../sdk/responses/user";
-import { ValidationErrors } from "../../sdk/responses/validation_error";
-import { useAuth } from "../../hooks/auth";
-import { useForm } from "react-hook-form";
-import useNotification from "antd/es/notification/useNotification";
-import { useState } from "react";
-import { useTranslation } from "react-i18next";
+import { Button, Flex, Form, Input, Select } from 'antd';
+import { FormItem } from 'react-hook-form-antd';
+import { IconDeviceFloppy } from '@tabler/icons-react';
+import { User } from '../../sdk/responses/user';
+import { ValidationErrors } from '../../sdk/responses/validation_error';
+import { useAuth } from '../../hooks/auth';
+import { useForm } from 'react-hook-form';
+import useNotification from 'antd/es/notification/useNotification';
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 type Props = {
     user: User;
@@ -36,7 +36,12 @@ export default function AccountEditor({ user: initialUser }: Props) {
         } catch (e) {
             if (e instanceof ValidationErrors) {
                 // @ts-expect-error BECAUSE THIS FUCKING LANGUAGE SUCKS
-                e.errors.forEach(x => setError(x.fieldName, {type: 'custom', 'message': x.getText()}));
+                e.errors.forEach((x) =>
+                    setError(x.fieldName, {
+                        type: 'custom',
+                        message: x.getText(),
+                    })
+                );
                 return;
             }
 
@@ -48,50 +53,56 @@ export default function AccountEditor({ user: initialUser }: Props) {
         }
     };
 
-    return <Form
-        style={{ width: 300 }}
-        layout='vertical'
-        onFinish={handleSubmit(doUpdateUser)}
-    >
-        <FormItem
-            control={control}
-            name="username"
-            label={t('users.editor.username')}
+    return (
+        <Form
+            style={{ width: 300 }}
+            layout="vertical"
+            onFinish={handleSubmit(doUpdateUser)}
         >
-            <Input disabled={formState.isSubmitting} />
-        </FormItem>
+            <FormItem
+                control={control}
+                name="username"
+                label={t('users.editor.username')}
+            >
+                <Input disabled={formState.isSubmitting} />
+            </FormItem>
 
-        <FormItem
-            control={control}
-            name="email"
-            label={t('users.editor.email')}
-        >
-            <Input disabled={formState.isSubmitting} />
-        </FormItem>
+            <FormItem
+                control={control}
+                name="email"
+                label={t('users.editor.email')}
+            >
+                <Input disabled={formState.isSubmitting} />
+            </FormItem>
 
-        <FormItem control={control} name="language" label={t('users.new.lang')}>
-            <Select
-                disabled={formState.isSubmitting}
-                options={[
-                    { value: 'en_US', label: 'English (American)' },
-                    { value: 'fr_FR', label: 'Français' },
-                ]}
-            />
-        </FormItem>
-
-        <Flex align="center" justify="center" style={{ marginTop: 32 }}>
-            <Form.Item>
-                <Button
-                    type="primary"
-                    htmlType="submit"
+            <FormItem
+                control={control}
+                name="language"
+                label={t('users.new.lang')}
+            >
+                <Select
                     disabled={formState.isSubmitting}
-                    icon={<IconDeviceFloppy size={20} />}
-                >
-                    {t('generic.save')}
-                </Button>
-            </Form.Item>
-        </Flex>
+                    options={[
+                        { value: 'en_US', label: 'English (American)' },
+                        { value: 'fr_FR', label: 'Français' },
+                    ]}
+                />
+            </FormItem>
 
-        {notifCtx}
-    </Form>;
+            <Flex align="center" justify="center" style={{ marginTop: 32 }}>
+                <Form.Item>
+                    <Button
+                        type="primary"
+                        htmlType="submit"
+                        disabled={formState.isSubmitting}
+                        icon={<IconDeviceFloppy size={20} />}
+                    >
+                        {t('generic.save')}
+                    </Button>
+                </Form.Item>
+            </Flex>
+
+            {notifCtx}
+        </Form>
+    );
 }

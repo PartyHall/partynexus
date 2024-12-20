@@ -39,10 +39,7 @@ class BackdropNormalizer implements NormalizerInterface
     }
 
     /**
-     * @param mixed $data
-     * @param string|null $format
      * @param array<mixed> $context
-     * @return bool
      */
     public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
     {

@@ -1,4 +1,4 @@
-import { Button, Flex, Image, Modal, Typography } from "antd";
+import { Button, Flex, Image, Modal, Typography } from 'antd';
 
 import {
     IconDownload,
@@ -6,17 +6,16 @@ import {
     IconRotateClockwise,
     IconVideo,
     IconZoomIn,
-    IconZoomOut
+    IconZoomOut,
 } from '@tabler/icons-react';
-import Loader from "../Loader";
-import PictureCard from "../PictureCard";
-import { PnEvent } from "../../sdk/responses/event";
-import PnPicture from "../../sdk/responses/picture";
-import { useAsyncEffect } from "ahooks";
-import { useAuth } from "../../hooks/auth";
-import { useState } from "react";
-import { useTranslation } from "react-i18next";
-
+import Loader from '../Loader';
+import PictureCard from '../PictureCard';
+import { PnEvent } from '../../sdk/responses/event';
+import PnPicture from '../../sdk/responses/picture';
+import { useAsyncEffect } from 'ahooks';
+import { useAuth } from '../../hooks/auth';
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 export default function EventPictureBar({ event }: { event: PnEvent }) {
     const { t } = useTranslation();
@@ -26,7 +25,9 @@ export default function EventPictureBar({ event }: { event: PnEvent }) {
 
     const [carrousel, setCarrousel] = useState<boolean>(false);
 
-    const [firstThreePictures, setFirstThreePictures] = useState<PnPicture[]>([]);
+    const [firstThreePictures, setFirstThreePictures] = useState<PnPicture[]>(
+        []
+    );
     const [pictures, setPictures] = useState<PnPicture[]>([]);
 
     useAsyncEffect(async () => {
@@ -75,68 +76,128 @@ export default function EventPictureBar({ event }: { event: PnEvent }) {
 
     // @TODO: Tooltip on iconbar in the picture displayer
 
-    return <Flex vertical gap={8}>
-        <Typography.Title className="red-glow ml1-2">{t('event.pictures.title')}</Typography.Title>
-        <Loader loading={loadingPictures}>
-            <Flex gap={8} align="center" justify="start" style={{ overflowX: 'auto' }}> {/* @TODO: scroll not working */}
-                {
-                    pictures.length > 0 && <>
-                        <Image.PreviewGroup
-                            items={pictures.map(x => `/api/pictures/${x.id}/download`)}
-                            preview={{
-                                visible: carrousel,
-                                onVisibleChange: (val) => setCarrousel(val),
-                                toolbarRender: (
-                                    _,
-                                    {
-                                        transform: { scale },
-                                        actions: { onRotateLeft, onRotateRight, onZoomOut, onZoomIn },
-                                        image: { url }
-                                    },
-                                ) => (
-                                    <Flex gap={16} className="ant-image-preview-operations" style={{ padding: '.5em' }}>
-                                        <Button shape="circle" icon={<IconRotate size={18} />} onClick={onRotateLeft} />
-                                        <Button shape="circle" icon={<IconRotateClockwise size={18} />} onClick={onRotateRight} />
-                                        <Button shape="circle" icon={<IconZoomIn size={18} />} disabled={scale === 1} onClick={onZoomOut} />
-                                        <Button shape="circle" icon={<IconZoomOut size={18} />} disabled={scale === 50} onClick={onZoomIn} />
-                                        <Button shape="circle" icon={<IconDownload size={18} />} onClick={() => onDownload(url)} />
-                                    </Flex>
-                                ),
-                            }}
-                        >
-                            {firstThreePictures.map(x => <PictureCard key={x.id} picture={x} />)}
-                        </Image.PreviewGroup>
-                        {
-                            pictures.length !== firstThreePictures.length &&
-                            <Typography.Link onClick={() => setCarrousel(true)}>{t('event.pictures.more')}</Typography.Link>
-                        }
-                    </>
-                }
+    return (
+        <Flex vertical gap={8}>
+            <Typography.Title className="red-glow ml1-2">
+                {t('event.pictures.title')}
+            </Typography.Title>
+            <Loader loading={loadingPictures}>
+                <Flex
+                    gap={8}
+                    align="center"
+                    justify="start"
+                    style={{ overflowX: 'auto' }}
+                >
+                    {' '}
+                    {/* @TODO: scroll not working */}
+                    {pictures.length > 0 && (
+                        <>
+                            <Image.PreviewGroup
+                                items={pictures.map(
+                                    (x) => `/api/pictures/${x.id}/download`
+                                )}
+                                preview={{
+                                    visible: carrousel,
+                                    onVisibleChange: (val) => setCarrousel(val),
+                                    toolbarRender: (
+                                        _,
+                                        {
+                                            transform: { scale },
+                                            actions: {
+                                                onRotateLeft,
+                                                onRotateRight,
+                                                onZoomOut,
+                                                onZoomIn,
+                                            },
+                                            image: { url },
+                                        }
+                                    ) => (
+                                        <Flex
+                                            gap={16}
+                                            className="ant-image-preview-operations"
+                                            style={{ padding: '.5em' }}
+                                        >
+                                            <Button
+                                                shape="circle"
+                                                icon={<IconRotate size={18} />}
+                                                onClick={onRotateLeft}
+                                            />
+                                            <Button
+                                                shape="circle"
+                                                icon={
+                                                    <IconRotateClockwise
+                                                        size={18}
+                                                    />
+                                                }
+                                                onClick={onRotateRight}
+                                            />
+                                            <Button
+                                                shape="circle"
+                                                icon={<IconZoomIn size={18} />}
+                                                disabled={scale === 1}
+                                                onClick={onZoomOut}
+                                            />
+                                            <Button
+                                                shape="circle"
+                                                icon={<IconZoomOut size={18} />}
+                                                disabled={scale === 50}
+                                                onClick={onZoomIn}
+                                            />
+                                            <Button
+                                                shape="circle"
+                                                icon={
+                                                    <IconDownload size={18} />
+                                                }
+                                                onClick={() => onDownload(url)}
+                                            />
+                                        </Flex>
+                                    ),
+                                }}
+                            >
+                                {firstThreePictures.map((x) => (
+                                    <PictureCard key={x.id} picture={x} />
+                                ))}
+                            </Image.PreviewGroup>
+                            {pictures.length !== firstThreePictures.length && (
+                                <Typography.Link
+                                    onClick={() => setCarrousel(true)}
+                                >
+                                    {t('event.pictures.more')}
+                                </Typography.Link>
+                            )}
+                        </>
+                    )}
+                    {pictures.length === 0 && (
+                        <Typography.Title level={3}>
+                            {t('event.pictures.no_pictures')}
+                        </Typography.Title>
+                    )}
+                </Flex>
+            </Loader>
+            {event.export && event.export.timelapse && (
+                <Flex align="center" justify="center">
+                    <Button
+                        icon={<IconVideo />}
+                        onClick={() => setTimelapseShown(true)}
+                    >
+                        {t('event.show_timelapse_bt')}
+                    </Button>
+                </Flex>
+            )}
 
-                {
-                    pictures.length === 0 && <Typography.Title level={3}>{t('event.pictures.no_pictures')}</Typography.Title>
-                }
-            </Flex>
-        </Loader>
-        {
-            event.export && event.export.timelapse
-            && <Flex align="center" justify="center">
-                <Button icon={<IconVideo />} onClick={() => setTimelapseShown(true)}>{t('event.show_timelapse_bt')}</Button>
-            </Flex>
-        }
-
-        <Modal
-            title={t('event.pictures.timelapse')}
-            open={timelapseShown}
-            footer={[]}
-            onClose={() => setTimelapseShown(false)}
-            onCancel={() => setTimelapseShown(false)}
-        >
-            <video
-                className="timelapse_video"
-                src={`/api/events/${event.id}/timelapse`}
-                controls
-            />
-        </Modal>
-    </Flex>
+            <Modal
+                title={t('event.pictures.timelapse')}
+                open={timelapseShown}
+                footer={[]}
+                onClose={() => setTimelapseShown(false)}
+                onCancel={() => setTimelapseShown(false)}
+            >
+                <video
+                    className="timelapse_video"
+                    src={`/api/events/${event.id}/timelapse`}
+                    controls
+                />
+            </Modal>
+        </Flex>
+    );
 }

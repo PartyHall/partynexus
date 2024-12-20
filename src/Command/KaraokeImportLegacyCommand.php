@@ -22,11 +22,11 @@ use Symfony\Component\Filesystem\Path;
 class KaraokeImportLegacyCommand extends Command
 {
     public function __construct(
-        private readonly Filesystem             $fs,
-        private readonly SongCompiler           $compilator,
+        private readonly Filesystem $fs,
+        private readonly SongCompiler $compilator,
         private readonly EntityManagerInterface $emi,
         #[Autowire(env: 'SONG_EXTRACT_LOCATION')]
-        private readonly string                 $wipLocation,
+        private readonly string $wipLocation,
     ) {
         parent::__construct();
     }

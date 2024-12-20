@@ -25,10 +25,11 @@ body {
 }
 
 .blue-glow {
-    padding-left: .25em;
+    padding-left: 0.25em;
     color: #fdfdfd !important;
 
-    text-shadow: 0 0 2px #001716,
+    text-shadow:
+        0 0 2px #001716,
         0 0 3px #03edf9,
         0 0 5px #03edf9,
         0 0 8px #03edf9;
@@ -37,9 +38,10 @@ body {
 }
 
 .red-glow {
-    padding-left: .25em;
+    padding-left: 0.25em;
     color: #fff5f6 !important;
-    text-shadow: 0 0 2px #000,
+    text-shadow:
+        0 0 2px #000,
         0 0 10px #fc1f2c,
         0 0 5px #fc1f2c,
         0 0 25px #fc1f2c;
@@ -57,7 +59,7 @@ body {
 }
 
 .ml1-2 {
-    margin-left: .5em;
+    margin-left: 0.5em;
 }
 
 .timelapse_video {
@@ -101,7 +103,7 @@ body {
 
     .SongListing__pagination {
         flex-direction: column;
-        gap: .5em;
+        gap: 0.5em;
     }
 }
 
@@ -109,6 +111,6 @@ body {
     width: 200px;
 
     .ant-card-body {
-        padding: .25em 1em;
+        padding: 0.25em 1em;
     }
 }

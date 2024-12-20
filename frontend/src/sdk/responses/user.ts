@@ -1,5 +1,5 @@
-import PnAppliance from "./appliance";
-import dayjs from "dayjs";
+import PnAppliance from './appliance';
+import dayjs from 'dayjs';
 
 export class User {
     iri: string;
@@ -29,7 +29,7 @@ export class User {
     static fromArray(arr: Record<string, any>[]) {
         const users: User[] = [];
 
-        arr.forEach(x => {
+        arr.forEach((x) => {
             const user = User.fromJson(x);
             if (user) {
                 users.push(user);

@@ -1,14 +1,15 @@
-import EventEditor from "../components/event_editor/EventEditor";
-import Loader from "../components/Loader";
-import { PnEvent } from "../sdk/responses/event";
-import { SdkError } from "../sdk/responses/error";
-import { Typography } from "antd";
+import { useAsyncEffect, useTitle } from 'ahooks';
 
-import { useAsyncEffect, useTitle } from "ahooks";
-import { useAuth } from "../hooks/auth";
-import { useParams } from "react-router-dom";
-import { useState } from "react";
-import { useTranslation } from "react-i18next";
+import EventEditor from '../components/event_editor/EventEditor';
+import Loader from '../components/Loader';
+import { PnEvent } from '../sdk/responses/event';
+import { SdkError } from '../sdk/responses/error';
+import { Typography } from 'antd';
+
+import { useAuth } from '../hooks/auth';
+import { useParams } from 'react-router-dom';
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 export default function EditEventPage() {
     const { id } = useParams();
@@ -19,7 +20,10 @@ export default function EditEventPage() {
     const [loading, setLoading] = useState<boolean>(true);
     const [event, setEvent] = useState<PnEvent | null>(null);
 
-    useTitle(t('event.editor.edit_title', {title: event?.name ?? '...'}) + ' - PartyHall');
+    useTitle(
+        t('event.editor.edit_title', { title: event?.name ?? '...' }) +
+            ' - PartyHall'
+    );
 
     useAsyncEffect(async () => {
         if (!id) {
@@ -33,15 +37,21 @@ export default function EditEventPage() {
             if (e instanceof SdkError && e.status == 404) {
                 setError('not_found.event');
             } else {
-                setError('unknown')
+                setError('unknown');
             }
         }
 
         setLoading(false);
     }, [id]);
 
-    return <Loader loading={loading}>
-        {!error && event && <EventEditor event={event} />}
-        {error && <Typography.Title>{t('generic.error.' + error)}</Typography.Title>}
-    </Loader>;
+    return (
+        <Loader loading={loading}>
+            {!error && event && <EventEditor event={event} />}
+            {error && (
+                <Typography.Title>
+                    {t('generic.error.' + error)}
+                </Typography.Title>
+            )}
+        </Loader>
+    );
 }

@@ -38,6 +38,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 /**
  * @TODO: When an audio/video file is uploaded, it should be normalized
  * so that all songs have the same level
+ *
  * @see https://github.com/slhck/ffmpeg-normalize
  */
 

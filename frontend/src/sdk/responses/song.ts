@@ -1,6 +1,6 @@
-import { Collection } from "./collection";
-import { User } from "./user";
-import dayjs from "dayjs";
+import { Collection } from './collection';
+import { User } from './user';
+import dayjs from 'dayjs';
 
 export default class PnSong {
     iri: string;
@@ -21,10 +21,10 @@ export default class PnSong {
     vocals: boolean;
     full: boolean;
 
-    instrumentalUrl: string|null;
-    cdgFileUploaded: boolean|null;
-    vocalsUrl: string|null;
-    combinedUrl: string|null;
+    instrumentalUrl: string | null;
+    cdgFileUploaded: boolean | null;
+    vocalsUrl: string | null;
+    combinedUrl: string | null;
 
     constructor(jsonData: Record<string, any>) {
         this.iri = jsonData['@id'];
@@ -48,7 +48,7 @@ export default class PnSong {
         this.combinedUrl = jsonData['combinedUrl'] ?? false;
     }
 
-    public static fromJson(data: Record<string,any>|null): PnSong|null {
+    public static fromJson(data: Record<string, any> | null): PnSong | null {
         if (!data) {
             return null;
         }
@@ -56,20 +56,22 @@ export default class PnSong {
         return new PnSong(data);
     }
 
-    public static fromCollection(data: Record<string, any>|null): Collection<PnSong>|null {
+    public static fromCollection(
+        data: Record<string, any> | null
+    ): Collection<PnSong> | null {
         if (!data) {
             return null;
         }
 
-        return Collection.fromJson<PnSong>(data, x => PnSong.fromJson(x));
+        return Collection.fromJson<PnSong>(data, (x) => PnSong.fromJson(x));
     }
 }
 
 export class PnExternalSong {
     id: string;
-    title: string|null;
-    artist: string|null;
-    cover: string|null;
+    title: string | null;
+    artist: string | null;
+    cover: string | null;
 
     constructor(data: Record<string, any>) {
         this.id = data['id'];
@@ -78,7 +80,7 @@ export class PnExternalSong {
         this.cover = data['cover'];
     }
 
-    static fromJson(data: Record<string, any>|null): PnExternalSong|null {
+    static fromJson(data: Record<string, any> | null): PnExternalSong | null {
         if (!data) {
             return null;
         }
@@ -86,12 +88,16 @@ export class PnExternalSong {
         return new PnExternalSong(data);
     }
 
-    public static fromCollection(data: Record<string, any>|null): Collection<PnExternalSong>|null {
+    public static fromCollection(
+        data: Record<string, any> | null
+    ): Collection<PnExternalSong> | null {
         if (!data) {
             return null;
         }
 
-        return Collection.fromJson<PnExternalSong>(data, x => PnExternalSong.fromJson(x));
+        return Collection.fromJson<PnExternalSong>(data, (x) =>
+            PnExternalSong.fromJson(x)
+        );
     }
 }
 
@@ -99,9 +105,9 @@ export class PnSongRequest {
     id: number;
     title: string;
     artist: string;
-    requestedBy: User|null;
+    requestedBy: User | null;
     createdAt: dayjs.Dayjs;
-    updatedAt: dayjs.Dayjs|null;
+    updatedAt: dayjs.Dayjs | null;
 
     constructor(data: Record<string, any>) {
         this.id = data['id'];
@@ -112,7 +118,7 @@ export class PnSongRequest {
         this.updatedAt = dayjs(data['updatedAt']);
     }
 
-    static fromJson(data: Record<string, any>|null) {
+    static fromJson(data: Record<string, any> | null) {
         if (!data) {
             return null;
         }
@@ -125,9 +131,9 @@ export class PnSongSession {
     id: number;
     title: string;
     artist: string;
-    song: string|null;
+    song: string | null;
     singer: string;
-    applianceId: number|null;
+    applianceId: number | null;
     sungAt: dayjs.Dayjs;
 
     constructor(data: Record<string, any>) {
@@ -140,7 +146,7 @@ export class PnSongSession {
         this.sungAt = dayjs(data['sungAt']);
     }
 
-    static fromJson(data: Record<string, any>|null) {
+    static fromJson(data: Record<string, any> | null) {
         if (!data) {
             return null;
         }
