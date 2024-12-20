@@ -56,9 +56,8 @@ export default function SongEditorForm({ isCreating, song, setSong }: Props) {
             setSong(resp);
         } catch (e) {
             if (e instanceof ValidationErrors) {
-                // @ts-expect-error BECAUSE THIS FUCKING LANGUAGE SUCKS
                 e.errors.forEach((x) =>
-                    setError(x.fieldName, {
+                    setError(x.fieldName as keyof PnSong, {
                         type: 'custom',
                         message: x.getText(),
                     })

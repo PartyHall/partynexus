@@ -45,9 +45,8 @@ export default function EventEditor({ event: initialEvent }: Props) {
             setEvent(resp);
         } catch (e) {
             if (e instanceof ValidationErrors) {
-                // @ts-expect-error BECAUSE THIS FUCKING LANGUAGE SUCKS
                 e.errors.forEach((x) =>
-                    setError(x.fieldName, {
+                    setError(x.fieldName as keyof PnEvent, {
                         type: 'custom',
                         message: x.getText(),
                     })

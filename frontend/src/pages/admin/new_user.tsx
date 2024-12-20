@@ -48,9 +48,8 @@ export default function AdminNewUserPage() {
             reset();
         } catch (e: any) {
             if (e instanceof ValidationErrors) {
-                // @ts-expect-error BECAUSE THIS FUCKING LANGUAGE SUCKS
                 e.errors.forEach((x) =>
-                    setError(x.fieldName, {
+                    setError(x.fieldName as keyof UserCreationProps, {
                         type: 'custom',
                         message: x.getText(),
                     })

@@ -50,8 +50,7 @@ export default function ApplianceEditor({
         } catch (e) {
             if (e instanceof ValidationErrors) {
                 e.errors.forEach((x) =>
-                    // @ts-expect-error BECAUSE THIS FUCKING LANGUAGE SUCKS
-                    setError(x.fieldName, {
+                    setError(x.fieldName as keyof PnAppliance, {
                         type: 'custom',
                         message: x.getText(),
                     })
