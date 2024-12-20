@@ -50,6 +50,8 @@ export default function SongEditor({ song: initialSong }: Props) {
         setCompileInProgress(false);
     };
 
+    const songFormat = song?.format?.toLowerCase();
+
     return <Flex vertical gap={16}>
         <Typography.Title className="blue-glow">
             {t(isCreating ? 'karaoke.editor.title_new' : 'karaoke.editor.title_edit', { title: song?.title })}
@@ -68,8 +70,8 @@ export default function SongEditor({ song: initialSong }: Props) {
                             <SongFileUploader
                                 type="instrumental"
                                 song={song}
-                                mimetypes={song.format?.toLowerCase() === 'video' ? ['video/webm'] : ['audio/mpeg']}
-                                extensions={song.format?.toLowerCase() === 'video' ? ['.webm'] : ['.mp3']}
+                                mimetypes={songFormat === 'video' || songFormat === 'transparent_video' ? ['video/webm'] : ['audio/mpeg']}
+                                extensions={songFormat === 'video' || songFormat === 'transparent_video' ? ['.webm'] : ['.mp3']}
                             />
                             {
                                 song?.format === 'cdg' &&

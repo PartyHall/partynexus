@@ -3,7 +3,9 @@
 namespace App\Serializer;
 
 use App\Entity\Song;
+use App\Enum\SongFormat;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Component\Filesystem\Path;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Vich\UploaderBundle\Storage\StorageInterface;
@@ -12,11 +14,18 @@ class SongNormalizer implements NormalizerInterface
 {
     private const string ALREADY_CALLED = 'SONG_NORMALIZER_ALREADY_CALLED';
 
+    private string $baseUrl;
+
     public function __construct(
         #[Autowire(service: 'api_platform.jsonld.normalizer.item')]
         private readonly NormalizerInterface $normalizer,
+        #[Autowire(env: 'PUBLIC_URL')]
+        string $baseUrl,
+        #[Autowire(env: 'SONG_EXTRACT_LOCATION')]
+        private string $wipLocation,
         private readonly StorageInterface $storage,
     ) {
+        $this->baseUrl = \rtrim($baseUrl, '/');
     }
 
     /**
@@ -32,6 +41,27 @@ class SongNormalizer implements NormalizerInterface
         $context[self::ALREADY_CALLED] = true;
 
         $object->coverUrl = $this->storage->resolveUri($object, 'coverFile');
+
+        // @TODO: Remove when I'll be using a custom Api Resource
+        if (!$object->getNexusBuildId()) {
+            $ext = SongFormat::CDG === $object->getFormat() ? 'mp3' : 'webm';
+
+            if (\file_exists(Path::join($this->wipLocation, $object->getId(), "instrumental.$ext"))) {
+                $object->instrumentalUrl = $this->baseUrl.'/api/song_file/'.$object->getId().'/instrumental.'.$ext;
+            }
+
+            if (\file_exists(Path::join($this->wipLocation, $object->getId(), 'vocals.mp3'))) {
+                $object->vocalsUrl = $this->baseUrl.'/api/song_file/'.$object->getId().'/vocals.mp3';
+            }
+
+            if (\file_exists(Path::join($this->wipLocation, $object->getId(), 'full.mp3'))) {
+                $object->combinedUrl = $this->baseUrl.'/api/song_file/'.$object->getId().'/full.mp3';
+            }
+
+            if (SongFormat::CDG === $object->getFormat()) {
+                $object->cdgFileUploaded = \file_exists(Path::join($this->wipLocation, $object->getId(), 'lyrics.cdg'));
+            }
+        }
 
         return $this->normalizer->normalize($object, $format, $context);
     }

@@ -5,7 +5,7 @@ namespace App\Command;
 use App\Entity\Song;
 use App\Enum\SongFormat;
 use App\Enum\SongQuality;
-use App\Service\SongCompilator;
+use App\Service\SongCompiler;
 use App\Utils\DirectoryUtils;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -22,11 +22,11 @@ use Symfony\Component\Filesystem\Path;
 class KaraokeImportLegacyCommand extends Command
 {
     public function __construct(
-        private readonly Filesystem $fs,
-        private readonly SongCompilator $compilator,
+        private readonly Filesystem             $fs,
+        private readonly SongCompiler           $compilator,
         private readonly EntityManagerInterface $emi,
         #[Autowire(env: 'SONG_EXTRACT_LOCATION')]
-        private readonly string $wipLocation,
+        private readonly string                 $wipLocation,
     ) {
         parent::__construct();
     }

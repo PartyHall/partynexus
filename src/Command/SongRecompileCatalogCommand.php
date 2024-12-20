@@ -4,7 +4,7 @@ namespace App\Command;
 
 use App\Entity\Song;
 use App\Repository\SongRepository;
-use App\Service\SongCompilator;
+use App\Service\SongCompiler;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -16,7 +16,7 @@ class SongRecompileCatalogCommand extends Command
 {
     public function __construct(
         private readonly SongRepository $repository,
-        private readonly SongCompilator $compilator,
+        private readonly SongCompiler   $compilator,
     ) {
         parent::__construct();
     }

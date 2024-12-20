@@ -159,6 +159,7 @@
             },
             "upload": {
                 "choose_bt": "Choose a file",
+                "no_file_uploaded": "No file uploaded",
                 "bad_format": {
                     "title": "The format is invalid",
                     "description": "Please use the correct format depending on the file you want to upload"

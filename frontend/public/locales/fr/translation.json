@@ -160,6 +160,7 @@
             },
             "upload": {
                 "choose_bt": "Choisir un fichier",
+                "no_file_uploaded": "Pas de fichier téléversé",
                 "bad_format": {
                     "title": "Le format est invalide",
                     "description": "Merci d'utiliser le bon format en fonction du fichier."

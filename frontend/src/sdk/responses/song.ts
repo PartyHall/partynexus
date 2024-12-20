@@ -21,6 +21,11 @@ export default class PnSong {
     vocals: boolean;
     full: boolean;
 
+    instrumentalUrl: string|null;
+    cdgFileUploaded: boolean|null;
+    vocalsUrl: string|null;
+    combinedUrl: string|null;
+
     constructor(jsonData: Record<string, any>) {
         this.iri = jsonData['@id'];
         this.id = jsonData['id'];
@@ -36,6 +41,11 @@ export default class PnSong {
         this.ready = jsonData['ready'];
         this.vocals = jsonData['vocals'];
         this.full = jsonData['combined'];
+
+        this.instrumentalUrl = jsonData['instrumentalUrl'] ?? null;
+        this.cdgFileUploaded = jsonData['cdgFileUploaded'] ?? false;
+        this.vocalsUrl = jsonData['vocalsUrl'] ?? false;
+        this.combinedUrl = jsonData['combinedUrl'] ?? false;
     }
 
     public static fromJson(data: Record<string,any>|null): PnSong|null {
