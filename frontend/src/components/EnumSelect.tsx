@@ -1,9 +1,9 @@
-import Loader from "./Loader";
+import Loader from './Loader';
 
-import { Select } from "antd";
-import { useAsyncEffect } from "ahooks";
-import { useAuth } from "../hooks/auth";
-import { useState } from "react";
+import { Select } from 'antd';
+import { useAsyncEffect } from 'ahooks';
+import { useAuth } from '../hooks/auth';
+import { useState } from 'react';
 
 /**
  * @TODO later
@@ -26,14 +26,16 @@ export default function EnumSelect({ enumName, disabled }: Props) {
         const data = await resp.json();
 
         setEnumValues(
-            data['member'].map((x: any) => ({ value: x['value'], label: x['name'] })),
+            data['member'].map((x: any) => ({
+                value: x['value'],
+                label: x['name'],
+            }))
         );
     }, [enumName]);
 
-    return <Loader loading={enumValues === null}>
-        {
-            enumValues &&
-            <Select disabled={disabled} options={enumValues} />
-        }
-    </Loader>;
+    return (
+        <Loader loading={enumValues === null}>
+            {enumValues && <Select disabled={disabled} options={enumValues} />}
+        </Loader>
+    );
 }

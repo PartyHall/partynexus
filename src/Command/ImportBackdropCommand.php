@@ -2,8 +2,6 @@
 
 namespace App\Command;
 
-use App\Entity\BackdropAlbum;
-use App\Repository\BackdropAlbumRepository;
 use App\Service\BackdropManager;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;

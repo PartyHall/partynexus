@@ -92,6 +92,10 @@ class SongUploadFileController extends AbstractController
                 } else {
                     $ext = 'webm';
                 }
+            } elseif ('lyrics' === $filetype) {
+                $ext = 'cdg';
+                $outFile = Path::join($this->wipLocation, \sprintf('%s/lyrics.cdg', $song->getId()));
+                $this->fs->remove($outFile);
             } else {
                 $ext = 'mp3';
                 $this->fs->remove(Path::join(

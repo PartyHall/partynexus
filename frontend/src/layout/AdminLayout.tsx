@@ -1,10 +1,10 @@
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useNavigate } from 'react-router-dom';
 
-import { useAuth } from "../hooks/auth";
-import { useEffect } from "react";
+import { useAuth } from '../hooks/auth';
+import { useEffect } from 'react';
 
 export default function AdminLayout() {
-    const {isGranted, api} = useAuth();
+    const { isGranted, api } = useAuth();
     const navigate = useNavigate();
 
     useEffect(() => {

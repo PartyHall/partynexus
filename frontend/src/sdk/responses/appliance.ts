@@ -1,11 +1,11 @@
-import dayjs from "dayjs";
+import dayjs from 'dayjs';
 
 export default class PnAppliance {
     id: number;
     name: string;
     hardwareId: string;
     apiToken: string;
-    lastSeen: dayjs.Dayjs|null;
+    lastSeen: dayjs.Dayjs | null;
 
     constructor(data: Record<string, any>) {
         this.id = data['id'];
@@ -15,7 +15,7 @@ export default class PnAppliance {
         this.lastSeen = data['lastSeen'] ? dayjs(data['lastSeen']) : null;
     }
 
-    static fromJson(data: Record<string, any>|null) {
+    static fromJson(data: Record<string, any> | null) {
         if (!data) {
             return data;
         }
@@ -23,13 +23,13 @@ export default class PnAppliance {
         return new PnAppliance(data);
     }
 
-    static fromArray(data: Record<string, any>[]|null) {
+    static fromArray(data: Record<string, any>[] | null) {
         if (!data) {
             return [];
         }
 
-        const appliances = data.map(x => PnAppliance.fromJson(x));
+        const appliances = data.map((x) => PnAppliance.fromJson(x));
 
-        return appliances.filter(x => !!x);
+        return appliances.filter((x) => !!x);
     }
 }

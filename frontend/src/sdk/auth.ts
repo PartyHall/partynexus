@@ -1,5 +1,5 @@
-import { AuthResponse } from "./responses/auth";
-import { SDK } from ".";
+import { AuthResponse } from './responses/auth';
+import { SDK } from '.';
 
 export default class Auth {
     private sdk: SDK;
@@ -9,34 +9,25 @@ export default class Auth {
     }
 
     async login(username: string, password: string): Promise<AuthResponse> {
-        const data = await this.sdk.post(
-            '/api/login',
-            {
-                'username': username,
-                'password': password,
-            },
-        );
+        const data = await this.sdk.post('/api/login', {
+            username: username,
+            password: password,
+        });
 
         return await data.json();
     }
 
     async magicLoginRequest(email: string): Promise<Response> {
-        return await this.sdk.post(
-            '/api/magic-login',
-            { 'email': email },
-        );
+        return await this.sdk.post('/api/magic-login', { email: email });
     }
 
     async magicLogin(email: string, code: string): Promise<AuthResponse> {
         try {
-            const data = await this.sdk.post(
-                '/api/magic-login-callback',
-                {
-                    'email': email,
-                    'code': code,
-                },
-            );
-    
+            const data = await this.sdk.post('/api/magic-login-callback', {
+                email: email,
+                code: code,
+            });
+
             return await data.json();
         } catch (e) {
             if ((e as any).status === 409) {
@@ -53,12 +44,9 @@ export default class Auth {
     }
 
     async refresh(refreshToken: string): Promise<AuthResponse> {
-        const data = await this.sdk.post(
-            '/api/refresh',
-            {
-                'refresh_token': refreshToken,
-            },
-        );
+        const data = await this.sdk.post('/api/refresh', {
+            refresh_token: refreshToken,
+        });
 
         return await data.json();
     }

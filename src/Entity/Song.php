@@ -36,6 +36,13 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  */
 
 /**
+ * @TODO: When an audio/video file is uploaded, it should be normalized
+ * so that all songs have the same level
+ *
+ * @see https://github.com/slhck/ffmpeg-normalize
+ */
+
+/**
  * @see App\Doctrine\FilterSongOnReadinessExtension
  */
 #[ApiResource(
@@ -256,6 +263,19 @@ class Song implements HasTimestamps
         self::API_GET_COLLECTION,
     ])]
     private bool $combined = false;
+
+    // @TODO: Those should be a get item custom api resource
+    #[Groups([self::API_GET_ITEM])]
+    public ?string $instrumentalUrl = null;
+
+    #[Groups([self::API_GET_ITEM])]
+    public ?bool $cdgFileUploaded = null;
+
+    #[Groups([self::API_GET_ITEM])]
+    public ?string $vocalsUrl = null;
+
+    #[Groups([self::API_GET_ITEM])]
+    public ?string $combinedUrl = null;
 
     public function __construct()
     {

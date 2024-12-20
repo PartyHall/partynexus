@@ -14,7 +14,7 @@ use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Uid\Uuid;
 
-readonly class SongCompilator
+readonly class SongCompiler
 {
     public function __construct(
         private Filesystem $fs,

@@ -1,20 +1,20 @@
-import { Button, Collapse, Flex, Typography } from "antd";
-import { useAsyncEffect, useTitle } from "ahooks";
-import { useNavigate, useParams } from "react-router-dom"
+import { Button, Collapse, Flex, Typography } from 'antd';
+import { useAsyncEffect, useTitle } from 'ahooks';
+import { useNavigate, useParams } from 'react-router-dom';
 
-import EventActionBar from "../components/event_display/EventActionBar";
-import EventExportBar from "../components/event_display/EventExportBar";
-import EventInfos from "../components/event_display/EventInfos";
-import EventPictureBar from "../components/event_display/EventPictureBar";
-import EventSongs from "../components/event_display/EventSongs";
+import EventActionBar from '../components/event_display/EventActionBar';
+import EventExportBar from '../components/event_display/EventExportBar';
+import EventInfos from '../components/event_display/EventInfos';
+import EventPictureBar from '../components/event_display/EventPictureBar';
+import EventSongs from '../components/event_display/EventSongs';
 
-import { IconEdit } from "@tabler/icons-react";
-import Loader from "../components/Loader";
-import { PnEvent } from "../sdk/responses/event";
-import { SdkError } from "../sdk/responses/error";
-import { useAuth } from "../hooks/auth";
-import { useState } from "react";
-import { useTranslation } from "react-i18next";
+import { IconEdit } from '@tabler/icons-react';
+import Loader from '../components/Loader';
+import { PnEvent } from '../sdk/responses/event';
+import { SdkError } from '../sdk/responses/error';
+import { useAuth } from '../hooks/auth';
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 export default function ShowEventPage() {
     const { id } = useParams();
@@ -44,7 +44,7 @@ export default function ShowEventPage() {
             if (e instanceof SdkError && e.status == 404) {
                 setError('not_found.event');
             } else {
-                setError('unknown')
+                setError('unknown');
             }
         }
         setLoading(false);
@@ -57,42 +57,63 @@ export default function ShowEventPage() {
         infosItems.push({
             key: 'infos',
             label: t('event.infos'),
-            children: <EventInfos event={event} displayOwnerStuff={displayOwnerStuff} />
-        })
+            children: (
+                <EventInfos
+                    event={event}
+                    displayOwnerStuff={displayOwnerStuff}
+                />
+            ),
+        });
     }
 
     if (isAdminOrEventOwner(event) && event?.export) {
         infosItems.push({
             key: 'export',
             label: t('event.export.title'),
-            children: <EventExportBar pnExport={event.export} />
+            children: <EventExportBar pnExport={event.export} />,
         });
     }
 
-    return <Loader loading={loading}>
-        {
-            error && <Typography.Title>{t('generic.error.' + error)}</Typography.Title>
-        }
-        {
-            !error && event && <>
-                <Flex justify="space-between" align="center" style={{ marginRight: '1em' }}>
-                    <Typography.Title className="blue-glow">{event.name}</Typography.Title>
-                    {
-                        displayOwnerStuff && <Button
-                            onClick={() => navigate(`/events/${event.id}/edit`)}
-                            icon={<IconEdit size={20}/>}
-                        >
-                            {t('event.edit')}
-                        </Button>
-                    }
-                </Flex>
+    return (
+        <Loader loading={loading}>
+            {error && (
+                <Typography.Title>
+                    {t('generic.error.' + error)}
+                </Typography.Title>
+            )}
+            {!error && event && (
+                <>
+                    <Flex
+                        justify="space-between"
+                        align="center"
+                        style={{ marginRight: '1em' }}
+                    >
+                        <Typography.Title className="blue-glow">
+                            {event.name}
+                        </Typography.Title>
+                        {displayOwnerStuff && (
+                            <Button
+                                onClick={() =>
+                                    navigate(`/events/${event.id}/edit`)
+                                }
+                                icon={<IconEdit size={20} />}
+                            >
+                                {t('event.edit')}
+                            </Button>
+                        )}
+                    </Flex>
 
-                <Collapse items={infosItems} defaultActiveKey={'infos'} />
-                <EventActionBar event={event} setEvent={setEvent} displayOwnerStuff={displayOwnerStuff} />
-                <EventPictureBar event={event} />
+                    <Collapse items={infosItems} defaultActiveKey={'infos'} />
+                    <EventActionBar
+                        event={event}
+                        setEvent={setEvent}
+                        displayOwnerStuff={displayOwnerStuff}
+                    />
+                    <EventPictureBar event={event} />
 
-                <EventSongs event={event} />
-            </>
-        }
-    </Loader >
+                    <EventSongs event={event} />
+                </>
+            )}
+        </Loader>
+    );
 }

@@ -1,14 +1,16 @@
-import ValidationError, { ValidationErrors } from "./responses/validation_error";
-import { Appliances } from "./appliances";
-import Auth from "./auth";
-import { Events } from "./events";
-import Karaoke from "./karaoke";
-import { PnTokenUser } from "./responses/auth";
-import { SdkError } from "./responses/error";
-import Users from "./users";
+import ValidationError, {
+    ValidationErrors,
+} from './responses/validation_error';
+import { Appliances } from './appliances';
+import Auth from './auth';
+import { Backdrops } from './backdrops';
+import { Events } from './events';
+import Karaoke from './karaoke';
+import { PnTokenUser } from './responses/auth';
+import { SdkError } from './responses/error';
+import Users from './users';
 
-import dayjs from "dayjs";
-import { Backdrops } from "./backdrops";
+import dayjs from 'dayjs';
 
 export type StoreToken = (
     token: string | null,
@@ -40,7 +42,7 @@ export class SDK {
         token: string | null,
         refreshToken: string | null,
         storeToken?: StoreToken,
-        onExpired?: OnExpired,
+        onExpired?: OnExpired
     ) {
         this.baseUrl = baseUrl.replace(/\/$/, '');
         this.token = token;
@@ -167,7 +169,7 @@ export class SDK {
         }
 
         options['method'] = 'PUT';
-        return await this.request(url, options)
+        return await this.request(url, options);
     }
 
     async delete(url: string) {
@@ -183,7 +185,10 @@ export class SDK {
 
         data.violations.forEach((x: any) => {
             if (!Object.keys(errors).includes(x.propertyPath)) {
-                errors[x.propertyPath] = new ValidationError(x.propertyPath, []);
+                errors[x.propertyPath] = new ValidationError(
+                    x.propertyPath,
+                    []
+                );
             }
 
             errors[x.propertyPath].errors.push(x.message);
@@ -229,10 +234,7 @@ export class SDK {
             return;
         }
 
-        const diffSeconds = this.tokenUser.expiresAt.diff(
-            dayjs(),
-            'seconds'
-        );
+        const diffSeconds = this.tokenUser.expiresAt.diff(dayjs(), 'seconds');
 
         if (diffSeconds < 30) {
             try {

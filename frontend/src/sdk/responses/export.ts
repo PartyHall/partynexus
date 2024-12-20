@@ -1,9 +1,9 @@
-import dayjs from "dayjs";
+import dayjs from 'dayjs';
 
 export default class PnExport {
     id: number;
     startedAt: dayjs.Dayjs;
-    endedAt: dayjs.Dayjs|null;
+    endedAt: dayjs.Dayjs | null;
     progress: string;
     status: string;
     timelapse: boolean;
@@ -17,7 +17,7 @@ export default class PnExport {
         this.timelapse = data['timelapse'];
     }
 
-    static fromJson(data: Record<string, any>|null) {
+    static fromJson(data: Record<string, any> | null) {
         if (!data) {
             return null;
         }

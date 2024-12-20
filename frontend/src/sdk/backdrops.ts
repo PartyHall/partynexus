@@ -1,6 +1,6 @@
-import { Backdrop, BackdropAlbum } from "./responses/backdrop";
-import { Collection } from "./responses/collection";
-import { SDK } from ".";
+import { Backdrop, BackdropAlbum } from './responses/backdrop';
+import { Collection } from './responses/collection';
+import { SDK } from '.';
 
 export class Backdrops {
     private sdk: SDK;
@@ -9,25 +9,25 @@ export class Backdrops {
         this.sdk = sdk;
     }
 
-    async getAlbum(id: number): Promise<BackdropAlbum|null> {
+    async getAlbum(id: number): Promise<BackdropAlbum | null> {
         const resp = await this.sdk.get(`/api/backdrop_albums/${id}`);
         const data = await resp.json();
 
         return BackdropAlbum.fromJson(data);
     }
 
-    async getAlbums(): Promise<Collection<BackdropAlbum>|null> {
+    async getAlbums(): Promise<Collection<BackdropAlbum> | null> {
         const resp = await this.sdk.get(`/api/backdrop_albums`);
         const data = await resp.json();
 
-        return Collection.fromJson(data, x => BackdropAlbum.fromJson(x));
+        return Collection.fromJson(data, (x) => BackdropAlbum.fromJson(x));
     }
 
     async createAlbum(album: BackdropAlbum) {
         const resp = await this.sdk.post(`/api/backdrop_albums`, {
-            'title': album.title,
-            'author': album.author,
-            'version': album.version,
+            title: album.title,
+            author: album.author,
+            version: album.version,
         });
 
         const data = await resp.json();
@@ -37,9 +37,9 @@ export class Backdrops {
 
     async updateAlbum(album: BackdropAlbum) {
         const resp = await this.sdk.patch(`/api/backdrop_albums/${album.id}`, {
-            'title': album.title,
-            'author': album.author,
-            'version': album.version,
+            title: album.title,
+            author: album.author,
+            version: album.version,
         });
 
         const data = await resp.json();
@@ -59,15 +59,19 @@ export class Backdrops {
         await this.sdk.delete(`/api/backdrop_albums/${albumId}`);
     }
 
-    async getBackdrops(albumId: number): Promise<Collection<Backdrop>|null> {
-        const resp = await this.sdk.get(`/api/backdrop_albums/${albumId}/backdrops`);
+    async getBackdrops(albumId: number): Promise<Collection<Backdrop> | null> {
+        const resp = await this.sdk.get(
+            `/api/backdrop_albums/${albumId}/backdrops`
+        );
         const data = await resp.json();
 
-        return Collection.fromJson(data, x => Backdrop.fromJson(x));
+        return Collection.fromJson(data, (x) => Backdrop.fromJson(x));
     }
 
-    async getBackdrop(albumId: number, id: number): Promise<Backdrop|null> {
-        const resp = await this.sdk.get(`/api/backdrop_albums/${albumId}/backdrops/${id}`);
+    async getBackdrop(albumId: number, id: number): Promise<Backdrop | null> {
+        const resp = await this.sdk.get(
+            `/api/backdrop_albums/${albumId}/backdrops/${id}`
+        );
         const data = await resp.json();
 
         return Backdrop.fromJson(data);
@@ -83,11 +87,21 @@ export class Backdrops {
         fd.set('album', `/api/backdrop_albums/${albumId}`);
         fd.set('file', backdrop.file.originFileObj);
 
-        const resp = await this.sdk.request(
-            `/api/backdrops`,
+        const resp = await this.sdk.request(`/api/backdrops`, {
+            method: 'POST',
+            body: fd,
+        });
+
+        const data = await resp.json();
+
+        return Backdrop.fromJson(data);
+    }
+
+    async updateBackdrop(albumId: number, backdrop: Backdrop) {
+        const resp = await this.sdk.patch(
+            `/api/backdrop_albums/${albumId}/backdrops/${backdrop.id}`,
             {
-                method: 'POST',
-                body: fd,
+                title: backdrop.title,
             }
         );
 
@@ -96,17 +110,9 @@ export class Backdrops {
         return Backdrop.fromJson(data);
     }
 
-    async updateBackdrop(albumId: number, backdrop: Backdrop) {
-        const resp = await this.sdk.patch(`/api/backdrop_albums/${albumId}/backdrops/${backdrop.id}`, {
-            'title': backdrop.title,
-        });
-
-        const data = await resp.json();
-
-        return Backdrop.fromJson(data);
-    }
-
     async deleteBackdrop(albumId: number, id: number): Promise<void> {
-        await this.sdk.delete(`/api/backdrop_albums/${albumId}/backdrops/${id}`);
+        await this.sdk.delete(
+            `/api/backdrop_albums/${albumId}/backdrops/${id}`
+        );
     }
 }

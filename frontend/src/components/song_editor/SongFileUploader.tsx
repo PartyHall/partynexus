@@ -1,86 +1,126 @@
-import { Button, Card, Flex, Typography, Upload } from "antd";
-import PnSong from "../../sdk/responses/song";
-import { useAuth } from "../../hooks/auth";
-import useNotification from "antd/es/notification/useNotification";
-import { useState } from "react";
-import { useTranslation } from "react-i18next";
+import { Button, Card, Flex, Typography, Upload } from 'antd';
+import { IconCheck, IconX } from '@tabler/icons-react';
+import PnSong from '../../sdk/responses/song';
+import { useAuth } from '../../hooks/auth';
+import useNotification from 'antd/es/notification/useNotification';
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 type Props = {
     type: string;
     song: PnSong;
     mimetypes: string[];
     extensions: string[];
-}
+};
 
 /**
  * @TODO: If a file is already uploaded, we should be able to listen to it
  * (Or view it if its a video)
  */
-export default function SongFileUploader({ type, song, mimetypes, extensions }: Props) {
+export default function SongFileUploader({ type, song, extensions }: Props) {
     const [notif, notifCtx] = useNotification();
     const { api } = useAuth();
     const { t } = useTranslation();
     const [uploading, setUploading] = useState<boolean>(false);
 
-    return <Card>
-        <Flex vertical gap={8}>
-            <Typography.Title level={3} style={{ margin: 0 }}>{type}:</Typography.Title>
-            
-            {
-                /* If file not uploaded, show a message "No file selected" */
-            }
+    return (
+        <Card>
+            <Flex vertical gap={8}>
+                <Typography.Title level={3} style={{ margin: 0 }}>
+                    {type}:{' '}
+                    {type === 'lyrics' && (
+                        <>
+                            {song.cdgFileUploaded ? (
+                                <IconCheck size={20} />
+                            ) : (
+                                <IconX size={20} />
+                            )}
+                        </>
+                    )}
+                </Typography.Title>
 
-            {
-                /* If file uploaded and instrumental and format != cdg show video */
-            }
+                <Flex align="center" justify="space-around">
+                    {((type === 'instrumental' && !song.instrumentalUrl) ||
+                        (type === 'vocals' && !song.vocalsUrl) ||
+                        (type === 'full' && !song.combinedUrl)) &&
+                        t('karaoke.editor.upload.no_file_uploaded')}
+                    {type === 'instrumental' &&
+                        song.instrumentalUrl &&
+                        (song.format?.toLowerCase() === 'video' ||
+                            song.format?.toLowerCase() ===
+                                'transparent_video') && (
+                            <video
+                                style={{ width: '50%' }}
+                                controls
+                                src={song.instrumentalUrl}
+                            />
+                        )}
+                    {type === 'instrumental' &&
+                        song.instrumentalUrl &&
+                        song.format?.toLowerCase() === 'cdg' && (
+                            <audio controls src={song.instrumentalUrl} />
+                        )}
+                    {type === 'vocals' && song.vocalsUrl && (
+                        <audio controls src={song.vocalsUrl} />
+                    )}
+                    {type === 'full' && song.combinedUrl && (
+                        <audio controls src={song.combinedUrl} />
+                    )}
 
-            {
-                /* If file uploaded and != instrumental and not the cdg file show audio */
-            }
+                    <Upload
+                        accept={extensions.join(',')}
+                        showUploadList={false}
+                        /*
+          // This lib is crap, it doesn't detect the mimetype of cdg
+          // which should be at least "application/cdg"
+          beforeUpload={file => {
+            console.log(file.type)
+              const isValid = mimetypes.includes(file.type);
 
-            <Flex align="center" justify="end">
-                <Upload
-                    accept={extensions.join(',')}
-                    showUploadList={false}
-                    beforeUpload={file => {
-                        const isValid = mimetypes.includes(file.type);
+              if (!isValid) {
+                  notif.error({
+                      message: t('karaoke.editor.upload.bad_format.title'),
+                      description: t('karaoke.editor.upload.bad_format.description'),
+                  })
+              }
 
-                        if (!isValid) {
-                            notif.error({
-                                message: t('karaoke.editor.upload.bad_format.title'),
-                                description: t('karaoke.editor.upload.bad_format.description'),
-                            })
-                        }
+              return isValid;
+          }}
+           */
+                        customRequest={async (x) => {
+                            try {
+                                setUploading(true);
 
-                        return isValid;
-                    }}
-                    customRequest={async (x) => {
-                        try {
-                            setUploading(true);
+                                await api.karaoke.uploadFile(
+                                    song,
+                                    type,
+                                    x.file
+                                );
 
-                            await api.karaoke.uploadFile(
-                                song,
-                                type,
-                                x.file,
-                            );
+                                setUploading(false);
+                            } catch (e) {
+                                setUploading(false);
 
-                            setUploading(false);
-                        } catch (e) {
-                            setUploading(false);
+                                console.error(e);
+                                notif.error({
+                                    message: t(
+                                        'karaoke.editor.upload.failed.title'
+                                    ),
+                                    description: t(
+                                        'karaoke.editor.upload.failed.description'
+                                    ),
+                                });
+                            }
+                        }}
+                    >
+                        <Button disabled={song.ready || uploading}>
+                            {t('karaoke.editor.upload.choose_bt')}
+                        </Button>
+                    </Upload>
+                </Flex>
 
-                            console.error(e);
-                            notif.error({
-                                message: t('karaoke.editor.upload.failed.title'),
-                                description: t('karaoke.editor.upload.failed.description'),
-                            });
-                        }
-                    }}
-                >
-                    <Button disabled={song.ready || uploading}>{t('karaoke.editor.upload.choose_bt')}</Button>
-                </Upload>
+                {notifCtx}
             </Flex>
-
-            {notifCtx}
-        </Flex>
-    </Card>
+        </Card>
+    );
 }

@@ -2,8 +2,13 @@ import './assets/css/index.scss';
 
 import { ConfigProvider, theme } from 'antd';
 import { I18nextProvider, initReactI18next } from 'react-i18next';
-import { RouterProvider, createBrowserRouter, redirect } from 'react-router-dom';
+import {
+    RouterProvider,
+    createBrowserRouter,
+    redirect,
+} from 'react-router-dom';
 import AdminBackdropsPage from './pages/admin/backdrops.tsx';
+import AdminIndexPage from './pages/admin/index.tsx';
 import AdminLayout from './layout/AdminLayout.tsx';
 import AdminNewUserPage from './pages/admin/new_user.tsx';
 import AdminUsersPage from './pages/admin/users.tsx';
@@ -25,19 +30,17 @@ import ShowEventPage from './pages/ShowEvent.tsx';
 import SongListingPage from './pages/karaoke/SongListing.tsx';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import detector from "i18next-browser-languagedetector";
-import i18n from "i18next";
-import AdminIndexPage from './pages/admin/index.tsx';
+import detector from 'i18next-browser-languagedetector';
+import i18n from 'i18next';
 
-i18n
-    .use(Backend)
+i18n.use(Backend)
     .use(detector)
     .use(initReactI18next)
     .init({
         fallbackLng: 'en',
         interpolation: {
             escapeValue: false,
-        }
+        },
     });
 
 const router = createBrowserRouter([
@@ -63,19 +66,19 @@ const router = createBrowserRouter([
                 children: [
                     {
                         path: '',
-                        element: <AdminIndexPage />
+                        element: <AdminIndexPage />,
                     },
                     {
                         path: '/admin/users/new',
-                        element: <AdminNewUserPage />
+                        element: <AdminNewUserPage />,
                     },
                     {
                         path: '/admin/users',
-                        element: <AdminUsersPage />
+                        element: <AdminUsersPage />,
                     },
                     {
                         path: '/admin/backdrops',
-                        element: <AdminBackdropsPage />
+                        element: <AdminBackdropsPage />,
                     },
                 ],
             },
@@ -156,7 +159,7 @@ const phTheme = {
         },
         Modal: {
             contentBg: 'rgb(23,21,32)',
-        }
+        },
     },
     algorithm: [theme.darkAlgorithm, theme.compactAlgorithm],
 };

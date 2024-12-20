@@ -7,7 +7,7 @@ use ApiPlatform\Metadata\Operation;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\State\ProcessorInterface;
 use App\Entity\Song;
-use App\Service\SongCompilator;
+use App\Service\SongCompiler;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
@@ -19,7 +19,7 @@ readonly class SongCompileProcessor implements ProcessorInterface
         /** @var ProcessorInterface<object, object> $processor */
         #[Autowire(service: PersistProcessor::class)]
         private ProcessorInterface $processor,
-        private SongCompilator $compilator,
+        private SongCompiler $compilator,
     ) {
     }
 

@@ -1,17 +1,17 @@
-import { Button, Flex, Input, Pagination, Switch, Typography } from "antd";
-import { IconSquareRoundedPlus, IconZoomQuestion } from "@tabler/icons-react";
-import { useAsyncEffect, useDebounce, useTitle } from "ahooks";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { Button, Flex, Input, Pagination, Switch, Typography } from 'antd';
+import { IconSquareRoundedPlus, IconZoomQuestion } from '@tabler/icons-react';
+import { useAsyncEffect, useDebounce, useTitle } from 'ahooks';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
-import { Collection } from "../../sdk/responses/collection";
-import Loader from "../../components/Loader";
-import PnSong from "../../sdk/responses/song";
-import SongCard from "../../components/SongCard";
+import { Collection } from '../../sdk/responses/collection';
+import Loader from '../../components/Loader';
+import PnSong from '../../sdk/responses/song';
+import SongCard from '../../components/SongCard';
 
-import { useAuth } from "../../hooks/auth";
-import useNotification from "antd/es/notification/useNotification";
-import { useState } from "react";
-import { useTranslation } from "react-i18next";
+import { useAuth } from '../../hooks/auth';
+import useNotification from 'antd/es/notification/useNotification';
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 type Context = {
     loading: boolean;
@@ -47,9 +47,9 @@ export default function SongListingPage() {
     useTitle(t('karaoke.title') + ' - PartyHall');
 
     useAsyncEffect(async () => {
-        const params: any = { page: ctx.page + '' }
+        const params: any = { page: ctx.page + '' };
         if (ctx.search) {
-            params['search'] = ctx.search
+            params['search'] = ctx.search;
         }
 
         if (!ctx.ready) {
@@ -58,15 +58,19 @@ export default function SongListingPage() {
 
         setSearchParams(params);
 
-        setCtx(oldCtx => ({ ...oldCtx, loading: true }));
+        setCtx((oldCtx) => ({ ...oldCtx, loading: true }));
 
         try {
-            const songs = await api.karaoke.getCollection(ctx.page, debouncedSearch, ctx.ready);
+            const songs = await api.karaoke.getCollection(
+                ctx.page,
+                debouncedSearch,
+                ctx.ready
+            );
 
-            setCtx(oldCtx => ({
+            setCtx((oldCtx) => ({
                 ...oldCtx,
                 loading: false,
-                songs
+                songs,
             }));
         } catch (e) {
             console.error(e);
@@ -77,65 +81,93 @@ export default function SongListingPage() {
         }
     }, [debouncedSearch, ctx.page, ctx.ready]);
 
-    return <>
-        <Flex vertical style={{ height: '100%' }} gap={8}>
-            <Flex gap={8}>
-                <Input
-                    placeholder={t('karaoke.search')}
-                    value={ctx.search}
-                    onChange={x => setCtx(old => ({ ...old, search: x.target.value, page: 1 }))}
-                />
-
-                {
-                    isGranted('ROLE_ADMIN') && <Flex gap={3} align="center">
-                        <Typography style={{ width: 50 }}>Ready?</Typography>
-                        <Switch
-                            value={ctx.ready}
-                            onChange={x => setCtx(old => ({
+    return (
+        <>
+            <Flex vertical style={{ height: '100%' }} gap={8}>
+                <Flex gap={8}>
+                    <Input
+                        placeholder={t('karaoke.search')}
+                        value={ctx.search}
+                        onChange={(x) =>
+                            setCtx((old) => ({
                                 ...old,
-                                ready: x.valueOf()
-                            }))}
-                        />
-                    </Flex>
-                }
-            </Flex>
+                                search: x.target.value,
+                                page: 1,
+                            }))
+                        }
+                    />
 
-            <Flex vertical gap={16} align="stretch" style={{ overflowY: 'auto', flex: '100%' }}>
-                <span></span> {/* Bypass the :empty of antd, will be fixed once we go on SearchablePaginatedList*/}
-                <Loader loading={ctx.loading}>
-                    {ctx.songs?.items.map(x => <SongCard key={x.iri} song={x} />)}
-                </Loader >
-            </Flex>
+                    {isGranted('ROLE_ADMIN') && (
+                        <Flex gap={3} align="center">
+                            <Typography style={{ width: 50 }}>
+                                Ready?
+                            </Typography>
+                            <Switch
+                                value={ctx.ready}
+                                onChange={(x) =>
+                                    setCtx((old) => ({
+                                        ...old,
+                                        ready: x.valueOf(),
+                                    }))
+                                }
+                            />
+                        </Flex>
+                    )}
+                </Flex>
 
-            <Flex className="SongListing__pagination" align="center" justify="space-between" wrap='wrap'>
-                <Pagination
-                    align="center"
-                    total={ctx.songs?.total ?? 10}
-                    pageSize={30} // @TODO: Default API platform one but we should add it to the hydra thing so that the front knows it
-                    showTotal={(total,) => t('karaoke.song_count', { total })}
-                    showSizeChanger={false}
-                    current={ctx.page}
-                    onChange={x => setCtx(old => ({ ...old, page: x.valueOf() }))}
-                />
-
-                <Button
-                    onClick={() => navigate('/karaoke/request')}
-                    icon={<IconZoomQuestion  size={20} />}
+                <Flex
+                    vertical
+                    gap={16}
+                    align="stretch"
+                    style={{ overflowY: 'auto', flex: '100%' }}
                 >
-                    {t('karaoke.request_song')}
-                </Button>
-                {
-                    isGranted('ROLE_ADMIN') &&
-                    <Button
-                        onClick={() => navigate('/karaoke/new')}
-                        icon={<IconSquareRoundedPlus size={20} />}
-                    >
-                        {t('karaoke.new_song')}
-                    </Button>
-                }
-            </Flex>
-        </Flex>
+                    <span></span>{' '}
+                    {/* Bypass the :empty of antd, will be fixed once we go on SearchablePaginatedList*/}
+                    <Loader loading={ctx.loading}>
+                        {ctx.songs?.items.map((x) => (
+                            <SongCard key={x.iri} song={x} />
+                        ))}
+                    </Loader>
+                </Flex>
 
-        {notifHandler}
-    </>
+                <Flex
+                    className="SongListing__pagination"
+                    align="center"
+                    justify="space-between"
+                    wrap="wrap"
+                >
+                    <Pagination
+                        align="center"
+                        total={ctx.songs?.total ?? 10}
+                        pageSize={30} // @TODO: Default API platform one but we should add it to the hydra thing so that the front knows it
+                        showTotal={(total) =>
+                            t('karaoke.song_count', { total })
+                        }
+                        showSizeChanger={false}
+                        current={ctx.page}
+                        onChange={(x) =>
+                            setCtx((old) => ({ ...old, page: x.valueOf() }))
+                        }
+                    />
+
+                    <Button
+                        onClick={() => navigate('/karaoke/request')}
+                        icon={<IconZoomQuestion size={20} />}
+                    >
+                        {t('karaoke.request_song')}
+                    </Button>
+                    {isGranted('ROLE_ADMIN') && (
+                        <Button
+                            onClick={() => navigate('/karaoke/new')}
+                            icon={<IconSquareRoundedPlus size={20} />}
+                        >
+                            {t('karaoke.new_song')}
+                        </Button>
+                    )}
+                </Flex>
+            </Flex>
+
+            {notifHandler}
+        </>
+    );
 }

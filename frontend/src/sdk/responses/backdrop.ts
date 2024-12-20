@@ -1,12 +1,12 @@
-import { UploadFile } from "antd";
+import { UploadFile } from 'antd';
 
 export class BackdropAlbum {
-    id: number|null;
+    id: number | null;
     title: string;
     author: string;
     version: number;
 
-    backdrops: Backdrop[]|null;
+    backdrops: Backdrop[] | null;
 
     constructor(data?: Record<string, any>) {
         if (!data) {
@@ -27,7 +27,7 @@ export class BackdropAlbum {
         this.backdrops = Backdrop.fromArray(data['backdrops']);
     }
 
-    static fromJson(data?: Record<string, any>|null) {
+    static fromJson(data?: Record<string, any> | null) {
         if (!data) {
             return null;
         }
@@ -56,7 +56,7 @@ export class Backdrop {
         this.url = data['url'];
     }
 
-    static fromJson(data?: Record<string, any>|null) {
+    static fromJson(data?: Record<string, any> | null) {
         if (!data) {
             return null;
         }
@@ -64,11 +64,11 @@ export class Backdrop {
         return new Backdrop(data);
     }
 
-    static fromArray(data?: Record<string, any>[]|null) {
+    static fromArray(data?: Record<string, any>[] | null) {
         if (!data) {
             return null;
         }
 
-        return data.map(x => Backdrop.fromJson(x)).filter(x => !!x);
+        return data.map((x) => Backdrop.fromJson(x)).filter((x) => !!x);
     }
 }

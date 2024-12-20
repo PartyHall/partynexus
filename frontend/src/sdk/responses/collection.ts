@@ -8,13 +8,15 @@ export class Collection<T> {
         this.total = total;
     }
 
-    static fromJson<T>(data: Record<string, any> | null, parse: (x: Record<string, any> | null) => T | null): Collection<T> | null {
+    static fromJson<T>(
+        data: Record<string, any> | null,
+        parse: (x: Record<string, any> | null) => T | null
+    ): Collection<T> | null {
         if (!data) {
             return null;
         }
 
-        const items = data
-            .member
+        const items = data.member
             .map((x: Record<string, any>) => parse(x))
             .filter((x: T | null) => !!x);
 
@@ -22,9 +24,6 @@ export class Collection<T> {
     }
 
     static getEmpty<T>(): Collection<T> {
-        return new Collection<T>(
-            [],
-            0,
-        );
+        return new Collection<T>([], 0);
     }
 }
