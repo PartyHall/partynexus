@@ -12,7 +12,6 @@ export class User {
     appliances: PnAppliance[];
 
     constructor(data: Record<string, any>) {
-        console.log(data);
         this.iri = data['@id'];
         this.id = data['id'];
         this.username = data['username'];
