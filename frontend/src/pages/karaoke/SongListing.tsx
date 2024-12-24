@@ -108,6 +108,7 @@ export default function SongListingPage() {
                                     setCtx((old) => ({
                                         ...old,
                                         ready: x.valueOf(),
+                                        page: 1,
                                     }))
                                 }
                             />

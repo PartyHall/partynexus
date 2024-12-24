@@ -1,6 +1,5 @@
 import { Button, DatePicker, Flex, Form, Input, Typography } from 'antd';
 import { FormItem } from 'react-hook-form-antd';
-import ParticipantsEditor from './ParticipantEditor';
 import { PnEvent } from '../../sdk/responses/event';
 import { ValidationErrors } from '../../sdk/responses/validation_error';
 
@@ -123,9 +122,6 @@ export default function EventEditor({ event: initialEvent }: Props) {
                 </Flex>
             </Form>
 
-            {!isCreating && event && (
-                <ParticipantsEditor event={event} setEvent={setEvent} />
-            )}
             {ctxNotif}
         </Flex>
     );

@@ -23,6 +23,9 @@ class FullTextSearchFilter extends AbstractFilter implements SearchFilterInterfa
 {
     use SearchFilterTrait;
 
+    private const string ACCENTS_FROM = 'áàâäãåāăąæçćĉċčďđéèêëēĕėęěĝğġģĥħíìîïĩīĭįıĵķĺļľŀłńņňŋñóòôöõōŏőœŕŗřśŝşšţťŧúùûüũūŭůűųŵýÿŷźżžßÁÀÂÄÃÅĀĂĄÆÇĆĈĊČĎĐÉÈÊËĒĔĖĘĚĜĞĠĢĤĦÍÌÎÏĨĪĬĮİĴĶĹĻĽĿŁŃŅŇŊÑÓÒÔÖÕŌŎŐŒŔŖŘŚŜŞŠŢŤŦÚÙÛÜŨŪŬŮŰŲŴÝŸŶŹŻŽẞ';
+    private const string ACCENTS_TO = 'aaaaaaaaaaaaccccddeeeeeeeeegggghiiiiiiiijklllllnnnnnooooooooorrrssstttuuuuuuuuuwyyyzzzssaaaaaaaaaaccccddeeeeeeeeegggghiiiiiiiijklllllnnnnnooooooooorrrssstttuuuuuuuuuwyyyzzzss';
+
     public const string DOCTRINE_INTEGER_TYPE = Types::INTEGER;
 
     private const string PROPERTY_NAME = 'search';
@@ -150,33 +153,39 @@ class FullTextSearchFilter extends AbstractFilter implements SearchFilterInterfa
         $valueParameter = $queryNameGenerator->generateParameterName($field);
         $exprBuilder = $queryBuilder->expr();
 
-        $queryBuilder->setParameter($valueParameter, $value);
+        $queryBuilder
+            ->setParameter($valueParameter, $value)
+            ->setParameter('from', self::ACCENTS_FROM)
+            ->setParameter('to', self::ACCENTS_TO);
+
+        $fieldExpr = sprintf('TRANSLATE(%s.%s, :from, :to)', $alias, $field);
+        $valueExpr = sprintf('TRANSLATE(:%s, :from, :to)', $valueParameter);
 
         return match ($strategy) {
             self::STRATEGY_EXACT => $exprBuilder->eq(
-                $wrapCase("{$alias}.{$field}"),
-                $wrapCase(":{$valueParameter}"),
+                $wrapCase($fieldExpr),
+                $wrapCase($valueExpr),
             ),
             self::STRATEGY_PARTIAL => $exprBuilder->like(
-                $wrapCase("{$alias}.{$field}"),
-                $exprBuilder->concat("'%'", $wrapCase(":{$valueParameter}"), "'%'"),
+                $wrapCase($fieldExpr),
+                $exprBuilder->concat("'%'", $wrapCase($valueExpr), "'%'"),
             ),
             self::STRATEGY_START => $exprBuilder->like(
-                $wrapCase("{$alias}.{$field}"),
-                $exprBuilder->concat($wrapCase(":{$valueParameter}"), "'%'"),
+                $wrapCase($fieldExpr),
+                $exprBuilder->concat($wrapCase($valueExpr), "'%'"),
             ),
             self::STRATEGY_END => $exprBuilder->like(
-                $wrapCase("{$alias}.{$field}"),
-                $exprBuilder->concat("'%'", $wrapCase(":{$valueParameter}")),
+                $wrapCase($fieldExpr),
+                $exprBuilder->concat("'%'", $wrapCase($valueExpr)),
             ),
             self::STRATEGY_WORD_START => $exprBuilder->orX(
                 $exprBuilder->like(
-                    $wrapCase("{$alias}.{$field}"),
-                    $exprBuilder->concat($wrapCase(":{$valueParameter}"), "'%'"),
+                    $wrapCase($fieldExpr),
+                    $exprBuilder->concat($wrapCase($valueExpr), "'%'"),
                 ),
                 $exprBuilder->like(
-                    $wrapCase("{$alias}.{$field}"),
-                    $exprBuilder->concat("'%'", $wrapCase(":{$valueParameter}")),
+                    $wrapCase($fieldExpr),
+                    $exprBuilder->concat("'%'", $wrapCase($valueExpr)),
                 ),
             ),
             default => throw new \InvalidArgumentException(sprintf('strategy %s does not exist.', $strategy)),

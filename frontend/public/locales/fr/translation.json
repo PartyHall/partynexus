@@ -108,8 +108,12 @@
             "error_desc": "Une erreur est survenue lors du débannissement de l'utilisateur. Voir la console pour plus d'infos"
         },
         "editor": {
+            "edit_someone": "Éditer l'utilisateur {{username}}",
+            "authentication_logs": "Historique de connexion",
             "username": "Mon pseudo",
-            "email": "Mon email"
+            "email": "Mon email",
+            "firstname": "Prénom",
+            "lastname": "Nom de famille"
         }
     },
     "karaoke": {
@@ -232,10 +236,8 @@
                 "description": "L'évènement n'a pas été marqué conclu. Il ne sera pas exporté."
             }
         },
-        "editor": {
-            "create_title": "Créer un évènement",
-            "edit_title": "Édition de {{title}}",
-            "participants": "Participants",
+        "participants": {
+            "title": "Participants",
             "delete": {
                 "title": "Expulser un utilisateur",
                 "description": "Vous allez expulser {{name}} de l'évènement.",
@@ -259,6 +261,10 @@
                     "description": "Une erreur est survenue lors de la recherche."
                 }
             }
+        },
+        "editor": {
+            "create_title": "Créer un évènement",
+            "edit_title": "Édition de {{title}}"
         },
         "export": {
             "title": "Export",

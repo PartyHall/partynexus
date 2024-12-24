@@ -19,12 +19,14 @@ class UserFixture extends Fixture
     /**
      * @param string[] $roles
      */
-    private function createUser(int $id, string $username, array $roles = []): void
+    private function createUser(int $id, string $username, array $roles = [], ?string $firstname = null, ?string $lastname = null): void
     {
         $user = (new User())
             ->setUsername($username)
             ->setEmail($username.'@partyhall.dev')
             ->setLanguage('en_US')
+            ->setFirstname($firstname)
+            ->setLastname($lastname)
         ;
 
         foreach ($roles as $role) {
@@ -42,10 +44,15 @@ class UserFixture extends Fixture
     {
         $this->manager = $manager;
 
-        $this->createUser(1, 'admin', ['ROLE_ADMIN']);
-        $this->createUser(2, 'eventmaker', ['ROLE_ADMIN']);
+        /*
+         * At least one user with full name, one with first name only, and one without name at all
+         * to test the display on the frontend
+         */
+
+        $this->createUser(1, 'admin', ['ROLE_ADMIN'], 'Dominick', 'Cobb');
+        $this->createUser(2, 'eventmaker', ['ROLE_ADMIN'], 'Robert', 'Fischer');
         $this->createUser(3, 'user');
-        $this->createUser(4, 'noevents');
+        $this->createUser(4, 'noevents', [], 'Nash');
 
         $manager->flush();
     }

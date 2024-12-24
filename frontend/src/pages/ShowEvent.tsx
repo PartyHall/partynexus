@@ -2,9 +2,12 @@ import { Button, Collapse, Flex, Typography } from 'antd';
 import { useAsyncEffect, useTitle } from 'ahooks';
 import { useNavigate, useParams } from 'react-router-dom';
 
+import AddParticipantToolbar from '../components/event_display/AddParticipantToolbar';
+
 import EventActionBar from '../components/event_display/EventActionBar';
 import EventExportBar from '../components/event_display/EventExportBar';
 import EventInfos from '../components/event_display/EventInfos';
+import EventParticipants from '../components/event_display/EventParticipants';
 import EventPictureBar from '../components/event_display/EventPictureBar';
 import EventSongs from '../components/event_display/EventSongs';
 
@@ -26,6 +29,10 @@ export default function ShowEventPage() {
     const [loading, setLoading] = useState<boolean>(true);
     const [event, setEvent] = useState<PnEvent | null>(null);
     const [pageName, setPageName] = useState<string>(t('event.show_one'));
+
+    const [collapseActiveKey, setCollapseActiveKey] = useState<string[]>([
+        'infos',
+    ]);
 
     useTitle(pageName + ' - PartyHall');
 
@@ -54,16 +61,36 @@ export default function ShowEventPage() {
 
     const infosItems = [];
     if (event) {
-        infosItems.push({
-            key: 'infos',
-            label: t('event.infos'),
-            children: (
-                <EventInfos
-                    event={event}
-                    displayOwnerStuff={displayOwnerStuff}
-                />
-            ),
-        });
+        infosItems.push(
+            {
+                key: 'infos',
+                label: t('event.infos'),
+                children: (
+                    <EventInfos
+                        event={event}
+                        displayOwnerStuff={displayOwnerStuff}
+                    />
+                ),
+            },
+            {
+                key: 'participants',
+                label: t('event.participants.title'),
+                extra: collapseActiveKey.includes('participants') ? (
+                    <AddParticipantToolbar
+                        event={event}
+                        setEvent={(e) => setEvent(e)}
+                    />
+                ) : (
+                    <></>
+                ),
+                children: (
+                    <EventParticipants
+                        event={event}
+                        setEvent={(e) => setEvent(e)}
+                    />
+                ),
+            }
+        );
     }
 
     if (isAdminOrEventOwner(event) && event?.export) {
@@ -103,7 +130,11 @@ export default function ShowEventPage() {
                         )}
                     </Flex>
 
-                    <Collapse items={infosItems} defaultActiveKey={'infos'} />
+                    <Collapse
+                        items={infosItems}
+                        activeKey={collapseActiveKey}
+                        onChange={(keys) => setCollapseActiveKey(keys)}
+                    />
                     <EventActionBar
                         event={event}
                         setEvent={setEvent}
