@@ -1,4 +1,4 @@
-import { PnListUser, User } from './responses/user';
+import { PnListUser, User, UserAuthenticationLog } from './responses/user';
 import { Collection } from './responses/collection';
 import { SDK } from '.';
 
@@ -75,5 +75,16 @@ export default class Users {
         const data = await resp.json();
 
         return User.fromJson(data);
+    }
+
+    async getAuthenticationLogs(user: number, page: number = 1) {
+        const resp = await this.sdk.get(
+            `/api/users/${user}/auth-logs?page=${page}`
+        );
+        const data = await resp.json();
+
+        return Collection.fromJson(data, (x) =>
+            UserAuthenticationLog.fromJson(x)
+        );
     }
 }

@@ -1,13 +1,16 @@
 import { Button, Card, Flex, Popconfirm, Tooltip, Typography } from 'antd';
 import { IconArrowBackUp, IconBan } from '@tabler/icons-react';
 import { PnListUser } from '../../sdk/responses/user';
+import getUsername from '../../utils/username';
 import { useAuth } from '../../hooks/auth';
+import { useNavigate } from 'react-router-dom';
 import useNotification from 'antd/es/notification/useNotification';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 export default function UserListCard({ user: listUser }: { user: PnListUser }) {
     const [user, setUser] = useState<PnListUser>(listUser);
+    const navigate = useNavigate();
 
     const { api } = useAuth();
     const [notif, notifCtx] = useNotification();
@@ -58,11 +61,21 @@ export default function UserListCard({ user: listUser }: { user: PnListUser }) {
     return (
         <Card>
             <Flex align="center" justify="space-between">
-                <Flex vertical>
-                    <Typography.Title style={{ fontSize: '1.2em', margin: 0 }}>
-                        {user.username}
+                <Flex
+                    vertical
+                    onClick={() => {
+                        navigate(`/admin/users/${user.id}`);
+                    }}
+                >
+                    <Typography.Title
+                        style={{ fontSize: '1.2em', margin: 0 }}
+                        className="red-glow"
+                    >
+                        {getUsername(user)}
                     </Typography.Title>
-                    <Typography.Text>{user.email}</Typography.Text>
+                    <Typography.Text>
+                        {user.username} ({user.email})
+                    </Typography.Text>
                 </Flex>
 
                 {api.tokenUser?.username !== user.username && user.bannedAt && (
@@ -71,11 +84,21 @@ export default function UserListCard({ user: listUser }: { user: PnListUser }) {
                             username: user.username,
                         })}
                         description={t('users.unban.confirm.desc')}
-                        onConfirm={() => unbanUser(user.username, user.iri)}
+                        onConfirm={(e) => {
+                            unbanUser(user.username, user.iri);
+                            e?.stopPropagation();
+                        }}
+                        onCancel={(e) => e?.stopPropagation()}
                         okText={t('generic.modal_im_sure')}
                         cancelText={t('generic.cancel')}
+                        onPopupClick={(e) => e.stopPropagation()}
                     >
-                        <Flex align="center" justify="center" gap={16}>
+                        <Flex
+                            align="center"
+                            justify="center"
+                            gap={16}
+                            onClick={(e) => e.stopPropagation()}
+                        >
                             <Typography.Text>
                                 {user.bannedAt.format('YYYY-MM-DD HH:mm:ss')}
                             </Typography.Text>
@@ -93,12 +116,20 @@ export default function UserListCard({ user: listUser }: { user: PnListUser }) {
                                 username: user.username,
                             })}
                             description={t('users.ban.confirm.desc')}
-                            onConfirm={() => banUser(user.username, user.iri)}
+                            onConfirm={(e) => {
+                                banUser(user.username, user.iri);
+                                e?.stopPropagation();
+                            }}
+                            onCancel={(e) => e?.stopPropagation()}
                             okText={t('generic.modal_im_sure')}
                             cancelText={t('generic.cancel')}
+                            onPopupClick={(e) => e.stopPropagation()}
                         >
                             <Tooltip title={t('users.ban.tooltip')}>
-                                <Button icon={<IconBan size={20} />} />
+                                <Button
+                                    icon={<IconBan size={20} />}
+                                    onClick={(e) => e.stopPropagation()}
+                                />
                             </Tooltip>
                         </Popconfirm>
                     )}

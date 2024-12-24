@@ -3,15 +3,21 @@
 namespace App\EventListener;
 
 use ApiPlatform\Metadata\IriConverterInterface;
+use App\Entity\User;
+use App\Entity\UserAuthenticationLog;
+use Doctrine\ORM\EntityManagerInterface;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\JWTCreatedEvent;
 use Lexik\Bundle\JWTAuthenticationBundle\Events;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 #[AsEventListener(Events::JWT_CREATED, method: 'onJwtCreated')]
 readonly class CustomJwtListener
 {
     public function __construct(
         private IriConverterInterface $iriConverter,
+        private RequestStack $requestStack,
+        private EntityManagerInterface $entityManager,
     ) {
     }
 
@@ -23,5 +29,18 @@ readonly class CustomJwtListener
         $payload['iri'] = $this->iriConverter->getIriFromResource($user);
 
         $event->setData($payload);
+
+        if (!$user instanceof User) {
+            return;
+        }
+
+        $log = (new UserAuthenticationLog())
+            ->setUser($user)
+            ->setAuthedAt(new \DateTimeImmutable())
+            ->setIp($this->requestStack->getMainRequest()->headers->get('X-Forwarded-For'))
+        ;
+
+        $this->entityManager->persist($log);
+        $this->entityManager->flush();
     }
 }

@@ -21,6 +21,8 @@ export default function AccountEditor({ user: initialUser }: Props) {
 
     const { control, handleSubmit, setError, formState } = useForm<User>({
         defaultValues: {
+            firstname: user.firstname,
+            lastname: user.lastname,
             username: user.username,
             email: user.email,
             language: user.language,
@@ -62,6 +64,22 @@ export default function AccountEditor({ user: initialUser }: Props) {
                 control={control}
                 name="username"
                 label={t('users.editor.username')}
+            >
+                <Input disabled={formState.isSubmitting} />
+            </FormItem>
+
+            <FormItem
+                control={control}
+                name="firstname"
+                label={t('users.editor.firstname')}
+            >
+                <Input disabled={formState.isSubmitting} />
+            </FormItem>
+
+            <FormItem
+                control={control}
+                name="lastname"
+                label={t('users.editor.lastname')}
             >
                 <Input disabled={formState.isSubmitting} />
             </FormItem>

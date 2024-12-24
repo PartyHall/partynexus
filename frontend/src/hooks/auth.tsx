@@ -3,6 +3,7 @@ import {
     createContext,
     useCallback,
     useContext,
+    useEffect,
     useState,
 } from 'react';
 
@@ -158,6 +159,14 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
             user,
         }));
     };
+
+    useEffect(() => {
+        // Tries to fix the weird issue
+        // where going on the site when I've not been on it for a long time
+        // freezes on the "LOADING" instead of
+        // fetching / kicking out
+        setToken(TOKEN ?? undefined, REFRESH_TOKEN ?? undefined);
+    }, []);
 
     return (
         <AuthContext.Provider

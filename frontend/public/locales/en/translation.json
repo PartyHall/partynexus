@@ -109,8 +109,12 @@
             "error_desc": "An error occured while unbanning this user. More info in the console."
         },
         "editor": {
+            "edit_someone": "Edit user {{username}}",
+            "authentication_logs": "Authentication logs",
             "username": "My username",
-            "email": "My email"
+            "email": "My email",
+            "firstname": "First name",
+            "lastname": "Last name"
         }
     },
     "karaoke": {
@@ -230,10 +234,8 @@
                 "description": "Failure when concluding the event. The event will not be exported"
             }
         },
-        "editor": {
-            "create_title": "Create an event",
-            "edit_title": "Editing {{title}}",
-            "participants": "Participants",
+        "participants": {
+            "title": "Participants",
             "delete": {
                 "title": "Kicking a user",
                 "description": "You are going to kick {{name}} from the event.",
@@ -257,6 +259,10 @@
                     "description": "An error occured while searching for a user."
                 }
             }
+        },
+        "editor": {
+            "create_title": "Create an event",
+            "edit_title": "Editing {{title}}"
         },
         "export": {
             "title": "Export",

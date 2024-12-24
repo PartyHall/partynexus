@@ -97,6 +97,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     ])]
     private string $username;
 
+    #[ORM\Column(type: Types::STRING, length: 64, nullable: true)]
+    #[Assert\Length(min: 3, max: 64)]
+    #[Groups([
+        self::API_GET_ITEM,
+        self::API_GET_COLLECTION,
+        self::API_CREATE,
+        self::API_UPDATE,
+        Event::API_GET_ITEM,
+        Event::API_EXPORT,
+    ])]
+    private ?string $firstname = null;
+
+    #[ORM\Column(type: Types::STRING, length: 64, nullable: true)]
+    #[Assert\Length(min: 3, max: 64)]
+    #[Groups([
+        self::API_GET_ITEM,
+        self::API_GET_COLLECTION,
+        self::API_CREATE,
+        self::API_UPDATE,
+        Event::API_GET_ITEM,
+        Event::API_EXPORT,
+    ])]
+    private ?string $lastname = null;
+
     #[ORM\Column(type: Types::STRING, length: 512, nullable: true)]
     private ?string $password = null;
 
@@ -154,6 +178,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: SongRequest::class, mappedBy: 'user')]
     private Collection $songRequests;
 
+    /** @var Collection<int, UserAuthenticationLog> */
+    #[ORM\OneToMany(targetEntity: UserAuthenticationLog::class, mappedBy: 'user')]
+    private Collection $authLogs;
+
     public function __construct()
     {
         $this->magicLinks = new ArrayCollection();
@@ -161,6 +189,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->userEvents = new ArrayCollection();
         $this->participatingEvents = new ArrayCollection();
         $this->songRequests = new ArrayCollection();
+        $this->authLogs = new ArrayCollection();
     }
 
     public function getId(): int
@@ -176,6 +205,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setUsername(string $username): self
     {
         $this->username = $username;
+
+        return $this;
+    }
+
+    public function getFirstname(): ?string
+    {
+        return $this->firstname;
+    }
+
+    public function setFirstname(?string $firstname): self
+    {
+        $this->firstname = $firstname;
+
+        return $this;
+    }
+
+    public function getLastname(): ?string
+    {
+        return $this->lastname;
+    }
+
+    public function setLastname(?string $lastname): self
+    {
+        $this->lastname = $lastname;
 
         return $this;
     }
@@ -391,5 +444,23 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         }
 
         $this->songRequests = $songRequests;
+    }
+
+    /** @return Collection<int, UserAuthenticationLog> */
+    public function getAuthLogs(): Collection
+    {
+        return $this->authLogs;
+    }
+
+    /** @param array<UserAuthenticationLog>|Collection<int, UserAuthenticationLog> $authLogs */
+    public function setAuthLogs(array|Collection $authLogs): self
+    {
+        if (\is_array($authLogs)) {
+            $authLogs = new ArrayCollection($authLogs);
+        }
+
+        $this->authLogs = $authLogs;
+
+        return $this;
     }
 }

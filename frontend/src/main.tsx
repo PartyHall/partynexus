@@ -8,6 +8,7 @@ import {
     redirect,
 } from 'react-router-dom';
 import AdminBackdropsPage from './pages/admin/backdrops.tsx';
+import AdminEditUserPage from './pages/admin/edit_user.tsx';
 import AdminIndexPage from './pages/admin/index.tsx';
 import AdminLayout from './layout/AdminLayout.tsx';
 import AdminNewUserPage from './pages/admin/new_user.tsx';
@@ -75,6 +76,10 @@ const router = createBrowserRouter([
                     {
                         path: '/admin/users',
                         element: <AdminUsersPage />,
+                    },
+                    {
+                        path: '/admin/users/:id',
+                        element: <AdminEditUserPage />,
                     },
                     {
                         path: '/admin/backdrops',
