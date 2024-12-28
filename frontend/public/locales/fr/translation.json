@@ -123,6 +123,17 @@
         "song_count": "{{total}} musiques",
         "new_song": "Créer une musique",
         "request_song": "Demander une musique",
+        "filters": {
+            "title": "Filtres",
+            "ready": "Prête?",
+            "format": "Format",
+            "video": "Vidéo",
+            "transparent_video": "Vidéo transparente",
+            "cdg": "CDG",
+            "has_vocals": "Voix?",
+            "no": "Non",
+            "yes": "Oui"
+        },
         "request": {
             "title": "Demander une musique",
             "song_title": "Titre",

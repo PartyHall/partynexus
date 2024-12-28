@@ -8,9 +8,7 @@ use App\Enum\SongQuality;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory as FakerFactory;
-use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Uid\Uuid;
-use Vich\UploaderBundle\FileAbstraction\ReplacingFile;
 
 class SongFixture extends Fixture
 {
@@ -61,25 +59,24 @@ class SongFixture extends Fixture
             'format' => 'video',
             'quality' => 'bad',
         ],
+        // Lets also add a few songs with weird chars to test the SongSearchFilter
+        [
+            'title' => 'Ainsi soit-il',
+            'artist' => 'Taïro',
+            'cover' => 'cover1',
+            'format' => 'video',
+            'quality' => 'good',
+            'mbid' => 'ff4151da-b769-4624-bcd8-4b088c65fc02',
+        ],
+        [
+            'title' => 'J\'étais prêt',
+            'artist' => 'Taïro',
+            'cover' => 'cover1',
+            'format' => 'video',
+            'quality' => 'perfect',
+            'mbid' => '4f2c028a-48e2-490d-8176-d8f602f5f9d1',
+        ],
     ];
-
-    public function __construct(
-        // #[Autowire('%kernel.project_dir%/src/DataFixtures/covers')]
-        // private readonly string $kernelBaseDir,
-    ) {
-    }
-
-    /*
-    private function getCover(string $filename): ?ReplacingFile
-    {
-        $imgPath = implode('/', [$this->kernelBaseDir, $filename.'.jpg']);
-        if (!file_exists($imgPath)) {
-            return null;
-        }
-
-        return new ReplacingFile($imgPath);
-    }
-    */
 
     public function load(ObjectManager $manager): void
     {

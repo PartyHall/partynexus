@@ -2,6 +2,8 @@ import { Collection } from './collection';
 import { User } from './user';
 import dayjs from 'dayjs';
 
+export type SongFormat = 'video' | 'cdg' | 'transparent_video';
+
 export default class PnSong {
     iri: string;
     id: number;
