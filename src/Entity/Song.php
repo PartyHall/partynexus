@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Common\Filter\SearchFilterInterface;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
@@ -14,7 +16,6 @@ use App\Doctrine\DBAL\Types\TsVectorType;
 use App\Doctrine\Filter\SongSearchFilter;
 use App\Enum\SongFormat;
 use App\Enum\SongQuality;
-use App\Filter\FullTextSearchFilter;
 use App\Interface\HasTimestamps;
 use App\Interface\Impl\HasTimestampsTrait;
 use App\Repository\SongRepository;
@@ -80,8 +81,8 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
     ]
 )]
 #[QueryParameter('ready')]
-// #[ApiFilter(FullTextSearchFilter::class, properties: ['title' => 'ipartial', 'artist' => 'ipartial'])]
 #[ApiFilter(SongSearchFilter::class)]
+#[ApiFilter(SearchFilter::class, properties: ['format' => SearchFilterInterface::STRATEGY_EXACT, 'vocals' => SearchFilterInterface::STRATEGY_EXACT])]
 #[ORM\Entity(repositoryClass: SongRepository::class)]
 #[ORM\Index(name: 'idx_songs_search', fields: ['searchVector'])]
 #[Vich\Uploadable]
@@ -281,6 +282,7 @@ class Song implements HasTimestamps
     #[Groups([self::API_GET_ITEM])]
     public ?string $combinedUrl = null;
 
+    /** @var string[] */
     #[ORM\Column(type: TsVectorType::TYPE, nullable: true)]
     private array $searchVector;
 
@@ -478,11 +480,13 @@ class Song implements HasTimestamps
         return $this;
     }
 
+    /** @return string[] */
     public function getSearchVector(): array
     {
         return $this->searchVector;
     }
 
+    /** @param string[] $searchVector */
     public function setSearchVector(array $searchVector): void
     {
         $this->searchVector = $searchVector;

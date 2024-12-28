@@ -14,6 +14,10 @@ class Version20241227222203 extends AbstractMigration
         $this->addSql('CREATE INDEX idx_songs_search ON song USING GIN(search_vector)');
         $this->addSql('UPDATE song SET search_vector = setweight(to_tsvector(\'french\', unaccent(COALESCE(title, \'\'))), \'A\') || setweight(to_tsvector(\'french\', unaccent(COALESCE(artist, \'\'))), \'B\')');
 
+        $this->addSql('ALTER TABLE song_request ADD COLUMN search_vector tsvector');
+        $this->addSql('CREATE INDEX idx_song_requests_search ON song_request USING GIN(search_vector)');
+        $this->addSql('UPDATE song_request SET search_vector = setweight(to_tsvector(\'french\', unaccent(COALESCE(title, \'\'))), \'A\') || setweight(to_tsvector(\'french\', unaccent(COALESCE(artist, \'\'))), \'B\')');
+
         $this->addSql(<<<SQL
             CREATE OR REPLACE FUNCTION song_search_vector_update() RETURNS trigger AS $$
             BEGIN
@@ -31,13 +35,22 @@ SQL
                 FOR EACH ROW
                 EXECUTE FUNCTION song_search_vector_update()
 SQL);
+        $this->addSql(<<<SQL
+            CREATE TRIGGER song_request_search_vector_update
+                BEFORE INSERT OR UPDATE ON song_request
+                FOR EACH ROW
+                EXECUTE FUNCTION song_search_vector_update()
+SQL);
     }
 
     public function down(Schema $schema): void
     {
+        $this->addSql('DROP TRIGGER IF EXISTS song_request_search_vector_update ON song');
         $this->addSql('DROP TRIGGER IF EXISTS song_search_vector_update ON song');
         $this->addSql('DROP FUNCTION IF EXISTS song_search_vector_update');
+        $this->addSql('DROP INDEX IF EXISTS idx_song_requests_search');
         $this->addSql('DROP INDEX IF EXISTS idx_songs_search');
+        $this->addSql('ALTER TABLE song_request DROP COLUMN search_vector');
         $this->addSql('ALTER TABLE song DROP COLUMN search_vector');
         $this->addSql('DROP EXTENSION IF EXISTS unaccent');
     }

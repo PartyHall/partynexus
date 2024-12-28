@@ -8,9 +8,7 @@ use App\Enum\SongQuality;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory as FakerFactory;
-use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Uid\Uuid;
-use Vich\UploaderBundle\FileAbstraction\ReplacingFile;
 
 class SongFixture extends Fixture
 {

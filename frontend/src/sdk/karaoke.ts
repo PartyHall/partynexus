@@ -1,4 +1,8 @@
-import PnSong, { PnExternalSong, PnSongRequest } from './responses/song';
+import PnSong, {
+    PnExternalSong,
+    PnSongRequest,
+    SongFormat,
+} from './responses/song';
 
 import { Collection } from './responses/collection';
 import { SDK } from '.';
@@ -13,12 +17,22 @@ export default class Karaoke {
     async getCollection(
         page: number = 1,
         search?: string,
-        ready: boolean = true
+        ready: boolean = true,
+        hasVocals: boolean | null = null,
+        formats: SongFormat[] = []
     ): Promise<Collection<PnSong> | null> {
         let url = `/api/songs?page=${page}`;
 
         if (search) {
             url += `&search=${search}`;
+        }
+
+        if (hasVocals !== null) {
+            url += `&vocals=${hasVocals}`;
+        }
+
+        if (formats.length > 0) {
+            formats.forEach((x) => (url += `&format[]=${x}`));
         }
 
         url += `&ready=${ready}`;

@@ -9,8 +9,18 @@ use Doctrine\ORM\QueryBuilder;
 
 class SongSearchFilter extends AbstractFilter
 {
-    protected function filterProperty(string $property, $value, QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, ?Operation $operation = null, array $context = []): void
-    {
+    /**
+     * @param mixed[] $context
+     */
+    protected function filterProperty(
+        string $property,
+        mixed $value,
+        QueryBuilder $queryBuilder,
+        QueryNameGeneratorInterface $queryNameGenerator,
+        string $resourceClass,
+        ?Operation $operation = null,
+        array $context = [],
+    ): void {
         if ('search' !== $property || empty($value)) {
             return;
         }
@@ -25,6 +35,9 @@ class SongSearchFilter extends AbstractFilter
             ->setParameter('tsquery', $value);
     }
 
+    /**
+     * @return mixed[]
+     */
     public function getDescription(string $resourceClass): array
     {
         return [

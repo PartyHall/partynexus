@@ -122,6 +122,17 @@
         "by": "By {{artist}}",
         "song_count": "{{total}} songs",
         "new_song": "New song",
+        "filters": {
+            "title": "Filters",
+            "ready": "Ready?",
+            "format": "Format",
+            "video": "Video",
+            "transparent_video": "Transparent video",
+            "cdg": "CDG",
+            "has_vocals": "Has vocals?",
+            "no": "No",
+            "yes": "Yes"
+        },
         "files": {
             "instrumental": "Instrumental",
             "vocals": "Vocals",

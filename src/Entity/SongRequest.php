@@ -8,7 +8,8 @@ use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
-use App\Filter\FullTextSearchFilter;
+use App\Doctrine\DBAL\Types\TsVectorType;
+use App\Doctrine\Filter\SongSearchFilter;
 use App\Interface\HasTimestamps;
 use App\Interface\Impl\HasTimestampsTrait;
 use App\State\Processor\SongRequestProcessor;
@@ -31,7 +32,7 @@ use Symfony\Component\Validator\Constraints as Assert;
         new Delete(security: 'is_granted("ROLE_ADMIN")'),
     ],
 )]
-#[ApiFilter(FullTextSearchFilter::class, properties: ['title', 'artist', 'requestedBy'])]
+#[ApiFilter(SongSearchFilter::class)]
 class SongRequest implements HasTimestamps
 {
     use HasTimestampsTrait;
@@ -74,6 +75,10 @@ class SongRequest implements HasTimestamps
     ])]
     private User $requestedBy;
 
+    /** @var string[] */
+    #[ORM\Column(type: TsVectorType::TYPE, nullable: true)]
+    private array $searchVector;
+
     public function getId(): int
     {
         return $this->id;
@@ -113,5 +118,17 @@ class SongRequest implements HasTimestamps
         $this->requestedBy = $requestedBy;
 
         return $this;
+    }
+
+    /** @return string[] */
+    public function getSearchVector(): array
+    {
+        return $this->searchVector;
+    }
+
+    /** @param string[] $searchVector */
+    public function setSearchVector(array $searchVector): void
+    {
+        $this->searchVector = $searchVector;
     }
 }
