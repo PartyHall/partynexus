@@ -32,6 +32,7 @@ RUN set -eux; \
 		opcache \
 		zip \
     	gd \
+		excimer \
 	;
 
 # https://getcomposer.org/doc/03-cli.md#composer-allow-superuser
