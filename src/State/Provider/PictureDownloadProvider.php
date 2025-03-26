@@ -10,6 +10,7 @@ use App\Repository\PictureRepository;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
@@ -21,6 +22,7 @@ readonly class PictureDownloadProvider implements ProviderInterface
     public function __construct(
         private PictureRepository $repo,
         private Security $security,
+        private RequestStack $requestStack,
         #[Autowire(env: 'PICTURES_LOCATION')]
         private string $basePath,
     ) {
@@ -29,6 +31,7 @@ readonly class PictureDownloadProvider implements ProviderInterface
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): object|array|null
     {
         $id = $uriVariables['id'] ?? null;
+        $alternatePicture = 'true' === strtolower($this->requestStack->getMainRequest()->query->get('alternate'));
 
         /** @var Picture|null $picture */
         $picture = $this->repo->find($id);
@@ -59,7 +62,16 @@ readonly class PictureDownloadProvider implements ProviderInterface
             throw HttpException::fromStatusCode(Response::HTTP_FORBIDDEN);
         }
 
-        $picturePath = join('/', [$this->basePath, $picture->getFilepath()]);
+        $filepath = $picture->getFilepath();
+        if ($alternatePicture) {
+            if (!$picture->isHasAlternatePicture()) {
+                throw HttpException::fromStatusCode(Response::HTTP_NOT_FOUND);
+            }
+
+            $filepath = $picture->getAlternateFilepath();
+        }
+
+        $picturePath = join('/', [$this->basePath, $filepath]);
 
         if (!file_exists($picturePath)) {
             throw HttpException::fromStatusCode(Response::HTTP_NOT_FOUND);

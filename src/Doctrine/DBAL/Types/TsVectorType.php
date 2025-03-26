@@ -34,6 +34,7 @@ class TsVectorType extends Type
      * @param string|null $value
      *
      * @return mixed[]
+     *
      * @psalm-suppress all
      */
     public function convertToPHPValue($value, AbstractPlatform $platform): array

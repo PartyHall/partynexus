@@ -111,6 +111,10 @@ class Picture implements HasEvent
     #[Assert\NotNull]
     private bool $unattended = false;
 
+    /**
+     * @TODO SECURITY => Don't let it in CREATE, just make an event listener to set it automatically
+     * Or maybe just override it automatically in PictureProcessor idk whichever is easier
+     */
     #[ORM\Column(type: UuidType::NAME)]
     #[Groups([
         self::API_GET_COLLECTION,
@@ -130,6 +134,20 @@ class Picture implements HasEvent
 
     #[ORM\Column(type: Types::STRING, nullable: true)]
     private ?string $fileMimetype = null;
+
+    #[Vich\UploadableField(mapping: 'pictures', fileNameProperty: 'alternateFilepath', mimeType: 'alternateFileMimetype')]
+    #[Groups([self::API_CREATE])]
+    private ?File $alternateFile = null;
+
+    #[ORM\Column(type: Types::STRING, nullable: true)]
+    private ?string $alternateFilepath = null;
+
+    #[ORM\Column(type: Types::STRING, nullable: true)]
+    private ?string $alternateFileMimetype = null;
+
+    #[ORM\Column(type: Types::BOOLEAN, options: ['default' => false])]
+    #[Groups([self::API_GET_ITEM])]
+    private bool $hasAlternatePicture = false;
 
     public function getId(): Uuid
     {
@@ -231,6 +249,60 @@ class Picture implements HasEvent
     public function setFileMimetype(?string $fileMimetype): self
     {
         $this->fileMimetype = $fileMimetype;
+
+        return $this;
+    }
+
+    public function getAlternateFile(): ?File
+    {
+        return $this->alternateFile;
+    }
+
+    /**
+     * If manually uploading a file (i.e. not using Symfony Form) ensure an instance
+     * of 'UploadedFile' is injected into this setter to trigger the update. If this
+     * bundle's configuration parameter 'inject_on_load' is set to 'true' this setter
+     * must be able to accept an instance of 'File' as the bundle will inject one here
+     * during Doctrine hydration.
+     */
+    public function setAlternateFile(File|UploadedFile|null $file = null): self
+    {
+        $this->alternateFile = $file;
+        $this->setHasAlternatePicture(null !== $file);
+
+        return $this;
+    }
+
+    public function getAlternateFileMimetype(): ?string
+    {
+        return $this->alternateFileMimetype;
+    }
+
+    public function setAlternateFileMimetype(?string $alternateFileMimetype): self
+    {
+        $this->alternateFileMimetype = $alternateFileMimetype;
+
+        return $this;
+    }
+
+    public function getAlternateFilepath(): ?string
+    {
+        return $this->alternateFilepath;
+    }
+
+    public function setAlternateFilepath(?string $alternateFilepath): void
+    {
+        $this->alternateFilepath = $alternateFilepath;
+    }
+
+    public function isHasAlternatePicture(): bool
+    {
+        return $this->hasAlternatePicture;
+    }
+
+    public function setHasAlternatePicture(bool $hasAlternatePicture): self
+    {
+        $this->hasAlternatePicture = $hasAlternatePicture;
 
         return $this;
     }
