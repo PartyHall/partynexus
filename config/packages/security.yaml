@@ -52,6 +52,7 @@ security:
         ROLE_ADMIN: ROLE_USER
     
     access_control:
+        - { path: ^/api/_sentry-test, roles: PUBLIC_ACCESS}
         - { path: ^/api/login, roles: PUBLIC_ACCESS }
         - { path: ^/api/magic-login, roles: PUBLIC_ACCESS }
         - { path: ^/api/refresh, roles: PUBLIC_ACCESS }
