@@ -118,7 +118,9 @@ class EventExporter
         $this->setStatus(ExportProgress::ADDING_PICTURES);
 
         $exportPicturePath = Path::join($this->tempPath, 'pictures');
+        $alternatePicturePath = Path::join($exportPicturePath, 'alternate');
         $this->fs->mkdir($exportPicturePath);
+        $this->fs->mkdir($alternatePicturePath);
 
         /** @var Picture $picture */
         foreach ($this->event->getPictures() as $picture) {
@@ -149,6 +151,22 @@ class EventExporter
             );
 
             $this->fs->copy($sourceFilePath, $outFile);
+
+            if ($picture->isHasAlternatePicture()) {
+                $outFileAlt = Path::join(
+                    $alternatePicturePath,
+                    \sprintf(
+                        '%s.%s',
+                        $picture->getTakenAt()->format('Y-m-d_H-i-s'),
+                        $ext,
+                    ),
+                );
+
+                $this->fs->copy(
+                    $this->storage->resolvePath($picture, 'alternateFile'),
+                    $outFileAlt,
+                );
+            }
 
             $this->logger->info('Picture added to export', ['file' => $outFile, 'event' => $this->event->getId()->toString()]);
         }

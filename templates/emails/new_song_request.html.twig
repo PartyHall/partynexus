@@ -1,2 +1,6 @@
+{% extends 'emails/base.html.twig' %}
+
+{% block content %}
 <h1>{{'emails.new_song_request.text1' | trans({'%requested_by%': requested_by})}}</h1>
 <p>{{'emails.new_song_request.text2' | trans({'%title%': title, '%artist%': artist})}}</p>
+{% endblock %}

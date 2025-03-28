@@ -43,10 +43,10 @@ ENV MERCURE_SUBSCRIBER_JWT_ALG=RS256
 ENV JWT_SECRET_KEY="%kernel.project_dir%/config/jwt/private.pem"
 ENV JWT_PUBLIC_KEY="%kernel.project_dir%/config/jwt/public.pem"
 
-# PARTYNEXUS: Adding redis
+# PARTYNEXUS: Adding redis, postgres and xsl (inky for mails)
 ###> recipes ###
 ###> doctrine/doctrine-bundle ###
-RUN install-php-extensions pdo_pgsql redis
+RUN install-php-extensions pdo_pgsql redis xsl
 ###< doctrine/doctrine-bundle ###
 ###< recipes ###
 

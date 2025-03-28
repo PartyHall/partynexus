@@ -1,3 +1,7 @@
+{% extends 'emails/base.html.twig' %}
+
+{% block content %}
 <h1>{{'emails.event_concluded.text1' | trans({'%event_name%': event.getName()})}}</h1>
 <p>{{'emails.event_concluded.text2' | trans}}:</p>
 <p><a href="{{link}}">{{'emails.event_concluded.link' | trans}}</a></p>
+{% endblock %}

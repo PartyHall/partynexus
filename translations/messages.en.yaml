@@ -1,4 +1,7 @@
 emails:
+    general:
+        cheers: 'Cheers,'
+        your_admin: 'Your PartyHall administrator'
     login:
         subject: 'Login request'
         welcome: 'Welcome %username%!'

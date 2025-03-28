@@ -1,0 +1,26 @@
+{% set clean_public_url = public_url|trim('/') %}
+
+{% apply inky_to_html %}
+    <container>
+            <row class="header">
+                <a href="{{ public_url }}">
+                    <img
+                        src="{{ [clean_public_url, 'assets/ph_logo_sm.png']|join('/') }}"
+                        class="logo"
+                        alt="Partyhall logo"
+                    />
+                </a>
+            </row>
+            <row class="content">
+                {% block content %}{% endblock %}
+                <spacer size="20"></spacer>
+                <p>{{ 'emails.general.cheers' | trans }}</p>
+                <p>{{ 'emails.general.your_admin' | trans }}</p>
+            </row>
+            <row class="bottom">
+                <center>
+                    <p>PartyHall - <a href="https://github.com/partyhall">Github</a></p>
+                </center>
+            </row>
+    </container>
+{% endapply %}

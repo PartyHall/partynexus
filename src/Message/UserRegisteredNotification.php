@@ -8,6 +8,7 @@ readonly class UserRegisteredNotification
         private string $language,
         private string $username,
         private string $userEmail,
+        private string $code,
     ) {
     }
 
@@ -24,5 +25,10 @@ readonly class UserRegisteredNotification
     public function getUserEmail(): string
     {
         return $this->userEmail;
+    }
+
+    public function getCode(): string
+    {
+        return $this->code;
     }
 }

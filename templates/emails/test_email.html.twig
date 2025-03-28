@@ -1,3 +1,7 @@
-<h1>Test email</h1>
-<p>This is a test email to ensure your mailing is setup properly</p>
-<p>It can also be useful to debug reach issues</p>
+{% extends 'emails/base.html.twig' %}
+
+{% block content %}
+    <h1>Test email</h1>
+    <p>This is a test email to ensure your mailing is setup properly</p>
+    <p>It can also be useful to debug reach issues</p>
+{% endblock %}

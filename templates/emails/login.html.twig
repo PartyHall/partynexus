@@ -1,4 +1,13 @@
-<h1>{{'emails.login.welcome' | trans({'%username%': username})}}</h1>
-<p>{{'emails.login.text1' | trans}}:</p>
-<p><a href="{{link}}">{{'emails.login.link' | trans}}</a></p>
-<p>{{'emails.login.warning' | trans}}</p>
+{% extends 'emails/base.html.twig' %}
+
+{% block content %}
+    <h1>{{'emails.login.welcome' | trans({'%username%': username})}}</h1>
+
+    <p>{{'emails.login.text1' | trans}}:</p>
+
+    <center>
+        <button class="expanded" href="{{link}}">{{'emails.login.link' | trans}}</button>
+    </center>
+
+    <p>{{'emails.login.warning' | trans}}</p>
+{% endblock %}
