@@ -15,6 +15,7 @@ parameters:
     env(LOCK_DSN): '%env(REDIS_DSN)%'
     env(MERCURE_BASE_URL): 'http://app'
     env(JWT_PASSPHRASE): 'partynexus_default_passphrase'
+    env(SENTRY_ENV): 'prod'
     
 services:
     _defaults:

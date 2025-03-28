@@ -3,5 +3,6 @@ when@prod:
         dsn: '%env(SENTRY_DSN)%'
         options:
             release: '%PARTYNEXUS_VERSION%/%PARTYNEXUS_COMMIT%'
+            environment: '%env(SENTRY_ENV)%'
             send_default_pii: true
             max_request_body_size: always
