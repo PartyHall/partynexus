@@ -8,12 +8,17 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-#[AsCommand('crash')]
+#[AsCommand('test:sentry')]
 class CrashCommand extends Command
 {
     public function __construct(private LoggerInterface $logger)
     {
         parent::__construct();
+    }
+
+    protected function configure()
+    {
+        $this->setHelp('Simple command that triggers an exception and logs an error. Used to test that sentry is working');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
