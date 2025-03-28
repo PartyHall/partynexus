@@ -27,9 +27,3 @@ services:
             - '../src/DependencyInjection/'
             - '../src/Entity/'
             - '../src/Kernel.php'
-    
-    # Configure the breadcrumb handler as a service (needed for the breadcrumb Monolog handler)
-    Sentry\Monolog\BreadcrumbHandler:
-        arguments:
-            - '@Sentry\State\HubInterface'
-            - !php/const Monolog\Logger::INFO # Configures the level of messages to capture as breadcrumbs
