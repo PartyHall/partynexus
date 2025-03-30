@@ -6,3 +6,8 @@ when@prod:
             environment: '%env(SENTRY_ENV)%'
             send_default_pii: true
             max_request_body_size: always
+            
+            ignore_exceptions:
+                - Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+                - Symfony\Component\Security\Core\Exception\AccessDeniedException
+                - Symfony\Component\Console\Exception\*
