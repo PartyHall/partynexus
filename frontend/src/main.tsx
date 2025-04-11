@@ -22,6 +22,7 @@ import EditSongPage from './pages/karaoke/EditSong.tsx';
 import EventsPage from './pages/Events.tsx';
 import LoginPage from './pages/login/index.tsx';
 import MagicLoginPage from './pages/login/MagicLoginCallback.tsx';
+import MagicPasswordPage from './pages/login/MagicPassword.tsx';
 import MyAccountPage from './pages/MyAccount.tsx';
 import NewAppliancePage from './pages/appliances/NewAppliance.tsx';
 import NewEventPage from './pages/NewEvent.tsx';
@@ -56,6 +57,10 @@ const router = createBrowserRouter([
     {
         path: '/magic-login',
         element: <MagicLoginPage />,
+    },
+    {
+        path: '/magic-password/:code',
+        element: <MagicPasswordPage />,
     },
     {
         path: '/',

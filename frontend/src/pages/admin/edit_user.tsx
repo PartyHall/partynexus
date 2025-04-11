@@ -6,6 +6,7 @@ import AccountEditor from '../../components/account/AccountEditor';
 import { Collection } from '../../sdk/responses/collection';
 import KeyVal from '../../components/Keyval';
 import Loader from '../../components/Loader';
+import MagicPasswordGenerator from '../../components/account/MagicPasswordGenerator';
 
 import { useAuth } from '../../hooks/auth';
 import { useParams } from 'react-router-dom';
@@ -67,6 +68,8 @@ export default function AdminEditUserPage() {
                 </Typography.Title>
 
                 {user && <AccountEditor user={user} />}
+
+                {user && <MagicPasswordGenerator user={user} />}
 
                 {authLogs && (
                     <>

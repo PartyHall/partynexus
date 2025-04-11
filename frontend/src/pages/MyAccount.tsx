@@ -45,7 +45,7 @@ export default function MyAccountPage() {
             <Loader loading={loading}>
                 <Flex vertical flex={1}>
                     <Flex vertical align="center">
-                        {user && <AccountEditor user={user} />}
+                        {user && <AccountEditor user={user} showPasswordForm />}
                     </Flex>
 
                     {user && isGranted('ROLE_ADMIN') && <Appliances />}

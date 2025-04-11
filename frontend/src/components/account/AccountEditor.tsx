@@ -1,6 +1,7 @@
-import { Button, Flex, Form, Input, Select } from 'antd';
+import { Button, Checkbox, Flex, Form, Input, Select } from 'antd';
 import { FormItem } from 'react-hook-form-antd';
 import { IconDeviceFloppy } from '@tabler/icons-react';
+import PasswordEditorModal from './PasswordEditorModal';
 import { User } from '../../sdk/responses/user';
 import { ValidationErrors } from '../../sdk/responses/validation_error';
 import { useAuth } from '../../hooks/auth';
@@ -11,13 +12,19 @@ import { useTranslation } from 'react-i18next';
 
 type Props = {
     user: User;
+    showPasswordForm?: boolean;
 };
 
-export default function AccountEditor({ user: initialUser }: Props) {
+export default function AccountEditor({
+    user: initialUser,
+    showPasswordForm,
+}: Props) {
     const { t } = useTranslation();
     const { api } = useAuth();
     const [user, setUser] = useState<User>(initialUser);
     const [notif, notifCtx] = useNotification();
+
+    const [passwordFormOpen, setPasswordFormOpen] = useState<boolean>(false);
 
     const { control, handleSubmit, setError, formState } = useForm<User>({
         defaultValues: {
@@ -106,6 +113,20 @@ export default function AccountEditor({ user: initialUser }: Props) {
                 />
             </FormItem>
 
+            {!showPasswordForm && (
+                <Checkbox disabled checked={user.isPasswordSet}>
+                    {t('users.editor.has_password')}
+                </Checkbox>
+            )}
+
+            {
+                showPasswordForm && <Flex align='center' justify='center'>
+                    <Button onClick={() => setPasswordFormOpen(true)}>
+                        {t('my_account.change_password')}
+                    </Button>
+                </Flex>
+            }
+
             <Flex align="center" justify="center" style={{ marginTop: 32 }}>
                 <Form.Item>
                     <Button
@@ -118,6 +139,12 @@ export default function AccountEditor({ user: initialUser }: Props) {
                     </Button>
                 </Form.Item>
             </Flex>
+
+            <PasswordEditorModal
+                passwordFormOpen={passwordFormOpen}
+                setPasswordFormOpen={setPasswordFormOpen}
+                user={user}
+            />
 
             {notifCtx}
         </Form>

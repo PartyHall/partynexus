@@ -54,12 +54,21 @@
                 "desc_expired": "This link has expired",
                 "desc_unknown": "An unknown error has occured, see console for more details"
             }
+        },
+        "magic_password": {
+            "hello": "Hello {{firstName}} {{lastName}}",
+            "desc": "You can now set the password for your account.",
+            "not_found": "This MagicPassword code was not found. Maybe it was already used or has expired (+48h)",
+            "success_title": "Your password was set !",
+            "success_desc": "You can now login with the username \"{{username}}\" and this password !",
+            "success_gohome": "Go back to login"
         }
     },
     "my_account": {
         "title": "My account",
         "logout": "Logout",
         "my_appliances": "My appliances",
+        "change_password": "Change password",
         "new": "New",
         "edit": "Edit",
         "delete": "Delete",
@@ -71,6 +80,19 @@
             "title": "Edit appliance",
             "title_create": "Create an appliance",
             "name": "Name"
+        },
+        "set_password": {
+            "old_password": "Old password",
+            "password": "New password",
+            "password_2": "Repeat password",
+            "dont_match": "Passwords don't match",
+            "requirements": "Requirements",
+            "min_chars": "Min 8 characters",
+            "luc": "Has upper and lowercase letters",
+            "numbers": "Has numbers",
+            "sc": "Has special characters",
+            "success_title": "Password updated",
+            "success_desc": "Your password was changed successfully"
         }
     },
     "users": {
@@ -114,7 +136,16 @@
             "username": "My username",
             "email": "My email",
             "firstname": "First name",
-            "lastname": "Last name"
+            "lastname": "Last name",
+            "has_password": "Has a password set?",
+            "magic_password": {
+                "generator": {
+                    "title": "Magic Password generator",
+                    "desc": "A MagicPassword is a link that you can give to someone so that they can define a password without having to login. It is single-use and let the person use the app when mails are poorly configured (Not received, falls in spam, etc...). This can also be used as a \"Forgotten password\" feature.",
+                    "generate": "Generate one",
+                    "generated_desc": "Link generated. Provide it to the user, it will expire in 48h."
+                }
+            }
         }
     },
     "karaoke": {

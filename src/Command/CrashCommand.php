@@ -27,7 +27,5 @@ class CrashCommand extends Command
         $this->logger->error('My custom command logged error.', ['some' => 'Context Data']);
         // the following code will test if an uncaught exception logs to sentry
         throw new \RuntimeException('Command example exception');
-
-        return 0;
     }
 }

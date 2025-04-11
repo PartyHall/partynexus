@@ -1,0 +1,4 @@
+validation:
+    not_blank: 'This field cannot be empty'
+    not_compromised: 'This password is compromised. Please choose another one (And change it if you are using it anywhere else!)'
+    password_requirements: 'The password must contain at least a lower case, an upper case, a number and a special character'

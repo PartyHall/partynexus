@@ -15,4 +15,5 @@ framework:
             'App\Message\UserRegisteredNotification': 'emails'
             'App\Message\TestEmailNotification': 'emails'
             'App\Message\NewSongRequestNotification': 'emails'
+            'App\Message\PasswordUpdatedNotification': 'emails'
             'App\Message\EventConcludedNotification': 'export'

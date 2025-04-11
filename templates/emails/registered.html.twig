@@ -1,13 +1,11 @@
 {% extends 'emails/base.html.twig' %}
 
 {% block content %}
-    <h1>{{'emails.registered.welcome' | trans({'%username%': username})}}</h1>
-
-    <p>{{'emails.registered.text1' | trans}}</p>
+    <p>{{ 'emails.registered.text1' | trans }}</p>
 
     <center>
-        <button class="expanded" href="{{link}}">{{'emails.registered.link' | trans}}</button>
+        <button class="expanded" href="{{ link }}">{{ 'emails.registered.link' | trans }}</button>
     </center>
 
-    <p>{{'emails.registered.warning' | trans}}</p>
+    <p>{{ 'emails.registered.warning' | trans }}</p>
 {% endblock %}

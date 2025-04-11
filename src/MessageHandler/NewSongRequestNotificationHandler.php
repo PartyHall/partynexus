@@ -32,6 +32,8 @@ readonly class NewSongRequestNotificationHandler
                 ->htmlTemplate('emails/new_song_request.html.twig')
                 ->locale($admin->getLanguage())
                 ->context([
+                    'firstname' => $admin->getFirstname(),
+                    'lastname' => $admin->getLastname(),
                     'title' => $notification->getTitle(),
                     'artist' => $notification->getArtist(),
                     'requested_by' => $notification->getRequestedBy(),

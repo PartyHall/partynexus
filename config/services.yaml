@@ -28,3 +28,8 @@ services:
             - '../src/DependencyInjection/'
             - '../src/Entity/'
             - '../src/Kernel.php'
+
+    # api_platform.state.error_provider:
+        # class: App\State\Provider\ErrorProvider
+        # tags:
+            # - { name: 'api_platform.state_provider', key: 'api_platform.state.error_provider' }
