@@ -10,7 +10,7 @@ use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[AsMessageHandler]
-readonly class MagickLinkNotificationHandler
+readonly class MagicLinkNotificationHandler
 {
     private string $baseUrl;
 
@@ -32,6 +32,8 @@ readonly class MagickLinkNotificationHandler
             ->locale($notification->getLanguage())
             ->context([
                 'username' => $notification->getUsername(),
+                'firstname' => $notification->getFirstname(),
+                'lastname' => $notification->getLastname(),
                 'link' => $this->baseUrl.'/magic-login/?email='.$notification->getUserEmail().'&code='.$notification->getCode(),
             ])
         ;

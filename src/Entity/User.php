@@ -9,7 +9,9 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
+use App\Model\PasswordSet;
 use App\State\Processor\BanUserProcessor;
+use App\State\Processor\UserSetPasswordProcessor;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -21,6 +23,13 @@ use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Validator\Constraints as Assert;
 
+/**
+ * @TODO: GET ITEM should be PII proof
+ * It should NOT tell the user email unless the SELF is set even though those endpoints are set for self & admin only
+ * as they can be used in other stuff (e.g. Magic Password, Event listing, ...)
+ *
+ * I'm not doing this right now as I don't know about the side effects
+ */
 #[ApiResource(
     operations: [
         new Get(
@@ -56,6 +65,12 @@ use Symfony\Component\Validator\Constraints as Assert;
             security: 'is_granted("ROLE_ADMIN")',
             name: self::UNBAN_USER_ROUTE,
             processor: BanUserProcessor::class,
+        ),
+        new Post(
+            uriTemplate: '/users/{id}/set-password',
+            security: 'user === object',
+            input: PasswordSet::class,
+            processor: UserSetPasswordProcessor::class,
         ),
     ]
 )]
@@ -159,6 +174,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: MagicLink::class, mappedBy: 'user', cascade: ['PERSIST'])]
     private Collection $magicLinks;
 
+    /** @var Collection<int, MagicPassword> $magicPasswords */
+    #[ORM\OneToMany(targetEntity: MagicPassword::class, mappedBy: 'user', cascade: ['PERSIST'])]
+    private Collection $magicPasswords;
+
     /** @var Collection<int, Appliance> $appliances */
     #[ORM\OneToMany(targetEntity: Appliance::class, mappedBy: 'owner')]
     #[Groups([
@@ -185,6 +204,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function __construct()
     {
         $this->magicLinks = new ArrayCollection();
+        $this->magicPasswords = new ArrayCollection();
         $this->appliances = new ArrayCollection();
         $this->userEvents = new ArrayCollection();
         $this->participatingEvents = new ArrayCollection();
@@ -279,6 +299,33 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if ($this->magicLinks->contains($link)) {
             $this->magicLinks->removeElement($link);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, MagicPassword>
+     */
+    public function getMagicPasswords(): Collection
+    {
+        return $this->magicPasswords;
+    }
+
+    public function addMagicPassword(MagicPassword $link): self
+    {
+        if (!$this->magicPasswords->contains($link)) {
+            $link->setUser($this);
+            $this->magicPasswords->add($link);
+        }
+
+        return $this;
+    }
+
+    public function removeMagicPassword(MagicPassword $link): self
+    {
+        if ($this->magicPasswords->contains($link)) {
+            $this->magicPasswords->removeElement($link);
         }
 
         return $this;
@@ -462,5 +509,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->authLogs = $authLogs;
 
         return $this;
+    }
+
+    #[Groups([self::API_GET_ITEM])]
+    public function isPasswordSet(): bool
+    {
+        return null !== $this->password;
     }
 }

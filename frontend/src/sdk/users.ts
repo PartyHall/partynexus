@@ -1,4 +1,9 @@
-import { PnListUser, User, UserAuthenticationLog } from './responses/user';
+import {
+    MagicPassword,
+    PnListUser,
+    User,
+    UserAuthenticationLog,
+} from './responses/user';
 import { Collection } from './responses/collection';
 import { SDK } from '.';
 
@@ -86,5 +91,35 @@ export default class Users {
         return Collection.fromJson(data, (x) =>
             UserAuthenticationLog.fromJson(x)
         );
+    }
+
+    async generateMagicPassword(user: number): Promise<MagicPassword | null> {
+        const resp = await this.sdk.post(`/api/magic_passwords`, {
+            user: '/api/users/' + user,
+        });
+
+        return MagicPassword.fromJson(await resp.json());
+    }
+
+    async magicPasswordIsValid(code: string) {
+        const resp = await this.sdk.get(
+            `/api/magic_passwords/${code}/is-valid`
+        );
+
+        return MagicPassword.fromJson(await resp.json());
+    }
+
+    async magicPasswordSet(code: string, newPassword: string) {
+        await this.sdk.post(
+            `/api/magic_passwords/${code}/set-password`,
+            { newPassword },
+        );
+    }
+
+    async setPassword(user: number, oldPassword: string|null, newPassword: string) {
+        await this.sdk.post(
+            `/api/users/${user}/set-password`,
+            { oldPassword, newPassword }
+        )
     }
 }

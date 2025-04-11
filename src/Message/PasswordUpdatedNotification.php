@@ -2,15 +2,13 @@
 
 namespace App\Message;
 
-readonly class MagicLinkNotification
+readonly class PasswordUpdatedNotification
 {
     public function __construct(
         private string $language,
-        private string $username,
+        private string $userEmail,
         private string $firstname,
         private string $lastname,
-        private string $userEmail,
-        private string $code,
     ) {
     }
 
@@ -19,9 +17,9 @@ readonly class MagicLinkNotification
         return $this->language;
     }
 
-    public function getUsername(): string
+    public function getUserEmail(): string
     {
-        return $this->username;
+        return $this->userEmail;
     }
 
     public function getFirstname(): string
@@ -32,15 +30,5 @@ readonly class MagicLinkNotification
     public function getLastname(): string
     {
         return $this->lastname;
-    }
-
-    public function getUserEmail(): string
-    {
-        return $this->userEmail;
-    }
-
-    public function getCode(): string
-    {
-        return $this->code;
     }
 }

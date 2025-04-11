@@ -10,6 +10,7 @@ export class User {
     email: string;
     language: string;
     appliances: PnAppliance[];
+    isPasswordSet: boolean;
 
     constructor(data: Record<string, any>) {
         this.iri = data['@id'];
@@ -20,6 +21,7 @@ export class User {
         this.email = data['email'];
         this.language = data['language'];
         this.appliances = PnAppliance.fromArray(data['appliances']);
+        this.isPasswordSet = data['passwordSet'];
     }
 
     static fromJson(data: Record<string, any> | null) {
@@ -69,6 +71,38 @@ export class PnListUser {
         }
 
         return new PnListUser(data);
+    }
+}
+
+export class MagicPassword {
+    id: number;
+    user: User;
+    createdAt: dayjs.Dayjs;
+    code: string;
+    used: boolean;
+    url: string;
+
+    constructor(data: Record<string, any>) {
+        this.id = data['id'];
+        this.createdAt = dayjs(data['createdAt']);
+        this.code = data['code'];
+        this.used = data['used'];
+        this.url = data['url'];
+
+        const user = User.fromJson(data['user']);
+        if (!user) {
+            throw 'User is not filled';
+        }
+
+        this.user = user;
+    }
+
+    public static fromJson(data: Record<string, any> | null) {
+        if (!data) {
+            return null;
+        }
+
+        return new MagicPassword(data);
     }
 }
 

@@ -6,7 +6,6 @@ use App\Entity\MagicLink;
 use App\Entity\User;
 use App\Message\UserRegisteredNotification;
 use Doctrine\Bundle\DoctrineBundle\Attribute\AsDoctrineListener;
-use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Event\PrePersistEventArgs;
 use Doctrine\ORM\Events;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -37,6 +36,8 @@ readonly class UserRegisteredListener
         $this->messageBus->dispatch(new UserRegisteredNotification(
             $user->getLanguage(),
             $user->getUsername(),
+            $user->getFirstname(),
+            $user->getLastname(),
             $user->getEmail(),
             $link->getCode(),
         ));

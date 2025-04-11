@@ -58,6 +58,8 @@ class LoginRequestController extends AbstractController
         $messageBus->dispatch(new MagicLinkNotification(
             $user->getLanguage(),
             $user->getUsername(),
+            $user->getFirstname(),
+            $user->getLastname(),
             $user->getEmail(),
             $link->getCode(),
         ));

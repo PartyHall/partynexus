@@ -53,12 +53,21 @@
                 "desc_expired": "Ce lien à expiré",
                 "desc_unknown": "Erreur inconnue, regarder la console pour plus d'infos"
             }
+        },
+        "magic_password": {
+            "hello": "Salut {{firstName}} {{lastName}}",
+            "desc": "Vous pouvez maintenant définir un mot de passe pour votre compte",
+            "not_found": "Ce code mot de passe magique n'a pas été trouvé. Peut-être qu'il a déjà été utilisé ou qu'il a expiré (+48h) ?",
+            "success_title": "Votre mot de passe a été défini",
+            "success_desc": "Vous pouvez maintenant vous connecter avec le pseudo \"{{username}}\" et ce mot de passe !",
+            "success_gohome": "Retourner à la connexion"
         }
     },
     "my_account": {
         "title": "Mon compte",
         "logout": "Déconnexion",
         "my_appliances": "Mes appareils",
+        "change_password": "Changer de mot de passe",
         "new": "Nouveau",
         "edit": "Éditer",
         "delete": "Supprimer",
@@ -70,6 +79,19 @@
             "title": "Éditer l'appareil",
             "title_create": "Créer un appareil",
             "name": "Nom"
+        },
+        "set_password": {
+            "old_password": "Ancien mot de passe",
+            "password": "Nouveau mot de passe",
+            "password_2": "Répéter le mot de passe",
+            "dont_match": "Les mots de passes ne correspondent pas",
+            "requirements": "Règles",
+            "min_chars": "Minimum 8 caractères",
+            "luc": "Contient des minuscules et majuscules",
+            "numbers": "Contient des chiffres",
+            "sc": "Contient des caractères spéciaux",
+            "success_title": "Mot de passe mis à jour",
+            "success_desc": "Votre mot de passe à été changé avec succès."
         }
     },
     "users": {
@@ -113,7 +135,16 @@
             "username": "Mon pseudo",
             "email": "Mon email",
             "firstname": "Prénom",
-            "lastname": "Nom de famille"
+            "lastname": "Nom de famille",
+            "has_password": "A défini son mot de passe ?",
+            "magic_password": {
+                "generator": {
+                    "title": "Générateur de MagicPassword",
+                    "desc": "Un MagicPassword est un lien que vous pouvez donner à la personne afin qu'elle puisse définir un mot de passe sans avoir à se connecter. Il est à usage unique et permet à la personne d'utiliser l'application quand les mails sont mal configurés (Non reçu, tombent en spam, etc...). Cela peut aussi être utilisé en cas d'oublie du mot de passe.",
+                    "generate": "Générer un MagicPassword",
+                    "generated_desc": "Lien généré. Transmettez-le à la personne afin qu'elle puisse définir un mot de passe. Il expirera dans 48h."
+                }
+            }
         }
     },
     "karaoke": {

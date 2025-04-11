@@ -1,5 +1,6 @@
 emails:
     general:
+        hello: 'Hi %firstname%, 👋'
         cheers: 'Cheers,'
         your_admin: 'Your PartyHall administrator'
     login:
@@ -23,6 +24,10 @@ emails:
         subject: 'New song request'
         text1: 'New song request by %requested_by%'
         text2: 'They want to get %title% by %artist%'
+    password_update:
+        subject: 'Password updated'
+        text1: 'Your PartyHall password has been updated'
+        warning: 'If you did not change your password, please reach immediately to your Partyhall administrator to secure your account !'
 users:
     login:
         banned: 'You are banned.'

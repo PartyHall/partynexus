@@ -301,6 +301,8 @@ class EventExporter
                     'emails.event_concluded.subject',
                     parameters: [
                         '%event_name%' => $this->event->getName(),
+                        '%firstname%' => $user->getFirstname(),
+                        '%lastname%' => $user->getLastname(),
                     ],
                     locale: $user->getLanguage()),
                 )

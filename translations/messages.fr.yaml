@@ -1,16 +1,15 @@
 emails:
     general:
+        hello: 'Salut %firstName%, 👋'
         cheers: 'Bonne journée,'
         your_admin: 'Votre administrateur PartyHall'
     login:
         subject: 'Tentative de connexion'
-        welcome: 'Salut %username%!'
         text1: "Vous avez essayé de vous connecter à PartyHall, voici votre lien magique"
         link: 'Connexion à PartyHall'
         warning: "Ce lien va expirer dans 15 minutes. Si vous n'avez pas fait cette demande, contactez votre administrateur PartyHall et supprimez cet email."
     registered:
         subject: 'Vous êtes inscrit sur PartyHall !'
-        welcome: 'Bienvenue %username% !'
         text1: 'Un administrateur vous a créé un compte PartyHall !'
         link: "Se connecter !"
         warning: "Si vous n'avez pas demandé cela, merci de contacter votre administrateur PartyHall."
@@ -22,7 +21,11 @@ emails:
     new_song_request:
         subject: 'Nouvelle demande de musique'
         text1: 'Une musique à été demandée par %requested_by%'
-        text2: "Il s'agît de %title% par %artist%"        
+        text2: "Il s'agît de %title% par %artist%"
+    password_update:
+        subject: 'Mot de passe mis à jour'
+        text1: 'Votre mot de passe PartyHall a été modifié'
+        warning: 'Si vous n\'avez pas changé votre mot de passe, merci de contacter immédiatement votre administrateur PartyHall pour sécuriser votre compte !'
 users:
     login:
         banned: 'Vous êtes bannis.'

@@ -2,10 +2,11 @@
 
 namespace App\Entity;
 
+use App\Repository\MagicLinkRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity]
+#[ORM\Entity(repositoryClass: MagicLinkRepository::class)]
 class MagicLink
 {
     #[ORM\Id]

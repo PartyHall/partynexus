@@ -1,0 +1,4 @@
+validation:
+    not_blank: 'Ce champ ne peut pas être vide.'
+    not_compromised: 'Ce mot de passe apparaît dans des fuites. Choisissez en un autre (Et changez le si vous l\'utilisez ailleurs!)'
+    password_requirements: 'Le mot de passe doit contenir au moins une minuscule, une majuscule, un chiffre et un caractère spécial.'
