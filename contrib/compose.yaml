@@ -25,7 +25,8 @@ services:
     volumes:
       - './jwt_keys:/app/config/jwt'
       - './data:/app/var'
-      - './supervisor_logs:/var/log/supervisor/'
       - './song_covers:/app/public/song_covers'
+      - './backdrops:/app/public/backdrops'
+      - './supervisor_logs:/var/log/supervisor/'
     ports:
       - '80:80'
