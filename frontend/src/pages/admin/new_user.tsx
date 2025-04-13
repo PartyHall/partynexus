@@ -11,6 +11,8 @@ import { useTranslation } from 'react-i18next';
 
 type UserCreationProps = {
     username: string;
+    firstname: string;
+    lastname: string;
     email: string;
     language: string;
 };
@@ -26,6 +28,8 @@ export default function AdminNewUserPage() {
         useForm<UserCreationProps>({
             defaultValues: {
                 username: '',
+                firstname: '',
+                lastname: '',
                 email: '',
                 language: 'en_US',
             },
@@ -35,6 +39,8 @@ export default function AdminNewUserPage() {
         try {
             const user = await api.users.register(
                 data.username,
+                data.firstname,
+                data.lastname,
                 data.email,
                 data.language
             );
@@ -84,6 +90,22 @@ export default function AdminNewUserPage() {
                         control={control}
                         name="username"
                         label={t('users.new.username')}
+                    >
+                        <Input disabled={formState.isSubmitting} />
+                    </FormItem>
+
+                    <FormItem
+                        control={control}
+                        name="firstname"
+                        label={t('users.new.firstname')}
+                    >
+                        <Input disabled={formState.isSubmitting} />
+                    </FormItem>
+
+                    <FormItem
+                        control={control}
+                        name="lastname"
+                        label={t('users.new.lastname')}
                     >
                         <Input disabled={formState.isSubmitting} />
                     </FormItem>

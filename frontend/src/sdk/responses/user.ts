@@ -16,8 +16,8 @@ export class User {
         this.iri = data['@id'];
         this.id = data['id'];
         this.username = data['username'];
-        this.firstname = data['firstname'];
-        this.lastname = data['lastname'];
+        this.firstname = data['firstname'] ?? '';
+        this.lastname = data['lastname'] ?? '';
         this.email = data['email'];
         this.language = data['language'];
         this.appliances = PnAppliance.fromArray(data['appliances']);

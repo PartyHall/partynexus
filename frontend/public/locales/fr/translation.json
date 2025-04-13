@@ -99,6 +99,8 @@
         "new_user_bt": "Inscrire un utilisateur",
         "new": {
             "username": "Pseudo",
+            "firstname": "Prénom",
+            "lastname": "Nom de famille",
             "email": "Adresse email",
             "lang": "Langue",
             "register": "Inscrire l'utilisateur",

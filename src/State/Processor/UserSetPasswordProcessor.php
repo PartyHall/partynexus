@@ -50,12 +50,7 @@ readonly class UserSetPasswordProcessor implements ProcessorInterface
         $this->entityManager->persist($user);
         $this->entityManager->flush();
 
-        $this->messageBus->dispatch(new PasswordUpdatedNotification(
-            $user->getLanguage(),
-            $user->getEmail(),
-            $user->getFirstname(),
-            $user->getLanguage(),
-        ));
+        $this->messageBus->dispatch(new PasswordUpdatedNotification($user));
 
         return new Response(status: 201);
     }

@@ -34,11 +34,7 @@ readonly class UserRegisteredListener
         $user->addMagicLink($link);
 
         $this->messageBus->dispatch(new UserRegisteredNotification(
-            $user->getLanguage(),
-            $user->getUsername(),
-            $user->getFirstname(),
-            $user->getLastname(),
-            $user->getEmail(),
+            $user,
             $link->getCode(),
         ));
     }

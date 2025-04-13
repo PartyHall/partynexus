@@ -511,6 +511,20 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    public function getFullName(): string
+    {
+        $fullName = $this->getUsername();
+
+        $firstName = $this->getFirstname() ?? '';
+        $lastName = $this->getLastname() ?? '';
+
+        if (!empty($firstName)) {
+            $fullName = \sprintf('%s %s', $firstName, $lastName);
+        }
+
+        return $fullName;
+    }
+
     #[Groups([self::API_GET_ITEM])]
     public function isPasswordSet(): bool
     {

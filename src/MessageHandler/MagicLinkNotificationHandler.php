@@ -32,8 +32,7 @@ readonly class MagicLinkNotificationHandler
             ->locale($notification->getLanguage())
             ->context([
                 'username' => $notification->getUsername(),
-                'firstname' => $notification->getFirstname(),
-                'lastname' => $notification->getLastname(),
+                'fullname' => $notification->getFullName(),
                 'link' => $this->baseUrl.'/magic-login/?email='.$notification->getUserEmail().'&code='.$notification->getCode(),
             ])
         ;

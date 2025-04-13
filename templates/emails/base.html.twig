@@ -12,7 +12,7 @@
                 </a>
             </row>
             <row class="content">
-                <h1>{{ 'emails.general.hello' | trans({'%firstname%': firstname, '%lastname%': lastname}) }}</h1>
+                <h1>{{ 'emails.general.hello' | trans({'%fullname%': fullname}) }}</h1>
 
                 {% block content %}{% endblock %}
                 <spacer size="20"></spacer>

@@ -1,17 +1,17 @@
 emails:
     general:
-        hello: 'Hi %firstname%, 👋'
+        hello: 'Hi %fullname%, 👋'
         cheers: 'Cheers,'
         your_admin: 'Your PartyHall administrator'
     login:
         subject: 'Login request'
-        welcome: 'Welcome %username%!'
+        welcome: 'Welcome %fullname%!'
         text1: "You tried to login to PartyHall, here's your magic-link"
         link: 'Login to PartyHall'
         warning: 'This will expire in 15 minutes. If you did not request this, please contact your PartyHall administrator and remove this email.'
     registered:
         subject: 'You are registered to PartyHall!'
-        welcome: 'Welcome %username%!'
+        welcome: 'Welcome %fullname%!'
         text1: 'An administrator created an account for you on PartyHall!'
         link: "Let's login!"
         warning: 'If you did not request this, please contact your PartyHall administrator.'

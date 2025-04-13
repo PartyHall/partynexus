@@ -25,8 +25,8 @@ readonly class PasswordUpdateNotificationHandler
             ->htmlTemplate('emails/password_update.html.twig')
             ->locale($notification->getLanguage())
             ->context([
-                'firstname' => $notification->getFirstname(),
-                'lastname' => $notification->getLastname(),
+                'username' => $notification->getUsername(),
+                'fullname' => $notification->getFullname(),
             ])
         ;
 

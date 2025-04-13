@@ -5,6 +5,7 @@ namespace App\Service;
 use App\Entity\Event;
 use App\Entity\Export;
 use App\Entity\Picture;
+use App\Entity\User;
 use App\Enum\ExportProgress;
 use App\Enum\ExportStatus;
 use App\Utils\DirectoryUtils;
@@ -294,6 +295,7 @@ class EventExporter
             ...$this->event->getParticipants()->toArray(),
         ];
 
+        /** @var User $user */
         foreach ($users as $user) {
             $mail = (new TemplatedEmail())
                 ->to($user->getEmail())
@@ -301,14 +303,15 @@ class EventExporter
                     'emails.event_concluded.subject',
                     parameters: [
                         '%event_name%' => $this->event->getName(),
-                        '%firstname%' => $user->getFirstname(),
-                        '%lastname%' => $user->getLastname(),
+                        '%username%' => $user->getUsername(),
+                        '%fullname%' => $user->getFullName(),
                     ],
                     locale: $user->getLanguage()),
                 )
                 ->htmlTemplate('emails/event_exported.html.twig')
                 ->locale($user->getLanguage())
                 ->context([
+                    'fullname' => $user->getFullName(),
                     'event' => $this->event,
                     'link' => $this->baseUrl.'/events/'.$this->event->getId()->toString(),
                 ]);

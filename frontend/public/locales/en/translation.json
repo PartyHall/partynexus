@@ -100,6 +100,8 @@
         "new_user_bt": "Register user",
         "new": {
             "username": "Username",
+            "firstname": "First name",
+            "lastname": "Last name",
             "email": "Email address",
             "lang": "Language",
             "register": "Register user",

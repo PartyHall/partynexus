@@ -1,6 +1,6 @@
 emails:
     general:
-        hello: 'Salut %firstName%, 👋'
+        hello: 'Salut %fullname%, 👋'
         cheers: 'Bonne journée,'
         your_admin: 'Votre administrateur PartyHall'
     login:

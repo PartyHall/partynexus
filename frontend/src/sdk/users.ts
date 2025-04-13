@@ -48,11 +48,15 @@ export default class Users {
 
     async register(
         username: string,
+        firstname: string,
+        lastname: string,
         email: string,
         language: string
     ): Promise<User | null> {
         const resp = await this.sdk.post('/api/users', {
             username,
+            firstname: firstname.length > 0 ? firstname : null,
+            lastname: lastname.length > 0 ? lastname : null,
             email,
             language,
         });
