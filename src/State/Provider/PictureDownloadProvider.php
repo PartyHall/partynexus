@@ -31,7 +31,7 @@ readonly class PictureDownloadProvider implements ProviderInterface
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): object|array|null
     {
         $id = $uriVariables['id'] ?? null;
-        $alternatePicture = 'true' === strtolower($this->requestStack->getMainRequest()->query->get('alternate'));
+        $alternatePicture = 'true' === strtolower($this->requestStack->getMainRequest()->query->get('alternate') ?? 'false');
 
         /** @var Picture|null $picture */
         $picture = $this->repo->find($id);
