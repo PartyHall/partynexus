@@ -141,7 +141,7 @@ export default function SongListingPage() {
             <Flex vertical style={{ height: '100%' }} gap={8}>
                 <Flex gap={8}>
                     <Input
-                        placeholder={t('karaoke.search')}
+                        placeholder={t('generic.search')}
                         value={ctx.search}
                         onChange={(x) =>
                             setCtx((old) => ({
@@ -272,7 +272,7 @@ export default function SongListingPage() {
                         onClick={() => navigate('/karaoke/request')}
                         icon={<IconZoomQuestion size={20} />}
                     >
-                        {t('karaoke.request_song')}
+                        {t('karaoke.request.title')}
                     </Button>
                     {isGranted('ROLE_ADMIN') && (
                         <Button
