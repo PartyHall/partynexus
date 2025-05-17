@@ -37,7 +37,7 @@ class EventConcludeController extends AbstractController
         $this->emi->flush();
 
         $this->messageBus->dispatch(new EventConcludedNotification(
-            $event,
+            $event->getId(),
             !$wasAlreadyOver,
         ));
 
