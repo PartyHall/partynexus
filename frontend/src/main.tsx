@@ -16,6 +16,7 @@ import AdminUsersPage from './pages/admin/users.tsx';
 import AuthProvider from './hooks/auth.tsx';
 import AuthenticatedLayout from './layout/AuthenticatedLayout.tsx';
 import Backend from 'i18next-http-backend';
+import DisplayBoardPage from './pages/DisplayBoard.tsx';
 import EditAppliancePage from './pages/appliances/EditAppliance.tsx';
 import EditEventPage from './pages/EditEvent.tsx';
 import EditSongPage from './pages/karaoke/EditSong.tsx';
@@ -61,6 +62,10 @@ const router = createBrowserRouter([
     {
         path: '/magic-password/:code',
         element: <MagicPasswordPage />,
+    },
+    {
+        path: '/display-board/:eventId/:displayBoardKey',
+        element: <DisplayBoardPage />,
     },
     {
         path: '/',

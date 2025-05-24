@@ -2,7 +2,7 @@
 
 namespace App\Security;
 
-use App\Repository\ApplianceRepository;
+use App\Repository\DisplayBoardKeyRepository;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,40 +13,33 @@ use Symfony\Component\Security\Http\Authenticator\AbstractAuthenticator;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Component\Security\Http\Authenticator\Passport\SelfValidatingPassport;
-use Symfony\Component\Uid\Uuid;
 
-class ApplianceAuthenticator extends AbstractAuthenticator
+class DisplayBoardAuthenticator extends AbstractAuthenticator
 {
     public function __construct(
-        private readonly ApplianceRepository $repository,
+        private readonly DisplayBoardKeyRepository $repository,
     ) {
     }
 
     public function supports(Request $request): ?bool
     {
-        return $request->headers->has('X-HARDWARE-ID') && $request->headers->has('X-API-TOKEN');
+        return $request->query->has('displayBoardKey');
     }
 
     public function authenticate(Request $request): Passport
     {
-        $hwid = $request->headers->get('X-HARDWARE-ID');
-        $token = $request->headers->get('X-API-TOKEN');
+        $displayBoardKey = $request->query->get('displayBoardKey');
 
-        if (empty($hwid) || empty($token) || !Uuid::isValid($hwid)) {
-            throw new CustomUserMessageAuthenticationException('Invalid auth');
+        if (empty($displayBoardKey)) {
+            throw new CustomUserMessageAuthenticationException('Invalid display board key');
         }
 
-        $userIdentifier = $hwid;
-        $user = $this->repository->findOneBy([
-            'hardwareId' => $hwid,
-            'apiToken' => $token,
-        ]);
-
-        if (!$user) {
-            throw new CustomUserMessageAuthenticationException('Invalid auth');
+        $displayBoardKey = $this->repository->findOneBy(['key' => $displayBoardKey]);
+        if (!$displayBoardKey) {
+            throw new CustomUserMessageAuthenticationException('Invalid display board key');
         }
 
-        return new SelfValidatingPassport(new UserBadge($userIdentifier));
+        return new SelfValidatingPassport(new UserBadge($displayBoardKey->getKey()));
     }
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response

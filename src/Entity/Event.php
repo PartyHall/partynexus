@@ -170,6 +170,10 @@ class Event
     ])]
     private Collection $songSessions;
 
+    #[ORM\OneToOne(targetEntity: DisplayBoardKey::class, mappedBy: 'event')]
+    #[Groups([self::API_GET_ITEM])]
+    private ?DisplayBoardKey $displayBoardKey = null;
+
     public function __construct()
     {
         $this->pictures = new ArrayCollection();
@@ -324,5 +328,17 @@ class Event
     public function getSongSessions(): Collection
     {
         return $this->songSessions;
+    }
+
+    public function getDisplayBoardKey(): ?DisplayBoardKey
+    {
+        return $this->displayBoardKey;
+    }
+
+    public function setDisplayBoardKey(?DisplayBoardKey $displayBoardKey): self
+    {
+        $this->displayBoardKey = $displayBoardKey;
+
+        return $this;
     }
 }

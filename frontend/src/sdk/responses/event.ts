@@ -1,3 +1,4 @@
+import DisplayBoardKey from './display_board_key';
 import PnExport from './export';
 import { User } from './user';
 import dayjs from 'dayjs';
@@ -61,6 +62,7 @@ export class PnEvent {
     owner: User;
     participants: User[];
 
+    displayBoardKey: DisplayBoardKey | null;
     export: PnExport | null;
 
     constructor(data: Record<string, any>) {
@@ -80,6 +82,7 @@ export class PnEvent {
 
         this.participants = User.fromArray(data['participants']);
 
+        this.displayBoardKey = DisplayBoardKey.fromJson(data['displayBoardKey']);
         this.export = PnExport.fromJson(data['export']);
 
         /**

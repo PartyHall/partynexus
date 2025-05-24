@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Appliance;
+use App\Entity\Event;
 use App\Entity\Picture;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -47,5 +48,19 @@ class PictureRepository extends ServiceEntityRepository implements ParticipantFi
         $qb->setParameter('current_user', $user);
 
         return $qb;
+    }
+
+    public function findByDisplayBoard(Event $event): mixed
+    {
+        return $this
+            ->createQueryBuilder('p')
+            ->where('p.event = :event')
+            ->andWhere('p.unattended = FALSE')
+            ->setParameter('event', $event)
+            ->orderBy('p.takenAt', 'DESC')
+            ->setMaxResults(9)
+            ->getQuery()
+            ->getResult()
+        ;
     }
 }

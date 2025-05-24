@@ -27,6 +27,18 @@ export default function EventInfos({ event, displayOwnerStuff }: Props) {
                     {event?.datetime.format('HH:mm - DD / MM / YYYY')}
                 </KeyVal>
                 <KeyVal label={t('event.location')}>{event?.location}</KeyVal>
+                {
+                    event.displayBoardKey
+                    && <KeyVal label={t('event.display_board.title')}>
+                        <a
+                            href={event.displayBoardKey.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            {t('generic.link')}
+                        </a>
+                    </KeyVal>
+                }
             </Flex>
         </>
     );
