@@ -11,7 +11,10 @@ security:
             entity:
                 class: App\Entity\Appliance
                 property: hardwareId
-    
+        display_board_provider:
+            entity:
+                class: App\Entity\DisplayBoardKey
+                property: key    
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
@@ -36,6 +39,17 @@ security:
             stateless: true
             refresh_jwt:
                 check_path: /api/refresh
+                provider: user_provider
+                
+        pictures:
+            pattern: (^/api/events/(.*)/pictures$)|(^/api/pictures/(.*)/download$)
+            stateless: true
+            provider: display_board_provider
+            custom_authenticators:
+                - App\Security\ApplianceAuthenticator
+                - App\Security\DisplayBoardAuthenticator
+            entry_point: jwt
+            jwt:
                 provider: user_provider
         
         api:

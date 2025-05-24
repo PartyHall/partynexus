@@ -4,6 +4,7 @@ namespace App\State\Provider;
 
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
+use App\Entity\DisplayBoardKey;
 use App\Entity\Picture;
 use App\Entity\User;
 use App\Repository\PictureRepository;
@@ -39,27 +40,35 @@ readonly class PictureDownloadProvider implements ProviderInterface
             throw HttpException::fromStatusCode(Response::HTTP_NOT_FOUND);
         }
 
-        /** @var User $user */
+        /** @var User|DisplayBoardKey $user */
         $user = $this->security->getUser();
 
-        // @TODO: Do this properly
+        // @TODO: Do all security properly
         // Maybe make a custom voter or so i'm not sure
-        $isAllowed = true;
-        if ($user !== $picture->getEvent()->getOwner()) {
-            $isAllowed = false;
-        }
 
-        if (!$isAllowed) {
-            foreach ($picture->getEvent()->getParticipants() as $participant) {
-                if ($participant === $user) {
-                    $isAllowed = true;
-                    break;
+        if ($user instanceof DisplayBoardKey) {
+            // @TODO: Check that the picture is in the last 12 uploaded
+            if ($picture->getEvent()->getDisplayBoardKey() !== $user || $picture->isUnattended()) {
+                throw HttpException::fromStatusCode(Response::HTTP_FORBIDDEN);
+            }
+        } else {
+            $isAllowed = true;
+            if ($user !== $picture->getEvent()->getOwner()) {
+                $isAllowed = false;
+            }
+
+            if (!$isAllowed) {
+                foreach ($picture->getEvent()->getParticipants() as $participant) {
+                    if ($participant === $user) {
+                        $isAllowed = true;
+                        break;
+                    }
                 }
             }
-        }
 
-        if (!$isAllowed) {
-            throw HttpException::fromStatusCode(Response::HTTP_FORBIDDEN);
+            if (!$isAllowed) {
+                throw HttpException::fromStatusCode(Response::HTTP_FORBIDDEN);
+            }
         }
 
         $filepath = $picture->getFilepath();

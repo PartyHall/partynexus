@@ -110,7 +110,7 @@ export class Events {
     async conclude(event: PnEvent): Promise<PnEvent | null> {
         const resp = await this.sdk.post(
             `/api/events/${event.id}/conclude`,
-            {}
+            {},
         );
         const data = await resp.json();
 
@@ -124,8 +124,10 @@ export class Events {
         const resp = await this.sdk.get(
             `/api/events/${event.id}/song-sessions?page=${page}`
         );
-        const data = await resp.json();
 
-        return Collection.fromJson(data, (x) => PnSongSession.fromJson(x));
+        return Collection.fromJson(
+            await resp.json(),
+            (x) => PnSongSession.fromJson(x),
+        );
     }
 }
