@@ -14,6 +14,7 @@
         "edit": "Edit",
         "choose": "Choose",
         "save": "Save",
+        "link": "Link",
         "error": {
             "unknown": "An unknown error has occured",
             "unknown_desc": "There was an issue, see the console for more info",
@@ -265,6 +266,12 @@
         "show_timelapse_bt": "Show the timelapse",
         "edit": "Edit",
         "see": "See",
+        "display_board": {
+            "title": "Display board",
+            "create": "Create a Display board key",
+            "created": "Display board key created",
+            "error": "An error occured while creating the display board key, see console for more info"
+        },
         "conclude": {
             "bt": "Mark as \"over\"",
             "title": "You are going to conclude the event",

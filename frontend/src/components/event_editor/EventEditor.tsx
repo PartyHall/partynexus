@@ -1,8 +1,8 @@
 import { Button, DatePicker, Flex, Form, Input, Typography } from 'antd';
+import DisplayBoardCreator from './DisplayBoardCreator';
 import { FormItem } from 'react-hook-form-antd';
 import { PnEvent } from '../../sdk/responses/event';
 import { ValidationErrors } from '../../sdk/responses/validation_error';
-
 import { useAuth } from '../../hooks/auth';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
@@ -108,6 +108,11 @@ export default function EventEditor({ event: initialEvent }: Props) {
                 >
                     <Input disabled={formState.isSubmitting} />
                 </FormItem>
+
+                {
+                    event
+                    && <DisplayBoardCreator event={event} />
+                }
 
                 <Flex align="center" justify="center" style={{ marginTop: 32 }}>
                     <Form.Item>
