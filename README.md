@@ -2,9 +2,7 @@
 
 PartyNexus is a sync hub for PartyHall. Your appliance will automatically sync pictures taken to it and provide a neat interface to share it with the people that were at the event without relying on zip export file.
 
-While not strictly required, it is really recommended.
-
-It's also mandatory if you want to use the backdrops or the karaoke feature (It can be ran on your own computer if you want to use it for this purpose only).
+If you really don't want to setup one (Like if you don't have a server), you can set it up on your own computer. You'll just need to run it every time you want to sync, and you'll need to be on the same network as the PartyHall appliance.
 
 ## Getting started
 

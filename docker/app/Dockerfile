@@ -51,7 +51,6 @@ RUN install-php-extensions pdo_pgsql redis xsl
 ###< recipes ###
 
 COPY --link ./docker/app/frankenphp/conf.d/10-app.ini $PHP_INI_DIR/app.conf.d/
-COPY --link --chmod=755 ./docker/app/frankenphp/docker-entrypoint.sh /usr/local/bin/docker-entrypoint
 COPY --link ./docker/app/frankenphp/Caddyfile /etc/caddy/Caddyfile
 
 ENTRYPOINT ["docker-entrypoint"]
@@ -63,6 +62,8 @@ CMD [ "frankenphp", "run", "--config", "/etc/caddy/Caddyfile" ]
 FROM frankenphp_base AS frankenphp_dev
 
 ENV APP_ENV=dev XDEBUG_MODE=off
+
+COPY --link --chmod=755 ./docker/app/frankenphp/docker-entrypoint.sh /usr/local/bin/docker-entrypoint
 
 RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
 
@@ -85,26 +86,22 @@ COPY --link ./frontend /app
 
 RUN cd /app && npm install && npm run build
 
-# Intermediary prod image
-FROM frankenphp_base AS frankenphp_intermerdiary
+# Prod image
+FROM frankenphp_base AS frankenphp_prod
 
 ARG PARTYNEXUS_VERSION='indev'
 ARG PARTYNEXUS_COMMIT='INDEV'
 
+ENV APP_ENV=prod
 ENV PARTYNEXUS_VERSION=${PARTYNEXUS_VERSION}
 ENV PARTYNEXUS_COMMIT=${PARTYNEXUS_COMMIT}
 ENV FRANKENPHP_CONFIG="import worker.Caddyfile"
 
+COPY --link --chmod=755 ./docker/app/frankenphp/start.sh /usr/local/bin/docker-entrypoint
+
 RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 COPY --link ./docker/app/frankenphp/conf.d/20-app.prod.ini $PHP_INI_DIR/app.conf.d/
 COPY --link ./docker/app/frankenphp/worker.Caddyfile /etc/caddy/worker.Caddyfile
-
-# hadolint ignore=DL3008
-RUN apt-get update && apt-get install -y --no-install-recommends \
-	supervisor \
-	&& rm -rf /var/lib/apt/lists/*
-
-COPY --link ./docker/app/supervisord.conf /etc/supervisor/supervisord.conf
 
 # prevent the reinstallation of vendors at every changes in the source code
 COPY --link composer.* symfony.* ./
@@ -117,13 +114,7 @@ RUN sed -i \
     -e "s/PARTYNEXUS_COMMIT: 'INDEV'/PARTYNEXUS_COMMIT: '${PARTYNEXUS_COMMIT}'/" \
     /app/config/services.yaml
 
-CMD [ "/usr/bin/supervisord", "-c", "/etc/supervisor/supervisord.conf" ]
-
-# Prod FrankenPHP image
-FROM frankenphp_intermerdiary AS frankenphp_prod
-
-ENV APP_ENV=prod
-
+# Installing the stuff properly
 RUN set -eux; \
 	mkdir -p var/cache var/log; \
     composer install --no-cache --prefer-dist --no-dev --no-autoloader --no-scripts --no-progress; \
@@ -132,14 +123,4 @@ RUN set -eux; \
 	composer run-script --no-dev post-install-cmd; \
 	chmod +x bin/console; sync;
 
-# Preprod FrankenPHP image
-FROM frankenphp_intermerdiary AS frankenphp_preprod
-
-ENV APP_ENV=dev
-RUN set -eux; \
-	mkdir -p var/cache var/log; \
-    composer install --no-cache --prefer-dist --no-autoloader --no-scripts --no-progress; \
-	composer dump-autoload --classmap-authoritative; \
-	# composer dump-env prod; \ # We don't want to use the JWT secret key specified here
-	composer run-script post-install-cmd; \
-	chmod +x bin/console; sync;
+CMD [ "/usr/local/bin/start" ]
