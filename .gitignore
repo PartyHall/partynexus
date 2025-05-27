@@ -41,6 +41,7 @@ phpstan.neon
 ###< phpstan/phpstan ###
 
 contrib/.env
+contrib/test
 supervisord.pid
 
 http/*.private.*.json

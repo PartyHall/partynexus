@@ -33,5 +33,7 @@ vendor/
 .env.local.php
 .env.test
 
+contrib/test
+
 0_DATA
 Makefile
