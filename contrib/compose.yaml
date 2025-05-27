@@ -9,19 +9,27 @@ services:
     volumes:
       - './db_data:/var/lib/postgresql/data'
     healthcheck:
-      test: ["CMD", "pg_isready", "-d", "partynexus", "-U", "partynexus"]
+      test: [ 'CMD', 'pg_isready', '-d', 'partynexus', '-U', 'partynexus' ]
       timeout: '5s'
-      start_period: '60s'
+      start_period: '25s'
       retries: 5
 
   redis:
     image: 'redis:7.4.1-bookworm'
+    healthcheck:
+      test: [ 'CMD', 'redis-cli', '--raw', 'incr', 'ping' ]
 
   app:
     image: 'partynexus:latest'
     restart: 'unless-stopped'
+    command: 'main'
     tty: true
     env_file: './.env'
+    depends_on:
+      database:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
     volumes:
       - './jwt_keys:/app/config/jwt'
       - './data:/app/var'
@@ -30,3 +38,29 @@ services:
       - './supervisor_logs:/var/log/supervisor/'
     ports:
       - '80:80'
+    healthcheck:
+      test: [ 'CMD', 'curl', '-f', 'http://localhost/health' ]
+      interval: '30s'
+      timeout: '5s'
+      retries: 3
+      start_period: "20s"
+
+  worker_emails:
+    image: 'partynexus:latest'
+    restart: 'unless-stopped'
+    command: ['consumer', 'emails']
+    tty: true
+    env_file: './.env'
+    depends_on:
+      app:
+        condition: service_healthy
+
+  worker_export:
+    image: 'partynexus:latest'
+    restart: 'unless-stopped'
+    command: ['consumer', 'export']
+    tty: true
+    env_file: './.env'
+    depends_on:
+      app:
+        condition: service_healthy
