@@ -50,7 +50,7 @@ class UserFixture extends Fixture
          */
 
         $this->createUser(1, 'admin', ['ROLE_ADMIN'], 'Dominick', 'Cobb');
-        $this->createUser(2, 'eventmaker', ['ROLE_ADMIN'], 'Robert', 'Fischer');
+        $this->createUser(2, 'eventmaker', ['ROLE_EVENT_MAKER'], 'Robert', 'Fischer');
         $this->createUser(3, 'user');
         $this->createUser(4, 'noevents', [], 'Nash');
 

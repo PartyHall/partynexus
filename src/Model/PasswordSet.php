@@ -2,10 +2,12 @@
 
 namespace App\Model;
 
+use App\Validator\CorrectPassword;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class PasswordSet
 {
+    #[CorrectPassword]
     public ?string $oldPassword = null;
 
     #[Assert\NotCompromisedPassword(message: 'validation.not_compromised')]

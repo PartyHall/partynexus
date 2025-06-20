@@ -1,0 +1,90 @@
+{
+    "generic": {
+        "home": "Accueil",
+        "username": "Pseudo",
+        "email": "Email",
+        "password": "Mot de passe",
+        "firstname": "Prénom",
+        "lastname": "Nom de famille",
+        "loading": "Chargement...",
+        "search": "Rechercher...",
+        "no_results": "Aucun résultat trouvé",
+        "cancel": "Annuler",
+        "create": "Créer",
+        "save": "Enregistrer",
+        "changes_saved": "Changements enregistrés avec succès",
+        "created": "Créé avec succès",
+        "delete": "Supprimer",
+        "new": "Ajouter",
+        "edit": "Modifier",
+        "link": "Lien",
+        "go_back": "Page précédente",
+        "logout": "Se déconnecter",
+        "error": {
+            "generic": "Une erreur s'est produite",
+            "generic_desc": "Merci de réessayer plus tard ou de contacter votre administrateur PartyHall"
+        }
+    },
+    "errors": {
+        "401": {
+            "title": "Authentification expirée",
+            "message": "Cela ne devrait pas arriver.\nUn rafraîchissement ou une déconnexion aurait dû être effectué."
+        },
+        "403": {
+            "title": "Interdit",
+            "message": "Vous n'avez pas la permission d'accéder à cette ressource."
+        },
+        "404": {
+            "title": "Page perdue dans l'espace",
+            "message": "La page que vous cherchez n'existe pas ou a été déplacé.\nPeut-être s'est-elle égarée dans une autre galaxie ?"
+        },
+        "5xx": {
+            "title": "Erreur serveur",
+            "message": "Une erreur inattendue s'est produite sur le serveur.\nVeuillez réessayer plus tard."
+        }
+    },
+    "register": {},
+    "login": {
+        "title": "Connexion",
+        "login_button": "Se connecter",
+        "forgot_password": "Mot de passe oublié ?",
+        "register_prompt": "Pas de compte ? S'inscrire."
+    },
+    "events": {
+        "title": "Évènements"
+    },
+    "account": {
+        "title": "Mon compte",
+        "actions": "Actions",
+        "language": "Langue",
+        "my_appliances": {
+            "title": "Mes appareils",
+            "none_found": "Aucun appareil trouvé",
+            "delete": "Supprimer l'appareil",
+            "delete_confirm": "Êtes vous sûr de vouloir supprimer l'appareil '{{name}}' ?",
+            "editor": {
+                "title_edit": "Modification de l'appareil '{{name}}'",
+                "title_new": "Nouvel appareil",
+                "id": "ID Appareil",
+                "name": "Nom de l'appareil",
+                "hwid": "Hardware ID",
+                "token": "Token",
+                "hwid_copied": "Hardware ID copié dans le presse-papiers",
+                "token_copied": "Token copied copié dans le presse-papiers"
+            }
+        },
+        "change_password": {
+            "title": "Changer le mot de passe",
+            "current": "Mot de passe actuel",
+            "new": "Nouveau mot de passe",
+            "confirm": "Confirmer le nouveau mot de passe",
+            "password_mismatch": "Les mots de passe ne correspondent pas"
+        }
+    },
+    "admin": {
+        "title": "Admin"
+    },
+    "karaoke": {
+        "title": "Karaoké"
+    }
+}
