@@ -63,7 +63,8 @@ security:
                 provider: user_provider
     
     role_hierarchy:
-        ROLE_ADMIN: ROLE_USER
+        ROLE_ADMIN: ROLE_EVENT_MAKER
+        ROLE_EVENT_MAKER: ROLE_USER
     
     access_control:
         - { path: ^/api/_sentry-test, roles: PUBLIC_ACCESS}

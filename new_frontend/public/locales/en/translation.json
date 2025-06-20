@@ -1,0 +1,90 @@
+{
+    "generic": {
+        "home": "Home",
+        "username": "Username",
+        "email": "Email",
+        "password": "Password",
+        "firstname": "First Name",
+        "lastname": "Last Name",
+        "loading": "Loading...",
+        "search": "Search...",
+        "no_results": "No results found",
+        "cancel": "Cancel",
+        "save": "Save",
+        "create": "Create",
+        "changes_saved": "Changes saved successfully",
+        "created": "Created successfully",
+        "delete": "Delete",
+        "new": "New",
+        "edit": "Edit",
+        "link": "Link",
+        "go_back": "Go Back",
+        "logout": "Log out",
+        "error": {
+            "generic": "An error occurred",
+            "generic_desc": "Please try again later or contact your PartyHall administrator"
+        }
+    },
+    "errors": {
+        "401": {
+            "title": "Authentication expired",
+            "message": "This should not have happened.\nRefresh or logout should have been called"
+        },
+        "403": {
+            "title": "Forbidden",
+            "message": "You do not have permission to access this resource."
+        },
+        "404": {
+            "title": "Page lost in space",
+            "message": "The page you are looking for does not exist or has been moved.\nMaybe it got lost in another galaxy?"
+        },
+        "5xx": {
+            "title": "Server error",
+            "message": "An unexpected error occurred on the server.\nPlease try again later."
+        }
+    },
+    "register": {},
+    "login": {
+        "title": "Login",
+        "login_button": "Log In",
+        "forgot_password": "Forgot password?",
+        "register_prompt": "Don't have an account? Register here."
+    },
+    "events": {
+        "title": "Events"
+    },
+    "account": {
+        "title": "My account",
+        "actions": "Actions",
+        "language": "Language",
+        "my_appliances": {
+            "title": "My appliances",
+            "none_found": "No appliances found",
+            "delete": "Delete appliance",
+            "delete_confirm": "Are you sure you want to delete the appliance '{{name}}'?",
+            "editor": {
+                "title_edit": "Editing appliance '{{name}}'",
+                "title_new": "New appliance",
+                "id": "Appliance ID",
+                "name": "Appliance name",
+                "hwid": "Hardware ID",
+                "token": "Token",
+                "hwid_copied": "Hardware ID copied to clipboard",
+                "token_copied": "Token copied to clipboard"
+            }
+        },
+        "change_password": {
+            "title": "Change password",
+            "current": "Current password",
+            "new": "New password",
+            "confirm": "Confirm new password",
+            "password_mismatch": "New password and confirmation do not match"
+        }
+    },
+    "admin": {
+        "title": "Admin"
+    },
+    "karaoke": {
+        "title": "Karaoke"
+    }
+}

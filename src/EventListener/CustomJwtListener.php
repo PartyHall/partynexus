@@ -24,9 +24,14 @@ readonly class CustomJwtListener
     public function onJWTCreated(JWTCreatedEvent $event): void
     {
         $user = $event->getUser();
+        if (!$user instanceof User) {
+            throw new \Exception('User is not a user');
+        }
+
         $payload = $event->getData();
 
         $payload['iri'] = $this->iriConverter->getIriFromResource($user);
+        $payload['id'] = $user->getId();
 
         $event->setData($payload);
 
