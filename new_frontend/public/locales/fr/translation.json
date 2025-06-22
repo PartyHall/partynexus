@@ -8,6 +8,9 @@
         "lastname": "Nom de famille",
         "loading": "Chargement...",
         "search": "Rechercher...",
+        "clear_search": "Effacer la recherche",
+        "no_more_results": "Vous avez atteint la fin de la liste",
+        "filters": "Filtres",
         "no_results": "Aucun résultat trouvé",
         "cancel": "Annuler",
         "create": "Créer",
@@ -85,6 +88,13 @@
         "title": "Admin"
     },
     "karaoke": {
-        "title": "Karaoké"
+        "title": "Karaoké",
+        "amt_songs": "{{amt}} musiques",
+        "add_song": {
+            "title": "Ajouter une musique"
+        },
+        "request_song": {
+            "title": "Demander une musique"
+        }
     }
 }

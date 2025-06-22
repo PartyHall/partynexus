@@ -1,5 +1,5 @@
 .button {
-    @apply rounded-sm p-1;
+    @apply rounded-sm p-1 flex items-center gap-1 justify-center;
     cursor: pointer;
 }
 

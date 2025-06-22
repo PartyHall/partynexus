@@ -6,16 +6,17 @@ import { IconCopy } from "@tabler/icons-react";
 import { enqueueSnackbar } from "notistack";
 
 type InputProps = {
-    label: string;
+    label?: string;
+    placeholder?: string;
     icon?: ReactNode;
     action?: ReactNode;
     error?: FieldError | string;
 } & InputHTMLAttributes<HTMLInputElement>;
 
-export default function Input({ icon, action, label, error, ...props }: InputProps) {
+export default function Input({ icon, action, label, error, className, ...props }: InputProps) {
     return (
-        <label className="flex flex-col w-full gap-0.5">
-            {label}:
+        <label className={`flex flex-col w-full gap-0.5̀ ${className || ''}`}>
+            {label}{label && ':'}
             <div className="w-full relative">
                 {
                     icon
@@ -29,11 +30,9 @@ export default function Input({ icon, action, label, error, ...props }: InputPro
                 <input className={`block w-full ${icon ? '!pl-10' : ''} ${action ? '!pr-8' : ''}`} {...props} />
                 {
                     action
-                    && isValidElement(action)
-                    && cloneElement(action, {
-                        // @ts-ignore
-                        className: `absolute right-0 top-1/2 -translate-y-1/2 border-right border-l-1 border-synthbg-700 h-[100%]`,
-                    })
+                    && <div className="absolute right-0 top-1/2 -translate-y-1/2 border-right border-l-1 border-synthbg-700 h-[100%]">
+                        {action}
+                    </div>
                 }
             </div>
             {

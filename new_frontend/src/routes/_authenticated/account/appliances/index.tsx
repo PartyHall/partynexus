@@ -30,7 +30,7 @@ function RouteComponent() {
 
   const data = Route.useLoaderData();
 
-  return <div className='pageContainer'>
+  return <div className='pageContainer flex'>
     <Card className='w-full sm:w-150 gap-2! p-4'>
       <div className='w-full flex flex-row items-center justify-between mb-3'>
         <Title noMargin>{t('account.my_appliances.title')}</Title>

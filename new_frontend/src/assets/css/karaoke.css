@@ -1,0 +1,23 @@
+.songCard {
+    @apply p-2 border bg-synthbg-800 border-synthbg-800 rounded-md flex flex-row gap-4 w-full;
+}
+
+.songCard > img {
+    @apply rounded-md w-[64px] h-[64px] object-cover;
+}
+
+.songCard .songDetails {
+    @apply flex-1 flex flex-col gap-1;
+}
+
+.songCard .songDetails h3 {
+    @apply text-lg font-semibold;
+}
+
+.songCard .songDetails p {
+    @apply text-sm;
+}
+
+.songCard .songFiles {
+    @apply flex flex-col gap-1 justify-center items-center;
+}

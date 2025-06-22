@@ -45,3 +45,5 @@ contrib/test
 supervisord.pid
 
 http/*.private.*.json
+
+songs.csv

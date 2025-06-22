@@ -93,7 +93,7 @@ function RouteComponent() {
     }
   }, [newPassword, confirmNewPassword]);
 
-  return <div className='flex flex-col p-4 m-auto items-center'>
+  return <div className='pageContainer'>
     <Card className='w-full sm:w-100'>
       <Title center>{t('account.change_password.title')}</Title>
 
