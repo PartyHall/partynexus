@@ -2,6 +2,7 @@
 @import "./glow.css";
 @import "./modal.css";
 @import "./buttons.css";
+@import "./karaoke.css";
 
 html,
 body,
@@ -179,5 +180,5 @@ a.no-underline:hover {
 }
 
 .pageContainer {
-    @apply flex flex-col p-4 m-auto items-center gap-8;
+    @apply flex flex-col p-4 mx-auto items-center gap-8 w-full sm:w-auto;
 }

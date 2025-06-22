@@ -80,7 +80,7 @@ services:
     volumes:
       - './new_frontend:/app'
     ports:
-      - '127.0.0.1:5176:5173'
+      - '5176:5173'
 
   ###> symfony/mailer ###
   mailer:

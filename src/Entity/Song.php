@@ -50,6 +50,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  */
 #[ApiResource(
     operations: [
+        // Sort order is done in SongOrderExtension
         new GetCollection(normalizationContext: [AbstractNormalizer::GROUPS => [self::API_GET_COLLECTION]]),
         new Get(normalizationContext: [AbstractNormalizer::GROUPS => [self::API_GET_ITEM]]),
         new Post(

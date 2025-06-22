@@ -101,7 +101,7 @@ function RouteComponent() {
   };
 
   return <div className='pageContainer'>
-    <Card className='w-full sm:w-125'>
+    <Card className='w-full sm:w-150'>
       <Title center>{t('account.title')}</Title>
       <form onSubmit={handleSubmit(submit)} className='w-full'>
         <div className="mb-4">
@@ -145,7 +145,7 @@ function RouteComponent() {
       </form>
     </Card>
 
-    <Card className='w-full sm:w-125'>
+    <Card className='w-full sm:w-150'>
       <Title center>{t('account.actions')}</Title>
       {
         isGranted('ROLE_EVENT_MAKER')

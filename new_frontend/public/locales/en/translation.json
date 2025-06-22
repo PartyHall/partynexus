@@ -8,6 +8,9 @@
         "lastname": "Last Name",
         "loading": "Loading...",
         "search": "Search...",
+        "clear_search": "Clear search",
+        "no_more_results": "You have reached the end of the list",
+        "filters": "Filters",
         "no_results": "No results found",
         "cancel": "Cancel",
         "save": "Save",
@@ -85,6 +88,13 @@
         "title": "Admin"
     },
     "karaoke": {
-        "title": "Karaoke"
+        "title": "Karaoke",
+        "amt_songs": "{{amt}} songs",
+        "add_song": {
+            "title": "Add a song"
+        },
+        "request_song": {
+            "title": "Request a song"
+        }
     }
 }

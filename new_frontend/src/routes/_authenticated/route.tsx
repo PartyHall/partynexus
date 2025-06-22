@@ -51,7 +51,7 @@ function RouteComponent() {
 
   return <>
     <TopBar />
-    <div id="main_page_container" className='w-full flex-1 overflow-auto'>
+    <div id="main_page_container" className='flex flex-col items-start w-full flex-1 overflow-auto'>
       <Outlet />
     </div>
   </>

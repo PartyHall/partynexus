@@ -28,6 +28,9 @@ export default defineConfig({
       '/api': {
         target: 'http://app:80',
       },
+      '/song_covers': {
+        target: 'http://app:80',
+      },
       '/.well-known/mercure': {
         target: 'http://app:80',
       },
