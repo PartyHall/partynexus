@@ -23,9 +23,13 @@
         "link": "Lien",
         "go_back": "Page précédente",
         "logout": "Se déconnecter",
+        "yes": "Oui",
+        "no": "Non",
+        "ok": "OK",
         "error": {
             "generic": "Une erreur s'est produite",
-            "generic_desc": "Merci de réessayer plus tard ou de contacter votre administrateur PartyHall"
+            "generic_desc": "Merci de réessayer plus tard ou de contacter votre administrateur PartyHall",
+            "generic_with_message": "Une erreur est survenue: {{message}}"
         }
     },
     "errors": {
@@ -90,11 +94,23 @@
     "karaoke": {
         "title": "Karaoké",
         "amt_songs": "{{amt}} musiques",
+        "song_title": "Titre",
+        "song_artist": "Artiste",
+        "filters": {
+            "ready": "Prête ?",
+            "has_vocals": "Avec voix ?",
+            "format": "Format",
+            "video": "Vidéo",
+            "transparent_video": "Vidéo transparente"
+        },
         "add_song": {
             "title": "Ajouter une musique"
         },
         "request_song": {
-            "title": "Demander une musique"
+            "title": "Demander une musique",
+            "requested_by": "Demandé par",
+            "submit": "Demander",
+            "success": "Demande de musique créée"
         }
     }
 }

@@ -2,10 +2,19 @@
 
 namespace App\Enum;
 
-use ApiPlatform\Metadata\Operation;
 
-enum SongFormat: string
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Operation;
+use Symfony\Component\Serializer\Attribute\Groups;
+
+#[ApiResource(
+    cacheHeaders: EnumApiConfig::CACHE_HEADERS,
+    normalizationContext: EnumApiConfig::NORMALIZATION_CONTEXT,
+)]
+enum SongFormat: string implements TranslatableEnumLabelInterface
 {
+    use EnumApiResourcetrait;
+
     case VIDEO = 'video';
     case CDG = 'cdg';
     case TRANSPARENT_VIDEO = 'transparent_video';
@@ -34,5 +43,15 @@ enum SongFormat: string
     public static function values(): array
     {
         return array_column(self::cases(), 'value');
+    }
+
+    #[Groups([EnumApiConfig::GET_GROUP])]
+    public function getLabel(): string
+    {
+        return match ($this) {
+            self::VIDEO => 'song.format.video',
+            self::CDG => 'song.format.cdg',
+            self::TRANSPARENT_VIDEO => 'song.format.transparent_video',
+        };
     }
 }

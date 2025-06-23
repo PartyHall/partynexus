@@ -60,7 +60,7 @@ export default function ApplianceCard({ appliance, doInvalidateRouter }: Props) 
                         return;
                     }
 
-                    setDeleteModalOpen
+                    setDeleteModalOpen(open);
                 }}
                 title={t('account.my_appliances.delete')}
                 description={t('account.my_appliances.delete_confirm', { name: appliance.name })}

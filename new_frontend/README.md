@@ -6,9 +6,10 @@ Built with my new wip stack: tanstack router, tanstack query, tailwind and zusta
 
 ## TODO
 
+- When the user updates its profile, refresh token should be immediatelly called (language prefs is in it, and its better so that its fresh anyway)
 - I need to translate the error on the backend based on user's "Accept-Language" header.
-- I also need to modify my customFetch to send the appropriate language header based on preferences.
 - Make custom snackbar to theme them (THANKS NOTISTACK to do weird shit like that so that I cant just override your css)
+- Make a form wrapper for RHF to fill & show automatically the globalErrors
 - Accessibility stuff
 - Make the appliance communicate with the backend (e.g. is it online, etc...)
 - Fix songs tsvector crap

@@ -7,6 +7,7 @@ type TokenUser = {
     exp: number;
     roles: string[];
     username: string;
+    language: string;
 }
 
 export type StoreType = {

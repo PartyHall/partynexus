@@ -23,7 +23,10 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiResource(
     operations: [
         new Get(normalizationContext: [AbstractNormalizer::GROUPS => [self::API_GET_ITEM, HasTimestamps::API_GET, User::API_GET_ITEM]]),
-        new GetCollection(normalizationContext: [AbstractNormalizer::GROUPS => [self::API_GET_ITEM, HasTimestamps::API_GET, User::API_GET_ITEM]]),
+        new GetCollection(
+            order: ['createdAt' => 'DESC'],
+            normalizationContext: [AbstractNormalizer::GROUPS => [self::API_GET_ITEM, HasTimestamps::API_GET, User::API_GET_ITEM]]
+        ),
         new Post(
             normalizationContext: [AbstractNormalizer::GROUPS => [self::API_GET_ITEM, HasTimestamps::API_GET, User::API_GET_ITEM]],
             denormalizationContext: [AbstractNormalizer::GROUPS => [self::API_CREATE]],

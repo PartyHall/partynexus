@@ -1,9 +1,14 @@
 import { getSongCollection } from '@/api/karaoke';
-import Button from '@/components/generic/button';
+import Button, { ButtonLink } from '@/components/generic/button';
+import EnumCheckboxes from '@/components/generic/enum_checkboxes';
 import Input from '@/components/generic/input';
+import Modal from '@/components/generic/modal';
+import TriStateSwitch from '@/components/generic/multiswitch';
+import Switch from '@/components/generic/switch';
 import { Tooltip } from '@/components/generic/tooltip';
 import SongCard from '@/components/karaoke/song_card';
 import { useDebounce } from '@/hooks/useDebounce';
+import { useAuthStore } from '@/stores/auth';
 import { IconFilter, IconPlus, IconSearch, IconX, IconZoomQuestion } from '@tabler/icons-react';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
@@ -16,18 +21,33 @@ import { useInView } from 'react-intersection-observer';
  * Implement @tanstack/virtual
  */
 
+type Filters = {
+  modalOpen: boolean;
+  ready: boolean;
+  hasVocals: boolean | null;
+  format: string[];
+};
+
 export const Route = createFileRoute('/_authenticated/karaoke/')({
   component: RouteComponent,
 })
 
 function RouteComponent() {
   const { t } = useTranslation();
+  const { isGranted } = useAuthStore();
   const { ref, inView } = useInView();
 
   const [search, setSearch] = useState('');
   const debouncedSearch = useDebounce(search, 500);
 
   const [totalSongs, setTotalSongs] = useState(-1);
+
+  const [filters, setFilters] = useState<Filters>({
+    modalOpen: false,
+    ready: true,
+    hasVocals: null,
+    format: [],
+  });
 
   const {
     status,
@@ -36,12 +56,14 @@ function RouteComponent() {
     isFetchingNextPage,
     fetchNextPage,
   } = useInfiniteQuery({
-    queryKey: ['karaoke-songs', debouncedSearch],
+    queryKey: ['karaoke-songs', debouncedSearch, filters.ready, filters.hasVocals, filters.format],
     queryFn: async ({ pageParam = 0 }) => {
       const data = await getSongCollection({
-        ready: true,
+        ready: filters.ready,
         pageParam,
         search: debouncedSearch,
+        hasVocals: filters.hasVocals,
+        format: filters.format,
       });
 
       setTotalSongs(data.totalItems);
@@ -78,10 +100,54 @@ function RouteComponent() {
         </Tooltip>}
       />
       <Tooltip content={t('generic.filters')}>
-        <Button>
+        <Button onClick={() => setFilters({ ...filters, modalOpen: true })}>
           <IconFilter size={18} />
         </Button>
       </Tooltip>
+
+      <Modal
+        open={filters.modalOpen}
+        onOpenChange={modalOpen => setFilters({ ...filters, modalOpen })}
+        title={t('generic.filters')}
+        actions={<>
+          <Button onClick={() => setFilters({ ...filters, modalOpen: false })} className='px-4!'>
+            {t('generic.ok')}
+          </Button>
+        </>}
+      >
+        <div className='flex flex-col gap-2'>
+          <div className='flex flex-col gap-2 w-full'>
+            {
+              isGranted('ROLE_ADMIN')
+              && <div className='flex flex-row align-center justify-between'>
+                <Switch
+                  id={'karaoke_filter_ready'}
+                  label={t('karaoke.filters.ready')}
+                  checked={filters.ready}
+                  onChange={x => setFilters({ ...filters, ready: x })}
+                />
+              </div>
+            }
+            <div className='flex flex-row align-center justify-between'>
+              <TriStateSwitch
+                id={'karaoke_filter_vocals'}
+                label={t('karaoke.filters.has_vocals')}
+                value={filters.hasVocals}
+                onChange={x => setFilters({ ...filters, hasVocals: x })}
+              />
+            </div>
+            <div className='flex flex-row align-center justify-between'>
+              <span className='text-sm'>{t('karaoke.filters.format')}</span>
+              <EnumCheckboxes
+                enumName={'song_formats'}
+                align='right'
+                onChange={values => setFilters({ ...filters, format: values })}
+                defaultValues={filters.format}
+              />
+            </div>
+          </div>
+        </div>
+      </Modal>
     </div>
     <div className='flex-1 w-full overflow-y-auto'>
       {status === 'pending' && <div className='text-center'>{t('generic.loading')}</div>}
@@ -112,14 +178,14 @@ function RouteComponent() {
     <div className='flex flex-row justify-between w-full items-center'>
       <span className='flex-1'>{t('karaoke.amt_songs', { amt: totalSongs >= 0 ? totalSongs : '?' })}</span>
       <div className='flex-end flex gap-2'>
-        <Button>
+        <ButtonLink to='/karaoke/new'>
           <IconPlus size={19} />
           {t('karaoke.add_song.title')}
-        </Button>
-        <Button>
+        </ButtonLink>
+        <ButtonLink to='/karaoke/request'>
           <IconZoomQuestion size={19} />
           {t('karaoke.request_song.title')}
-        </Button>
+        </ButtonLink>
       </div>
     </div>
   </div>
