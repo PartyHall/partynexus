@@ -32,6 +32,7 @@ readonly class CustomJwtListener
 
         $payload['iri'] = $this->iriConverter->getIriFromResource($user);
         $payload['id'] = $user->getId();
+        $payload['language'] = $user->getLanguage();
 
         $event->setData($payload);
 

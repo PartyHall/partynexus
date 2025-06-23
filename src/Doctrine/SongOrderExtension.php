@@ -6,6 +6,7 @@ use ApiPlatform\Doctrine\Orm\Extension\QueryCollectionExtensionInterface;
 use ApiPlatform\Doctrine\Orm\Util\QueryNameGeneratorInterface;
 use ApiPlatform\Metadata\Operation;
 use App\Entity\Song;
+use App\Entity\SongRequest;
 use Doctrine\ORM\QueryBuilder;
 
 class SongOrderExtension implements QueryCollectionExtensionInterface

@@ -29,3 +29,9 @@ emails:
 users:
     login:
         banned: 'Vous êtes bannis.'
+
+song:
+    format:
+        video: 'Vidéo'
+        cdg: 'CDG'
+        transparent_video: 'Vidéo transparente'

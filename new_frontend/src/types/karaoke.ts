@@ -1,3 +1,5 @@
+import type { User } from "./user";
+
 export type Song = {
     id: number;
     title: string;
@@ -13,3 +15,10 @@ export type Song = {
     vocals: boolean;
     combined: boolean;
 }
+
+export type SongRequest = {
+    id: number;
+    title: string;
+    artist: string;
+    requestedBy: User;
+};

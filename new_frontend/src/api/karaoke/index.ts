@@ -6,16 +6,26 @@ type GetCollectionParams = {
     pageParam?: number;
     search?: string;
     ready?: boolean;
+    hasVocals?: boolean | null;
+    format?: string[];
 };
 
-export async function getSongCollection({ pageParam = 1, search, ready }: GetCollectionParams): Promise<Collection<Song>> {
-    const params: Record<string, string> = {
+export async function getSongCollection({ pageParam = 1, search, ready, hasVocals, format }: GetCollectionParams): Promise<Collection<Song>> {
+    const params = new URLSearchParams({
         page: String(pageParam),
         ready: ready ? 'true' : 'false',
-    };
+    });
 
     if (search) {
-        params.search = search;
+        params.set('search', search);
+    }
+
+    if (hasVocals !== null && hasVocals !== undefined) {
+        params.set('hasVocals', hasVocals ? 'true' : 'false');
+    }
+
+    if (format && format.length > 0) {
+        format.forEach((f) => params.append('format[]', f));
     }
 
     const response = await customFetch(`/api/songs?${new URLSearchParams(params)}`, { method: 'GET' });

@@ -23,9 +23,13 @@
         "link": "Link",
         "go_back": "Go Back",
         "logout": "Log out",
+        "yes": "Yes",
+        "no": "No",
+        "ok": "OK",
         "error": {
             "generic": "An error occurred",
-            "generic_desc": "Please try again later or contact your PartyHall administrator"
+            "generic_desc": "Please try again later or contact your PartyHall administrator",
+            "generic_with_message": "An error occurred: {{message}}"
         }
     },
     "errors": {
@@ -90,11 +94,23 @@
     "karaoke": {
         "title": "Karaoke",
         "amt_songs": "{{amt}} songs",
+        "song_title": "Title",
+        "song_artist": "Artist",
+        "filters": {
+            "ready": "Ready?",
+            "has_vocals": "Has vocals?",
+            "format": "Format",
+            "video": "Video",
+            "transparent_video": "Transparent video"
+        },
         "add_song": {
             "title": "Add a song"
         },
         "request_song": {
-            "title": "Request a song"
+            "title": "Request a song",
+            "requested_by": "Requested by",
+            "submit": "Request",
+            "success": "Song request created"
         }
     }
 }

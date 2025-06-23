@@ -3,11 +3,15 @@ import { useAuthStore } from '@/stores/auth'
 import { ValidationError } from './violations_error'
 
 export async function customFetch(input: RequestInfo, init: RequestInit = {}) {
-  const token = useAuthStore.getState().token
+  const {token, tokenUser} = useAuthStore.getState()
 
   const headers = new Headers(init.headers || {})
   if (token) {
     headers.set('Authorization', `Bearer ${token}`)
+  }
+
+  if (!headers.has('Accept-Language')) {
+    headers.set('Accept-Language', tokenUser?.language || 'en_US');
   }
 
   if (!headers.has('Content-Type') && init.method) {
@@ -42,9 +46,7 @@ export async function customFetch(input: RequestInfo, init: RequestInit = {}) {
       let errorBody: any = null
 
       try {
-        console.log('Preparse');
         errorBody = await response.clone().json()
-        console.log('Postparse');
 
         if (response.status === 422) {
           console.log('is 422');

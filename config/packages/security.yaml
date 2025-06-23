@@ -67,6 +67,7 @@ security:
         ROLE_EVENT_MAKER: ROLE_USER
     
     access_control:
+        - { path: ^/api/song_formats, roles: PUBLIC_ACCESS} # TEMP
         - { path: ^/api/_sentry-test, roles: PUBLIC_ACCESS}
         - { path: ^/api/login, roles: PUBLIC_ACCESS }
         - { path: ^/api/magic-login, roles: PUBLIC_ACCESS }
