@@ -37,3 +37,9 @@ song:
         video: 'Video'
         cdg: 'CDG'
         transparent_video: 'Transparent video'
+    quality:
+        awful: 'Awful'
+        bad: 'Bad'
+        ok: 'OK'
+        good: 'Good'
+        perfect: 'Perfect'

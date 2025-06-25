@@ -110,7 +110,42 @@
             "title": "Demander une musique",
             "requested_by": "Demandé par",
             "submit": "Demander",
-            "success": "Demande de musique créée"
+            "success": "Demande de musique créée",
+            "mark_done": "Marquer comme terminé",
+            "request_completed": "Demande de musique terminée !"
+        },
+        "editor": {
+            "title_new": "Nouvelle musique",
+            "title_edit": "Modification de '{{name}}'",
+            "metadata": "Metadata",
+            "quality": "Qualité",
+            "musicbrainz_id": "MusicBrainz ID",
+            "spotify_id": "Spotify ID",
+            "hotspot": "Hotspot"
+        },
+        "compile": {
+            "title": "Paramètres de compilation",
+            "text1": "Une musique peut être décompilée (extraite, prête à être édité) ou compilé (un fichier .phk est généré et l'édition est bloquée).",
+            "text2": "Vous pouvez ici demander une compilation / décompilation de votre musique",
+            "text3": "Nb: Décompiler une musique va la supprimer de tous vos appareils qui l'ont synchronisé. Si vous recompilez, les appareils pourront la resynchroniser.",
+            "request_compile": "Lancer la compilation",
+            "request_decompile": "Lancer la décompilation",
+            "success_compile": {
+                "title": "Musique compilée",
+                "description": "La musique à été correctement compilée"
+            },
+            "failure_compile": {
+                "title": "Échec de la compilation",
+                "description": "La musique n'a pas été compilée, voir la console pour plus d'infos"
+            },
+            "success_decompile": {
+                "title": "Musique décompilée",
+                "description": "La musique à été correctement décompilée"
+            },
+            "failure_decompile": {
+                "title": "Échec de la décompilation",
+                "description": "La musique n'a pas été décompilée, voir la console pour plus d'infos"
+            }
         }
     }
 }

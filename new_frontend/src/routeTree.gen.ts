@@ -17,6 +17,7 @@ import { Route as AuthenticatedKaraokeIndexRouteImport } from './routes/_authent
 import { Route as AuthenticatedAccountIndexRouteImport } from './routes/_authenticated/account/index'
 import { Route as AuthenticatedKaraokeRequestRouteImport } from './routes/_authenticated/karaoke/request'
 import { Route as AuthenticatedKaraokeNewRouteImport } from './routes/_authenticated/karaoke/new'
+import { Route as AuthenticatedKaraokeIdRouteImport } from './routes/_authenticated/karaoke/$id'
 import { Route as AuthenticatedAccountChangePasswordRouteImport } from './routes/_authenticated/account/change-password'
 import { Route as AuthenticatedAccountAppliancesRouteRouteImport } from './routes/_authenticated/account/appliances/route'
 import { Route as AuthenticatedAccountAppliancesIndexRouteImport } from './routes/_authenticated/account/appliances/index'
@@ -65,6 +66,11 @@ const AuthenticatedKaraokeNewRoute = AuthenticatedKaraokeNewRouteImport.update({
   path: '/karaoke/new',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedKaraokeIdRoute = AuthenticatedKaraokeIdRouteImport.update({
+  id: '/karaoke/$id',
+  path: '/karaoke/$id',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedAccountChangePasswordRoute =
   AuthenticatedAccountChangePasswordRouteImport.update({
     id: '/account/change-password',
@@ -102,6 +108,7 @@ export interface FileRoutesByFullPath {
   '/register': typeof RegisterIndexRoute
   '/account/appliances': typeof AuthenticatedAccountAppliancesRouteRouteWithChildren
   '/account/change-password': typeof AuthenticatedAccountChangePasswordRoute
+  '/karaoke/$id': typeof AuthenticatedKaraokeIdRoute
   '/karaoke/new': typeof AuthenticatedKaraokeNewRoute
   '/karaoke/request': typeof AuthenticatedKaraokeRequestRoute
   '/account': typeof AuthenticatedAccountIndexRoute
@@ -115,6 +122,7 @@ export interface FileRoutesByTo {
   '/login': typeof LoginIndexRoute
   '/register': typeof RegisterIndexRoute
   '/account/change-password': typeof AuthenticatedAccountChangePasswordRoute
+  '/karaoke/$id': typeof AuthenticatedKaraokeIdRoute
   '/karaoke/new': typeof AuthenticatedKaraokeNewRoute
   '/karaoke/request': typeof AuthenticatedKaraokeRequestRoute
   '/account': typeof AuthenticatedAccountIndexRoute
@@ -131,6 +139,7 @@ export interface FileRoutesById {
   '/register/': typeof RegisterIndexRoute
   '/_authenticated/account/appliances': typeof AuthenticatedAccountAppliancesRouteRouteWithChildren
   '/_authenticated/account/change-password': typeof AuthenticatedAccountChangePasswordRoute
+  '/_authenticated/karaoke/$id': typeof AuthenticatedKaraokeIdRoute
   '/_authenticated/karaoke/new': typeof AuthenticatedKaraokeNewRoute
   '/_authenticated/karaoke/request': typeof AuthenticatedKaraokeRequestRoute
   '/_authenticated/account/': typeof AuthenticatedAccountIndexRoute
@@ -147,6 +156,7 @@ export interface FileRouteTypes {
     | '/register'
     | '/account/appliances'
     | '/account/change-password'
+    | '/karaoke/$id'
     | '/karaoke/new'
     | '/karaoke/request'
     | '/account'
@@ -160,6 +170,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/register'
     | '/account/change-password'
+    | '/karaoke/$id'
     | '/karaoke/new'
     | '/karaoke/request'
     | '/account'
@@ -175,6 +186,7 @@ export interface FileRouteTypes {
     | '/register/'
     | '/_authenticated/account/appliances'
     | '/_authenticated/account/change-password'
+    | '/_authenticated/karaoke/$id'
     | '/_authenticated/karaoke/new'
     | '/_authenticated/karaoke/request'
     | '/_authenticated/account/'
@@ -248,6 +260,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedKaraokeNewRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/karaoke/$id': {
+      id: '/_authenticated/karaoke/$id'
+      path: '/karaoke/$id'
+      fullPath: '/karaoke/$id'
+      preLoaderRoute: typeof AuthenticatedKaraokeIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/account/change-password': {
       id: '/_authenticated/account/change-password'
       path: '/account/change-password'
@@ -311,6 +330,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
   AuthenticatedAccountAppliancesRouteRoute: typeof AuthenticatedAccountAppliancesRouteRouteWithChildren
   AuthenticatedAccountChangePasswordRoute: typeof AuthenticatedAccountChangePasswordRoute
+  AuthenticatedKaraokeIdRoute: typeof AuthenticatedKaraokeIdRoute
   AuthenticatedKaraokeNewRoute: typeof AuthenticatedKaraokeNewRoute
   AuthenticatedKaraokeRequestRoute: typeof AuthenticatedKaraokeRequestRoute
   AuthenticatedAccountIndexRoute: typeof AuthenticatedAccountIndexRoute
@@ -323,6 +343,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
     AuthenticatedAccountAppliancesRouteRouteWithChildren,
   AuthenticatedAccountChangePasswordRoute:
     AuthenticatedAccountChangePasswordRoute,
+  AuthenticatedKaraokeIdRoute: AuthenticatedKaraokeIdRoute,
   AuthenticatedKaraokeNewRoute: AuthenticatedKaraokeNewRoute,
   AuthenticatedKaraokeRequestRoute: AuthenticatedKaraokeRequestRoute,
   AuthenticatedAccountIndexRoute: AuthenticatedAccountIndexRoute,

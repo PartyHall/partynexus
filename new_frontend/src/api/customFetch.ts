@@ -15,11 +15,11 @@ export async function customFetch(input: RequestInfo, init: RequestInit = {}) {
   }
 
   if (!headers.has('Content-Type') && init.method) {
-    const mthd = init.method.toUpperCase();
+    const method = init.method.toUpperCase();
 
-    if (mthd === 'PATCH') {
+    if (method === 'PATCH') {
       headers.set('Content-Type', 'application/merge-patch+json')
-    } else if (['POST', 'PUT'].includes(mthd)) {
+    } else if (['POST', 'PUT'].includes(method)) {
       headers.set('Content-Type', 'application/ld+json')
     }
   }

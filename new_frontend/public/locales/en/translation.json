@@ -110,7 +110,42 @@
             "title": "Request a song",
             "requested_by": "Requested by",
             "submit": "Request",
-            "success": "Song request created"
+            "success": "Song request created",
+            "mark_done": "Mark as done",
+            "request_completed": "Song request completed!"
+        },
+        "editor": {
+            "title_new": "New song",
+            "title_edit": "Editing '{{name}}'",
+            "metadata": "Metadata",
+            "quality": "Quality",
+            "musicbrainz_id": "MusicBrainz ID",
+            "spotify_id": "Spotify ID",
+            "hotspot": "Hotspot"
+        },
+        "compile": {
+            "title": "Compilation settings",
+            "text1": "A song can be either uncompiled (extracted, ready to be edited) or compiled (a .phk file is generated and edition is locked).",
+            "text2": "Here you can request to compile / decompile your song",
+            "text3": "Note that decompiling the song will remove it from all the appliances that fetched it, and rebuilding it will cause the appliance to fetch it again.",
+            "request_compile": "Lancer la compilation",
+            "request_decompile": "Lancer la décompilation",
+            "success_compile": {
+                "title": "Song compiled",
+                "description": "The song was compiled successfully"
+            },
+            "failure_compile": {
+                "title": "Failed to compile",
+                "description": "The song was not compiled. Look at the console for more infos"
+            },
+            "success_decompile": {
+                "title": "Song decompiled",
+                "description": "The song was decompiled successfully"
+            },
+            "failure_decompile": {
+                "title": "Failed to decompile",
+                "description": "The song was not decompiled. Look at the console for more infos"
+            }
         }
     }
 }

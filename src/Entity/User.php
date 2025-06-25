@@ -10,6 +10,7 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Link;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
+use App\Enum\Language;
 use App\Model\PasswordSet;
 use App\State\Processor\BanUserProcessor;
 use App\State\Processor\RegisterUserProcessor;
@@ -187,7 +188,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     ])]
     private string $email;
 
-    #[ORM\Column(type: Types::STRING, length: 255, options: ['default' => 'en_US'])]
+    #[ORM\Column(type: Types::STRING, length: 255, enumType: Language::class, options: ['default' => 'en_US'])]
     #[Assert\NotBlank]
     #[Assert\NotBlank(['groups' => [self::API_REGISTER]])]
     #[Groups([
@@ -196,7 +197,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         self::API_UPDATE,
         self::API_REGISTER,
     ])]
-    private string $language;
+    private Language $language;
 
     /** @var string[] $roles */
     #[ORM\Column(type: Types::JSON)]
@@ -405,7 +406,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $role = strtoupper($role);
 
         if (!str_starts_with($role, 'ROLE_')) {
-            $role = 'ROLE_'.$role;
+            $role = 'ROLE_' . $role;
         }
 
         if (!in_array($role, $this->roles)) {
@@ -420,10 +421,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $role = strtoupper($role);
 
         if (!str_starts_with($role, 'ROLE_')) {
-            $role = 'ROLE_'.$role;
+            $role = 'ROLE_' . $role;
         }
 
-        $this->roles = array_filter($this->roles, fn ($x) => $x !== $role);
+        $this->roles = array_filter($this->roles, fn($x) => $x !== $role);
 
         return $this;
     }
@@ -500,12 +501,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getLanguage(): string
+    public function getLanguage(): Language
     {
         return $this->language;
     }
 
-    public function setLanguage(string $language): self
+    public function setLanguage(Language $language): self
     {
         $this->language = $language;
 

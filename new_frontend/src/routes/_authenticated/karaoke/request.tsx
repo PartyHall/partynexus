@@ -155,7 +155,7 @@ function RouteComponent() {
         && <div className='flex flex-col gap-2 w-full overflow-y-auto'>
           {
             data.pages.map(page => <>
-              {page.data.map(song => <SongRequestCard key={song.id} song={song} />)}
+              {page.data.map(song => <SongRequestCard key={song.id} song={song} doInvalidate={refetch} />)}
             </>)
           }
 

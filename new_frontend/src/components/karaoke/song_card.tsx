@@ -2,10 +2,13 @@ import { IconMicrophone, IconPiano, IconVinyl } from "@tabler/icons-react";
 import { Tooltip } from "../generic/tooltip";
 import { useTranslation } from "react-i18next";
 import type { Song } from "@/types/karaoke";
+import { Link } from "@tanstack/react-router";
+import { useAuthStore } from "@/stores/auth";
 
 type Props = { song: Song };
 
 export default function SongCard({ song }: Props) {
+    const { isGranted } = useAuthStore();
     const { t } = useTranslation();
 
     return (
@@ -24,6 +27,14 @@ export default function SongCard({ song }: Props) {
             <div className='songDetails'>
                 <h3>{song.title}</h3>
                 <p className="text-gray-500">{song.artist}</p>
+                {
+                    isGranted('ROLE_ADMIN')
+                    && <div>
+                        <Link to="/karaoke/$id" params={{ id: '' + song.id }}>
+                            {t('generic.edit')}
+                        </Link>
+                    </div>
+                }
             </div>
 
             <div className="songFiles">

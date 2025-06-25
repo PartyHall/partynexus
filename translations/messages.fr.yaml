@@ -35,3 +35,9 @@ song:
         video: 'Vidéo'
         cdg: 'CDG'
         transparent_video: 'Vidéo transparente'
+    quality:
+        awful: 'Affreux'
+        bad: 'Mauvaise'
+        ok: 'OK'
+        good: 'Correcte'
+        perfect: 'Parfaite'

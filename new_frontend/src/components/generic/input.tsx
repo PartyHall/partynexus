@@ -27,7 +27,7 @@ export default function Input({ icon, action, label, error, className, ...props 
                         'aria-hidden': true,
                     })
                 }
-                <input className={`block w-full ${icon ? '!pl-10' : ''} ${action ? '!pr-8' : ''}`} {...props} />
+                <input className={`block w-full ${icon ? '!pl-10' : ''} ${action ? '!pr-8' : ''} disabled:bg-synthbg-600! disabled:text-synthfg-400!`} {...props} />
                 {
                     action
                     && <div className="absolute right-0 top-1/2 -translate-y-1/2 border-right border-l-1 border-synthbg-700 h-[100%]">

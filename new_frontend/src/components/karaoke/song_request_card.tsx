@@ -1,11 +1,38 @@
 import { useTranslation } from "react-i18next";
 import type { SongRequest } from "@/types/karaoke";
 import Username from "../username";
+import { Tooltip } from "../generic/tooltip";
+import { IconCheck } from "@tabler/icons-react";
+import { useAuthStore } from "@/stores/auth";
+import Button from "../generic/button";
+import { useState } from "react";
+import { enqueueSnackbar } from "notistack";
+import { deleteSongRequest } from "@/api/karaoke/requests";
 
-type Props = { song: SongRequest };
+type Props = {
+    song: SongRequest,
+    doInvalidate?: () => void,
+};
 
-export default function SongRequestCard({ song }: Props) {
+export default function SongRequestCard({ song, doInvalidate }: Props) {
     const { t } = useTranslation();
+    const { isGranted } = useAuthStore();
+
+    const [isMarkingAsDone, setIsMarkingAsDone] = useState(false);
+
+    const markAsDone = async () => {
+        setIsMarkingAsDone(true);
+
+        try {
+            await deleteSongRequest(song.id);
+            enqueueSnackbar(t('karaoke.request_song.request_completed'), { variant: 'success' });
+            doInvalidate?.();
+        } catch (error) {
+            enqueueSnackbar(t('generic.error.generic'), { variant: 'error' });
+        }
+
+        setIsMarkingAsDone(false);
+    };
 
     return <div className="songCard">
         <div className='songDetails'>
@@ -18,5 +45,15 @@ export default function SongRequestCard({ song }: Props) {
                 </span>}
             />
         </div>
+        {
+            isGranted('ROLE_ADMIN')
+            && <div className="songFiles pr-2">
+                <Tooltip content={t('karaoke.request_song.mark_done')}>
+                    <Button disabled={isMarkingAsDone} onClick={markAsDone}>
+                        <IconCheck size={20} />
+                    </Button>
+                </Tooltip>
+            </div>
+        }
     </div>;
 }
