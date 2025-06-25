@@ -6,6 +6,7 @@ Built with my new wip stack: tanstack router, tanstack query, tailwind and zusta
 
 ## TODO
 
+- Admin can mark request as "done"
 - When the user updates its profile, refresh token should be immediatelly called (language prefs is in it, and its better so that its fresh anyway)
 - I need to translate the error on the backend based on user's "Accept-Language" header.
 - Make custom snackbar to theme them (THANKS NOTISTACK to do weird shit like that so that I cant just override your css)

@@ -19,3 +19,10 @@ export async function createSongRequest(title: string, artist: string): Promise<
 
     return await response.json();
 }
+
+export async function deleteSongRequest(id: number): Promise<void> {
+    await customFetch(
+        `/api/song_requests/${id}`,
+        { method: 'DELETE' },
+    );
+}

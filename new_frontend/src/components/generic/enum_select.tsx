@@ -20,13 +20,13 @@ export default function EnumSelect({ enumName, label, disabled, error, ...props 
             {label}:
             {
                 !isPending && <select
-                    className="flex-1"
+                    className="flex-1 min-h-[26px] disabled:bg-synthbg-600! disabled:text-synthfg-400!"
                     disabled={disabled || isPending || !!loadError}
                     {...props}
                 >
                     {
                         data && Object.values(data.member).map(entry => (
-                            <option key={entry.id} value={entry.value}>
+                            <option key={entry.id} value={entry['@id']}>
                                 {entry.label}
                             </option>
                         ))

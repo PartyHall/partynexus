@@ -103,35 +103,52 @@ function RouteComponent() {
   return <div className='pageContainer'>
     <Card className='w-full sm:w-150'>
       <Title center>{t('account.title')}</Title>
-      <form onSubmit={handleSubmit(submit)} className='w-full'>
-        <div className="mb-4">
-          <Input label={t('generic.username')} id='username' {...register('username')} error={errors.username} disabled={isSubmitting} />
-        </div>
-        <div className="mb-4">
-          <Input label={t('generic.email')} id='email' type='email' {...register('email')} error={errors.email} disabled={isSubmitting} />
-        </div>
-        <div className="mb-4">
-          <Input label={t('generic.firstname')} id='firstname' {...register('firstname')} error={errors.firstname} disabled={isSubmitting} />
-        </div>
+      <form onSubmit={handleSubmit(submit)} className='w-full flex flex-col gap-4'>
+        <Input
+          label={t('generic.username')}
+          id='username'
+          {...register('username')}
+          error={errors.username}
+          disabled={isSubmitting}
+        />
 
-        <div className="mb-4">
-          <Input label={t('generic.lastname')} id='lastname' {...register('lastname')} error={errors.lastname} disabled={isSubmitting} />
-        </div>
+        <Input
+          label={t('generic.email')}
+          id='email'
+          type='email'
+          {...register('email')}
+          error={errors.email}
+          disabled={isSubmitting}
+        />
 
-        <div className="mb-4">
-          <EnumSelect
-            enumName='languages'
-            label={t('account.language')}
-            id='language-select'
-            {...register('language')}
-            error={errors.language}
-            disabled={isSubmitting}
-          />
-        </div>
+        <Input
+          label={t('generic.firstname')}
+          id='firstname'
+          {...register('firstname')}
+          error={errors.firstname}
+          disabled={isSubmitting}
+        />
+
+        <Input
+          label={t('generic.lastname')}
+          id='lastname'
+          {...register('lastname')}
+          error={errors.lastname}
+          disabled={isSubmitting}
+        />
+
+        <EnumSelect
+          enumName='languages'
+          label={t('account.language')}
+          id='language-select'
+          {...register('language')}
+          error={errors.language}
+          disabled={isSubmitting}
+        />
 
         {
           globalErrors.length > 0 && (
-            <div className="text-red-glow mb-4">
+            <div className="text-red-glow">
               {
                 globalErrors.map((error, index) => (
                   <p key={index}>{error}</p>
