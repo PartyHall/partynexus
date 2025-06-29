@@ -1,8 +1,22 @@
-import type { User } from "@/types/user";
+import type { MinimalUser, User } from "@/types/user";
 import type { ReactNode } from "react";
 
-export default function Username({ user, prefix }: { user: User, prefix?: ReactNode }) {
-    return <span className="text-green-glow">
+type Props = {
+    user: User | MinimalUser;
+    prefix?: ReactNode;
+    noStyle?: boolean;
+};
+
+export default function Username({ user, prefix, noStyle }: Props) {
+    let attr = {};
+
+    if (!noStyle) {
+        attr = {
+            className: "text-green-glow",
+        };
+    }
+
+    return <span {...attr}>
         {prefix && <>{prefix} </>}
         {(user.firstname || user.lastname) && <>{user.firstname} {user.lastname}</>}
         {!user.firstname && !user.lastname && user.username}

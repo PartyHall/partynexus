@@ -18,9 +18,18 @@ export type Song = {
     combined: boolean;
 }
 
+export type UpsertSong = Song & { coverFile: File | null };
+
 export type SongRequest = {
     id: number;
     title: string;
     artist: string;
     requestedBy: User;
+};
+
+export type ExternalSong = {
+    id: string;
+    title: string;
+    artist: string;
+    cover?: string;
 };

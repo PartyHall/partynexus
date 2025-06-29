@@ -109,6 +109,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups([
         self::API_GET_ITEM,
         self::API_GET_COLLECTION,
+        Event::API_GET_COLLECTION,
         Event::API_GET_ITEM,
     ])]
     private int $id;
@@ -121,6 +122,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         self::API_GET_COLLECTION,
         self::API_CREATE,
         self::API_REGISTER,
+        Event::API_GET_COLLECTION,
         Event::API_GET_ITEM,
         Event::API_EXPORT,
     ])]
@@ -135,6 +137,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         self::API_CREATE,
         self::API_UPDATE,
         self::API_REGISTER,
+        Event::API_GET_COLLECTION,
         Event::API_GET_ITEM,
         Event::API_EXPORT,
     ])]
@@ -149,6 +152,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         self::API_CREATE,
         self::API_UPDATE,
         self::API_REGISTER,
+        Event::API_GET_COLLECTION,
         Event::API_GET_ITEM,
         Event::API_EXPORT,
     ])]

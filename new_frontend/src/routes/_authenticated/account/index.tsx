@@ -37,7 +37,7 @@ type UserAccountForm = {
 function RouteComponent() {
   const data = Route.useLoaderData();
   const { t } = useTranslation();
-  const { tokenUser, setToken, isGranted } = useAuthStore();
+  const { tokenUser, setToken, isGranted, doRefresh } = useAuthStore();
 
   useTranslatedTitle('account.title');
 
@@ -84,9 +84,12 @@ function RouteComponent() {
         t('generic.changes_saved'),
         { variant: 'success' },
       );
+
+      if (tokenUser.language !== formData.language) {
+        await doRefresh();
+      }
     } catch (err: any) {
       if (err instanceof ValidationError) {
-        console.log('Validation error:', err);
         const globalErrors = err.applyToReactHookForm(setError);
         if (globalErrors.length > 0) {
           setGlobalErrors(globalErrors);
@@ -162,7 +165,7 @@ function RouteComponent() {
       </form>
     </Card>
 
-    <Card className='w-full sm:w-150'>
+    <Card className='w-full sm:w-150 flex flex-col gap-2 items-center'>
       <Title center>{t('account.actions')}</Title>
       {
         isGranted('ROLE_EVENT_MAKER')

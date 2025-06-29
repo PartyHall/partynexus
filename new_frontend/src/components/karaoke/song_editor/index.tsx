@@ -20,15 +20,6 @@ export default function SongEditor({ song, onSuccess }: Props) {
             && <SongEditorCompiler song={song} />
         }
 
-        <div className="flex flex-col sm:flex-row justify-around gap-8 sm:gap-50">
-            <SongEditorForm song={song} onSuccess={onSuccess} />
-            {
-                song
-                && !song.ready
-                && <div>
-                    file upload
-                </div>
-            }
-        </div>
+        <SongEditorForm song={song} onSuccess={onSuccess} />
     </div>
 }

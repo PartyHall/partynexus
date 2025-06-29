@@ -16,7 +16,7 @@ export default function Modal({ open, onOpenChange, title, description, actions,
             <Content className='DialogContent'>
                 <Title className='text-yellow-glow text-2xl font-bold'>{title}</Title>
                 {
-                    description && <Description>{description}</Description>
+                    description && <Description hidden={description === title}>{description}</Description>
                 }
 
                 {children}

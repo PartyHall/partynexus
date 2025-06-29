@@ -40,6 +40,17 @@ export class HttpServerError extends HttpError {
   }
 }
 
+export class ProblemDetailsError extends HttpError {
+  constructor(data: any) {
+    super({
+      message: data.title,
+      submessage: data.detail,
+      status: data.status,
+      body: JSON.stringify(data),
+    });
+  }
+}
+
 export function makeError(status: number): HttpError {
   return new HttpError({
     message: `errors.${status}.title`,

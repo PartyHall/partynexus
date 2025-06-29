@@ -11,10 +11,12 @@ use App\State\Provider\ExternalSpotifySongProvider;
     operations: [
         new GetCollection(
             uriTemplate: '/external/spotify/{artist}/{track}',
+            security: 'is_granted("ROLE_ADMIN")',
             provider: ExternalSpotifySongProvider::class,
         ),
         new GetCollection(
             uriTemplate: '/external/musicbrainz/{artist}/{track}',
+            security: 'is_granted("ROLE_ADMIN")',
             provider: ExternalMusicBrainzSongProvider::class,
         ),
     ]

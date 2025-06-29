@@ -28,6 +28,10 @@ services:
             - '../src/DependencyInjection/'
             - '../src/Entity/'
             - '../src/Kernel.php'
+    
+    App\EventListener\ProblemDetailsExceptionListener:
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception, priority: 255 }
 
     # api_platform.state.error_provider:
         # class: App\State\Provider\ErrorProvider

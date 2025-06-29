@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Song;
 use App\Enum\SongFormat;
+use App\Exception\ProblemDetailsException;
 use App\Repository\SongRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -11,10 +12,13 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Filesystem\Path;
+use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -50,16 +54,16 @@ class SongUploadFileController extends AbstractController
         /** @var UploadedFile|null $file */
         $file = $request->files->get('file');
         if (!$file) {
-            return new JsonResponse(['error' => 'Invalid file provided'], status: 400);
+            throw new ProblemDetailsException(400, 'Invalid file', 'No file provided');
         }
 
         $song = $this->songRepository->find($id);
         if (!$song instanceof Song) {
-            return new JsonResponse(['error' => 'Song not found'], status: 404);
+            throw new ProblemDetailsException(404, 'Song not found', 'The song you are trying to upload a file for does not exist');
         }
 
         if ($song->isReady()) {
-            return new JsonResponse(['error' => 'The song is compiled'], status: 400);
+            throw new ProblemDetailsException(400, 'Song already compiled', 'The song you are trying to upload a file for is already compiled');
         }
 
         // The cover is a special case as it should be both in the

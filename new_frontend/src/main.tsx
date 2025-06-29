@@ -12,9 +12,13 @@ import i18n from 'i18next';
 import { closeSnackbar, SnackbarProvider } from 'notistack';
 import Button from './components/generic/button';
 import { IconX } from '@tabler/icons-react';
+import dayjs from 'dayjs';
+import LocalizedFormat from 'dayjs/plugin/localizedFormat';
 
 const router = createRouter({ routeTree });
 const queryClient = new QueryClient();
+
+dayjs.extend(LocalizedFormat)
 
 declare module '@tanstack/react-router' {
   interface Register {

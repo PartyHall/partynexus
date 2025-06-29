@@ -21,6 +21,7 @@ use App\Interface\Impl\HasTimestampsTrait;
 use App\Repository\SongRepository;
 use App\State\Processor\SongCompileProcessor;
 use App\State\Processor\SongDecompileProcessor;
+use App\State\Processor\SongPostProcessor;
 use App\State\Provider\SongDownloadProvider;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -54,9 +55,12 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
         new GetCollection(normalizationContext: [AbstractNormalizer::GROUPS => [self::API_GET_COLLECTION]]),
         new Get(normalizationContext: [AbstractNormalizer::GROUPS => [self::API_GET_ITEM]]),
         new Post(
+            inputFormats: ['multipart' => ['multipart/form-data']],
+            outputFormats: ['jsonld' => ['application/ld+json']],
             normalizationContext: [AbstractNormalizer::GROUPS => [self::API_GET_ITEM]],
             denormalizationContext: [AbstractNormalizer::GROUPS => [self::API_CREATE]],
             security: 'is_granted("ROLE_ADMIN")',
+            processor: SongPostProcessor::class,
         ),
         new Patch(
             normalizationContext: [AbstractNormalizer::GROUPS => [self::API_GET_ITEM]],
@@ -139,6 +143,7 @@ class Song implements HasTimestamps
     private string $artist;
 
     #[Vich\UploadableField(mapping: 'song_covers', fileNameProperty: 'coverName')]
+    #[Groups([self::API_CREATE, self::API_UPDATE])]
     private ?File $coverFile = null;
 
     #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]

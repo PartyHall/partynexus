@@ -1,6 +1,8 @@
 import { getSong } from '@/api/karaoke';
 import SongEditor from '@/components/karaoke/song_editor';
+import useTranslatedTitle from '@/hooks/useTranslatedTitle';
 import { createFileRoute } from '@tanstack/react-router'
+import { useRouter } from '@tanstack/react-router';
 
 /** @TODO: Before load => isGranted(ROLE_ADMIN) || 403 */
 
@@ -18,6 +20,11 @@ export const Route = createFileRoute('/_authenticated/karaoke/$id')({
 
 function RouteComponent() {
   const data = Route.useLoaderData();
+  const router = useRouter();
+  useTranslatedTitle('karaoke.editor.title_edit', {name: data.title || ''});
 
-  return <SongEditor song={data} />
+  return <SongEditor
+    song={data}
+    onSuccess={async () => await router.invalidate()}
+  />
 }

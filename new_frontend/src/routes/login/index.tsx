@@ -9,6 +9,7 @@ import { useAuthStore } from '@/stores/auth';
 import Input from '@/components/generic/input';
 import { IconAsterisk, IconUser } from '@tabler/icons-react';
 import Button from '@/components/generic/button';
+import useTranslatedTitle from '@/hooks/useTranslatedTitle';
 
 export const Route = createFileRoute('/login/')({
   component: RouteComponent,
@@ -20,6 +21,8 @@ type LoginForm = {
 };
 
 function RouteComponent() {
+  useTranslatedTitle('login.title');
+
   const { t } = useTranslation();
   const navigate = useNavigate();
   const setToken = useAuthStore(state => state.setToken);
@@ -63,7 +66,7 @@ function RouteComponent() {
       <img
         src='/assets/ph_logo_sd.webp'
         alt="PartyHall logo"
-        className='w-60'
+        className='w-60 m-auto'
       />
 
       <form className='flex flex-col gap-2 w-full' onSubmit={handleSubmit(onSubmit)}>

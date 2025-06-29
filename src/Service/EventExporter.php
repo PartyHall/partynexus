@@ -231,7 +231,7 @@ class EventExporter
 
         // @TODO: Do properly ?
         exec(\sprintf(
-            'ffmpeg -f concat -safe 0 -i %s -vf "settb=AVTB,setpts=N/%s/TB,fps=%s" -c:v libx264 %s',
+            'ffmpeg -f concat -safe 0 -i %s -vf "settb=AVTB,setpts=N/%s/TB,fps=%s" -c:v libx264 -profile:v baseline -level 3.1 -pix_fmt yuv420p -movflags +faststart %s',
             $listFile,
             $framerate,
             $framerate,

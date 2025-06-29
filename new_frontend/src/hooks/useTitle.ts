@@ -29,4 +29,8 @@ function useTitle(title: string, options: UseTitleOptions = DEFAULT_USE_TITLE_OP
     }, []);
 }
 
+export function useNexusTitle(title: string) {
+    useTitle(`${title} | Partyhall`)
+}
+
 export default typeof document !== 'undefined' ? useTitle : (_title: string) => { };

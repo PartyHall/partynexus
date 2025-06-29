@@ -1,9 +1,9 @@
-import { HttpError, HttpServerError, makeError } from './http_error'
+import { HttpError, HttpServerError, makeError, ProblemDetailsError } from './http_error'
 import { useAuthStore } from '@/stores/auth'
 import { ValidationError } from './violations_error'
 
 export async function customFetch(input: RequestInfo, init: RequestInit = {}) {
-  const {token, tokenUser} = useAuthStore.getState()
+  const { token, tokenUser } = useAuthStore.getState()
 
   const headers = new Headers(init.headers || {})
   if (token) {
@@ -14,13 +14,13 @@ export async function customFetch(input: RequestInfo, init: RequestInit = {}) {
     headers.set('Accept-Language', tokenUser?.language || 'en_US');
   }
 
-  if (!headers.has('Content-Type') && init.method) {
+  if (!headers.has('Content-Type') && init.method && !(init.body instanceof FormData)) {
     const method = init.method.toUpperCase();
 
     if (method === 'PATCH') {
-      headers.set('Content-Type', 'application/merge-patch+json')
+      headers.set('Content-Type', 'application/merge-patch+json');
     } else if (['POST', 'PUT'].includes(method)) {
-      headers.set('Content-Type', 'application/ld+json')
+      headers.set('Content-Type', 'application/ld+json');
     }
   }
 
@@ -49,11 +49,15 @@ export async function customFetch(input: RequestInfo, init: RequestInit = {}) {
         errorBody = await response.clone().json()
 
         if (response.status === 422) {
-          console.log('is 422');
           throw new ValidationError(errorBody.violations || []);
         }
+
+        // RFC7807 compilant error
+        if (errorBody.title && errorBody.detail) {
+          throw new ProblemDetailsError(errorBody);
+        }
       } catch (err: any) {
-        if (err instanceof ValidationError) {
+        if (err instanceof ValidationError || err instanceof ProblemDetailsError) {
           throw err;
         }
 

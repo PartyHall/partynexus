@@ -104,3 +104,9 @@
     box-shadow: 0 0 5px #c8ff004d, 0 0 10px #c8ff0033;
     border: 1px solid #c8ff0080;
 }
+
+/* No utilities for now as it's only used in participant list */
+.icon-blue-glow {
+    color: #fdfdfd !important;
+    filter: drop-shadow(0 0 3px #03edf9);
+}

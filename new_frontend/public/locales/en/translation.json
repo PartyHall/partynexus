@@ -21,6 +21,7 @@
         "new": "New",
         "edit": "Edit",
         "link": "Link",
+        "use": "Use",
         "go_back": "Go Back",
         "logout": "Log out",
         "yes": "Yes",
@@ -58,7 +59,26 @@
         "register_prompt": "Don't have an account? Register here."
     },
     "events": {
-        "title": "Events"
+        "title": "Events",
+        "amt_events": "{{amt}} events",
+        "editor": {
+            "title_new": "New event",
+            "participants": {
+                "add": "Add participant",
+                "remove": "Remove participant",
+                "remove_disclaimer": "Are you sure you want to remove <0></0> from this event?",
+                "remove_success": "Participant removed successfully"
+            }
+        },
+        "made_by": "Made by",
+        "located_at": "Location",
+        "date": "Date",
+        "photos": "Photos",
+        "timelapse": "Timelapse",
+        "participants": "Participants",
+        "sung_songs": "Sung songs",
+        "settings": "Settings",
+        "no_timelapse": "No timelapse available"
     },
     "account": {
         "title": "My account",
@@ -103,9 +123,6 @@
             "video": "Video",
             "transparent_video": "Transparent video"
         },
-        "add_song": {
-            "title": "Add a song"
-        },
         "request_song": {
             "title": "Request a song",
             "requested_by": "Requested by",
@@ -121,7 +138,12 @@
             "quality": "Quality",
             "musicbrainz_id": "MusicBrainz ID",
             "spotify_id": "Spotify ID",
-            "hotspot": "Hotspot"
+            "hotspot": "Hotspot",
+            "external_song": {
+                "title_spotify": "Search on Spotify",
+                "title_musicBrainz": "Search on MusicBrainz"
+            },
+            "upload_cover": "Upload cover art"
         },
         "compile": {
             "title": "Compilation settings",
