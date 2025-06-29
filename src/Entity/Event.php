@@ -27,7 +27,7 @@ use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @see App\Doctrine\FilterEventOnOwnerExtension
+ * @see \App\Doctrine\FilterEventOnOwnerExtension
  */
 #[ApiResource(
     operations: [

@@ -17,14 +17,15 @@ use Symfony\Component\Uid\Uuid;
 readonly class SongCompiler
 {
     public function __construct(
-        private Filesystem $fs,
+        private Filesystem             $fs,
         private EntityManagerInterface $emi,
-        private SerializerInterface $serializer,
+        private SerializerInterface    $serializer,
         #[Autowire(env: 'SONG_EXTRACT_LOCATION')]
-        private string $wipLocation,
+        private string                 $wipLocation,
         #[Autowire(env: 'SONG_LOCATION')]
-        private string $compiledLocation,
-    ) {
+        private string                 $compiledLocation,
+    )
+    {
     }
 
     /**
@@ -32,7 +33,7 @@ readonly class SongCompiler
      */
     public function decompile(Song $song): void
     {
-        $compiledFile = Path::join($this->compiledLocation, $song->getId().'.phk');
+        $compiledFile = Path::join($this->compiledLocation, $song->getId() . '.phk');
         if (!$this->fs->exists($compiledFile)) {
             throw new \Exception('The compiled file is missing');
         }
@@ -66,7 +67,7 @@ readonly class SongCompiler
             throw new \Exception('The decompiled files are missing');
         }
 
-        $compiledFile = Path::join($this->compiledLocation, $song->getId().'.phk');
+        $compiledFile = Path::join($this->compiledLocation, $song->getId() . '.phk');
         $this->fs->mkdir($this->compiledLocation);
         $this->fs->remove($compiledFile);
 
@@ -146,7 +147,7 @@ readonly class SongCompiler
 
         $files = new \RecursiveIteratorIterator(
             new \RecursiveDirectoryIterator($wipDir),
-            \RecursiveIteratorIterator::LEAVES_ONLY
+            \RecursiveIteratorIterator::LEAVES_ONLY,
         );
 
         foreach ($files as $file) {

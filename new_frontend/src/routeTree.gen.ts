@@ -13,12 +13,20 @@ import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/
 import { Route as RegisterIndexRouteImport } from './routes/register/index'
 import { Route as LoginIndexRouteImport } from './routes/login/index'
 import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated/index'
+import { Route as AuthenticatedNewRouteImport } from './routes/_authenticated/new'
+import { Route as AuthenticatedIdRouteRouteImport } from './routes/_authenticated/$id/route'
 import { Route as AuthenticatedKaraokeIndexRouteImport } from './routes/_authenticated/karaoke/index'
 import { Route as AuthenticatedAccountIndexRouteImport } from './routes/_authenticated/account/index'
+import { Route as AuthenticatedIdIndexRouteImport } from './routes/_authenticated/$id/index'
 import { Route as AuthenticatedKaraokeRequestRouteImport } from './routes/_authenticated/karaoke/request'
 import { Route as AuthenticatedKaraokeNewRouteImport } from './routes/_authenticated/karaoke/new'
 import { Route as AuthenticatedKaraokeIdRouteImport } from './routes/_authenticated/karaoke/$id'
 import { Route as AuthenticatedAccountChangePasswordRouteImport } from './routes/_authenticated/account/change-password'
+import { Route as AuthenticatedIdTimelapseRouteImport } from './routes/_authenticated/$id/timelapse'
+import { Route as AuthenticatedIdSongsRouteImport } from './routes/_authenticated/$id/songs'
+import { Route as AuthenticatedIdSettingsRouteImport } from './routes/_authenticated/$id/settings'
+import { Route as AuthenticatedIdParticipantsRouteImport } from './routes/_authenticated/$id/participants'
+import { Route as AuthenticatedIdEditRouteImport } from './routes/_authenticated/$id/edit'
 import { Route as AuthenticatedAccountAppliancesRouteRouteImport } from './routes/_authenticated/account/appliances/route'
 import { Route as AuthenticatedAccountAppliancesIndexRouteImport } from './routes/_authenticated/account/appliances/index'
 import { Route as AuthenticatedAccountAppliancesNewRouteImport } from './routes/_authenticated/account/appliances/new'
@@ -43,6 +51,16 @@ const AuthenticatedIndexRoute = AuthenticatedIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedNewRoute = AuthenticatedNewRouteImport.update({
+  id: '/new',
+  path: '/new',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedIdRouteRoute = AuthenticatedIdRouteRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedKaraokeIndexRoute =
   AuthenticatedKaraokeIndexRouteImport.update({
     id: '/karaoke/',
@@ -55,6 +73,11 @@ const AuthenticatedAccountIndexRoute =
     path: '/account/',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedIdIndexRoute = AuthenticatedIdIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AuthenticatedIdRouteRoute,
+} as any)
 const AuthenticatedKaraokeRequestRoute =
   AuthenticatedKaraokeRequestRouteImport.update({
     id: '/karaoke/request',
@@ -77,6 +100,33 @@ const AuthenticatedAccountChangePasswordRoute =
     path: '/account/change-password',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedIdTimelapseRoute =
+  AuthenticatedIdTimelapseRouteImport.update({
+    id: '/timelapse',
+    path: '/timelapse',
+    getParentRoute: () => AuthenticatedIdRouteRoute,
+  } as any)
+const AuthenticatedIdSongsRoute = AuthenticatedIdSongsRouteImport.update({
+  id: '/songs',
+  path: '/songs',
+  getParentRoute: () => AuthenticatedIdRouteRoute,
+} as any)
+const AuthenticatedIdSettingsRoute = AuthenticatedIdSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AuthenticatedIdRouteRoute,
+} as any)
+const AuthenticatedIdParticipantsRoute =
+  AuthenticatedIdParticipantsRouteImport.update({
+    id: '/participants',
+    path: '/participants',
+    getParentRoute: () => AuthenticatedIdRouteRoute,
+  } as any)
+const AuthenticatedIdEditRoute = AuthenticatedIdEditRouteImport.update({
+  id: '/edit',
+  path: '/edit',
+  getParentRoute: () => AuthenticatedIdRouteRoute,
+} as any)
 const AuthenticatedAccountAppliancesRouteRoute =
   AuthenticatedAccountAppliancesRouteRouteImport.update({
     id: '/account/appliances',
@@ -103,14 +153,22 @@ const AuthenticatedAccountAppliancesIdRoute =
   } as any)
 
 export interface FileRoutesByFullPath {
+  '/$id': typeof AuthenticatedIdRouteRouteWithChildren
+  '/new': typeof AuthenticatedNewRoute
   '/': typeof AuthenticatedIndexRoute
   '/login': typeof LoginIndexRoute
   '/register': typeof RegisterIndexRoute
   '/account/appliances': typeof AuthenticatedAccountAppliancesRouteRouteWithChildren
+  '/$id/edit': typeof AuthenticatedIdEditRoute
+  '/$id/participants': typeof AuthenticatedIdParticipantsRoute
+  '/$id/settings': typeof AuthenticatedIdSettingsRoute
+  '/$id/songs': typeof AuthenticatedIdSongsRoute
+  '/$id/timelapse': typeof AuthenticatedIdTimelapseRoute
   '/account/change-password': typeof AuthenticatedAccountChangePasswordRoute
   '/karaoke/$id': typeof AuthenticatedKaraokeIdRoute
   '/karaoke/new': typeof AuthenticatedKaraokeNewRoute
   '/karaoke/request': typeof AuthenticatedKaraokeRequestRoute
+  '/$id/': typeof AuthenticatedIdIndexRoute
   '/account': typeof AuthenticatedAccountIndexRoute
   '/karaoke': typeof AuthenticatedKaraokeIndexRoute
   '/account/appliances/$id': typeof AuthenticatedAccountAppliancesIdRoute
@@ -118,13 +176,20 @@ export interface FileRoutesByFullPath {
   '/account/appliances/': typeof AuthenticatedAccountAppliancesIndexRoute
 }
 export interface FileRoutesByTo {
+  '/new': typeof AuthenticatedNewRoute
   '/': typeof AuthenticatedIndexRoute
   '/login': typeof LoginIndexRoute
   '/register': typeof RegisterIndexRoute
+  '/$id/edit': typeof AuthenticatedIdEditRoute
+  '/$id/participants': typeof AuthenticatedIdParticipantsRoute
+  '/$id/settings': typeof AuthenticatedIdSettingsRoute
+  '/$id/songs': typeof AuthenticatedIdSongsRoute
+  '/$id/timelapse': typeof AuthenticatedIdTimelapseRoute
   '/account/change-password': typeof AuthenticatedAccountChangePasswordRoute
   '/karaoke/$id': typeof AuthenticatedKaraokeIdRoute
   '/karaoke/new': typeof AuthenticatedKaraokeNewRoute
   '/karaoke/request': typeof AuthenticatedKaraokeRequestRoute
+  '/$id': typeof AuthenticatedIdIndexRoute
   '/account': typeof AuthenticatedAccountIndexRoute
   '/karaoke': typeof AuthenticatedKaraokeIndexRoute
   '/account/appliances/$id': typeof AuthenticatedAccountAppliancesIdRoute
@@ -134,14 +199,22 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/_authenticated/$id': typeof AuthenticatedIdRouteRouteWithChildren
+  '/_authenticated/new': typeof AuthenticatedNewRoute
   '/_authenticated/': typeof AuthenticatedIndexRoute
   '/login/': typeof LoginIndexRoute
   '/register/': typeof RegisterIndexRoute
   '/_authenticated/account/appliances': typeof AuthenticatedAccountAppliancesRouteRouteWithChildren
+  '/_authenticated/$id/edit': typeof AuthenticatedIdEditRoute
+  '/_authenticated/$id/participants': typeof AuthenticatedIdParticipantsRoute
+  '/_authenticated/$id/settings': typeof AuthenticatedIdSettingsRoute
+  '/_authenticated/$id/songs': typeof AuthenticatedIdSongsRoute
+  '/_authenticated/$id/timelapse': typeof AuthenticatedIdTimelapseRoute
   '/_authenticated/account/change-password': typeof AuthenticatedAccountChangePasswordRoute
   '/_authenticated/karaoke/$id': typeof AuthenticatedKaraokeIdRoute
   '/_authenticated/karaoke/new': typeof AuthenticatedKaraokeNewRoute
   '/_authenticated/karaoke/request': typeof AuthenticatedKaraokeRequestRoute
+  '/_authenticated/$id/': typeof AuthenticatedIdIndexRoute
   '/_authenticated/account/': typeof AuthenticatedAccountIndexRoute
   '/_authenticated/karaoke/': typeof AuthenticatedKaraokeIndexRoute
   '/_authenticated/account/appliances/$id': typeof AuthenticatedAccountAppliancesIdRoute
@@ -151,14 +224,22 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
+    | '/$id'
+    | '/new'
     | '/'
     | '/login'
     | '/register'
     | '/account/appliances'
+    | '/$id/edit'
+    | '/$id/participants'
+    | '/$id/settings'
+    | '/$id/songs'
+    | '/$id/timelapse'
     | '/account/change-password'
     | '/karaoke/$id'
     | '/karaoke/new'
     | '/karaoke/request'
+    | '/$id/'
     | '/account'
     | '/karaoke'
     | '/account/appliances/$id'
@@ -166,13 +247,20 @@ export interface FileRouteTypes {
     | '/account/appliances/'
   fileRoutesByTo: FileRoutesByTo
   to:
+    | '/new'
     | '/'
     | '/login'
     | '/register'
+    | '/$id/edit'
+    | '/$id/participants'
+    | '/$id/settings'
+    | '/$id/songs'
+    | '/$id/timelapse'
     | '/account/change-password'
     | '/karaoke/$id'
     | '/karaoke/new'
     | '/karaoke/request'
+    | '/$id'
     | '/account'
     | '/karaoke'
     | '/account/appliances/$id'
@@ -181,14 +269,22 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/_authenticated'
+    | '/_authenticated/$id'
+    | '/_authenticated/new'
     | '/_authenticated/'
     | '/login/'
     | '/register/'
     | '/_authenticated/account/appliances'
+    | '/_authenticated/$id/edit'
+    | '/_authenticated/$id/participants'
+    | '/_authenticated/$id/settings'
+    | '/_authenticated/$id/songs'
+    | '/_authenticated/$id/timelapse'
     | '/_authenticated/account/change-password'
     | '/_authenticated/karaoke/$id'
     | '/_authenticated/karaoke/new'
     | '/_authenticated/karaoke/request'
+    | '/_authenticated/$id/'
     | '/_authenticated/account/'
     | '/_authenticated/karaoke/'
     | '/_authenticated/account/appliances/$id'
@@ -232,6 +328,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedIndexRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/new': {
+      id: '/_authenticated/new'
+      path: '/new'
+      fullPath: '/new'
+      preLoaderRoute: typeof AuthenticatedNewRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/$id': {
+      id: '/_authenticated/$id'
+      path: '/$id'
+      fullPath: '/$id'
+      preLoaderRoute: typeof AuthenticatedIdRouteRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/karaoke/': {
       id: '/_authenticated/karaoke/'
       path: '/karaoke'
@@ -245,6 +355,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/account'
       preLoaderRoute: typeof AuthenticatedAccountIndexRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/$id/': {
+      id: '/_authenticated/$id/'
+      path: '/'
+      fullPath: '/$id/'
+      preLoaderRoute: typeof AuthenticatedIdIndexRouteImport
+      parentRoute: typeof AuthenticatedIdRouteRoute
     }
     '/_authenticated/karaoke/request': {
       id: '/_authenticated/karaoke/request'
@@ -273,6 +390,41 @@ declare module '@tanstack/react-router' {
       fullPath: '/account/change-password'
       preLoaderRoute: typeof AuthenticatedAccountChangePasswordRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/$id/timelapse': {
+      id: '/_authenticated/$id/timelapse'
+      path: '/timelapse'
+      fullPath: '/$id/timelapse'
+      preLoaderRoute: typeof AuthenticatedIdTimelapseRouteImport
+      parentRoute: typeof AuthenticatedIdRouteRoute
+    }
+    '/_authenticated/$id/songs': {
+      id: '/_authenticated/$id/songs'
+      path: '/songs'
+      fullPath: '/$id/songs'
+      preLoaderRoute: typeof AuthenticatedIdSongsRouteImport
+      parentRoute: typeof AuthenticatedIdRouteRoute
+    }
+    '/_authenticated/$id/settings': {
+      id: '/_authenticated/$id/settings'
+      path: '/settings'
+      fullPath: '/$id/settings'
+      preLoaderRoute: typeof AuthenticatedIdSettingsRouteImport
+      parentRoute: typeof AuthenticatedIdRouteRoute
+    }
+    '/_authenticated/$id/participants': {
+      id: '/_authenticated/$id/participants'
+      path: '/participants'
+      fullPath: '/$id/participants'
+      preLoaderRoute: typeof AuthenticatedIdParticipantsRouteImport
+      parentRoute: typeof AuthenticatedIdRouteRoute
+    }
+    '/_authenticated/$id/edit': {
+      id: '/_authenticated/$id/edit'
+      path: '/edit'
+      fullPath: '/$id/edit'
+      preLoaderRoute: typeof AuthenticatedIdEditRouteImport
+      parentRoute: typeof AuthenticatedIdRouteRoute
     }
     '/_authenticated/account/appliances': {
       id: '/_authenticated/account/appliances'
@@ -305,6 +457,27 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface AuthenticatedIdRouteRouteChildren {
+  AuthenticatedIdEditRoute: typeof AuthenticatedIdEditRoute
+  AuthenticatedIdParticipantsRoute: typeof AuthenticatedIdParticipantsRoute
+  AuthenticatedIdSettingsRoute: typeof AuthenticatedIdSettingsRoute
+  AuthenticatedIdSongsRoute: typeof AuthenticatedIdSongsRoute
+  AuthenticatedIdTimelapseRoute: typeof AuthenticatedIdTimelapseRoute
+  AuthenticatedIdIndexRoute: typeof AuthenticatedIdIndexRoute
+}
+
+const AuthenticatedIdRouteRouteChildren: AuthenticatedIdRouteRouteChildren = {
+  AuthenticatedIdEditRoute: AuthenticatedIdEditRoute,
+  AuthenticatedIdParticipantsRoute: AuthenticatedIdParticipantsRoute,
+  AuthenticatedIdSettingsRoute: AuthenticatedIdSettingsRoute,
+  AuthenticatedIdSongsRoute: AuthenticatedIdSongsRoute,
+  AuthenticatedIdTimelapseRoute: AuthenticatedIdTimelapseRoute,
+  AuthenticatedIdIndexRoute: AuthenticatedIdIndexRoute,
+}
+
+const AuthenticatedIdRouteRouteWithChildren =
+  AuthenticatedIdRouteRoute._addFileChildren(AuthenticatedIdRouteRouteChildren)
+
 interface AuthenticatedAccountAppliancesRouteRouteChildren {
   AuthenticatedAccountAppliancesIdRoute: typeof AuthenticatedAccountAppliancesIdRoute
   AuthenticatedAccountAppliancesNewRoute: typeof AuthenticatedAccountAppliancesNewRoute
@@ -327,6 +500,8 @@ const AuthenticatedAccountAppliancesRouteRouteWithChildren =
   )
 
 interface AuthenticatedRouteRouteChildren {
+  AuthenticatedIdRouteRoute: typeof AuthenticatedIdRouteRouteWithChildren
+  AuthenticatedNewRoute: typeof AuthenticatedNewRoute
   AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
   AuthenticatedAccountAppliancesRouteRoute: typeof AuthenticatedAccountAppliancesRouteRouteWithChildren
   AuthenticatedAccountChangePasswordRoute: typeof AuthenticatedAccountChangePasswordRoute
@@ -338,6 +513,8 @@ interface AuthenticatedRouteRouteChildren {
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedIdRouteRoute: AuthenticatedIdRouteRouteWithChildren,
+  AuthenticatedNewRoute: AuthenticatedNewRoute,
   AuthenticatedIndexRoute: AuthenticatedIndexRoute,
   AuthenticatedAccountAppliancesRouteRoute:
     AuthenticatedAccountAppliancesRouteRouteWithChildren,

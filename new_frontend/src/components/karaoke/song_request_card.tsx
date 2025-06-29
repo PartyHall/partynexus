@@ -8,6 +8,7 @@ import Button from "../generic/button";
 import { useState } from "react";
 import { enqueueSnackbar } from "notistack";
 import { deleteSongRequest } from "@/api/karaoke/requests";
+import Card from "../generic/card";
 
 type Props = {
     song: SongRequest,
@@ -34,7 +35,7 @@ export default function SongRequestCard({ song, doInvalidate }: Props) {
         setIsMarkingAsDone(false);
     };
 
-    return <div className="songCard">
+    return <Card className="songCard" noGlow>
         <div className='songDetails'>
             <h3>{t('karaoke.song_title')}: {song.title}</h3>
             <p className="text-gray-500">{t('karaoke.song_artist')}: {song.artist}</p>
@@ -55,5 +56,5 @@ export default function SongRequestCard({ song, doInvalidate }: Props) {
                 </Tooltip>
             </div>
         }
-    </div>;
+    </Card>;
 }

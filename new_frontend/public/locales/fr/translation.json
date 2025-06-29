@@ -21,6 +21,7 @@
         "new": "Ajouter",
         "edit": "Modifier",
         "link": "Lien",
+        "use": "Utiliser",
         "go_back": "Page précédente",
         "logout": "Se déconnecter",
         "yes": "Oui",
@@ -58,7 +59,26 @@
         "register_prompt": "Pas de compte ? S'inscrire."
     },
     "events": {
-        "title": "Évènements"
+        "title": "Évènements",
+        "amt_events": "{{amt}} évènements",
+        "editor": {
+            "title_new": "Nouvel évènement",
+            "participants": {
+                "add": "Ajouter un participant",
+                "remove": "Supprimer un participant",
+                "remove_disclaimer": "Êtes-vous sûr de vouloir supprimer <0></0> de cet évènement ?",
+                "remove_success": "Participant supprimé avec succès"
+            }
+        },
+        "made_by": "Proposé par",
+        "located_at": "Lieu",
+        "date": "Date",
+        "photos": "Photos",
+        "timelapse": "Timelapse",
+        "participants": "Participants",
+        "sung_songs": "Musiques chantées",
+        "settings": "Paramètres",
+        "no_timelapse": "Aucun timelapse disponible"
     },
     "account": {
         "title": "Mon compte",
@@ -103,9 +123,6 @@
             "video": "Vidéo",
             "transparent_video": "Vidéo transparente"
         },
-        "add_song": {
-            "title": "Ajouter une musique"
-        },
         "request_song": {
             "title": "Demander une musique",
             "requested_by": "Demandé par",
@@ -121,7 +138,12 @@
             "quality": "Qualité",
             "musicbrainz_id": "MusicBrainz ID",
             "spotify_id": "Spotify ID",
-            "hotspot": "Hotspot"
+            "hotspot": "Hotspot",
+            "external_song": {
+                "title_spotify": "Chercher sur Spotify",
+                "title_musicBrainz": "Chercher sur MusicBrainz"
+            },
+            "upload_cover": "Téléverser une pochette"
         },
         "compile": {
             "title": "Paramètres de compilation",

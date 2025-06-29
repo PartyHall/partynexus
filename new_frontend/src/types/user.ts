@@ -10,4 +10,12 @@ export type User = {
     bannedAt: string | null;
     passwordSet: boolean;
     appliances: Appliance[];
-}
+};
+
+export type MinimalUser = {
+    '@id': string;
+    id: number;
+    username: string;
+    firstname: string;
+    lastname: string;
+};

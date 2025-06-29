@@ -5,6 +5,7 @@ import Button from '@/components/generic/button';
 import Input from '@/components/generic/input';
 import Title from '@/components/generic/title';
 import SongRequestCard from '@/components/karaoke/song_request_card';
+import useTranslatedTitle from '@/hooks/useTranslatedTitle';
 import { IconSend2 } from '@tabler/icons-react';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
@@ -31,6 +32,7 @@ type SongRequestForm = {
 };
 
 function RouteComponent() {
+  useTranslatedTitle('karaoke.request_song.title')
   const { t } = useTranslation();
   const { ref, inView } = useInView();
   const [globalErrors, setGlobalErrors] = useState<string[]>([]);

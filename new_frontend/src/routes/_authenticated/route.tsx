@@ -2,6 +2,7 @@ import { createFileRoute, Outlet, redirect, useNavigate } from '@tanstack/react-
 import { useAuthStore } from '../../stores/auth';
 import { useEffect } from 'react';
 import { TopBar } from '@/components/topbar';
+import setI18NLanguage from '@/utils/lang';
 
 export const Route = createFileRoute('/_authenticated')({
   beforeLoad: async () => {
@@ -10,6 +11,8 @@ export const Route = createFileRoute('/_authenticated')({
     if (!token || !tokenUser) {
       throw redirect({ to: '/login', reloadDocument: true });
     }
+
+    setI18NLanguage(tokenUser.language);
 
     /**
      * If the token expires in less than 30 seconds,
@@ -32,12 +35,16 @@ function RouteComponent() {
    * 
    * This ensures that we always have a valid token
    * or the user gets logged out
+   * 
+   * Also update the user language based on its token infos
    */
   useEffect(() => {
     if (!tokenUser || !refreshToken) {
       navigate({ to: '/login' });
       return;
     }
+
+    setI18NLanguage(tokenUser.language);
 
     const interval = setTimeout(
       doRefresh,

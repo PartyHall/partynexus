@@ -162,7 +162,7 @@ a::after {
     transform: translateX(-50%);
 }
 
-a:hover {
+a:not(.no-hover):hover {
     color: theme('colors.primary.300');
 }
 
@@ -175,7 +175,7 @@ a.no-underline:hover::after {
     display: none;
 }
 
-a.no-underline:hover {
+a:not(.no-hover).no-underline:hover {
     @apply text-white;
 }
 

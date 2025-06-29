@@ -4,12 +4,15 @@ import Button from "@/components/generic/button";
 import EnumSelect from "@/components/generic/enum_select";
 import Input from "@/components/generic/input";
 import Title from "@/components/generic/title";
-import type { Song } from "@/types/karaoke";
+import type { Song, UpsertSong } from "@/types/karaoke";
 import { IconDeviceFloppy, IconSearch } from "@tabler/icons-react";
 import { enqueueSnackbar } from "notistack";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
+import ExternalSongModal from "./external_song_modal";
+import SongFormCover from "./song_form_cover";
+import UploadButton from "@/components/generic/upload_button";
 
 type Props = {
     song?: Song | null;
@@ -20,13 +23,17 @@ export default function SongEditorForm({ song, onSuccess }: Props) {
     const { t } = useTranslation();
     const [globalErrors, setGlobalErrors] = useState<string[]>([]);
 
+    const [externalSongService, setExternalSongService] = useState<'spotify' | 'musicBrainz' | null>(null);
+
     const {
         register,
         handleSubmit,
         setError,
-        formState: { errors, isSubmitting, dirtyFields },
+        formState: { errors, isSubmitting },
         reset,
-    } = useForm<Song>({
+        setValue,
+        watch,
+    } = useForm<UpsertSong>({
         defaultValues: {
             title: song?.title || '',
             artist: song?.artist || '',
@@ -35,23 +42,24 @@ export default function SongEditorForm({ song, onSuccess }: Props) {
             musicBrainzId: song?.musicBrainzId?.length ? song.musicBrainzId : null,
             spotifyId: song?.spotifyId?.length ? song.spotifyId : null,
             hotspot: song?.hotspot || 0,
+            coverFile: null,
         }
     });
 
-    const onSubmit = async (data: Song) => {
+    const title = watch('title');
+    const artist = watch('artist');
+
+    const onSubmit = async (data: UpsertSong) => {
+        console.log("Form data:", data);
+        return;
         setGlobalErrors([]);
 
         try {
             let savedSong: Song | null = null;
 
             if (song && song.id) {
-                const updateData: Record<string, any> = { id: song.id };
-
-                Object.keys(dirtyFields).forEach((key) => {
-                    updateData[key] = data[key as keyof Song];
-                });
-
-                savedSong = await updateSong(updateData);
+                data.id = song.id;
+                savedSong = await updateSong(data);
 
                 reset(savedSong);
             } else {
@@ -75,11 +83,23 @@ export default function SongEditorForm({ song, onSuccess }: Props) {
         }
     };
 
+    return <form className="flex flex-col gap-4 w-full sm:w-80" onSubmit={handleSubmit(onSubmit)}>
+        {
+            song?.id
+            && <Title level={2} className="blue-glow text-center" noMargin>
+                {t('karaoke.editor.metadata')}
+            </Title>
+        }
 
-    return <form className="flex flex-col gap-4" onSubmit={handleSubmit(onSubmit)}>
-        <Title level={2} className="blue-glow text-center" noMargin>
-            {t('karaoke.editor.metadata')}
-        </Title>
+        {/*
+        <SongFormCover
+            song={song}
+            disabled={isSubmitting || song?.ready}
+            {...register('coverFile')}
+        />*/}
+
+        <UploadButton {...register('coverFile')} />
+
         <Input
             label={t('karaoke.song_title')}
             {...register('title', { required: true })}
@@ -112,7 +132,13 @@ export default function SongEditorForm({ song, onSuccess }: Props) {
 
         <Input
             label={t('karaoke.editor.musicbrainz_id')}
-            action={<Button disabled={song?.ready}><IconSearch size={18} /></Button>}
+            action={<Button
+                type='button'
+                disabled={song?.ready}
+                onClick={() => setExternalSongService('musicBrainz')}
+            >
+                <IconSearch size={18} />
+            </Button>}
             {...register('musicBrainzId')}
             error={errors.musicBrainzId}
             disabled={isSubmitting || song?.ready}
@@ -120,7 +146,13 @@ export default function SongEditorForm({ song, onSuccess }: Props) {
 
         <Input
             label={t('karaoke.editor.spotify_id')}
-            action={<Button disabled={song?.ready}><IconSearch size={18} /></Button>}
+            action={<Button
+                type='button'
+                disabled={song?.ready}
+                onClick={() => setExternalSongService('spotify')}
+            >
+                <IconSearch size={18} />
+            </Button>}
             {...register('spotifyId')}
             error={errors.spotifyId}
             disabled={isSubmitting || song?.ready}
@@ -144,6 +176,31 @@ export default function SongEditorForm({ song, onSuccess }: Props) {
                     }
                 </div>
             )
+        }
+
+        {
+            externalSongService
+            && <ExternalSongModal
+                service={externalSongService}
+                defaultArtist={artist}
+                defaultTitle={title}
+                open={!!externalSongService}
+                onClose={(es) => {
+                    if (es) {
+                        setValue('title', es.title);
+                        setValue('artist', es.artist);
+                        setValue(
+                            externalSongService === 'spotify'
+                                ? 'spotifyId'
+                                : 'musicBrainzId',
+                            es.id
+                        );
+
+                    }
+
+                    setExternalSongService(null);
+                }}
+            />
         }
 
         <Button disabled={isSubmitting || song?.ready}>

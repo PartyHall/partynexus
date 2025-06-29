@@ -72,6 +72,7 @@ class Export implements HasEvent
         self::API_GET_ITEM,
         Event::API_GET_ITEM,
     ])]
+    /** Was the timelapse generated? */
     private bool $timelapse;
 
     public function getId(): int

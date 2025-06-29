@@ -1,5 +1,5 @@
 import type { Collection } from "@/types";
-import type { Song } from "@/types/karaoke";
+import type { Song, UpsertSong } from "@/types/karaoke";
 import { customFetch } from "../customFetch";
 
 type GetCollectionParams = {
@@ -38,18 +38,33 @@ export async function getSong(id: string | number): Promise<Song> {
     return await resp.json();
 }
 
-export async function createSong(song: Song): Promise<Song> {
+export async function createSong(song: UpsertSong): Promise<Song> {
+    const formData = new FormData();
+
+    formData.set('title', song.title);
+    formData.set('artist', song.artist);
+    formData.set('format', song.format);
+    formData.set('quality', song.quality);
+
+    if (song.musicBrainzId?.trim().length) {
+        formData.set('musicBrainzId', song.musicBrainzId.trim());
+    }
+
+    if (song.spotifyId?.trim().length) {
+        formData.set('spotifyId', song.spotifyId.trim());
+    }
+
+    if (song.hotspot && song.hotspot > 0) {
+        formData.set('hotspot', String(song.hotspot));
+    }
+
+    if (song.coverFile) {
+        formData.set('coverFile', song.coverFile);
+    }
+
     const resp = await customFetch('/api/songs', {
         method: 'POST',
-        body: JSON.stringify({
-            title: song.title,
-            artist: song.artist,
-            format: '/api/song_formats/' + song.format,
-            quality: '/api/song_qualities/' + song.quality,
-            musicBrainzId: song.musicBrainzId?.trim().length ? song.musicBrainzId.trim() : undefined,
-            spotifyId: song.spotifyId?.trim().length ? song.spotifyId : undefined,
-            hotspot: (song.hotspot || 0) > 0 ? song.hotspot : undefined,
-        }),
+        body: formData,
     });
 
     return await resp.json();
@@ -61,8 +76,8 @@ export async function updateSong(song: Record<string, any>): Promise<Song> {
         body: JSON.stringify({
             title: song.title,
             artist: song.artist,
-            format: song.format ? '/api/song_formats/' + song.format : undefined,
-            quality: song.quality ? '/api/song_qualities/' + song.quality : undefined,
+            format: song.format ?? undefined,
+            quality: song.quality ?? undefined,
             musicBrainzId: song.musicBrainzId,
             spotifyId: song.spotifyId,
             hotspot: song.hotspot,
@@ -86,6 +101,18 @@ export async function decompileSong(id: number): Promise<Song> {
         method: 'PATCH',
         body: '{}',
     });
+
+    return await resp.json();
+}
+
+export async function uploadFile(song: Song, filetype: string, file: File): Promise<Song> {
+    const fd = new FormData();
+    fd.set('file', file);
+
+    const resp = await customFetch(
+        `/api/songs/${song.id}/upload-file/${filetype}`,
+        { method: 'POST', headers: { 'Accept': 'application/ld+json' }, body: fd },
+    );
 
     return await resp.json();
 }

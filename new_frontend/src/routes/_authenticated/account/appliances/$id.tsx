@@ -1,5 +1,6 @@
 import { getAppliance } from '@/api/appliances';
 import ApplianceEditor from '@/components/account/appliances/appliance_editor';
+import useTranslatedTitle from '@/hooks/useTranslatedTitle';
 import { createFileRoute, useRouter } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/_authenticated/account/appliances/$id')({
@@ -16,9 +17,12 @@ export const Route = createFileRoute('/_authenticated/account/appliances/$id')({
 
 function RouteComponent() {
   const router = useRouter();
+  const data = Route.useLoaderData();
+
+  useTranslatedTitle('account.my_appliances.editor.title_edit', { name: data.name || '' });
 
   return <ApplianceEditor
-    appliance={Route.useLoaderData()}
+    appliance={data}
     doInvalidateRoute={router.invalidate}
   />
 }

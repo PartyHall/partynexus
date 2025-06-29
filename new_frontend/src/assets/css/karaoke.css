@@ -1,8 +1,8 @@
 .songCard {
-    @apply p-2 border bg-synthbg-800 border-synthbg-800 rounded-md flex flex-row gap-4 w-full;
+    @apply p-2! flex flex-row w-full;
 }
 
-.songCard > img {
+.songCard > div > img {
     @apply rounded-md w-[64px] h-[64px] object-cover;
 }
 

@@ -8,6 +8,7 @@ import Switch from '@/components/generic/switch';
 import { Tooltip } from '@/components/generic/tooltip';
 import SongCard from '@/components/karaoke/song_card';
 import { useDebounce } from '@/hooks/useDebounce';
+import useTranslatedTitle from '@/hooks/useTranslatedTitle';
 import { useAuthStore } from '@/stores/auth';
 import { IconFilter, IconPlus, IconSearch, IconX, IconZoomQuestion } from '@tabler/icons-react';
 import { useInfiniteQuery } from '@tanstack/react-query';
@@ -33,6 +34,7 @@ export const Route = createFileRoute('/_authenticated/karaoke/')({
 })
 
 function RouteComponent() {
+  useTranslatedTitle('karaoke.title');
   const { t } = useTranslation();
   const { isGranted } = useAuthStore();
   const { ref, inView } = useInView();
@@ -180,7 +182,7 @@ function RouteComponent() {
       <div className='flex-end flex gap-2'>
         <ButtonLink to='/karaoke/new'>
           <IconPlus size={19} />
-          {t('karaoke.add_song.title')}
+          {t('karaoke.editor.title_new')}
         </ButtonLink>
         <ButtonLink to='/karaoke/request'>
           <IconZoomQuestion size={19} />
