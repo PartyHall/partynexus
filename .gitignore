@@ -47,3 +47,5 @@ supervisord.pid
 http/*.private.*.json
 
 songs.csv
+
+.dump_data

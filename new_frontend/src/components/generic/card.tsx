@@ -5,10 +5,11 @@ type Props = {
     children: React.ReactNode;
     className?: string;
     noGlow?: boolean;
+    customGlow?: string;
 };
 
-export default function Card({ children, className, noGlow }: Props) {
-    const glow = `shadow-md box-purple-glow`;
+export default function Card({ children, className, noGlow, customGlow }: Props) {
+    const glow = `shadow-md ${customGlow ? customGlow : 'box-purple-glow'}`;
 
     return <div
         className={`

@@ -9,8 +9,9 @@ type Props = {
 };
 
 const LevelGlowMap = [
-    "text-blue-glow",
+    "text-purple-glow",
     "text-yellow-glow",
+    "text-blue-glow",
     "text-red-glow",
 ];
 

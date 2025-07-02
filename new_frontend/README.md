@@ -6,15 +6,8 @@ Built with my new wip stack: tanstack router, tanstack query, tailwind and zusta
 
 ## Ordre des choses à faire
 
-- Empêcher la modification du pseudo
 - Si modification de l'email = faire revalider le compte! (+ message sur l'ui pour le dire)
-- Bouton global sur un évènement pour "tout télécharger" si un export existe
-- Finir participants (Ajouter un participant)
-- Faire musique chantée (Désactiver la pagination dessus quand filtré sur un event, qui d'ailleurs est obligatoire)
-- Paramètres
-- Faire le display board
 - Fixer les 401 sur timelapse jsp pq (et s'assurer que ça marche pour les photos aussi)
-- Faire le formulaire de création / édition
 - Faire la page d'admin
 - Finir la portion Karaoké
 - Faire la gallerie photo (!)

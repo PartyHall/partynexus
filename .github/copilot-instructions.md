@@ -2,6 +2,8 @@ FOR FUCK SAKE STOP PROPOSING UGLY ASS HACKS
 
 AND STOP FUCKING SAYING THAT YOU'RE GIVING ME A CLEAN STANDARD HACKLESS THING, THATS WHAT I EXPECT YOU TO FUCKING DO
 
+You have access to the files so stop asking me to verify stuff, do it yourself
+
 ---
 
 ## What's this project
@@ -20,6 +22,15 @@ This project is a sync server so that the appliance can:
 ## General Guidelines
 
 - If the user encounters a problem help him debug and give you the information you need before drawing any conclusion on how to fix it.
+
+## Running commands
+
+If you need to run command, you have to get into the docker containers:
+```sh
+$ docker compose exec app THE COMMAND
+$ docker compose exec frontend THE COMMAND
+$ docker compose exec new_frontend THE COMMAND
+```
 
 ## Backend
 

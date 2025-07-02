@@ -30,6 +30,8 @@ use Symfony\Component\Validator\Constraints as Assert;
                     fromClass: Event::class,
                 ),
             ],
+            paginationEnabled: false,
+            order: ['sungAt' => 'DESC'],
             normalizationContext: [AbstractNormalizer::GROUPS => [self::API_GET_COLLECTION]],
         ),
         new Post(

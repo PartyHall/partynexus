@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import Cookies from 'js-cookie';
 
 type TokenUser = {
     id: number;
@@ -29,6 +30,7 @@ export const useAuthStore = create<StoreType>()((set, get) => ({
         if (!token || !refreshToken) {
             localStorage.removeItem('token');
             localStorage.removeItem('refreshToken');
+            Cookies.remove('mercureAuthorization');
 
             return {
                 token: null,
@@ -39,6 +41,7 @@ export const useAuthStore = create<StoreType>()((set, get) => ({
 
         localStorage.setItem('token', token);
         localStorage.setItem('refreshToken', refreshToken);
+        Cookies.set('mercureAuthorization', token);
 
         return {
             token,

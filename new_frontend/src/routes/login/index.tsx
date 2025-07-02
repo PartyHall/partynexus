@@ -104,10 +104,6 @@ function RouteComponent() {
         <Button type="submit" disabled={isSubmitting}>
           {t('login.login_button')}
         </Button>
-
-        <div className='text-center mt-4'>
-          <Link to='/register'>{t('login.register_prompt')}</Link>
-        </div>
       </form>
     </Card>
   </div>

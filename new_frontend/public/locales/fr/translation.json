@@ -4,6 +4,7 @@
         "username": "Pseudo",
         "email": "Email",
         "password": "Mot de passe",
+        "id": "ID",
         "firstname": "Prénom",
         "lastname": "Nom de famille",
         "loading": "Chargement...",
@@ -61,24 +62,59 @@
     "events": {
         "title": "Évènements",
         "amt_events": "{{amt}} évènements",
+        "notice_id_appliance": "Note: Si l'évènement a été créé manuellement, l'ID doit être renseigné sur chaque appareil participant à l'évènement.",
+        "name": "Nom de l'évènement",
         "editor": {
             "title_new": "Nouvel évènement",
             "participants": {
                 "add": "Ajouter un participant",
+                "add_disclaimer": "Êtes-vous sûr de vouloir ajouter {{username}} à cet évènement ?",
+                "add_success": "{{username}} ajouté avec succès",
                 "remove": "Supprimer un participant",
-                "remove_disclaimer": "Êtes-vous sûr de vouloir supprimer <0></0> de cet évènement ?",
+                "remove_disclaimer": "Êtes-vous sûr de vouloir supprimer {{username}} de cet évènement ?",
                 "remove_success": "Participant supprimé avec succès"
             }
         },
         "made_by": "Proposé par",
         "located_at": "Lieu",
         "date": "Date",
+        "about": "Infos",
         "photos": "Photos",
         "timelapse": "Timelapse",
         "participants": "Participants",
-        "sung_songs": "Musiques chantées",
-        "settings": "Paramètres",
-        "no_timelapse": "Aucun timelapse disponible"
+        "no_timelapse": "Aucun timelapse disponible",
+        "download_everything": "Tout télécharger",
+        "karaoke": {
+            "title": "Musiques chantées",
+            "no_sessions": "Aucune musique chantée pour cet évènement !",
+            "song_title": "{{title}} par {{artist}}",
+            "interpreted_by": "Interprétée par {{singer}}",
+            "sung_at": "Chantée le {{date}} à {{time}}",
+            "amt_song_session": "{{amt}} musiques chantées"
+        },
+        "settings": {
+            "title": "Paramètres",
+            "conclude": "Conclure / Marquer comme terminé",
+            "conclude_description": "Marquer cet évènement comme terminé. Il ne sera plus modifiable, la génération du timelapse sera lancée et les utilisateurs pourront télécharger un fichier zip contenant tout ce qui est lié à l'évènement. Faites cela une fois l'évènement terminé et que l'appareil a entièrement synchronisé avec PartyNexus.",
+            "conclude_confirm_desc": "Vous allez conclure l'évènement '{{eventName}}'. Faites attention, une fois cela fait, l'évènement ne pourra plus recevoir de nouvelles photos ou faire quoi que ce soit de nouveau. Veuillez vous assurer que votre appareil a correctement synchronisé toutes les données !",
+            "concluded_no_export": "L'évènement est terminé mais aucun export n'a été généré pour le moment. Veuillez patienter un peu !",
+            "display_board": {
+                "title": "Tableau d'affichage",
+                "desc": "Un tableau d'affichage génère un lien que vous pouvez mettre sur un écran à côté de l'appareil afin d'afficher les 9 dernières images prises.",
+                "link": "Lien du tableau d'affichage",
+                "no_key": "Aucun lien n'a été généré pour cet évènement.",
+                "generate": "Générer le lien du tableau d'affichage"
+            },
+            "export": {
+                "title": "Infos d'export",
+                "started_at": "Export démarré à",
+                "ended_at": "Export terminé à",
+                "progress": "Progression de l'export",
+                "status": "Status de l'export",
+                "force_reexport": "Forcer un nouvel export",
+                "force_reexport_desc": "Vous allez exporter à nouveau cet évènement, ce qui va supprimer l'ancien export et en créer un nouveau. Cela peut prendre du temps."
+            }
+        }
     },
     "account": {
         "title": "Mon compte",
@@ -116,6 +152,11 @@
         "amt_songs": "{{amt}} musiques",
         "song_title": "Titre",
         "song_artist": "Artiste",
+        "files": {
+            "instrumental": "Instrumentale",
+            "vocals": "Voix",
+            "mixed": "Musique complète"
+        },
         "filters": {
             "ready": "Prête ?",
             "has_vocals": "Avec voix ?",

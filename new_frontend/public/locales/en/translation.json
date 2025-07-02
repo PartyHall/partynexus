@@ -4,6 +4,7 @@
         "username": "Username",
         "email": "Email",
         "password": "Password",
+        "id": "ID",
         "firstname": "First Name",
         "lastname": "Last Name",
         "loading": "Loading...",
@@ -61,24 +62,60 @@
     "events": {
         "title": "Events",
         "amt_events": "{{amt}} events",
+        "notice_id_appliance": "Note: If the event was created manually, the id is to be filled on every appliance participating to the event.",
         "editor": {
             "title_new": "New event",
+            "title_edit": "Editing '{{name}}'",
+            "name": "Event name",
             "participants": {
                 "add": "Add participant",
+                "add_disclaimer": "Are you sure you want to add {{username}} to this event?",
+                "add_success": "{{username}} added successfully",
                 "remove": "Remove participant",
-                "remove_disclaimer": "Are you sure you want to remove <0></0> from this event?",
+                "remove_disclaimer": "Are you sure you want to remove {{username}} from this event?",
                 "remove_success": "Participant removed successfully"
             }
         },
         "made_by": "Made by",
         "located_at": "Location",
         "date": "Date",
+        "about": "About",
         "photos": "Photos",
         "timelapse": "Timelapse",
         "participants": "Participants",
-        "sung_songs": "Sung songs",
-        "settings": "Settings",
-        "no_timelapse": "No timelapse available"
+        "no_timelapse": "No timelapse available",
+        "download_everything": "Download everything",
+        "karaoke": {
+            "title": "Sung songs",
+            "no_sessions": "No sung songs for this event!",
+            "song_title": "{{title}} by {{artist}}",
+            "interpreted_by": "Interpreted by {{singer}}",
+            "sung_at": "Sung on {{date}} at {{time}}",
+            "amt_song_session": "{{amt}} sung songs"
+        },
+        "settings": {
+            "title": "Settings",
+            "conclude": "Conclude / Mark as \"over\"",
+            "conclude_description": "Mark this event as over. It will no longer be editable, the timelapse generation will be launched, and users will be able to download a zip file containing everything related to the event. Do this once the event is over and the appliance has fully synchronized with PartyNexus.",
+            "conclude_confirm_desc": "You are going to conclude the event '{{eventName}}'. Be careful as once this is done, the event will not be able to receive new pictures or do anything new. Please ensure your appliance has properly synchronized everything !",
+            "concluded_no_export": "Event is over but no export has been generated yet. Please wait a bit!",
+            "display_board": {
+                "title": "Display board",
+                "desc": "A display board generates a link that you can put on a screen next to the appliance to show the last 9 pictures taken.",
+                "link": "Display board link",
+                "no_key": "No link were generated yet for this event.",
+                "generate": "Generate display board link"
+            },
+            "export": {
+                "title": "Export infos",
+                "started_at": "Export started at",
+                "ended_at": "Export ended at",
+                "progress": "Export progress",
+                "status": "Export status",
+                "force_reexport": "Force re-export",
+                "force_reexport_desc": "You are going to re-export this event, which will delete the old export and create a new one. This may take some time."
+            }
+        }
     },
     "account": {
         "title": "My account",
@@ -116,6 +153,11 @@
         "amt_songs": "{{amt}} songs",
         "song_title": "Title",
         "song_artist": "Artist",
+        "files": {
+            "instrumental": "Instrumental",
+            "vocals": "Vocals",
+            "mixed": "Full song"
+        },
         "filters": {
             "ready": "Ready?",
             "has_vocals": "Has vocals?",

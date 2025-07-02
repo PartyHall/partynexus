@@ -180,10 +180,13 @@ function RouteComponent() {
     <div className='flex flex-row justify-between w-full items-center'>
       <span className='flex-1'>{t('karaoke.amt_songs', { amt: totalSongs >= 0 ? totalSongs : '?' })}</span>
       <div className='flex-end flex gap-2'>
-        <ButtonLink to='/karaoke/new'>
-          <IconPlus size={19} />
-          {t('karaoke.editor.title_new')}
-        </ButtonLink>
+        {
+          isGranted('ROLE_ADMIN')
+          && <ButtonLink to='/karaoke/new'>
+            <IconPlus size={19} />
+            {t('karaoke.editor.title_new')}
+          </ButtonLink>
+        }
         <ButtonLink to='/karaoke/request'>
           <IconZoomQuestion size={19} />
           {t('karaoke.request_song.title')}

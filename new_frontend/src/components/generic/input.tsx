@@ -1,9 +1,9 @@
-import type { ReactNode } from "@tanstack/react-router";
-import { cloneElement, isValidElement, type InputHTMLAttributes, type MouseEventHandler } from "react";
-import type { FieldError } from "react-hook-form";
+import { cloneElement, isValidElement, type InputHTMLAttributes, type MouseEventHandler, type ReactNode } from "react";
+import { Controller, type Control, type FieldError } from "react-hook-form";
 import Button from "./button";
 import { IconCopy } from "@tabler/icons-react";
 import { enqueueSnackbar } from "notistack";
+import dayjs from "dayjs";
 
 type InputProps = {
     label?: string;
@@ -11,12 +11,19 @@ type InputProps = {
     icon?: ReactNode;
     action?: ReactNode;
     error?: FieldError | string;
+    hideRequired?: boolean;
 } & InputHTMLAttributes<HTMLInputElement>;
 
-export default function Input({ icon, action, label, error, className, ...props }: InputProps) {
+export default function Input({ icon, action, label, error, className, hideRequired, ...props }: InputProps) {
     return (
         <label className={`flex flex-col w-full gap-0.5̀ ${className || ''}`}>
-            {label}{label && ':'}
+            {
+                label
+                && <span>
+                    {label}:
+                    {!hideRequired && props.required && <span className="text-red-glow"> * </span>}
+                </span>
+            }
             <div className="w-full relative">
                 {
                     icon
@@ -44,6 +51,28 @@ export default function Input({ icon, action, label, error, className, ...props 
             }
         </label>
     );
+}
+
+// Fuck react hook form
+// I need to move to Tanstack form at some point
+// but i'm already learning enough libs for now
+export function DateTimeInput({ label, name, control, disabled, error, required }: { label?: string, name: string, control: Control<any>, disabled?: boolean, error?: string | FieldError, required?: boolean }) {
+    return (
+        <Controller
+            control={control}
+            name={name}
+            render={({ field }) => <Input
+                type="datetime-local"
+                label={label}
+                value={field.value ? dayjs(field.value).format('YYYY-MM-DDTHH:mm') : ''}
+                error={error}
+                onChange={(e) => field.onChange(dayjs(e.target.value).toISOString())}
+                disabled={disabled}
+                required={required}
+            />
+            }
+        />
+    )
 }
 
 type CopyInputProps = {

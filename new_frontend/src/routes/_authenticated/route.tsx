@@ -3,6 +3,7 @@ import { useAuthStore } from '../../stores/auth';
 import { useEffect } from 'react';
 import { TopBar } from '@/components/topbar';
 import setI18NLanguage from '@/utils/lang';
+import MercureProvider from '@/hooks/useMercure';
 
 export const Route = createFileRoute('/_authenticated')({
   beforeLoad: async () => {
@@ -59,7 +60,9 @@ function RouteComponent() {
   return <>
     <TopBar />
     <div id="main_page_container" className='flex flex-col items-start w-full flex-1 overflow-auto'>
-      <Outlet />
+      <MercureProvider>
+        <Outlet />
+      </MercureProvider>
     </div>
   </>
 }

@@ -232,7 +232,7 @@ class UserSecurityTest extends AuthenticatedTestCase
 
         $this->assertEquals('toto', $user->getUsername());
         $this->assertEquals('toto@tutu.fr', $user->getEmail());
-        $this->assertEquals('en_US', $user->getLanguage());
+        $this->assertEquals('en_US', $user->getLanguage()->value);
     }
 
     // Update user (someone else)
@@ -277,7 +277,7 @@ class UserSecurityTest extends AuthenticatedTestCase
 
         $this->assertEquals('toto', $user->getUsername());
         $this->assertEquals('toto@tutu.fr', $user->getEmail());
-        $this->assertEquals('en_US', $user->getLanguage());
+        $this->assertEquals('en_US', $user->getLanguage()->value);
     }
 
     public function testUserUpdateAppliance(): void

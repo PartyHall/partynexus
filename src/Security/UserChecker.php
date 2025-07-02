@@ -22,7 +22,7 @@ readonly class UserChecker implements UserCheckerInterface
         }
 
         if (null !== $user->getBannedAt()) {
-            throw new AccountExpiredException($this->translator->trans('users.login.banned', locale: $user->getLanguage()));
+            throw new AccountExpiredException($this->translator->trans('users.login.banned', locale: $user->getLanguage()->value));
         }
     }
 

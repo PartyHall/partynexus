@@ -1,7 +1,7 @@
 import { createLink } from "@tanstack/react-router";
 import { forwardRef } from "react";
 
-type Props = {
+export type ButtonProps = {
     variant?: 'secondary' | 'danger' | 'success' | 'warning' | 'info';
 } & React.ButtonHTMLAttributes<HTMLButtonElement>;
 
@@ -9,7 +9,7 @@ type Props = {
  * @TODO: Make a variant system for outlined / contained / text buttons
  */
 
-export default function Button({ className, ...props }: Props) {
+export default function Button({ className, ...props }: ButtonProps) {
     let classes = '';
 
     switch (props.variant) {
@@ -70,7 +70,7 @@ const CustomButtonLink = forwardRef<HTMLAnchorElement, CustomButtonLinkProps>(
                 break;
         }
         return (
-            <a ref={ref} {...props} className={`flex gap-0.5 no-underline button ${classes}`} />
+            <a ref={ref} {...props} className={`flex gap-0.5 no-underline button no-hover ${classes}`} />
         )
     },
 )

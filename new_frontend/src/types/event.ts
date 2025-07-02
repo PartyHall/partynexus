@@ -1,4 +1,5 @@
 import type { Export } from "./export";
+import type { DisplayBoardKey } from "./photo";
 import type { MinimalUser } from "./user";
 
 export type EventListItem = {
@@ -17,5 +18,12 @@ export type Event = EventListItem & {
     over: boolean;
     export: Export|null;
     participants: MinimalUser[];
-    displayBoardKey: string|null;
+    displayBoardKey: DisplayBoardKey|null;
+};
+
+export type UpsertEvent = {
+    name: string;
+    datetime: string;
+    location?: string|null;
+    author?: string|null;
 };
