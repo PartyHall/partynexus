@@ -72,16 +72,7 @@ function RouteComponent() {
         && <div className='flex flex-col gap-2 w-full overflow-y-auto'>
           {
             data.pages.map(page => <React.Fragment key={page.currentPage}>
-              {
-                page.previousPage && (
-                  <div className='text-center text-gray-500'>
-                    {t('generic.page', { page: page.previousPage + 1 })}
-                  </div>
-                )
-              }
-              {
-                page.data.map(event => <EventListCard key={event.id} event={event} />)
-              }
+              {page.data.map(event => <EventListCard key={event.id} event={event} />)}
             </React.Fragment>)
           }
           <div ref={ref} className='h-8 pt-2 w-full text-center text-red-glow'>

@@ -33,3 +33,11 @@ export type ExternalSong = {
     artist: string;
     cover?: string;
 };
+
+export type SongSession = {
+    id: number;
+    title: string;
+    artist: string;
+    sungAt: string;
+    singer: string;
+};

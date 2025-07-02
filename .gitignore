@@ -48,3 +48,5 @@ http/*.private.*.json
 
 .dump_data
 songs.csv
+
+.dump_data

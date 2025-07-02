@@ -30,6 +30,19 @@ users:
     login:
         banned: 'Vous êtes bannis.'
 
+events:
+    export:
+        progress:
+            started: 'Export démarré'
+            adding_pictures: 'Ajout des photos'
+            generating_timelapse: 'Génération du timelapse'
+            adding_metadata: 'Ajout des métadonnées'
+            building_zip: 'Création du zip final'
+        status:
+            started: 'Export en cours'
+            complete: 'Export terminé'
+            failed: 'Export échoué'
+            
 song:
     format:
         video: 'Vidéo'

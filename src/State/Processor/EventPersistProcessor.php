@@ -16,28 +16,41 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 /**
  * @implements ProcessorInterface<\App\Entity\Event, \App\Entity\Event>
  */
-readonly class EventCreationProcessor implements ProcessorInterface
+readonly class EventPersistProcessor implements ProcessorInterface
 {
     public function __construct(
         /** @var ProcessorInterface<object, object> $processor */
         #[Autowire(service: PersistProcessor::class)]
         private ProcessorInterface $processor,
-        private Security $security,
-    ) {
+        private Security           $security,
+    )
+    {
     }
 
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): mixed
     {
-        if ($data instanceof Event && $operation instanceof Post) {
-            $user = $this->security->getUser();
+        if (!$data instanceof Event) {
+            return $this->processor->process($data, $operation, $uriVariables, $context);
+        }
 
-            if ($user instanceof User) {
-                $data->setOwner($user);
-            } elseif ($user instanceof Appliance) {
-                $data->setOwner($user->getOwner());
-            } else {
+        $user = $this->security->getUser();
+        $owner = $user instanceof User ? $user : ($user instanceof Appliance ? $user->getOwner() : null);
+
+        if ($operation instanceof Post) {
+            if (!$owner) {
                 throw new BadRequestHttpException('Event can only be created by user or appliance');
             }
+
+            $data->setOwner($owner);
+        }
+
+        if ($data->getParticipants()->contains($owner)) {
+            $data->setParticipants(
+                \array_filter(
+                    $data->getParticipants()->toArray(),
+                    fn(User $participant) => $participant->getId() !== $owner->getId(),
+                ),
+            );
         }
 
         return $this->processor->process($data, $operation, $uriVariables, $context);

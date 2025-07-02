@@ -44,7 +44,7 @@ export function TopBar() {
                                 <Link
                                     key={link.to}
                                     to={link.to}
-                                    className="flex gap-1"
+                                    className="flex gap-1 no-hover hover:text-pink-glow"
                                 >
                                     {link.icon}{link.label}
                                 </Link>
@@ -66,7 +66,7 @@ export function TopBar() {
                     <Link
                         key={link.to}
                         to={link.to}
-                        className="flex gap-1"
+                        className="flex gap-1 no-hover hover:text-pink-glow"
                         onClick={() => setOpened(false)}
                     >
                         {link.icon}

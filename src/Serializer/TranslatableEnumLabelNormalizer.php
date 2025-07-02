@@ -39,7 +39,10 @@ class TranslatableEnumLabelNormalizer implements NormalizerInterface {
 
         /** @var Request $request */
         $request = $this->requestStack->getMainRequest();
-        $locale = $request->getPreferredLanguage(['en_US', 'fr_FR']);
+        $locale = 'en_US';
+        if ($request) {
+            $locale = $request->getPreferredLanguage(['en_US', 'fr_FR']);
+        }
 
         $data['label'] = $this->translator->trans(
             id: $data['label'],

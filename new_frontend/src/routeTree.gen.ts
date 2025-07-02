@@ -10,7 +10,6 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
-import { Route as RegisterIndexRouteImport } from './routes/register/index'
 import { Route as LoginIndexRouteImport } from './routes/login/index'
 import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated/index'
 import { Route as AuthenticatedNewRouteImport } from './routes/_authenticated/new'
@@ -18,6 +17,7 @@ import { Route as AuthenticatedIdRouteRouteImport } from './routes/_authenticate
 import { Route as AuthenticatedKaraokeIndexRouteImport } from './routes/_authenticated/karaoke/index'
 import { Route as AuthenticatedAccountIndexRouteImport } from './routes/_authenticated/account/index'
 import { Route as AuthenticatedIdIndexRouteImport } from './routes/_authenticated/$id/index'
+import { Route as DisplayBoardEventIdKeyRouteImport } from './routes/display-board.$eventId.$key'
 import { Route as AuthenticatedKaraokeRequestRouteImport } from './routes/_authenticated/karaoke/request'
 import { Route as AuthenticatedKaraokeNewRouteImport } from './routes/_authenticated/karaoke/new'
 import { Route as AuthenticatedKaraokeIdRouteImport } from './routes/_authenticated/karaoke/$id'
@@ -25,6 +25,7 @@ import { Route as AuthenticatedAccountChangePasswordRouteImport } from './routes
 import { Route as AuthenticatedIdTimelapseRouteImport } from './routes/_authenticated/$id/timelapse'
 import { Route as AuthenticatedIdSongsRouteImport } from './routes/_authenticated/$id/songs'
 import { Route as AuthenticatedIdSettingsRouteImport } from './routes/_authenticated/$id/settings'
+import { Route as AuthenticatedIdPhotosRouteImport } from './routes/_authenticated/$id/photos'
 import { Route as AuthenticatedIdParticipantsRouteImport } from './routes/_authenticated/$id/participants'
 import { Route as AuthenticatedIdEditRouteImport } from './routes/_authenticated/$id/edit'
 import { Route as AuthenticatedAccountAppliancesRouteRouteImport } from './routes/_authenticated/account/appliances/route'
@@ -34,11 +35,6 @@ import { Route as AuthenticatedAccountAppliancesIdRouteImport } from './routes/_
 
 const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
   id: '/_authenticated',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const RegisterIndexRoute = RegisterIndexRouteImport.update({
-  id: '/register/',
-  path: '/register/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginIndexRoute = LoginIndexRouteImport.update({
@@ -78,6 +74,11 @@ const AuthenticatedIdIndexRoute = AuthenticatedIdIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AuthenticatedIdRouteRoute,
 } as any)
+const DisplayBoardEventIdKeyRoute = DisplayBoardEventIdKeyRouteImport.update({
+  id: '/display-board/$eventId/$key',
+  path: '/display-board/$eventId/$key',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedKaraokeRequestRoute =
   AuthenticatedKaraokeRequestRouteImport.update({
     id: '/karaoke/request',
@@ -114,6 +115,11 @@ const AuthenticatedIdSongsRoute = AuthenticatedIdSongsRouteImport.update({
 const AuthenticatedIdSettingsRoute = AuthenticatedIdSettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
+  getParentRoute: () => AuthenticatedIdRouteRoute,
+} as any)
+const AuthenticatedIdPhotosRoute = AuthenticatedIdPhotosRouteImport.update({
+  id: '/photos',
+  path: '/photos',
   getParentRoute: () => AuthenticatedIdRouteRoute,
 } as any)
 const AuthenticatedIdParticipantsRoute =
@@ -157,10 +163,10 @@ export interface FileRoutesByFullPath {
   '/new': typeof AuthenticatedNewRoute
   '/': typeof AuthenticatedIndexRoute
   '/login': typeof LoginIndexRoute
-  '/register': typeof RegisterIndexRoute
   '/account/appliances': typeof AuthenticatedAccountAppliancesRouteRouteWithChildren
   '/$id/edit': typeof AuthenticatedIdEditRoute
   '/$id/participants': typeof AuthenticatedIdParticipantsRoute
+  '/$id/photos': typeof AuthenticatedIdPhotosRoute
   '/$id/settings': typeof AuthenticatedIdSettingsRoute
   '/$id/songs': typeof AuthenticatedIdSongsRoute
   '/$id/timelapse': typeof AuthenticatedIdTimelapseRoute
@@ -168,6 +174,7 @@ export interface FileRoutesByFullPath {
   '/karaoke/$id': typeof AuthenticatedKaraokeIdRoute
   '/karaoke/new': typeof AuthenticatedKaraokeNewRoute
   '/karaoke/request': typeof AuthenticatedKaraokeRequestRoute
+  '/display-board/$eventId/$key': typeof DisplayBoardEventIdKeyRoute
   '/$id/': typeof AuthenticatedIdIndexRoute
   '/account': typeof AuthenticatedAccountIndexRoute
   '/karaoke': typeof AuthenticatedKaraokeIndexRoute
@@ -179,9 +186,9 @@ export interface FileRoutesByTo {
   '/new': typeof AuthenticatedNewRoute
   '/': typeof AuthenticatedIndexRoute
   '/login': typeof LoginIndexRoute
-  '/register': typeof RegisterIndexRoute
   '/$id/edit': typeof AuthenticatedIdEditRoute
   '/$id/participants': typeof AuthenticatedIdParticipantsRoute
+  '/$id/photos': typeof AuthenticatedIdPhotosRoute
   '/$id/settings': typeof AuthenticatedIdSettingsRoute
   '/$id/songs': typeof AuthenticatedIdSongsRoute
   '/$id/timelapse': typeof AuthenticatedIdTimelapseRoute
@@ -189,6 +196,7 @@ export interface FileRoutesByTo {
   '/karaoke/$id': typeof AuthenticatedKaraokeIdRoute
   '/karaoke/new': typeof AuthenticatedKaraokeNewRoute
   '/karaoke/request': typeof AuthenticatedKaraokeRequestRoute
+  '/display-board/$eventId/$key': typeof DisplayBoardEventIdKeyRoute
   '/$id': typeof AuthenticatedIdIndexRoute
   '/account': typeof AuthenticatedAccountIndexRoute
   '/karaoke': typeof AuthenticatedKaraokeIndexRoute
@@ -203,10 +211,10 @@ export interface FileRoutesById {
   '/_authenticated/new': typeof AuthenticatedNewRoute
   '/_authenticated/': typeof AuthenticatedIndexRoute
   '/login/': typeof LoginIndexRoute
-  '/register/': typeof RegisterIndexRoute
   '/_authenticated/account/appliances': typeof AuthenticatedAccountAppliancesRouteRouteWithChildren
   '/_authenticated/$id/edit': typeof AuthenticatedIdEditRoute
   '/_authenticated/$id/participants': typeof AuthenticatedIdParticipantsRoute
+  '/_authenticated/$id/photos': typeof AuthenticatedIdPhotosRoute
   '/_authenticated/$id/settings': typeof AuthenticatedIdSettingsRoute
   '/_authenticated/$id/songs': typeof AuthenticatedIdSongsRoute
   '/_authenticated/$id/timelapse': typeof AuthenticatedIdTimelapseRoute
@@ -214,6 +222,7 @@ export interface FileRoutesById {
   '/_authenticated/karaoke/$id': typeof AuthenticatedKaraokeIdRoute
   '/_authenticated/karaoke/new': typeof AuthenticatedKaraokeNewRoute
   '/_authenticated/karaoke/request': typeof AuthenticatedKaraokeRequestRoute
+  '/display-board/$eventId/$key': typeof DisplayBoardEventIdKeyRoute
   '/_authenticated/$id/': typeof AuthenticatedIdIndexRoute
   '/_authenticated/account/': typeof AuthenticatedAccountIndexRoute
   '/_authenticated/karaoke/': typeof AuthenticatedKaraokeIndexRoute
@@ -228,10 +237,10 @@ export interface FileRouteTypes {
     | '/new'
     | '/'
     | '/login'
-    | '/register'
     | '/account/appliances'
     | '/$id/edit'
     | '/$id/participants'
+    | '/$id/photos'
     | '/$id/settings'
     | '/$id/songs'
     | '/$id/timelapse'
@@ -239,6 +248,7 @@ export interface FileRouteTypes {
     | '/karaoke/$id'
     | '/karaoke/new'
     | '/karaoke/request'
+    | '/display-board/$eventId/$key'
     | '/$id/'
     | '/account'
     | '/karaoke'
@@ -250,9 +260,9 @@ export interface FileRouteTypes {
     | '/new'
     | '/'
     | '/login'
-    | '/register'
     | '/$id/edit'
     | '/$id/participants'
+    | '/$id/photos'
     | '/$id/settings'
     | '/$id/songs'
     | '/$id/timelapse'
@@ -260,6 +270,7 @@ export interface FileRouteTypes {
     | '/karaoke/$id'
     | '/karaoke/new'
     | '/karaoke/request'
+    | '/display-board/$eventId/$key'
     | '/$id'
     | '/account'
     | '/karaoke'
@@ -273,10 +284,10 @@ export interface FileRouteTypes {
     | '/_authenticated/new'
     | '/_authenticated/'
     | '/login/'
-    | '/register/'
     | '/_authenticated/account/appliances'
     | '/_authenticated/$id/edit'
     | '/_authenticated/$id/participants'
+    | '/_authenticated/$id/photos'
     | '/_authenticated/$id/settings'
     | '/_authenticated/$id/songs'
     | '/_authenticated/$id/timelapse'
@@ -284,6 +295,7 @@ export interface FileRouteTypes {
     | '/_authenticated/karaoke/$id'
     | '/_authenticated/karaoke/new'
     | '/_authenticated/karaoke/request'
+    | '/display-board/$eventId/$key'
     | '/_authenticated/$id/'
     | '/_authenticated/account/'
     | '/_authenticated/karaoke/'
@@ -295,7 +307,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   LoginIndexRoute: typeof LoginIndexRoute
-  RegisterIndexRoute: typeof RegisterIndexRoute
+  DisplayBoardEventIdKeyRoute: typeof DisplayBoardEventIdKeyRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -305,13 +317,6 @@ declare module '@tanstack/react-router' {
       path: ''
       fullPath: ''
       preLoaderRoute: typeof AuthenticatedRouteRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/register/': {
-      id: '/register/'
-      path: '/register'
-      fullPath: '/register'
-      preLoaderRoute: typeof RegisterIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login/': {
@@ -363,6 +368,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedIdIndexRouteImport
       parentRoute: typeof AuthenticatedIdRouteRoute
     }
+    '/display-board/$eventId/$key': {
+      id: '/display-board/$eventId/$key'
+      path: '/display-board/$eventId/$key'
+      fullPath: '/display-board/$eventId/$key'
+      preLoaderRoute: typeof DisplayBoardEventIdKeyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authenticated/karaoke/request': {
       id: '/_authenticated/karaoke/request'
       path: '/karaoke/request'
@@ -410,6 +422,13 @@ declare module '@tanstack/react-router' {
       path: '/settings'
       fullPath: '/$id/settings'
       preLoaderRoute: typeof AuthenticatedIdSettingsRouteImport
+      parentRoute: typeof AuthenticatedIdRouteRoute
+    }
+    '/_authenticated/$id/photos': {
+      id: '/_authenticated/$id/photos'
+      path: '/photos'
+      fullPath: '/$id/photos'
+      preLoaderRoute: typeof AuthenticatedIdPhotosRouteImport
       parentRoute: typeof AuthenticatedIdRouteRoute
     }
     '/_authenticated/$id/participants': {
@@ -460,6 +479,7 @@ declare module '@tanstack/react-router' {
 interface AuthenticatedIdRouteRouteChildren {
   AuthenticatedIdEditRoute: typeof AuthenticatedIdEditRoute
   AuthenticatedIdParticipantsRoute: typeof AuthenticatedIdParticipantsRoute
+  AuthenticatedIdPhotosRoute: typeof AuthenticatedIdPhotosRoute
   AuthenticatedIdSettingsRoute: typeof AuthenticatedIdSettingsRoute
   AuthenticatedIdSongsRoute: typeof AuthenticatedIdSongsRoute
   AuthenticatedIdTimelapseRoute: typeof AuthenticatedIdTimelapseRoute
@@ -469,6 +489,7 @@ interface AuthenticatedIdRouteRouteChildren {
 const AuthenticatedIdRouteRouteChildren: AuthenticatedIdRouteRouteChildren = {
   AuthenticatedIdEditRoute: AuthenticatedIdEditRoute,
   AuthenticatedIdParticipantsRoute: AuthenticatedIdParticipantsRoute,
+  AuthenticatedIdPhotosRoute: AuthenticatedIdPhotosRoute,
   AuthenticatedIdSettingsRoute: AuthenticatedIdSettingsRoute,
   AuthenticatedIdSongsRoute: AuthenticatedIdSongsRoute,
   AuthenticatedIdTimelapseRoute: AuthenticatedIdTimelapseRoute,
@@ -533,7 +554,7 @@ const AuthenticatedRouteRouteWithChildren =
 const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   LoginIndexRoute: LoginIndexRoute,
-  RegisterIndexRoute: RegisterIndexRoute,
+  DisplayBoardEventIdKeyRoute: DisplayBoardEventIdKeyRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

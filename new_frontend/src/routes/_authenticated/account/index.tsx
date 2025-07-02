@@ -52,7 +52,6 @@ function RouteComponent() {
     reset,
   } = useForm<UserAccountForm>({
     defaultValues: {
-      username: data.username,
       email: data.email,
       firstname: data.firstname,
       lastname: data.lastname,
@@ -71,7 +70,6 @@ function RouteComponent() {
       const resp = await customFetch(tokenUser.iri, {
         method: 'PATCH',
         body: JSON.stringify({
-          username: formData.username,
           email: formData.email,
           firstname: formData.firstname,
           lastname: formData.lastname,
@@ -110,9 +108,8 @@ function RouteComponent() {
         <Input
           label={t('generic.username')}
           id='username'
-          {...register('username')}
-          error={errors.username}
-          disabled={isSubmitting}
+          value={data.username}
+          disabled={true}
         />
 
         <Input

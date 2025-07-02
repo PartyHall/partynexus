@@ -15,10 +15,11 @@ use Symfony\Component\HttpFoundation\RequestStack;
 readonly class CustomJwtListener
 {
     public function __construct(
-        private IriConverterInterface $iriConverter,
-        private RequestStack $requestStack,
+        private IriConverterInterface  $iriConverter,
+        private RequestStack           $requestStack,
         private EntityManagerInterface $entityManager,
-    ) {
+    )
+    {
     }
 
     public function onJWTCreated(JWTCreatedEvent $event): void
@@ -33,6 +34,12 @@ readonly class CustomJwtListener
         $payload['iri'] = $this->iriConverter->getIriFromResource($user);
         $payload['id'] = $user->getId();
         $payload['language'] = $user->getLanguage();
+        $payload['mercure'] = [
+            'publish' => [],
+            'subscribe' => [
+                \sprintf('/users/%s{?topic}', $user->getId()),
+            ],
+        ];
 
         $event->setData($payload);
 

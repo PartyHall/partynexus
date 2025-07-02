@@ -11,8 +11,9 @@ use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\QueryParameter;
 use App\Controller\EventConcludeController;
+use App\Enum\EnumApiConfig;
 use App\Repository\EventRepository;
-use App\State\Processor\EventCreationProcessor;
+use App\State\Processor\EventPersistProcessor;
 use App\State\Provider\ExportDownloadProvider;
 use App\State\Provider\RegistrationEventProvider;
 use App\State\Provider\TimelapseDownloadProvider;
@@ -34,28 +35,23 @@ use Symfony\Component\Validator\Constraints as Assert;
     operations: [
         new GetCollection(
             order: ['datetime' => 'DESC'],
-            normalizationContext: [AbstractNormalizer::GROUPS => [self::API_GET_COLLECTION]],
+            normalizationContext: [AbstractNormalizer::GROUPS => [self::API_GET_COLLECTION, EnumApiConfig::GET_GROUP]],
         ),
-        new Get(
-            normalizationContext: [AbstractNormalizer::GROUPS => [self::API_GET_ITEM]],
-            security: 'is_granted("ROLE_ADMIN") or object.getOwner().hasAppliance(user) or object.hasParticipant(user)'
-        ),
+        new Get(security: 'is_granted("ROLE_ADMIN") or object.getOwner().hasAppliance(user) or object.hasParticipant(user)'),
         new Post(
-            normalizationContext: [AbstractNormalizer::GROUPS => [self::API_GET_ITEM]],
             denormalizationContext: [AbstractNormalizer::GROUPS => [self::API_CREATE]],
             security: 'is_granted("ROLE_APPLIANCE") or is_granted("ROLE_ADMIN")',
-            processor: EventCreationProcessor::class,
+            processor: EventPersistProcessor::class,
         ),
         new Patch(
-            normalizationContext: [AbstractNormalizer::GROUPS => [self::API_GET_ITEM]],
             denormalizationContext: [AbstractNormalizer::GROUPS => [self::API_UPDATE]],
-            security: 'is_granted("ROLE_ADMIN") or user == object.getOwner()'
+            security: 'is_granted("ROLE_ADMIN") or user == object.getOwner()',
+            processor: EventPersistProcessor::class,
         ),
         new Post(
             uriTemplate: '/events/{id}/conclude',
             status: 200,
             controller: EventConcludeController::class,
-            normalizationContext: [AbstractNormalizer::GROUPS => [self::API_GET_ITEM]],
             denormalizationContext: [AbstractNormalizer::GROUPS => []],
             // security: 'is_granted("ROLE_ADMIN") or user == object.getOwner()', // Handled in the controller temporarly
             read: false,
@@ -70,6 +66,7 @@ use Symfony\Component\Validator\Constraints as Assert;
             provider: RegistrationEventProvider::class,
         ),
     ],
+    normalizationContext: [AbstractNormalizer::GROUPS => [self::API_GET_ITEM, EnumApiConfig::GET_GROUP]],
 )]
 #[ApiFilter(SearchFilter::class, properties: ['name' => 'ipartial'])]
 #[ORM\Entity(repositoryClass: EventRepository::class)]

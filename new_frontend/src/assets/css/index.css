@@ -149,6 +149,10 @@ a {
     transition: color 0.1s ease;
 }
 
+a:not(.no-hover) {
+    @apply text-blue-glow;
+}
+
 a::after {
     content: '';
     position: absolute;
@@ -163,7 +167,7 @@ a::after {
 }
 
 a:not(.no-hover):hover {
-    color: theme('colors.primary.300');
+    @apply text-pink-glow;
 }
 
 a:hover::after {

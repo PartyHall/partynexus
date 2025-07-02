@@ -1,6 +1,6 @@
 import type { Collection } from "@/types";
 import { customFetch } from "../customFetch";
-import type { EventListItem, Event } from "@/types/event";
+import type { EventListItem, Event, UpsertEvent } from "@/types/event";
 
 type GetAllEventsParams = {
     pageParam?: number;
@@ -19,6 +19,24 @@ export async function getAllEvents({ pageParam = 0, mineOnly }: GetAllEventsPara
 
 export async function getEventById(id: string): Promise<Event> {
     const resp = await customFetch(`/api/events/${id}`);
+
+    return await resp.json();
+}
+
+export async function createEvent(data: UpsertEvent): Promise<Event> {
+    const resp = await customFetch('/api/events', {
+        method: 'POST',
+        body: JSON.stringify(data),
+    });
+
+    return await resp.json();
+}
+
+export async function updateEvent(id: string, data: UpsertEvent): Promise<Event> {
+    const resp = await customFetch(`/api/events/${id}`, {
+        method: 'PATCH',
+        body: JSON.stringify(data),
+    });
 
     return await resp.json();
 }

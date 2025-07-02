@@ -27,9 +27,10 @@ export default function DisplayBoardCreator({ event }: Props) {
         setIsCreating(true);
 
         try {
-            setCreated(
-                await api.displayBoards.create(event.id),
-            );
+            const key = await api.displayBoards.create(event.id)
+            console.log('Created display board key:', key);
+
+            setCreated(key);
         } catch (e) {
             setErr('Failed to create display board key');
             console.error(e);

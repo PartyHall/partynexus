@@ -31,6 +31,19 @@ emails:
 users:
     login:
         banned: 'You are banned.'
+        
+events:
+    export:
+        progress:
+            started: 'Export started'
+            adding_pictures: 'Adding pictures'
+            generating_timelapse: 'Generating timelapse'
+            adding_metadata: 'Adding metadata'
+            building_zip: 'Building final zip'
+        status:
+            started: 'Export in progress'
+            complete: 'Export complete'
+            failed: 'Export failed'
 
 song:
     format:

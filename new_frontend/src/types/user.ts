@@ -1,6 +1,8 @@
 import type { Appliance } from "./appliance";
 
 export type User = {
+    '@id': string;
+
     id: number;
     username: string;
     firstname: string;

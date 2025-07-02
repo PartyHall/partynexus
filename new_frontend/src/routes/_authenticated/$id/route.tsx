@@ -1,14 +1,24 @@
 import { getEventById } from '@/api/events';
+import ExportDownloadButton from '@/components/event/export_download_button';
 import { ButtonLink } from '@/components/generic/button';
 import Card from '@/components/generic/card';
+import { KeyVal } from '@/components/generic/key_val';
+import Title from '@/components/generic/title';
 import Username from '@/components/username';
-import useTitle, { useNexusTitle } from '@/hooks/useTitle';
+import { useMercureListener } from '@/hooks/useMercure';
+import { useNexusTitle } from '@/hooks/useTitle';
 import { useAuthStore } from '@/stores/auth';
+import { useEventStore } from '@/stores/event';
 import { IconEdit } from '@tabler/icons-react';
 import { createFileRoute, Link, Outlet, useRouter } from '@tanstack/react-router'
 import dayjs from 'dayjs';
-import type { ReactNode } from 'react';
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+
+/**
+ * @TODO: Add mercure here so that the event updates in real-time
+ * esp. export
+ */
 
 export const Route = createFileRoute('/_authenticated/$id')({
   component: RouteComponent,
@@ -21,16 +31,7 @@ export const Route = createFileRoute('/_authenticated/$id')({
   },
 })
 
-function KeyVal({ label, children }: { label: string, children: ReactNode }) {
-  const { t } = useTranslation();
-
-  return <p className='flex flex-col'>
-    <span className='font-bold text-pink-glow'>{t(label)}:</span>
-    <span className='ml-4'>{children}</span>
-  </p>;
-}
-
-type Subroute = '' | '/timelapse' | '/participants' | '/songs' | '/settings';
+type Subroute = '' | '/photos' | '/timelapse' | '/participants' | '/songs' | '/settings';
 
 function SubrouteLink({ text, to, id }: { text: string, to: Subroute, id: string }) {
   const { t } = useTranslation();
@@ -45,51 +46,39 @@ function SubrouteLink({ text, to, id }: { text: string, to: Subroute, id: string
 
 function RouteComponent() {
   const data = Route.useLoaderData();
-  const { t } = useTranslation();
+  const tokenUser = useAuthStore(state => state.tokenUser);
+  const { event, setEvent } = useEventStore();
 
   useNexusTitle(data.name);
+  useMercureListener(`/events/${data.id}`, event => setEvent(event));
 
-  const tokenUser = useAuthStore(state => state.tokenUser);
+  useEffect(() => setEvent(data), [data]);
 
-  return <div className='pageContainer gap-3!'>
+  if (!event) {
+    return;
+  }
+
+  return <div className='flex flex-col p-4 mx-auto items-center gap-3 w-full sm:w-150 h-[100%]'>
     <Card className='w-full'>
-      <div className='flex flex-row justify-between items-start'>
-        <h1 className='text-2xl font-bold mb-4 text-blue-glow'>{data.name}</h1>
+      <Title noMargin className="text-center mb-2">{event.name}</Title>
+
+      <div className='w-full flex flex-row flex-wrap items-center justify-around p-2 bg-synthbg-700 rounded-md text-red-glow'>
+        <SubrouteLink text='events.about' to='' id={event.id} />
+        <SubrouteLink text='events.photos' to='/photos' id={event.id} />
 
         {
-          tokenUser?.id === data.owner?.id
-          && <ButtonLink to='/$id/edit' params={{ id: data.id }}><IconEdit size={18} /> {t('generic.edit')}</ButtonLink>
+          event.export
+          && event.export.status.value === 'complete'
+          && event.export?.timelapse
+          && <SubrouteLink text='events.timelapse' to='/timelapse' id={event.id} />
+        }
+        <SubrouteLink text='events.participants' to='/participants' id={event.id} />
+        <SubrouteLink text='events.karaoke.title' to='/songs' id={event.id} />
+        {
+          tokenUser?.id === event.owner?.id
+          && <SubrouteLink text='events.settings.title' to='/settings' id={event.id} />
         }
       </div>
-      {
-        data.datetime
-        && <KeyVal label='events.date'>
-          {dayjs(data.datetime).format('L - LT')}
-        </KeyVal>
-      }
-      {
-        data.location
-        && <KeyVal label='events.located_at'>
-          {data.location}
-        </KeyVal>
-      }
-      <KeyVal label='events.made_by'>
-        {data.author ?? <Username user={data.owner} noStyle />}
-      </KeyVal>
-    </Card >
-
-    <Card className='w-full flex flex-row flex-wrap items-center justify-around p-2 bg-synthbg-700 rounded-md text-red-glow'>
-      <SubrouteLink text='events.photos' to='' id={data.id} />
-      {
-        data.export?.timelapse
-        && <SubrouteLink text='events.timelapse' to='/timelapse' id={data.id} />
-      }
-      <SubrouteLink text='events.participants' to='/participants' id={data.id} />
-      <SubrouteLink text='events.sung_songs' to='/songs' id={data.id} />
-      {
-        tokenUser?.id === data.owner?.id
-        && <SubrouteLink text='events.settings' to='/settings' id={data.id} />
-      }
     </Card>
 
     <Card className='w-full overflow-y-auto'>
