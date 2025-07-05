@@ -6,9 +6,8 @@ Built with my new wip stack: tanstack router, tanstack query, tailwind and zusta
 
 ## Ordre des choses à faire
 
-- Si modification de l'email = faire revalider le compte! (+ message sur l'ui pour le dire)
 - Fixer les 401 sur timelapse jsp pq (et s'assurer que ça marche pour les photos aussi)
-- Faire la page d'admin
+- Faire la page "backdrops"
 - Finir la portion Karaoké
 - Faire la gallerie photo (!)
 - Faire l'authentification oauth customizable
@@ -17,14 +16,7 @@ Built with my new wip stack: tanstack router, tanstack query, tailwind and zusta
 
 ## TODO
 
-- I need to translate the error on the backend based on user's "Accept-Language" header.
-- Make custom snackbar to theme them (THANKS NOTISTACK to do weird shit like that so that I cant just override your css)
-- Make a form wrapper for RHF to fill & show automatically the globalErrors
-- Accessibility stuff
-- Make the appliance communicate with the backend (e.g. is it online, etc...)
 - Fix songs tsvector crap
-
-GROS PROBLèME DE PERMISSION, le listing des event liste tout même si l'user est pas admin
 
 ## OAuth login & co
 

@@ -21,3 +21,21 @@ export type MinimalUser = {
     firstname: string;
     lastname: string;
 };
+
+export type MagicPassword = {
+    '@id': string;
+    id: number;
+    user: string;
+    createdAt: string;
+    code: string;
+    used: boolean;
+    url: string;
+}
+
+export type UserAuthLog = {
+    '@id': string;
+    id: number;
+    user: string;
+    ip: string;
+    authedAt: string;
+};

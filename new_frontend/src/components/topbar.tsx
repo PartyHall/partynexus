@@ -7,7 +7,6 @@ import Button from "./generic/button";
 
 export function TopBar() {
     const { t } = useTranslation();
-    const navigate = useNavigate();
     const isGranted = useAuthStore((state) => state.isGranted);
 
     const [opened, setOpened] = useState<boolean>(false);
@@ -30,12 +29,13 @@ export function TopBar() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-center justify-between h-16">
                 <div className="flex-shrink-0">
-                    <img
-                        src="/assets/ph_logo_sd.webp"
-                        alt="PartyHall logo"
-                        className="w-35 cursor-pointer"
-                        onClick={() => navigate({ to: "/" })}
-                    />
+                    <Link to="/">
+                        <img
+                            src="/assets/ph_logo_sd.webp"
+                            alt="PartyHall logo"
+                            className="w-35 cursor-pointer"
+                        />
+                    </Link>
                 </div>
                 <div className="hidden md:block">
                     <div className="ml-10 flex items-center space-x-4">

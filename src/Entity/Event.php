@@ -68,8 +68,12 @@ class Event
 {
     public const string API_GET_COLLECTION = 'api:event:get-collection';
     public const string API_GET_ITEM = 'api:event:get';
+    public const string API_EVENTMAKER_GET_ITEM = 'api:event_maker:event:get';
+    public const string API_ADMIN_GET_ITEM = 'api:admin:event:get';
     public const string API_CREATE = 'api:event:create';
+    public const string API_ADMIN_CREATE = 'api:admin:event:create';
     public const string API_UPDATE = 'api:event:update';
+    public const string API_ADMIN_UPDATE = 'api:admin:event:update';
     public const string API_EXPORT = 'api:export';
 
     #[ORM\Id]
@@ -170,6 +174,30 @@ class Event
     #[ORM\OneToOne(targetEntity: DisplayBoardKey::class, mappedBy: 'event')]
     #[Groups([self::API_GET_ITEM])]
     private ?DisplayBoardKey $displayBoardKey = null;
+
+    /**
+     * Registration Key is used to generate a "register link"
+     * that let an event organizer register to PartyNexus
+     * and be automatically added to the event.
+     *
+     * It also let an already registered user to join the event
+     * automatically
+     */
+    #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
+    #[Groups([self::API_ADMIN_GET_ITEM])]
+    private string $registrationKey;
+
+    /**
+     * As this is a dangerous feature, it is disabled by default
+     * and must be enabled by an administrator.
+     */
+    #[ORM\Column(type: Types::BOOLEAN, options: ['default' => false])]
+    #[Groups([
+        self::API_GET_ITEM,
+        self::API_ADMIN_CREATE,
+        self::API_ADMIN_UPDATE,
+    ])]
+    private bool $registrationEnabled = false;
 
     public function __construct()
     {
@@ -335,6 +363,30 @@ class Event
     public function setDisplayBoardKey(?DisplayBoardKey $displayBoardKey): self
     {
         $this->displayBoardKey = $displayBoardKey;
+
+        return $this;
+    }
+
+    public function getRegistrationKey(): string
+    {
+        return $this->registrationKey;
+    }
+
+    public function setRegistrationKey(string $registrationKey): self
+    {
+        $this->registrationKey = $registrationKey;
+
+        return $this;
+    }
+
+    public function isRegistrationEnabled(): bool
+    {
+        return $this->registrationEnabled;
+    }
+
+    public function setRegistrationEnabled(bool $isRegistrationEnabled): self
+    {
+        $this->registrationEnabled = $isRegistrationEnabled;
 
         return $this;
     }

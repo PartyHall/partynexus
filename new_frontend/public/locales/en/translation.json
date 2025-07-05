@@ -4,6 +4,8 @@
         "username": "Username",
         "email": "Email",
         "password": "Password",
+        "date": "Date",
+        "ip": "IP Address",
         "id": "ID",
         "firstname": "First Name",
         "lastname": "Last Name",
@@ -20,6 +22,7 @@
         "created": "Created successfully",
         "delete": "Delete",
         "new": "New",
+        "add": "Add",
         "edit": "Edit",
         "link": "Link",
         "use": "Use",
@@ -78,7 +81,6 @@
         },
         "made_by": "Made by",
         "located_at": "Location",
-        "date": "Date",
         "about": "About",
         "photos": "Photos",
         "timelapse": "Timelapse",
@@ -146,7 +148,52 @@
         }
     },
     "admin": {
-        "title": "Admin"
+        "title": "Admin",
+        "users": {
+            "title": "Users",
+            "title_edit": "{{username}}",
+            "amt_users": "{{amt}} users",
+            "management": {
+                "title": "Management",
+                "ban": {
+                    "title": "Ban user",
+                    "desc": "Banning a user will prevent them from logging in to PartyNexus.",
+                    "banned_at": "Banned on {{date}} at {{time}}",
+                    "unban": "Unban user"
+                },
+                "magic_password": {
+                    "title": "Magic password",
+                    "desc": "A MagicPassword is a link that you can give to someone so that they can define a password without having to login. It is single-use and let the person use the app when mails are poorly configured (Not received, falls in spam, etc...). This can also be used as a \"Forgotten password\" feature.",
+                    "generate": "Generate one"
+                }
+            },
+            "auth_log": {
+                "title": "Authentication logs",
+                "empty": "No authentication logs found for this user"
+            }
+        },
+        "backdrop_albums": {
+            "title": "Backdrop albums",
+            "title_new": "New backdrop album",
+            "title_edit": "Editing '{{name}}'",
+            "amt_album": "{{amt}} albums",
+            "album_version": "Version {{version}}",
+            "delete_album": "Delete album",
+            "album_title": "Album title",
+            "author": "Album author",
+            "version": "Album version",
+            "note_appliance_update": "Note: The appliance will only update whenever the album version is updated. Do all the update you want then increment the version number.",
+            "no_backdrops": "No backdrops in this album",
+            "delete_confirm": {
+                "title": "Delete album",
+                "desc": "Are you sure you want to delete the album '{{title}}'? This will remove it from all appliances that fetched it."
+            },
+            "backdrops": {
+                "title": "Backdrops",
+                "delete_title": "Delete backdrop",
+                "delete_desc": "Are you sure you want to delete the backdrop '{{title}}'?"
+            }
+        }
     },
     "karaoke": {
         "title": "Karaoke",

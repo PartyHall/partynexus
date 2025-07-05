@@ -174,10 +174,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     ])]
     private ?\DateTimeImmutable $bannedAt = null;
 
-    /** @var Collection<int, MagicLink> $magicLinks */
-    #[ORM\OneToMany(targetEntity: MagicLink::class, mappedBy: 'user', cascade: ['PERSIST'])]
-    private Collection $magicLinks;
-
     /** @var Collection<int, MagicPassword> $magicPasswords */
     #[ORM\OneToMany(targetEntity: MagicPassword::class, mappedBy: 'user', cascade: ['PERSIST'])]
     private Collection $magicPasswords;
@@ -207,7 +203,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function __construct()
     {
-        $this->magicLinks = new ArrayCollection();
         $this->magicPasswords = new ArrayCollection();
         $this->appliances = new ArrayCollection();
         $this->userEvents = new ArrayCollection();
@@ -277,33 +272,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setEmail(string $email): self
     {
         $this->email = $email;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, MagicLink>
-     */
-    public function getMagicLinks(): Collection
-    {
-        return $this->magicLinks;
-    }
-
-    public function addMagicLink(MagicLink $link): self
-    {
-        if (!$this->magicLinks->contains($link)) {
-            $link->setUser($this);
-            $this->magicLinks->add($link);
-        }
-
-        return $this;
-    }
-
-    public function removeMagicLink(MagicLink $link): self
-    {
-        if ($this->magicLinks->contains($link)) {
-            $this->magicLinks->removeElement($link);
-        }
 
         return $this;
     }

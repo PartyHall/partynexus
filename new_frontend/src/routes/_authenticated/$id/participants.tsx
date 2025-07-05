@@ -24,6 +24,11 @@ export const Route = createFileRoute('/_authenticated/$id/participants')({
  * revisit it later, let's use react-select for now.
  * 
  * @see https://github.com/luciodale/react-searchable-dropdown/issues/3
+ * 
+ * Edit: Its fixed but I don't like the fact that you can only provide
+ * string and not objects as options, so we stick with react-select for now
+ * 
+ * Maybe I'll create a PR to add support for objects in the future.
  */
 
 function RouteComponent() {
@@ -72,10 +77,17 @@ function RouteComponent() {
         <AsyncSelect
           value={null}
           placeholder={t('generic.search')}
-          options={[{ value: 'test', label: 'toto' }, { value: 'toto', label: 'test' }]}
           menuPosition='fixed'
           unstyled
-          loadOptions={async (val: string) => (await getUsers({ search: val })).member.map(u => ({ value: u['@id'], label: u.username }))}
+          loadOptions={async (val: string) => (await getUsers({ search: val })).member.map(u => {
+            let username = u.username;
+
+            if (u.firstname.length) {
+              username = `${u.firstname} ${u.lastname} (${u.username})`;
+            }
+
+            return { value: u['@id'], label: username };
+          })}
           defaultOptions
           onChange={setUserToAdd}
           classNames={{

@@ -3,7 +3,7 @@ import { useAuthStore } from '@/stores/auth'
 import { ValidationError } from './violations_error'
 
 export async function customFetch(input: RequestInfo, init: RequestInit = {}) {
-  const { token, tokenUser } = useAuthStore.getState()
+  const { token, tokenUser, setToken } = useAuthStore.getState()
 
   const headers = new Headers(init.headers || {})
   if (token) {
@@ -39,7 +39,19 @@ export async function customFetch(input: RequestInfo, init: RequestInit = {}) {
         })
       }
 
-      if ([401, 403, 404].includes(response.status)) {
+      // At some point we might want to try to refresh the token
+      // but for now just disconnect the user
+      if (response.status === 401) {
+        setToken(null, null);
+
+        throw new HttpError({
+          message: `errors.401.title`,
+          submessage: `errors.401.message`,
+          status: response.status,
+        });
+      }
+
+      if ([403, 404].includes(response.status)) {
         throw makeError(response.status);
       }
 

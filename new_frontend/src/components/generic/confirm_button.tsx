@@ -12,6 +12,7 @@ type Props = {
     onConfirm: () => Promise<void>;
     children?: React.ReactNode;
     confirmButtonProps?: Omit<ButtonProps, 'onClick'|'disabled'>;
+    onSuccess?: () => void;
 } & Omit<ButtonProps, 'onClick'>;
 
 export default function ConfirmButton({
@@ -21,6 +22,7 @@ export default function ConfirmButton({
     tConfirmButtonText,
     onConfirm,
     children,
+    onSuccess,
     ...props
 }: Props) {
     const { t } = useTranslation();
@@ -52,6 +54,8 @@ export default function ConfirmButton({
                         await onConfirm();
                         setSubmitting(false);
                         setModalShown(false);
+
+                        onSuccess?.();
                     }}
                     disabled={submitting}
                     {...props.confirmButtonProps}

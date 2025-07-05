@@ -25,7 +25,6 @@ export default function EventForm({ event }: Props) {
         handleSubmit,
         setError,
         formState: { errors, isSubmitting },
-        reset,
     } = useForm<UpsertEvent>({
         defaultValues: {
             name: event?.name || '',
@@ -103,6 +102,18 @@ export default function EventForm({ event }: Props) {
             error={errors.location}
             disabled={isSubmitting}
         />
+
+        {
+            globalErrors.length > 0 && (
+                <div className="text-red-glow mb-4">
+                    {
+                        globalErrors.map((error, index) => (
+                            <p key={index}>{error}</p>
+                        ))
+                    }
+                </div>
+            )
+        }
 
         <Button>
             {t('generic.save')}

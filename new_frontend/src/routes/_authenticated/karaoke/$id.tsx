@@ -21,7 +21,7 @@ export const Route = createFileRoute('/_authenticated/karaoke/$id')({
 function RouteComponent() {
   const data = Route.useLoaderData();
   const router = useRouter();
-  useTranslatedTitle('karaoke.editor.title_edit', {name: data.title || ''});
+  useTranslatedTitle('karaoke.editor.title_edit', undefined, {name: data.title || ''});
 
   return <SongEditor
     song={data}

@@ -6,11 +6,11 @@ type GetCollectionParams = {
     pageParam?: number;
     search?: string;
     ready?: boolean;
-    hasVocals?: boolean | null;
+    vocals?: boolean | null;
     format?: string[];
 };
 
-export async function getSongCollection({ pageParam = 1, search, ready, hasVocals, format }: GetCollectionParams): Promise<Collection<Song>> {
+export async function getSongCollection({ pageParam = 1, search, ready, vocals, format }: GetCollectionParams): Promise<Collection<Song>> {
     const params = new URLSearchParams({
         page: String(pageParam),
         ready: ready ? 'true' : 'false',
@@ -20,8 +20,8 @@ export async function getSongCollection({ pageParam = 1, search, ready, hasVocal
         params.set('search', search);
     }
 
-    if (hasVocals !== null && hasVocals !== undefined) {
-        params.set('hasVocals', hasVocals ? 'true' : 'false');
+    if (vocals !== null && vocals !== undefined) {
+        params.set('vocals', vocals ? 'true' : 'false');
     }
 
     if (format && format.length > 0) {

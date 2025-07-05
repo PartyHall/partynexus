@@ -18,8 +18,8 @@ use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 #[ApiResource(
     operations: [
         new Post(
-            normalizationContext: [AbstractNormalizer::GROUPS => self::API_GET_ITEM],
-            denormalizationContext: [AbstractNormalizer::GROUPS => self::API_CREATE],
+            normalizationContext: [AbstractNormalizer::GROUPS => [self::API_GET_ITEM]],
+            denormalizationContext: [AbstractNormalizer::GROUPS => [self::API_CREATE]],
             security: 'is_granted("ROLE_ADMIN")',
             processor: MagicPasswordProcessor::class,
         ),

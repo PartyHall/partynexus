@@ -4,6 +4,8 @@
         "username": "Pseudo",
         "email": "Email",
         "password": "Mot de passe",
+        "date": "Date",
+        "ip": "Adresse IP",
         "id": "ID",
         "firstname": "Prénom",
         "lastname": "Nom de famille",
@@ -15,6 +17,7 @@
         "no_results": "Aucun résultat trouvé",
         "cancel": "Annuler",
         "create": "Créer",
+        "add": "Ajouter",
         "save": "Enregistrer",
         "changes_saved": "Changements enregistrés avec succès",
         "created": "Créé avec succès",
@@ -77,7 +80,6 @@
         },
         "made_by": "Proposé par",
         "located_at": "Lieu",
-        "date": "Date",
         "about": "Infos",
         "photos": "Photos",
         "timelapse": "Timelapse",
@@ -145,7 +147,52 @@
         }
     },
     "admin": {
-        "title": "Admin"
+        "title": "Admin",
+        "users": {
+            "title": "Utilisateurs",
+            "title_edit": "{{username}}",
+            "amt_events": "{{amt}} utilisateurs",
+            "management": {
+                "title": "Gestion",
+                "ban": {
+                    "title": "Bannir l'utilisateur",
+                    "desc": "Bannir un utilisateur l'empêchera de se connecter à PartyNexus.",
+                    "banned_at": "Banni le {{date}} à {{time}}",
+                    "unban": "Débannir l'utilisateur"
+                },
+                "magic_password": {
+                    "title": "Mot de passe magique",
+                    "desc": "Un mot de passe magique est un lien que vous pouvez donner à quelqu'un pour qu'il puisse définir un mot de passe sans avoir à se connecter. Il est à usage unique et permet à la personne d'utiliser l'application lorsque les mails sont mal configurés (non reçus, tombés dans les spams, etc.). Cela peut également être utilisé comme une fonctionnalité de \"Mot de passe oublié\".",
+                    "generate": "Générer"
+                }
+            },
+            "auth_log": {
+                "title": "Logs de connexion",
+                "empty": "Aucun log de connexion trouvé pour cet utilisateur"
+            }
+        },
+        "backdrop_albums": {
+            "title": "Albums de passe-têtes",
+            "title_new": "Nouvel album de passe-têtes",
+            "title_edit": "Modification de '{{name}}'",
+            "amt_album": "{{amt}} albums",
+            "album_version": "Version {{version}}",
+            "delete_album": "Supprimer l'album",
+            "album_title": "Titre de l'album",
+            "author": "Auteur de l'album",
+            "version": "Version de l'album",
+            "note_appliance_update": "Note: Les appareils ne mettrons à jour l'album que si la version est changée. Faites toutes vos modifications puis augmentez le numéro de version.",
+            "no_backdrops": "Aucun passe-tête trouvé dans cet album",
+            "delete_confirm": {
+                "title": "Supprimer l'album",
+                "desc": "Êtes-vous sûr de vouloir supprimer l'album '{{title}}' ? Cela va le supprimer des appareils l'ayant déjà téléchargé."
+            },
+            "backdrops": {
+                "title": "Passe-têtes",
+                "delete_title": "Supprimer ce passe-tête",
+                "delete_desc": "Êtes-vous sûr de vouloir supprimer le passe-tête '{{title}}' ?"
+            }
+        }
     },
     "karaoke": {
         "title": "Karaoké",

@@ -19,7 +19,7 @@ function RouteComponent() {
   const router = useRouter();
   const data = Route.useLoaderData();
 
-  useTranslatedTitle('account.my_appliances.editor.title_edit', { name: data.name || '' });
+  useTranslatedTitle('account.my_appliances.editor.title_edit', undefined, { name: data.name || '' });
 
   return <ApplianceEditor
     appliance={data}

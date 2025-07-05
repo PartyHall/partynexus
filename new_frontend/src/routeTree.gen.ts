@@ -13,8 +13,10 @@ import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/
 import { Route as LoginIndexRouteImport } from './routes/login/index'
 import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated/index'
 import { Route as AuthenticatedNewRouteImport } from './routes/_authenticated/new'
+import { Route as AuthenticatedAdminRouteRouteImport } from './routes/_authenticated/admin/route'
 import { Route as AuthenticatedIdRouteRouteImport } from './routes/_authenticated/$id/route'
 import { Route as AuthenticatedKaraokeIndexRouteImport } from './routes/_authenticated/karaoke/index'
+import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin/index'
 import { Route as AuthenticatedAccountIndexRouteImport } from './routes/_authenticated/account/index'
 import { Route as AuthenticatedIdIndexRouteImport } from './routes/_authenticated/$id/index'
 import { Route as DisplayBoardEventIdKeyRouteImport } from './routes/display-board.$eventId.$key'
@@ -29,7 +31,13 @@ import { Route as AuthenticatedIdPhotosRouteImport } from './routes/_authenticat
 import { Route as AuthenticatedIdParticipantsRouteImport } from './routes/_authenticated/$id/participants'
 import { Route as AuthenticatedIdEditRouteImport } from './routes/_authenticated/$id/edit'
 import { Route as AuthenticatedAccountAppliancesRouteRouteImport } from './routes/_authenticated/account/appliances/route'
+import { Route as AuthenticatedAdminUsersIndexRouteImport } from './routes/_authenticated/admin/users/index'
+import { Route as AuthenticatedAdminBackdropAlbumsIndexRouteImport } from './routes/_authenticated/admin/backdrop-albums/index'
 import { Route as AuthenticatedAccountAppliancesIndexRouteImport } from './routes/_authenticated/account/appliances/index'
+import { Route as AuthenticatedAdminUsersNewRouteImport } from './routes/_authenticated/admin/users/new'
+import { Route as AuthenticatedAdminUsersIdRouteImport } from './routes/_authenticated/admin/users/$id'
+import { Route as AuthenticatedAdminBackdropAlbumsNewRouteImport } from './routes/_authenticated/admin/backdrop-albums/new'
+import { Route as AuthenticatedAdminBackdropAlbumsIdRouteImport } from './routes/_authenticated/admin/backdrop-albums/$id'
 import { Route as AuthenticatedAccountAppliancesNewRouteImport } from './routes/_authenticated/account/appliances/new'
 import { Route as AuthenticatedAccountAppliancesIdRouteImport } from './routes/_authenticated/account/appliances/$id'
 
@@ -52,6 +60,11 @@ const AuthenticatedNewRoute = AuthenticatedNewRouteImport.update({
   path: '/new',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedAdminRouteRoute = AuthenticatedAdminRouteRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedIdRouteRoute = AuthenticatedIdRouteRouteImport.update({
   id: '/$id',
   path: '/$id',
@@ -63,6 +76,11 @@ const AuthenticatedKaraokeIndexRoute =
     path: '/karaoke/',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AuthenticatedAdminRouteRoute,
+} as any)
 const AuthenticatedAccountIndexRoute =
   AuthenticatedAccountIndexRouteImport.update({
     id: '/account/',
@@ -139,11 +157,47 @@ const AuthenticatedAccountAppliancesRouteRoute =
     path: '/account/appliances',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedAdminUsersIndexRoute =
+  AuthenticatedAdminUsersIndexRouteImport.update({
+    id: '/users/',
+    path: '/users/',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
+  } as any)
+const AuthenticatedAdminBackdropAlbumsIndexRoute =
+  AuthenticatedAdminBackdropAlbumsIndexRouteImport.update({
+    id: '/backdrop-albums/',
+    path: '/backdrop-albums/',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
+  } as any)
 const AuthenticatedAccountAppliancesIndexRoute =
   AuthenticatedAccountAppliancesIndexRouteImport.update({
     id: '/',
     path: '/',
     getParentRoute: () => AuthenticatedAccountAppliancesRouteRoute,
+  } as any)
+const AuthenticatedAdminUsersNewRoute =
+  AuthenticatedAdminUsersNewRouteImport.update({
+    id: '/users/new',
+    path: '/users/new',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
+  } as any)
+const AuthenticatedAdminUsersIdRoute =
+  AuthenticatedAdminUsersIdRouteImport.update({
+    id: '/users/$id',
+    path: '/users/$id',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
+  } as any)
+const AuthenticatedAdminBackdropAlbumsNewRoute =
+  AuthenticatedAdminBackdropAlbumsNewRouteImport.update({
+    id: '/backdrop-albums/new',
+    path: '/backdrop-albums/new',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
+  } as any)
+const AuthenticatedAdminBackdropAlbumsIdRoute =
+  AuthenticatedAdminBackdropAlbumsIdRouteImport.update({
+    id: '/backdrop-albums/$id',
+    path: '/backdrop-albums/$id',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
   } as any)
 const AuthenticatedAccountAppliancesNewRoute =
   AuthenticatedAccountAppliancesNewRouteImport.update({
@@ -160,6 +214,7 @@ const AuthenticatedAccountAppliancesIdRoute =
 
 export interface FileRoutesByFullPath {
   '/$id': typeof AuthenticatedIdRouteRouteWithChildren
+  '/admin': typeof AuthenticatedAdminRouteRouteWithChildren
   '/new': typeof AuthenticatedNewRoute
   '/': typeof AuthenticatedIndexRoute
   '/login': typeof LoginIndexRoute
@@ -177,10 +232,17 @@ export interface FileRoutesByFullPath {
   '/display-board/$eventId/$key': typeof DisplayBoardEventIdKeyRoute
   '/$id/': typeof AuthenticatedIdIndexRoute
   '/account': typeof AuthenticatedAccountIndexRoute
+  '/admin/': typeof AuthenticatedAdminIndexRoute
   '/karaoke': typeof AuthenticatedKaraokeIndexRoute
   '/account/appliances/$id': typeof AuthenticatedAccountAppliancesIdRoute
   '/account/appliances/new': typeof AuthenticatedAccountAppliancesNewRoute
+  '/admin/backdrop-albums/$id': typeof AuthenticatedAdminBackdropAlbumsIdRoute
+  '/admin/backdrop-albums/new': typeof AuthenticatedAdminBackdropAlbumsNewRoute
+  '/admin/users/$id': typeof AuthenticatedAdminUsersIdRoute
+  '/admin/users/new': typeof AuthenticatedAdminUsersNewRoute
   '/account/appliances/': typeof AuthenticatedAccountAppliancesIndexRoute
+  '/admin/backdrop-albums': typeof AuthenticatedAdminBackdropAlbumsIndexRoute
+  '/admin/users': typeof AuthenticatedAdminUsersIndexRoute
 }
 export interface FileRoutesByTo {
   '/new': typeof AuthenticatedNewRoute
@@ -199,15 +261,23 @@ export interface FileRoutesByTo {
   '/display-board/$eventId/$key': typeof DisplayBoardEventIdKeyRoute
   '/$id': typeof AuthenticatedIdIndexRoute
   '/account': typeof AuthenticatedAccountIndexRoute
+  '/admin': typeof AuthenticatedAdminIndexRoute
   '/karaoke': typeof AuthenticatedKaraokeIndexRoute
   '/account/appliances/$id': typeof AuthenticatedAccountAppliancesIdRoute
   '/account/appliances/new': typeof AuthenticatedAccountAppliancesNewRoute
+  '/admin/backdrop-albums/$id': typeof AuthenticatedAdminBackdropAlbumsIdRoute
+  '/admin/backdrop-albums/new': typeof AuthenticatedAdminBackdropAlbumsNewRoute
+  '/admin/users/$id': typeof AuthenticatedAdminUsersIdRoute
+  '/admin/users/new': typeof AuthenticatedAdminUsersNewRoute
   '/account/appliances': typeof AuthenticatedAccountAppliancesIndexRoute
+  '/admin/backdrop-albums': typeof AuthenticatedAdminBackdropAlbumsIndexRoute
+  '/admin/users': typeof AuthenticatedAdminUsersIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/_authenticated/$id': typeof AuthenticatedIdRouteRouteWithChildren
+  '/_authenticated/admin': typeof AuthenticatedAdminRouteRouteWithChildren
   '/_authenticated/new': typeof AuthenticatedNewRoute
   '/_authenticated/': typeof AuthenticatedIndexRoute
   '/login/': typeof LoginIndexRoute
@@ -225,15 +295,23 @@ export interface FileRoutesById {
   '/display-board/$eventId/$key': typeof DisplayBoardEventIdKeyRoute
   '/_authenticated/$id/': typeof AuthenticatedIdIndexRoute
   '/_authenticated/account/': typeof AuthenticatedAccountIndexRoute
+  '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
   '/_authenticated/karaoke/': typeof AuthenticatedKaraokeIndexRoute
   '/_authenticated/account/appliances/$id': typeof AuthenticatedAccountAppliancesIdRoute
   '/_authenticated/account/appliances/new': typeof AuthenticatedAccountAppliancesNewRoute
+  '/_authenticated/admin/backdrop-albums/$id': typeof AuthenticatedAdminBackdropAlbumsIdRoute
+  '/_authenticated/admin/backdrop-albums/new': typeof AuthenticatedAdminBackdropAlbumsNewRoute
+  '/_authenticated/admin/users/$id': typeof AuthenticatedAdminUsersIdRoute
+  '/_authenticated/admin/users/new': typeof AuthenticatedAdminUsersNewRoute
   '/_authenticated/account/appliances/': typeof AuthenticatedAccountAppliancesIndexRoute
+  '/_authenticated/admin/backdrop-albums/': typeof AuthenticatedAdminBackdropAlbumsIndexRoute
+  '/_authenticated/admin/users/': typeof AuthenticatedAdminUsersIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/$id'
+    | '/admin'
     | '/new'
     | '/'
     | '/login'
@@ -251,10 +329,17 @@ export interface FileRouteTypes {
     | '/display-board/$eventId/$key'
     | '/$id/'
     | '/account'
+    | '/admin/'
     | '/karaoke'
     | '/account/appliances/$id'
     | '/account/appliances/new'
+    | '/admin/backdrop-albums/$id'
+    | '/admin/backdrop-albums/new'
+    | '/admin/users/$id'
+    | '/admin/users/new'
     | '/account/appliances/'
+    | '/admin/backdrop-albums'
+    | '/admin/users'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/new'
@@ -273,14 +358,22 @@ export interface FileRouteTypes {
     | '/display-board/$eventId/$key'
     | '/$id'
     | '/account'
+    | '/admin'
     | '/karaoke'
     | '/account/appliances/$id'
     | '/account/appliances/new'
+    | '/admin/backdrop-albums/$id'
+    | '/admin/backdrop-albums/new'
+    | '/admin/users/$id'
+    | '/admin/users/new'
     | '/account/appliances'
+    | '/admin/backdrop-albums'
+    | '/admin/users'
   id:
     | '__root__'
     | '/_authenticated'
     | '/_authenticated/$id'
+    | '/_authenticated/admin'
     | '/_authenticated/new'
     | '/_authenticated/'
     | '/login/'
@@ -298,10 +391,17 @@ export interface FileRouteTypes {
     | '/display-board/$eventId/$key'
     | '/_authenticated/$id/'
     | '/_authenticated/account/'
+    | '/_authenticated/admin/'
     | '/_authenticated/karaoke/'
     | '/_authenticated/account/appliances/$id'
     | '/_authenticated/account/appliances/new'
+    | '/_authenticated/admin/backdrop-albums/$id'
+    | '/_authenticated/admin/backdrop-albums/new'
+    | '/_authenticated/admin/users/$id'
+    | '/_authenticated/admin/users/new'
     | '/_authenticated/account/appliances/'
+    | '/_authenticated/admin/backdrop-albums/'
+    | '/_authenticated/admin/users/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -340,6 +440,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedNewRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/admin': {
+      id: '/_authenticated/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AuthenticatedAdminRouteRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/$id': {
       id: '/_authenticated/$id'
       path: '/$id'
@@ -353,6 +460,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/karaoke'
       preLoaderRoute: typeof AuthenticatedKaraokeIndexRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/admin/': {
+      id: '/_authenticated/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AuthenticatedAdminIndexRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteRoute
     }
     '/_authenticated/account/': {
       id: '/_authenticated/account/'
@@ -452,12 +566,54 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAccountAppliancesRouteRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/admin/users/': {
+      id: '/_authenticated/admin/users/'
+      path: '/users'
+      fullPath: '/admin/users'
+      preLoaderRoute: typeof AuthenticatedAdminUsersIndexRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteRoute
+    }
+    '/_authenticated/admin/backdrop-albums/': {
+      id: '/_authenticated/admin/backdrop-albums/'
+      path: '/backdrop-albums'
+      fullPath: '/admin/backdrop-albums'
+      preLoaderRoute: typeof AuthenticatedAdminBackdropAlbumsIndexRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteRoute
+    }
     '/_authenticated/account/appliances/': {
       id: '/_authenticated/account/appliances/'
       path: '/'
       fullPath: '/account/appliances/'
       preLoaderRoute: typeof AuthenticatedAccountAppliancesIndexRouteImport
       parentRoute: typeof AuthenticatedAccountAppliancesRouteRoute
+    }
+    '/_authenticated/admin/users/new': {
+      id: '/_authenticated/admin/users/new'
+      path: '/users/new'
+      fullPath: '/admin/users/new'
+      preLoaderRoute: typeof AuthenticatedAdminUsersNewRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteRoute
+    }
+    '/_authenticated/admin/users/$id': {
+      id: '/_authenticated/admin/users/$id'
+      path: '/users/$id'
+      fullPath: '/admin/users/$id'
+      preLoaderRoute: typeof AuthenticatedAdminUsersIdRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteRoute
+    }
+    '/_authenticated/admin/backdrop-albums/new': {
+      id: '/_authenticated/admin/backdrop-albums/new'
+      path: '/backdrop-albums/new'
+      fullPath: '/admin/backdrop-albums/new'
+      preLoaderRoute: typeof AuthenticatedAdminBackdropAlbumsNewRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteRoute
+    }
+    '/_authenticated/admin/backdrop-albums/$id': {
+      id: '/_authenticated/admin/backdrop-albums/$id'
+      path: '/backdrop-albums/$id'
+      fullPath: '/admin/backdrop-albums/$id'
+      preLoaderRoute: typeof AuthenticatedAdminBackdropAlbumsIdRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteRoute
     }
     '/_authenticated/account/appliances/new': {
       id: '/_authenticated/account/appliances/new'
@@ -499,6 +655,35 @@ const AuthenticatedIdRouteRouteChildren: AuthenticatedIdRouteRouteChildren = {
 const AuthenticatedIdRouteRouteWithChildren =
   AuthenticatedIdRouteRoute._addFileChildren(AuthenticatedIdRouteRouteChildren)
 
+interface AuthenticatedAdminRouteRouteChildren {
+  AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
+  AuthenticatedAdminBackdropAlbumsIdRoute: typeof AuthenticatedAdminBackdropAlbumsIdRoute
+  AuthenticatedAdminBackdropAlbumsNewRoute: typeof AuthenticatedAdminBackdropAlbumsNewRoute
+  AuthenticatedAdminUsersIdRoute: typeof AuthenticatedAdminUsersIdRoute
+  AuthenticatedAdminUsersNewRoute: typeof AuthenticatedAdminUsersNewRoute
+  AuthenticatedAdminBackdropAlbumsIndexRoute: typeof AuthenticatedAdminBackdropAlbumsIndexRoute
+  AuthenticatedAdminUsersIndexRoute: typeof AuthenticatedAdminUsersIndexRoute
+}
+
+const AuthenticatedAdminRouteRouteChildren: AuthenticatedAdminRouteRouteChildren =
+  {
+    AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
+    AuthenticatedAdminBackdropAlbumsIdRoute:
+      AuthenticatedAdminBackdropAlbumsIdRoute,
+    AuthenticatedAdminBackdropAlbumsNewRoute:
+      AuthenticatedAdminBackdropAlbumsNewRoute,
+    AuthenticatedAdminUsersIdRoute: AuthenticatedAdminUsersIdRoute,
+    AuthenticatedAdminUsersNewRoute: AuthenticatedAdminUsersNewRoute,
+    AuthenticatedAdminBackdropAlbumsIndexRoute:
+      AuthenticatedAdminBackdropAlbumsIndexRoute,
+    AuthenticatedAdminUsersIndexRoute: AuthenticatedAdminUsersIndexRoute,
+  }
+
+const AuthenticatedAdminRouteRouteWithChildren =
+  AuthenticatedAdminRouteRoute._addFileChildren(
+    AuthenticatedAdminRouteRouteChildren,
+  )
+
 interface AuthenticatedAccountAppliancesRouteRouteChildren {
   AuthenticatedAccountAppliancesIdRoute: typeof AuthenticatedAccountAppliancesIdRoute
   AuthenticatedAccountAppliancesNewRoute: typeof AuthenticatedAccountAppliancesNewRoute
@@ -522,6 +707,7 @@ const AuthenticatedAccountAppliancesRouteRouteWithChildren =
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedIdRouteRoute: typeof AuthenticatedIdRouteRouteWithChildren
+  AuthenticatedAdminRouteRoute: typeof AuthenticatedAdminRouteRouteWithChildren
   AuthenticatedNewRoute: typeof AuthenticatedNewRoute
   AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
   AuthenticatedAccountAppliancesRouteRoute: typeof AuthenticatedAccountAppliancesRouteRouteWithChildren
@@ -535,6 +721,7 @@ interface AuthenticatedRouteRouteChildren {
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedIdRouteRoute: AuthenticatedIdRouteRouteWithChildren,
+  AuthenticatedAdminRouteRoute: AuthenticatedAdminRouteRouteWithChildren,
   AuthenticatedNewRoute: AuthenticatedNewRoute,
   AuthenticatedIndexRoute: AuthenticatedIndexRoute,
   AuthenticatedAccountAppliancesRouteRoute:

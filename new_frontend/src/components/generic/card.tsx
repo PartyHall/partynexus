@@ -17,8 +17,6 @@ export default function Card({ children, className, noGlow, customGlow }: Props)
             bg-synthbg-800
             rounded-md
             p-4
-            transition-shadow
-            duration-300
             ${noGlow ? '' : glow}
         `}
     >

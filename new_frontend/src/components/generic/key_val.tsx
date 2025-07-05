@@ -6,7 +6,7 @@ import { Tooltip } from "./tooltip";
 export function KeyVal({ label, tooltip, children }: { label: string, tooltip?: string, children: ReactNode }) {
   const { t } = useTranslation();
 
-  return <p className='flex flex-col'>
+  return <div className='flex flex-col'>
     <div className="flex flex-row items-center gap-2">
       {
         tooltip
@@ -23,5 +23,5 @@ export function KeyVal({ label, tooltip, children }: { label: string, tooltip?: 
 
     </div>
     <span className='ml-4'>{children}</span>
-  </p>;
+  </div>;
 }
