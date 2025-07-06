@@ -35,6 +35,7 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import detector from 'i18next-browser-languagedetector';
 import i18n from 'i18next';
+import RegisterPage from './pages/Register.tsx';
 
 i18n.use(Backend)
     .use(detector)
@@ -66,6 +67,10 @@ const router = createBrowserRouter([
     {
         path: '/display-board/:eventId/:displayBoardKey',
         element: <DisplayBoardPage />,
+    },
+    {
+        path: '/register/:token',
+        element: <RegisterPage />,
     },
     {
         path: '/',

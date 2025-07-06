@@ -29,6 +29,7 @@ export default function EventEditor({ event: initialEvent }: Props) {
             author: event?.author,
             datetime: event?.datetime,
             location: event?.location,
+            userRegistrationEnabled: event?.userRegistrationEnabled ?? false,
         },
     });
 
@@ -107,6 +108,18 @@ export default function EventEditor({ event: initialEvent }: Props) {
                     label={t('event.location')}
                 >
                     <Input disabled={formState.isSubmitting} />
+                </FormItem>
+
+                <FormItem
+                    control={control}
+                    name="userRegistrationEnabled"
+                    label={t('event.user_registration_enabled')}
+                    valuePropName="checked"
+                >
+                    <Input
+                        type="checkbox"
+                        disabled={formState.isSubmitting}
+                    />
                 </FormItem>
 
                 {

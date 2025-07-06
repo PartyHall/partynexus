@@ -39,6 +39,16 @@ export default function EventInfos({ event, displayOwnerStuff }: Props) {
                         </a>
                     </KeyVal>
                 }
+
+                {
+                    displayOwnerStuff
+                    && event?.userRegistrationUrl
+                    && <KeyVal label="User registration URL">
+                        <a target='_blank' rel='noreferrer' href={event?.userRegistrationUrl}>
+                            {event?.userRegistrationUrl}
+                        </a>
+                    </KeyVal>
+                }
             </Flex>
         </>
     );

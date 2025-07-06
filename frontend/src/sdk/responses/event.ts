@@ -20,7 +20,7 @@ export class PnListEvent {
         author: string | null,
         datetime: dayjs.Dayjs,
         location: string | null,
-        owner: string
+        owner: string,
     ) {
         this.iri = iri;
         this.id = id;
@@ -44,7 +44,7 @@ export class PnListEvent {
             data['author'],
             dayjs(data['datetime']),
             data['location'],
-            data['owner']
+            data['owner'],
         );
     }
 }
@@ -65,6 +65,9 @@ export class PnEvent {
     displayBoardKey: DisplayBoardKey | null;
     export: PnExport | null;
 
+    userRegistrationUrl: string | null;
+    userRegistrationEnabled: boolean;
+
     constructor(data: Record<string, any>) {
         const owner = User.fromJson(data['owner']);
         if (!owner) {
@@ -84,6 +87,9 @@ export class PnEvent {
 
         this.displayBoardKey = DisplayBoardKey.fromJson(data['displayBoardKey']);
         this.export = PnExport.fromJson(data['export']);
+
+        this.userRegistrationUrl = data['userRegistrationUrl'] || null;
+        this.userRegistrationEnabled = data['userRegistrationEnabled'] || false;
 
         /**
          * @TODO: Amt images handtaken, amt images unattended

@@ -1,9 +1,10 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
+import tailwindcss from '@tailwindcss/vite';
 
 // https://vitejs.dev/config/
 export default defineConfig({
-    plugins: [react()],
+    plugins: [tailwindcss(), react()],
     // Temp fix for tabler-icons
     // => https://github.com/tabler/tabler-icons/issues/1233#issuecomment-2428245119
     resolve: {

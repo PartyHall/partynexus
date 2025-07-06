@@ -64,6 +64,7 @@ export class Events {
             author: event.author,
             datetime: event.datetime.toISOString(),
             location: event.location,
+            userRegistrationEnabled: event.userRegistrationEnabled,
         };
 
         const resp = await this.sdk.post('/api/events', body);
@@ -78,6 +79,7 @@ export class Events {
             author: event.author,
             datetime: event.datetime.toISOString(),
             location: event.location,
+            userRegistrationEnabled: event.userRegistrationEnabled,
         };
 
         const resp = await this.sdk.patch(`/api/events/${event.id}`, body);
