@@ -11,11 +11,6 @@ use Hidehalo\Nanoid\Client;
 #[AsDoctrineListener(Events::prePersist)]
 readonly class EventCreatedListener
 {
-    public function __construct(
-    )
-    {
-    }
-
     public function prePersist(PrePersistEventArgs $args): void
     {
         /** @var Event $evt */

@@ -113,7 +113,7 @@ export default function EventEditor({ event: initialEvent }: Props) {
                 <FormItem
                     control={control}
                     name="userRegistrationEnabled"
-                    label={t('event.user_registration_enabled')}
+                    label="User registration enabled?"
                     valuePropName="checked"
                 >
                     <Input

@@ -30,48 +30,47 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @see \App\Doctrine\FilterEventOnOwnerExtension
  */
-#[
-    ApiResource(
-        operations: [
-            new GetCollection(
-                order: ['datetime' => 'DESC'],
-                normalizationContext: [AbstractNormalizer::GROUPS => [self::API_GET_COLLECTION]],
-            ),
-            new Get(
-                normalizationContext: [AbstractNormalizer::GROUPS => [self::API_GET_ITEM]],
-                security: 'is_granted("ROLE_ADMIN") or object.getOwner().hasAppliance(user) or object.hasParticipant(user)'
-            ),
-            new Post(
-                normalizationContext: [AbstractNormalizer::GROUPS => [self::API_GET_ITEM]],
-                denormalizationContext: [AbstractNormalizer::GROUPS => [self::API_CREATE]],
-                security: 'is_granted("ROLE_APPLIANCE") or is_granted("ROLE_ADMIN")',
-                processor: EventCreationProcessor::class,
-            ),
-            new Patch(
-                normalizationContext: [AbstractNormalizer::GROUPS => [self::API_GET_ITEM]],
-                denormalizationContext: [AbstractNormalizer::GROUPS => [self::API_UPDATE]],
-                security: 'is_granted("ROLE_ADMIN") or user == object.getOwner()'
-            ),
-            new Post(
-                uriTemplate: '/events/{id}/conclude',
-                status: 200,
-                controller: EventConcludeController::class,
-                normalizationContext: [AbstractNormalizer::GROUPS => [self::API_GET_ITEM]],
-                denormalizationContext: [AbstractNormalizer::GROUPS => []],
-                // security: 'is_granted("ROLE_ADMIN") or user == object.getOwner()', // Handled in the controller temporarly
-                read: false,
-                validate: false,
-            ),
-            new Get(uriTemplate: '/events/{id}/timelapse', provider: TimelapseDownloadProvider::class),
-            new Get(uriTemplate: '/events/{id}/export', provider: ExportDownloadProvider::class),
-            new Get(
-                uriTemplate: '/register/{userRegistrationCode}',
-                uriVariables: ['userRegistrationCode'],
-                normalizationContext: [AbstractNormalizer::GROUPS => [self::API_GET_REGISTER]],
-                provider: RegistrationEventProvider::class,
-            )
-        ],
-    )]
+#[ApiResource(
+    operations: [
+        new GetCollection(
+            order: ['datetime' => 'DESC'],
+            normalizationContext: [AbstractNormalizer::GROUPS => [self::API_GET_COLLECTION]],
+        ),
+        new Get(
+            normalizationContext: [AbstractNormalizer::GROUPS => [self::API_GET_ITEM]],
+            security: 'is_granted("ROLE_ADMIN") or object.getOwner().hasAppliance(user) or object.hasParticipant(user)'
+        ),
+        new Post(
+            normalizationContext: [AbstractNormalizer::GROUPS => [self::API_GET_ITEM]],
+            denormalizationContext: [AbstractNormalizer::GROUPS => [self::API_CREATE]],
+            security: 'is_granted("ROLE_APPLIANCE") or is_granted("ROLE_ADMIN")',
+            processor: EventCreationProcessor::class,
+        ),
+        new Patch(
+            normalizationContext: [AbstractNormalizer::GROUPS => [self::API_GET_ITEM]],
+            denormalizationContext: [AbstractNormalizer::GROUPS => [self::API_UPDATE]],
+            security: 'is_granted("ROLE_ADMIN") or user == object.getOwner()'
+        ),
+        new Post(
+            uriTemplate: '/events/{id}/conclude',
+            status: 200,
+            controller: EventConcludeController::class,
+            normalizationContext: [AbstractNormalizer::GROUPS => [self::API_GET_ITEM]],
+            denormalizationContext: [AbstractNormalizer::GROUPS => []],
+            // security: 'is_granted("ROLE_ADMIN") or user == object.getOwner()', // Handled in the controller temporarly
+            read: false,
+            validate: false,
+        ),
+        new Get(uriTemplate: '/events/{id}/timelapse', provider: TimelapseDownloadProvider::class),
+        new Get(uriTemplate: '/events/{id}/export', provider: ExportDownloadProvider::class),
+        new Get(
+            uriTemplate: '/register/{userRegistrationCode}',
+            uriVariables: ['userRegistrationCode'],
+            normalizationContext: [AbstractNormalizer::GROUPS => [self::API_GET_REGISTER]],
+            provider: RegistrationEventProvider::class,
+        )
+    ],
+)]
 #[ApiFilter(SearchFilter::class, properties: ['name' => 'ipartial'])]
 #[ORM\Entity(repositoryClass: EventRepository::class)]
 #[QueryParameter('mine')]
