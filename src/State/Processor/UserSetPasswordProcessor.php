@@ -8,8 +8,8 @@ use App\Message\PasswordUpdatedNotification;
 use App\Model\PasswordSet;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -37,8 +37,13 @@ readonly class UserSetPasswordProcessor implements ProcessorInterface
         }
 
         if ($user->isPasswordSet()) {
-            if (!$this->passwordHasher->isPasswordValid($user, $data->oldPassword)) {
-                throw new BadRequestException('Old password is incorrect');
+            $oldPassword = $data->oldPassword ?? null;
+            if (!$oldPassword) {
+                throw new BadRequestHttpException('Old password is required');
+            }
+
+            if (!$this->passwordHasher->isPasswordValid($user, $oldPassword)) {
+                throw new BadRequestHttpException('Old password is incorrect');
             }
         }
 

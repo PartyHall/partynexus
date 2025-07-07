@@ -12,5 +12,5 @@ export default function Loader({
         return children;
     }
 
-    return <div className="loader"></div>;
+    return <div className="loader min-h-10"></div>;
 }

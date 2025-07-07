@@ -2,32 +2,33 @@
 
 namespace App\Serializer;
 
-use App\Entity\BackdropAlbum;
-use App\Entity\DisplayBoardKey;
+use App\Entity\Event;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
-use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
+use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
-class DisplayBoardKeyNormalizer implements NormalizerInterface
+class EventNormalizer implements NormalizerInterface
 {
-    private const string ALREADY_CALLED = 'DBK_NORMALIZER_ALREADY_CALLED';
-    private string $frontUrl;
+    private const string ALREADY_CALLED = 'EVENT_NORMALIZER_ALREADY_CALLED';
+
+    private string $baseUrl;
 
     public function __construct(
         #[Autowire(service: 'api_platform.jsonld.normalizer.item')]
         private readonly NormalizerInterface $normalizer,
         #[Autowire(env: 'PUBLIC_URL')]
-        string $frontUrl,
+        string $baseUrl,
     ) {
-        $this->frontUrl = \rtrim($frontUrl, '/');
+        $this->baseUrl = \rtrim($baseUrl, '/');
     }
 
     /**
+     * @param Event        $object
      * @param array<mixed> $context
      *
      * @return array<mixed>|string|int|float|bool|\ArrayObject<int, mixed>|null
      *
-     * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
+     * @throws ExceptionInterface
      */
     public function normalize(mixed $object, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
@@ -36,12 +37,18 @@ class DisplayBoardKeyNormalizer implements NormalizerInterface
         /** @var array<mixed> $data */
         $data = $this->normalizer->normalize($object, $format, $context);
 
-        $data['url'] = \implode('/', [
-            $this->frontUrl,
-            'display-board',
-            $object->getEvent()->getId(),
-            $object->getKey(),
-        ]);
+        if ($object->getUserRegistrationCode()) {
+            $data['userRegistrationUrl'] = \implode(
+                '/',
+                [
+                    $this->baseUrl,
+                    'register',
+                    $object->getUserRegistrationCode(),
+                ]
+            );
+        } else {
+            $data['userRegsistrationUrl'] = null;
+        }
 
         return $data;
     }
@@ -51,23 +58,21 @@ class DisplayBoardKeyNormalizer implements NormalizerInterface
      */
     public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
     {
-        if (
-            isset($context[self::ALREADY_CALLED])
-            || (
-                \array_key_exists(AbstractNormalizer::GROUPS, $context)
-                && \in_array(BackdropAlbum::EXPORT, $context[AbstractNormalizer::GROUPS])
-            )
-        ) {
+        if (isset($context[self::ALREADY_CALLED])) {
             return false;
         }
 
-        return $data instanceof DisplayBoardKey;
+        return $data instanceof Event;
     }
 
+    /**
+     * @return array<mixed>
+     */
     public function getSupportedTypes(?string $format): array
     {
         return [
-            DisplayBoardKey::class => true,
+            Event::class => true,
+            '*' => false,
         ];
     }
 }

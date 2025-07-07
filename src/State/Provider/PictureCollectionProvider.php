@@ -14,12 +14,12 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 /**
- * @implements ProviderInterface<\App\Entity\Picture>
+ * @implements ProviderInterface<Picture>
  */
 readonly class PictureCollectionProvider implements ProviderInterface
 {
     /**
-     * @param ProviderInterface<\App\Entity\Picture> $decorated
+     * @param ProviderInterface<Picture> $decorated
      */
     public function __construct(
         #[Autowire(service: 'api_platform.doctrine.orm.state.collection_provider')]
@@ -34,9 +34,9 @@ readonly class PictureCollectionProvider implements ProviderInterface
      * @param array<mixed> $uriVariables
      * @param array<mixed> $context
      *
-     * @return array<Picture>
+     * @return Picture|iterable<Picture>|null
      */
-    public function provide(Operation $operation, array $uriVariables = [], array $context = []): array
+    public function provide(Operation $operation, array $uriVariables = [], array $context = []): array|Picture|null
     {
         $eventId = $uriVariables['eventId'] ?? null;
         if ($eventId) {

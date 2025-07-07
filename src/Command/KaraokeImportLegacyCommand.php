@@ -55,7 +55,14 @@ class KaraokeImportLegacyCommand extends Command
         }
 
         if (\is_dir($basePath)) {
-            $files = array_diff(scandir($basePath), ['..', '.']);
+            $files = \scandir($basePath);
+            if (!$files) {
+                $output->writeln("<error>Couldn't list the files in the given folder!</error>");
+
+                return Command::FAILURE;
+            }
+
+            $files = \array_diff($files, ['..', '.']);
             foreach ($files as $file) {
                 $this->importSong($style, Path::join($basePath, $file));
             }
@@ -99,7 +106,12 @@ class KaraokeImportLegacyCommand extends Command
             $zip->close();
 
             // Create a non ready song from song.json file
-            $meta = json_decode(file_get_contents(Path::Join($tempDir, 'song.json')), true);
+            $fileData = \file_get_contents(Path::Join($tempDir, 'song.json'));
+            if (!$fileData) {
+                throw new \Exception('Failed to read song json file');
+            }
+
+            $meta = json_decode($fileData, true);
             $song = (new Song())
                 ->setTitle($meta['title'])
                 ->setArtist($meta['artist'])

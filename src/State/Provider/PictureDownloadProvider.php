@@ -13,6 +13,7 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 /**
@@ -32,7 +33,13 @@ readonly class PictureDownloadProvider implements ProviderInterface
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): object|array|null
     {
         $id = $uriVariables['id'] ?? null;
-        $alternatePicture = 'true' === strtolower($this->requestStack->getMainRequest()->query->get('alternate') ?? 'false');
+
+        $alternatePicture = $this->requestStack->getMainRequest()?->query->get('alternate') ?? false;
+        if (!\is_string($alternatePicture)) {
+            throw new BadRequestHttpException('The "alternate" query parameter must be a string.');
+        }
+
+        $alternatePicture = 'true' === \strtolower($alternatePicture);
 
         /** @var Picture|null $picture */
         $picture = $this->repo->find($id);

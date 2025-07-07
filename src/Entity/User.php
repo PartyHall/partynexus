@@ -7,10 +7,12 @@ use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Link;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use App\Model\PasswordSet;
 use App\State\Processor\BanUserProcessor;
+use App\State\Processor\RegisterUserProcessor;
 use App\State\Processor\UserSetPasswordProcessor;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -72,11 +74,20 @@ use Symfony\Component\Validator\Constraints as Assert;
             input: PasswordSet::class,
             processor: UserSetPasswordProcessor::class,
         ),
+        new Post(
+            uriTemplate: '/register/{userRegistrationCode}',
+            uriVariables: ['userRegistrationCode' => new Link()],
+            denormalizationContext: [AbstractNormalizer::GROUPS => [self::API_REGISTER]],
+            validationContext: [AbstractNormalizer::GROUPS => [self::API_REGISTER]],
+            processor: RegisterUserProcessor::class,
+        ),
     ]
 )]
 #[ApiFilter(SearchFilter::class, properties: ['username' => 'ipartial'])]
 #[UniqueEntity(fields: ['username'], message: 'Username already taken')]
 #[UniqueEntity(fields: ['email'], message: 'Email already taken')]
+#[UniqueEntity(fields: ['username'], message: 'Username already taken', groups: [self::API_REGISTER])]
+#[UniqueEntity(fields: ['email'], message: 'Email already taken', groups: [self::API_REGISTER])]
 #[ORM\Entity]
 #[ORM\Table('nexus_user')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
@@ -89,6 +100,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public const string API_GET_ITEM_SELF = 'api:user:get-self';
     public const string API_CREATE = 'api:user:create';
     public const string API_UPDATE = 'api:user:update';
+    public const string API_REGISTER = 'api:user:create-register';
 
     #[ORM\Id]
     #[ORM\Column(type: Types::INTEGER)]
@@ -102,11 +114,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(type: Types::STRING, length: 32, unique: true)]
     #[Assert\Length(min: 3, max: 32)]
+    #[Assert\Length(min: 3, max: 64, groups: [self::API_REGISTER])]
     #[Groups([
         self::API_GET_ITEM,
         self::API_GET_COLLECTION,
         self::API_CREATE,
-        self::API_UPDATE,
+        self::API_REGISTER,
         Event::API_GET_ITEM,
         Event::API_EXPORT,
     ])]
@@ -114,11 +127,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(type: Types::STRING, length: 64, nullable: true)]
     #[Assert\Length(min: 3, max: 64)]
+    #[Assert\Length(min: 3, max: 64, groups: [self::API_REGISTER])]
     #[Groups([
         self::API_GET_ITEM,
         self::API_GET_COLLECTION,
         self::API_CREATE,
         self::API_UPDATE,
+        self::API_REGISTER,
         Event::API_GET_ITEM,
         Event::API_EXPORT,
     ])]
@@ -126,11 +141,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(type: Types::STRING, length: 64, nullable: true)]
     #[Assert\Length(min: 3, max: 64)]
+    #[Assert\Length(min: 3, max: 64, groups: [self::API_REGISTER])]
     #[Groups([
         self::API_GET_ITEM,
         self::API_GET_COLLECTION,
         self::API_CREATE,
         self::API_UPDATE,
+        self::API_REGISTER,
         Event::API_GET_ITEM,
         Event::API_EXPORT,
     ])]
@@ -139,23 +156,45 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: Types::STRING, length: 512, nullable: true)]
     private ?string $password = null;
 
+    /**
+     * Meh, this is to clean up later, I use this for auto-registration
+     * but password change is its own DTO, not sure how to do it properly
+     * and I'd rather not have a custom DTO for user registration,
+     * we'll see after the frontend rewrite.
+     */
+    #[Groups([self::API_REGISTER])]
+    #[Assert\NotCompromisedPassword(message: 'validation.not_compromised', groups: [self::API_REGISTER])]
+    #[Assert\NotBlank(message: 'validation.not_blank', groups: [self::API_REGISTER])]
+    #[Assert\Length(min: 8, groups: [self::API_REGISTER])]
+    #[Assert\Regex(
+        pattern: '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{8,}$/',
+        message: 'validation.password_requirements',
+        groups: [self::API_REGISTER],
+    )]
+    public ?string $newPassword = null;
+
     #[ORM\Column(type: Types::STRING, length: 255, unique: true)]
     #[Assert\NotBlank]
+    #[Assert\NotBlank(['groups' => [self::API_REGISTER]])]
     #[Assert\Email]
+    #[Assert\Email(['groups' => [self::API_REGISTER]])]
     #[Groups([
         self::API_GET_ITEM,
         self::API_GET_COLLECTION,
         self::API_CREATE,
         self::API_UPDATE,
+        self::API_REGISTER,
     ])]
     private string $email;
 
     #[ORM\Column(type: Types::STRING, length: 255, options: ['default' => 'en_US'])]
     #[Assert\NotBlank]
+    #[Assert\NotBlank(['groups' => [self::API_REGISTER]])]
     #[Groups([
         self::API_GET_ITEM,
         self::API_CREATE,
         self::API_UPDATE,
+        self::API_REGISTER,
     ])]
     private string $language;
 
@@ -429,6 +468,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    public function addParticipatingEvent(Event $event): self
+    {
+        if (!$this->participatingEvents->contains($event)) {
+            $this->participatingEvents->add($event);
+            $event->addParticipant($this);
+        }
+
+        return $this;
+    }
+
     /**
      * @return Collection<int, Event>
      */
@@ -438,7 +487,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @param array<Event>|Collection<int, User> $participatingEvents
+     * @param array<Event>|Collection<int|string, User> $participatingEvents
      */
     public function setParticipatingEvents(array|Collection $participatingEvents): self
     {

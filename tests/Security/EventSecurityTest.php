@@ -8,9 +8,17 @@ use App\Repository\ApplianceRepository;
 use App\Repository\EventRepository;
 use App\Tests\AuthenticatedTestCase;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityRepository;
 
 class EventSecurityTest extends AuthenticatedTestCase
 {
+    // Ffs phpstan
+    /** @var EntityManagerInterface */
+    protected EntityManagerInterface $emi;
+
+    /** @var EntityRepository<Event> */
+    protected EntityRepository $repo;
+
     private const array EVENT_DATA = [
         'name' => 'My event',
         'author' => 'Me',
@@ -37,6 +45,20 @@ class EventSecurityTest extends AuthenticatedTestCase
         'name' => 'My edited event',
         'author' => 'The new author',
     ];
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $emi = $this->getContainer()->get(EntityManagerInterface::class);
+
+        if (!$emi instanceof EntityManagerInterface) {
+            throw new \Exception('This is useless but phpstan sucks');
+        }
+
+        $this->emi = $emi;
+        $this->repo = $emi->getRepository(Event::class);
+    }
 
     private function assertEventEquals(?Event $dbEvent): void
     {
@@ -97,9 +119,8 @@ class EventSecurityTest extends AuthenticatedTestCase
         $this->assertJsonContains(self::EVENT_CREATED_DATA);
 
         $resp = json_decode($response->getContent(), true);
-        $repo = $this->getContainer()->get(EventRepository::class);
 
-        $this->assertEventEquals($repo->find($resp['id']));
+        $this->assertEventEquals($this->repo->find($resp['id']));
     }
 
     // Create event (appliance)
@@ -120,9 +141,7 @@ class EventSecurityTest extends AuthenticatedTestCase
         $this->assertJsonContains(self::EVENT_CREATED_DATA);
 
         $resp = json_decode($response->getContent(), true);
-        $repo = $this->getContainer()->get(EventRepository::class);
-
-        $this->assertEventEquals($repo->find($resp['id']));
+        $this->assertEventEquals($this->repo->find($resp['id']));
     }
 
     // Update event (unauthenticated)
@@ -155,11 +174,12 @@ class EventSecurityTest extends AuthenticatedTestCase
     // Update event (appliance not owner)
     public function test_event_patch_not_owner_appliance(): void
     {
-        $repository = $this->getContainer()->get(EventRepository::class);
+        /** @var ApplianceRepository $repositoryAppliance */
         $repositoryAppliance = $this->getContainer()->get(ApplianceRepository::class);
 
         /** @var Event $event */
-        $event = $repository->find('0192bf5a-67d8-7d9d-8a5e-962b23aceeaa');
+        $event = $this->repo->find('0192bf5a-67d8-7d9d-8a5e-962b23aceeaa');
+
         /** @var Appliance $appliance */
         $appliance = $repositoryAppliance->find(2);
 
@@ -178,10 +198,8 @@ class EventSecurityTest extends AuthenticatedTestCase
     // Update event (appliance owner)
     public function test_event_patch_owner_appliance(): void
     {
-        $repository = $this->getContainer()->get(EventRepository::class);
-
         /** @var Event $event */
-        $event = $repository->find('0192bf5a-67d8-7d9d-8a5e-962b23aceeaa');
+        $event = $this->repo->find('0192bf5a-67d8-7d9d-8a5e-962b23aceeaa');
         /** @var Appliance $appliance */
         $appliance = $event->getOwner()->getAppliances()->get(0);
 

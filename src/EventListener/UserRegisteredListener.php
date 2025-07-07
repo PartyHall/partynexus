@@ -9,12 +9,14 @@ use Doctrine\Bundle\DoctrineBundle\Attribute\AsDoctrineListener;
 use Doctrine\ORM\Event\PrePersistEventArgs;
 use Doctrine\ORM\Events;
 use Symfony\Component\Messenger\MessageBusInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 #[AsDoctrineListener(Events::prePersist)]
 readonly class UserRegisteredListener
 {
     public function __construct(
         private MessageBusInterface $messageBus,
+        private UserPasswordHasherInterface $passwordHasher,
     ) {
     }
 
@@ -27,15 +29,20 @@ readonly class UserRegisteredListener
         /** @var User $user */
         $user = $args->getObject();
 
-        $link = (new MagicLink())
-            ->setCode(\bin2hex(\random_bytes(64)))
-            ->setUsed(false);
+        if ($user->newPassword) {
+            $user->setPassword($this->passwordHasher->hashPassword($user, $user->newPassword));
+            $user->newPassword = null;
+        } else {
+            $link = (new MagicLink())
+                ->setCode(\bin2hex(\random_bytes(64)))
+                ->setUsed(false);
 
-        $user->addMagicLink($link);
+            $user->addMagicLink($link);
 
-        $this->messageBus->dispatch(new UserRegisteredNotification(
-            $user,
-            $link->getCode(),
-        ));
+            $this->messageBus->dispatch(new UserRegisteredNotification(
+                $user,
+                $link->getCode(),
+            ));
+        }
     }
 }

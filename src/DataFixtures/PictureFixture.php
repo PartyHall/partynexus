@@ -40,14 +40,17 @@ class PictureFixture extends Fixture implements DependentFixtureInterface
             test: true,
         );
 
+        /** @var \DateTimeImmutable $dt */
+        $dt = \DateTimeImmutable::createFromFormat(
+            \DateTimeInterface::ATOM,
+            '2024-09-01T22:31:43Z',
+        );
+
         $picture = (new Picture())
             ->setEvent($event)
             ->setApplianceUuid(Uuid::v4())
             ->setUnattended($unattended)
-            ->setTakenAt(\DateTimeImmutable::createFromFormat(
-                \DateTimeInterface::ATOM,
-                '2024-09-01T22:31:43Z',
-            ))
+            ->setTakenAt($dt)
             ->setFile($uploadedFile)
         ;
 

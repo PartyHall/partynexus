@@ -129,7 +129,8 @@ class EventExporter
                 continue;
             }
 
-            $ext = $this->mimeTypes->getExtensions($picture->getFileMimetype());
+            $ext = $picture->getFileMimetype();
+            $ext = $this->mimeTypes->getExtensions($ext ?? '');
             $ext = $ext[0] ?? null;
 
             if (!$ext) {
@@ -151,6 +152,15 @@ class EventExporter
                 ),
             );
 
+            if (!$sourceFilePath) {
+                $this->logger->error('Source file path is empty, skipping picture export', [
+                    'event' => $this->event->getId()->toString(),
+                    'picture' => $picture->getId()->toString(),
+                ]);
+
+                continue;
+            }
+
             $this->fs->copy($sourceFilePath, $outFile);
 
             if ($picture->isHasAlternatePicture()) {
@@ -163,8 +173,18 @@ class EventExporter
                     ),
                 );
 
+                $altFile = $this->storage->resolvePath($picture, 'alternateFile');
+                if (!$altFile) {
+                    $this->logger->error('Alternate file path is empty, skipping alternate picture export', [
+                        'event' => $this->event->getId()->toString(),
+                        'picture' => $picture->getId()->toString(),
+                    ]);
+
+                    continue;
+                }
+
                 $this->fs->copy(
-                    $this->storage->resolvePath($picture, 'alternateFile'),
+                    $altFile,
                     $outFileAlt,
                 );
             }

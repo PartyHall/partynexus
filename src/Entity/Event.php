@@ -14,6 +14,7 @@ use App\Controller\EventConcludeController;
 use App\Repository\EventRepository;
 use App\State\Processor\EventCreationProcessor;
 use App\State\Provider\ExportDownloadProvider;
+use App\State\Provider\RegistrationEventProvider;
 use App\State\Provider\TimelapseDownloadProvider;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -27,7 +28,7 @@ use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @see App\Doctrine\FilterEventOnOwnerExtension
+ * @see \App\Doctrine\FilterEventOnOwnerExtension
  */
 #[ApiResource(
     operations: [
@@ -62,6 +63,12 @@ use Symfony\Component\Validator\Constraints as Assert;
         ),
         new Get(uriTemplate: '/events/{id}/timelapse', provider: TimelapseDownloadProvider::class),
         new Get(uriTemplate: '/events/{id}/export', provider: ExportDownloadProvider::class),
+        new Get(
+            uriTemplate: '/register/{userRegistrationCode}',
+            uriVariables: ['userRegistrationCode'],
+            normalizationContext: [AbstractNormalizer::GROUPS => [self::API_GET_REGISTER]],
+            provider: RegistrationEventProvider::class,
+        ),
     ],
 )]
 #[ApiFilter(SearchFilter::class, properties: ['name' => 'ipartial'])]
@@ -75,6 +82,8 @@ class Event
     public const string API_UPDATE = 'api:event:update';
     public const string API_EXPORT = 'api:export';
 
+    public const string API_GET_REGISTER = 'api:event:get-register';
+
     #[ORM\Id]
     #[ORM\Column(type: UuidType::NAME)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
@@ -82,6 +91,7 @@ class Event
     #[Groups([
         self::API_GET_COLLECTION,
         self::API_GET_ITEM,
+        self::API_GET_REGISTER,
         self::API_EXPORT,
     ])]
     private Uuid $id;
@@ -92,6 +102,7 @@ class Event
         self::API_GET_ITEM,
         self::API_CREATE,
         self::API_UPDATE,
+        self::API_GET_REGISTER,
         self::API_EXPORT,
     ])]
     #[Assert\NotBlank]
@@ -173,6 +184,13 @@ class Event
     #[ORM\OneToOne(targetEntity: DisplayBoardKey::class, mappedBy: 'event')]
     #[Groups([self::API_GET_ITEM])]
     private ?DisplayBoardKey $displayBoardKey = null;
+
+    #[ORM\Column(type: Types::STRING, length: 255, unique: true, nullable: true)]
+    private ?string $userRegistrationCode = null;
+
+    #[ORM\Column(type: Types::BOOLEAN, options: ['default' => false])]
+    #[Groups([self::API_GET_ITEM, self::API_CREATE, self::API_UPDATE])]
+    private bool $userRegistrationEnabled = false;
 
     public function __construct()
     {
@@ -312,6 +330,16 @@ class Event
         return $this;
     }
 
+    public function addParticipant(User $user): self
+    {
+        if (!$this->participants->contains($user)) {
+            $this->participants->add($user);
+            $user->addParticipatingEvent($this);
+        }
+
+        return $this;
+    }
+
     public function getExport(): ?Export
     {
         return $this->export;
@@ -338,6 +366,30 @@ class Event
     public function setDisplayBoardKey(?DisplayBoardKey $displayBoardKey): self
     {
         $this->displayBoardKey = $displayBoardKey;
+
+        return $this;
+    }
+
+    public function getUserRegistrationCode(): ?string
+    {
+        return $this->userRegistrationCode;
+    }
+
+    public function setUserRegistrationCode(?string $userRegistrationCode): self
+    {
+        $this->userRegistrationCode = $userRegistrationCode;
+
+        return $this;
+    }
+
+    public function isUserRegistrationEnabled(): bool
+    {
+        return $this->userRegistrationEnabled;
+    }
+
+    public function setUserRegistrationEnabled(bool $userRegistrationEnabled): self
+    {
+        $this->userRegistrationEnabled = $userRegistrationEnabled;
 
         return $this;
     }

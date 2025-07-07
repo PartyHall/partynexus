@@ -33,6 +33,12 @@ class ImportBackdropCommand extends Command
         try {
             $album = $this->backdropManager->import($file);
 
+            if (!$album) {
+                $style->error('An issue occured while importing the album. No exception was thrown, but the album is null. Please report this issue on PartyNexus with an album file.');
+
+                return Command::FAILURE;
+            }
+
             $style->success(\sprintf(
                 'Backdrop album %s by %s imported successfully (id %s)',
                 $album->getTitle(),

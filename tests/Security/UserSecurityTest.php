@@ -336,6 +336,8 @@ class UserSecurityTest extends AuthenticatedTestCase
     {
         /** @var User|null $user */
         $user = $this->emi->getRepository(User::class)->find(2);
+
+        $this->assertNotNull($user);
         $this->assertNull($user->getBannedAt());
 
         $token = $this->authenticate('admin', 'password');
@@ -356,6 +358,7 @@ class UserSecurityTest extends AuthenticatedTestCase
 
         /** @var User|null $user */
         $user = $this->emi->getRepository(User::class)->find(2);
+        $this->assertNotNull($user);
         $this->assertNotNull($user->getBannedAt());
     }
 
@@ -419,6 +422,7 @@ class UserSecurityTest extends AuthenticatedTestCase
 
         /** @var User|null $user */
         $user = $this->emi->getRepository(User::class)->find(2);
+        $this->assertNotNull($user);
         $this->assertNull($user->getBannedAt());
     }
 }

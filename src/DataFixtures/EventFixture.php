@@ -3,6 +3,7 @@
 namespace App\DataFixtures;
 
 use App\Entity\Event;
+use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\ORM\Id\AssignedGenerator;
@@ -38,7 +39,7 @@ class EventFixture extends Fixture implements DependentFixtureInterface
             ->setAuthor('Me')
             ->setLocation('At home')
             ->setDatetime(new \DateTimeImmutable('2024-10-25T15:34:54Z'))
-            ->setOwner($this->getReference('user__admin'));
+            ->setOwner($this->getReference('user__admin', User::class));
 
         ReflectionUtils::setId($event, Uuid::fromString('0192bf5a-67d8-7d9d-8a5e-962b23aceeaa'));
 
@@ -48,8 +49,8 @@ class EventFixture extends Fixture implements DependentFixtureInterface
         $manager->flush();
 
         $event->setParticipants([
-            $this->getReference('user__eventmaker'),
-            $this->getReference('user__user'),
+            $this->getReference('user__eventmaker', User::class),
+            $this->getReference('user__user', User::class),
         ]);
 
         $manager->persist($event);
@@ -62,12 +63,15 @@ class EventFixture extends Fixture implements DependentFixtureInterface
         $manager->flush();
 
         for ($i = 0; $i < 100; ++$i) {
+            /** @var string $name */
+            $name = $faker->words(3, true); // phpstan bs
+
             $event = (new Event())
-                ->setName($faker->words(3, true))
+                ->setName($name)
                 ->setAuthor($faker->name())
                 ->setLocation($faker->address())
                 ->setDatetime(\DateTimeImmutable::createFromMutable($faker->dateTime()))
-                ->setOwner($this->getReference('user__user'));
+                ->setOwner($this->getReference('user__user', User::class));
 
             $manager->persist($event);
             $this->addReference('event__user__'.($i + 2), $event);
