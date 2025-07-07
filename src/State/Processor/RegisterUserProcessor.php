@@ -27,8 +27,7 @@ readonly class RegisterUserProcessor implements ProcessorInterface
         private EventRepository $repository,
         private EntityManagerInterface $entityManager,
         private AuthenticationSuccessHandler $authenticationSuccessHandler,
-    )
-    {
+    ) {
     }
 
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = [])
@@ -61,7 +60,6 @@ readonly class RegisterUserProcessor implements ProcessorInterface
         $event->addParticipant($user);
         $this->entityManager->persist($user);
         $this->entityManager->flush();
-
 
         return $this->authenticationSuccessHandler->handleAuthenticationSuccess($user);
     }

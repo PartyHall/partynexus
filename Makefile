@@ -45,13 +45,13 @@ phpstan:
 	@docker compose exec app php -d memory_limit=8G vendor/bin/phpstan analyse
 
 phpcsfixer:
-	@docker compose exec app vendor/bin/php-cs-fixer fix --dry-run -vv --diff
+	@docker compose exec app php -d memory_limit=-1 vendor/bin/php-cs-fixer fix --dry-run -vv --diff
 
 phpcsfixer-fix:
-	@docker compose exec app vendor/bin/php-cs-fixer fix -vv --diff
+	@docker compose exec app php -d memory_limit=-1 vendor/bin/php-cs-fixer fix -vv --diff
 
 lint-fix:
-	@docker compose exec app vendor/bin/php-cs-fixer fix -vv --diff
+	@docker compose exec app php -d memory_limit=-1 vendor/bin/php-cs-fixer fix -vv --diff
 
 fix-perms:
 	sudo chown -R "$(USER)" .

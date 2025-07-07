@@ -10,8 +10,7 @@ readonly class RegistrationEventProvider implements ProviderInterface
 {
     public function __construct(
         private EventRepository $eventRepository,
-    )
-    {
+    ) {
     }
 
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): object|array|null

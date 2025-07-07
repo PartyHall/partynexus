@@ -160,7 +160,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * Meh, this is to clean up later, I use this for auto-registration
      * but password change is its own DTO, not sure how to do it properly
      * and I'd rather not have a custom DTO for user registration,
-     * we'll see after the frontend rewrite
+     * we'll see after the frontend rewrite.
      */
     #[Groups([self::API_REGISTER])]
     #[Assert\NotCompromisedPassword(message: 'validation.not_compromised', groups: [self::API_REGISTER])]

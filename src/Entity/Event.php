@@ -68,7 +68,7 @@ use Symfony\Component\Validator\Constraints as Assert;
             uriVariables: ['userRegistrationCode'],
             normalizationContext: [AbstractNormalizer::GROUPS => [self::API_GET_REGISTER]],
             provider: RegistrationEventProvider::class,
-        )
+        ),
     ],
 )]
 #[ApiFilter(SearchFilter::class, properties: ['name' => 'ipartial'])]

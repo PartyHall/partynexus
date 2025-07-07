@@ -10,7 +10,6 @@ use Doctrine\ORM\Event\PrePersistEventArgs;
 use Doctrine\ORM\Events;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Symfony\Component\VarDumper\Dumper\ContextProvider\RequestContextProvider;
 
 #[AsDoctrineListener(Events::prePersist)]
 readonly class UserRegisteredListener
