@@ -10,7 +10,10 @@ use App\Repository\EventRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Lexik\Bundle\JWTAuthenticationBundle\Security\Http\Authentication\AuthenticationSuccessHandler;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\RateLimiter\RateLimiterFactory;
 
 readonly class RegisterUserProcessor implements ProcessorInterface
 {
@@ -18,6 +21,9 @@ readonly class RegisterUserProcessor implements ProcessorInterface
         /** @var ProcessorInterface<User, User> $processor */
         #[Autowire(service: PersistProcessor::class)]
         private ProcessorInterface $processor,
+        private RequestStack $requestStack,
+        #[Autowire(service: 'limiter.register')]
+        private RateLimiterFactory $registerApiLimiter,
         private EventRepository $repository,
         private EntityManagerInterface $entityManager,
         private AuthenticationSuccessHandler $authenticationSuccessHandler,
@@ -34,6 +40,16 @@ readonly class RegisterUserProcessor implements ProcessorInterface
 
         if (!$event || !$event->isUserRegistrationEnabled()) {
             throw new NotFoundHttpException();
+        }
+
+        // We went through validators + standard checks, so now
+        // just before persisting, we can add the rate limiter
+        /**
+         * @TODO: Test that it properly follows X-Forwarded-For
+         */
+        $rl = $this->registerApiLimiter->create($this->requestStack->getMainRequest()->getClientIp());
+        if (false === $rl->consume()->isAccepted()) {
+            return new Response(status: 429);
         }
 
         $user = $this->processor->process($data, $operation, $uriVariables, $context);
