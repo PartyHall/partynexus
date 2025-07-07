@@ -487,7 +487,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @param array<Event>|Collection<int, User> $participatingEvents
+     * @param array<Event>|Collection<int|string, User> $participatingEvents
      */
     public function setParticipatingEvents(array|Collection $participatingEvents): self
     {

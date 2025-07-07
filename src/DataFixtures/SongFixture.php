@@ -106,7 +106,10 @@ class SongFixture extends Fixture
         for ($i = 0; $i < 150; ++$i) {
             $song = new Song();
 
-            $song->setTitle($faker->words(5, true));
+            /** @var string $title */
+            $title = $faker->words(5, true); // phpstan bs
+
+            $song->setTitle($title);
             $song->setArtist($faker->name());
             $song->setFormat($faker->randomElement(SongFormat::cases()));
             $song->setQuality($faker->randomElement(SongQuality::cases()));

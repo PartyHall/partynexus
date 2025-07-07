@@ -2,6 +2,7 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\Event;
 use App\Entity\Export;
 use App\Enum\ExportProgress;
 use App\Enum\ExportStatus;
@@ -20,7 +21,7 @@ class ExportFixture extends Fixture implements DependentFixtureInterface
 
     public function load(ObjectManager $manager): void
     {
-        $event = $this->getReference('event__1');
+        $event = $this->getReference('event__1', Event::class);
 
         $export = (new Export())
             ->setEvent($event)

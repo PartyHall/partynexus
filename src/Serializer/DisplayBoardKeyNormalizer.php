@@ -33,6 +33,7 @@ class DisplayBoardKeyNormalizer implements NormalizerInterface
     {
         $context[self::ALREADY_CALLED] = true;
 
+        /** @var array<mixed> $data */
         $data = $this->normalizer->normalize($object, $format, $context);
 
         $data['url'] = \implode('/', [

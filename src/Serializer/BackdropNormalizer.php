@@ -33,7 +33,11 @@ class BackdropNormalizer implements NormalizerInterface
     {
         $context[self::ALREADY_CALLED] = true;
 
-        $object->url = $this->requestStack->getMainRequest()->getUriForPath($this->storage->resolveUri($object, 'file'));
+        $file = $this->storage->resolveUri($object, 'file');
+
+        if ($file) {
+            $object->url = $this->requestStack->getMainRequest()?->getUriForPath($file);
+        }
 
         return $this->normalizer->normalize($object, $format, $context);
     }

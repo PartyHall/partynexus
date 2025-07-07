@@ -28,6 +28,7 @@ class MagicPasswordNormalizer implements NormalizerInterface
      */
     public function normalize(mixed $object, ?string $format = null, array $context = []): array
     {
+        /** @var array<mixed> $data */
         $data = $this->normalizer->normalize($object, $format, $context);
 
         $data['url'] = \implode(

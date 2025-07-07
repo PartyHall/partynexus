@@ -4,6 +4,7 @@ namespace App\DataFixtures;
 
 use ApiPlatform\Doctrine\Common\Filter\DateFilterInterface;
 use App\Entity\Backdrop;
+use App\Entity\BackdropAlbum;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -29,7 +30,7 @@ class BackdropFixture extends Fixture implements DateFilterInterface
 
         $backdrop = (new Backdrop())
             ->setTitle($title)
-            ->setAlbum($this->getReference($album))
+            ->setAlbum($this->getReference($album, BackdropAlbum::class))
             ->setFile($uploadedFile)
         ;
 

@@ -31,7 +31,8 @@ readonly class UserGroupContextBuilder implements SerializerContextBuilderInterf
         $user = $this->security->getUser();
 
         if (
-            !\array_key_exists('resource_class', $extractedAttributes)
+            !$extractedAttributes
+            || !\array_key_exists('resource_class', $extractedAttributes)
             || !\array_key_exists('operation', $extractedAttributes)
             || User::class !== $extractedAttributes['resource_class']
             || !($extractedAttributes['operation'] instanceof Get)
@@ -39,6 +40,14 @@ readonly class UserGroupContextBuilder implements SerializerContextBuilderInterf
             || ((string) $user->getId()) !== $request->attributes->get('id')
         ) {
             return $ctx;
+        }
+
+        if (!\array_key_exists(AbstractNormalizer::GROUPS, $ctx)) {
+            $ctx[AbstractNormalizer::GROUPS] = [];
+        }
+
+        if (!\is_array($ctx[AbstractNormalizer::GROUPS])) {
+            throw new \LogicException(sprintf('The "%s" context key must be an array, "%s" given.', AbstractNormalizer::GROUPS, get_debug_type($ctx[AbstractNormalizer::GROUPS])));
         }
 
         $ctx[AbstractNormalizer::GROUPS] = [

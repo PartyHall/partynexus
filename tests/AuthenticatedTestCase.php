@@ -25,6 +25,10 @@ class AuthenticatedTestCase extends ApiTestCase
         parent::setUp();
 
         // region Temporary until we use factories
+        if (!self::$kernel) {
+            throw new \Exception('Kernel not initialized');
+        }
+
         $app = new Application(self::$kernel);
         $app->setAutoExit(false);
         $app->run(new ArrayInput([
@@ -34,7 +38,12 @@ class AuthenticatedTestCase extends ApiTestCase
         ]), new NullOutput());
         // endregion
 
-        $this->emi = $this->getContainer()->get(EntityManagerInterface::class);
+        $emi = $this->getContainer()->get(EntityManagerInterface::class);
+        if (!$emi instanceof EntityManagerInterface) {
+            throw new \Exception('EntityManagerInterface not found in container');
+        }
+
+        $this->emi = $emi;
     }
 
     protected function authenticate(string $username, string $password): string

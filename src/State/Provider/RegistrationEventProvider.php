@@ -4,8 +4,12 @@ namespace App\State\Provider;
 
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
+use App\Entity\Event;
 use App\Repository\EventRepository;
 
+/**
+ * @implements ProviderInterface<Event>
+ */
 readonly class RegistrationEventProvider implements ProviderInterface
 {
     public function __construct(

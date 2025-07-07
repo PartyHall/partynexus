@@ -35,14 +35,17 @@ class EventParticipantsUpdatedListener
                 ->getQuery()
                 ->getResult();
 
-            $currentParticipantIds = array_map(fn ($user) => $user->getId(), $currentParticipants);
-            $newParticipantIds = array_map(fn ($user) => $user->getId(), $update->toArray());
+            /** @var User[] $updateElts */
+            $updateElts = $update->toArray();
 
-            $addedParticipantIds = array_diff($newParticipantIds, $currentParticipantIds);
-            $removedParticipantIds = array_diff($currentParticipantIds, $newParticipantIds);
+            $currentParticipantIds = \array_map(fn (User $user) => $user->getId(), $currentParticipants);
+            $newParticipantIds = \array_map(fn (User $user) => $user->getId(), $updateElts);
 
-            $addedParticipants = array_filter($update->toArray(), fn ($user) => in_array($user->getId(), $addedParticipantIds));
-            $removedParticipants = array_filter($currentParticipants, fn ($user) => in_array($user->getId(), $removedParticipantIds));
+            $addedParticipantIds = \array_diff($newParticipantIds, $currentParticipantIds);
+            $removedParticipantIds = \array_diff($currentParticipantIds, $newParticipantIds);
+
+            $addedParticipants = \array_filter($updateElts, fn (User $user) => \in_array($user->getId(), $addedParticipantIds));
+            $removedParticipants = \array_filter($currentParticipants, fn (User $user) => \in_array($user->getId(), $removedParticipantIds));
 
             // @TODO: Send mail when added / removed
         }

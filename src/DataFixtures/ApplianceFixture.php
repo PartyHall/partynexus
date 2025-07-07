@@ -3,6 +3,7 @@
 namespace App\DataFixtures;
 
 use App\Entity\Appliance;
+use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
@@ -16,7 +17,7 @@ class ApplianceFixture extends Fixture implements DependentFixtureInterface
             ->setName('My Admin Appliance')
             ->setHardwareId(Uuid::fromString('b094786e-5158-4ceb-861b-28cb45b2a2c3'))
             ->setApiToken('my-api-token')
-            ->setOwner($this->getReference('user__admin'))
+            ->setOwner($this->getReference('user__admin', User::class))
         ;
 
         ReflectionUtils::setId($appliance, 1);
@@ -28,7 +29,7 @@ class ApplianceFixture extends Fixture implements DependentFixtureInterface
             ->setName('My User Appliance')
             ->setHardwareId(Uuid::fromString('c105897f-6169-5dfc-962c-39dc56c3b3d4'))
             ->setApiToken('my-api-token')
-            ->setOwner($this->getReference('user__user'))
+            ->setOwner($this->getReference('user__user', User::class))
         ;
 
         ReflectionUtils::setId($appliance, 2);

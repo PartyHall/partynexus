@@ -34,6 +34,7 @@ class EventNormalizer implements NormalizerInterface
     {
         $context[self::ALREADY_CALLED] = true;
 
+        /** @var array<mixed> $data */
         $data = $this->normalizer->normalize($object, $format, $context);
 
         if ($object->getUserRegistrationCode()) {

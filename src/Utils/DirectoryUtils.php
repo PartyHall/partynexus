@@ -23,9 +23,9 @@ class DirectoryUtils
      * @param int         $maxAttempts maximum attempts before giving up (to prevent
      *                                 endless loops)
      *
-     * @return string|bool full path to newly-created dir, or false on failure
+     * @return string full path to newly-created dir, or false on failure
      */
-    public static function tempdir(?string $dir = null, string $prefix = 'tmp_', int $mode = 0700, int $maxAttempts = 1000): bool|string
+    public static function tempdir(?string $dir = null, string $prefix = 'tmp_', int $mode = 0700, int $maxAttempts = 1000): string
     {
         /* Use the system temp dir by default. */
         if (is_null($dir)) {
@@ -39,12 +39,12 @@ class DirectoryUtils
          * be stuck in an endless loop.
          */
         if (!is_dir($dir) || !is_writable($dir)) {
-            return false;
+            throw new \Exception('The specified directory does not exist or is not writable: '.$dir);
         }
 
         /* Make sure characters in prefix are safe. */
         if (false !== strpbrk($prefix, '\\/:*?"<>|')) {
-            return false;
+            throw new \InvalidArgumentException('The prefix contains invalid characters. Allowed characters are alphanumeric and underscore.');
         }
 
         /* Attempt to create a random directory until it works. Abort if we reach

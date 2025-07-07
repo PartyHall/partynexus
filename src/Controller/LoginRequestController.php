@@ -31,7 +31,7 @@ class LoginRequestController extends AbstractController
         }
 
         $email = $request->getPayload()->get('email');
-        if (!$email) {
+        if (!$email || !\is_string($email)) {
             return new Response(status: 400);
         }
 
@@ -80,6 +80,10 @@ class LoginRequestController extends AbstractController
 
         $email = $payload->get('email');
         $code = $payload->get('code');
+
+        if (!\is_string($email) || !\is_string($code)) {
+            return new Response(status: 400);
+        }
 
         $magicLink = $magicLinkRepo->findByEmailAndCode($email, $code);
         if (!$magicLink) {

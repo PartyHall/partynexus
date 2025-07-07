@@ -14,7 +14,8 @@ readonly class EventCreatedListener
     public function prePersist(PrePersistEventArgs $args): void
     {
         /** @var Event $evt */
-        if (!($evt = $args->getObject()) instanceof Event) {
+        $evt = $args->getObject();
+        if (!$evt instanceof Event) {
             return;
         }
 
