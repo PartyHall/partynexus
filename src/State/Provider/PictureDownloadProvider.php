@@ -34,7 +34,7 @@ readonly class PictureDownloadProvider implements ProviderInterface
     {
         $id = $uriVariables['id'] ?? null;
 
-        $alternatePicture = $this->requestStack->getMainRequest()?->query->get('alternate') ?? false;
+        $alternatePicture = $this->requestStack->getMainRequest()?->query->get('alternate') ?? 'false';
         if (!\is_string($alternatePicture)) {
             throw new BadRequestHttpException('The "alternate" query parameter must be a string.');
         }
