@@ -51,4 +51,11 @@ class SongSearchFilter extends AbstractFilter
             ],
         ];
     }
+
+    private function toTsQuery(string $search): string
+    {
+        $words = preg_split('/\s+/', trim($search));
+        $words = array_filter($words, fn($w) => $w !== '');
+        return implode(' & ', array_map(fn($w) => $w . ':*', $words));
+    }
 }

@@ -12,7 +12,7 @@ import { PnEvent } from '../sdk/responses/event';
 import { SDK } from '../sdk';
 import { User } from '../sdk/responses/user';
 
-const BASE_URL = import.meta.env.VITE_API_URL ?? '';
+const BASE_URL = ''; // http://192.168.14.10:5175';
 
 const TOKEN = localStorage.getItem('token');
 const REFRESH_TOKEN = localStorage.getItem('refresh_token');
