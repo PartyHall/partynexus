@@ -37,3 +37,4 @@ contrib/test
 
 0_DATA
 Makefile
+.dump_data

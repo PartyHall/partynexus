@@ -1,15 +1,13 @@
-import { Button, Flex, Image, Modal, Typography } from 'antd';
+import 'yet-another-react-lightbox/styles.css';
+import "yet-another-react-lightbox/plugins/counter.css";
 
-import {
-    IconDownload,
-    IconRotate,
-    IconRotateClockwise,
-    IconVideo,
-    IconZoomIn,
-    IconZoomOut,
-} from '@tabler/icons-react';
+import { Button, Flex, Modal, Typography } from 'antd';
+import { Counter, Download, Fullscreen, Zoom } from 'yet-another-react-lightbox/plugins';
+import { IconVideo } from '@tabler/icons-react';
+
+import Lightbox from 'yet-another-react-lightbox';
+
 import Loader from '../Loader';
-import PictureCard from '../PictureCard';
 import { PnEvent } from '../../sdk/responses/event';
 import PnPicture from '../../sdk/responses/picture';
 import { useAsyncEffect } from 'ahooks';
@@ -56,24 +54,6 @@ export default function EventPictureBar({ event }: { event: PnEvent }) {
         setLoadingPictures(false);
     }, []);
 
-    // Download method stolen from antd docs
-    const onDownload = (url: string) => {
-        const filename = Date.now() + '.jpg'; // @TODO: Send the format from server
-
-        fetch(url)
-            .then((response) => response.blob())
-            .then((blob) => {
-                const blobUrl = URL.createObjectURL(new Blob([blob]));
-                const link = document.createElement('a');
-                link.href = blobUrl;
-                link.download = filename;
-                document.body.appendChild(link);
-                link.click();
-                URL.revokeObjectURL(blobUrl);
-                link.remove();
-            });
-    };
-
     // @TODO: Tooltip on iconbar in the picture displayer
 
     return (
@@ -86,87 +66,33 @@ export default function EventPictureBar({ event }: { event: PnEvent }) {
                     gap={8}
                     align="center"
                     justify="start"
-                    style={{ overflowX: 'auto' }}
+                    style={{ overflowX: 'auto', maxHeight: '100px' }}
                 >
-                    {' '}
-                    {/* @TODO: scroll not working */}
-                    {pictures.length > 0 && (
-                        <>
-                            <Image.PreviewGroup
-                                items={pictures.map(
-                                    (x) => `/api/pictures/${x.id}/download`
-                                )}
-                                preview={{
-                                    visible: carrousel,
-                                    onVisibleChange: (val) => setCarrousel(val),
-                                    toolbarRender: (
-                                        _,
-                                        {
-                                            transform: { scale },
-                                            actions: {
-                                                onRotateLeft,
-                                                onRotateRight,
-                                                onZoomOut,
-                                                onZoomIn,
-                                            },
-                                            image: { url },
-                                        }
-                                    ) => (
-                                        <Flex
-                                            gap={16}
-                                            className="ant-image-preview-operations"
-                                            style={{ padding: '.5em' }}
-                                        >
-                                            <Button
-                                                shape="circle"
-                                                icon={<IconRotate size={18} />}
-                                                onClick={onRotateLeft}
-                                            />
-                                            <Button
-                                                shape="circle"
-                                                icon={
-                                                    <IconRotateClockwise
-                                                        size={18}
-                                                    />
-                                                }
-                                                onClick={onRotateRight}
-                                            />
-                                            <Button
-                                                shape="circle"
-                                                icon={<IconZoomIn size={18} />}
-                                                disabled={scale === 1}
-                                                onClick={onZoomOut}
-                                            />
-                                            <Button
-                                                shape="circle"
-                                                icon={<IconZoomOut size={18} />}
-                                                disabled={scale === 50}
-                                                onClick={onZoomIn}
-                                            />
-                                            <Button
-                                                shape="circle"
-                                                icon={
-                                                    <IconDownload size={18} />
-                                                }
-                                                onClick={() => onDownload(url)}
-                                            />
-                                        </Flex>
-                                    ),
-                                }}
-                            >
-                                {firstThreePictures.map((x) => (
-                                    <PictureCard key={x.id} picture={x} />
-                                ))}
-                            </Image.PreviewGroup>
-                            {pictures.length !== firstThreePictures.length && (
-                                <Typography.Link
-                                    onClick={() => setCarrousel(true)}
-                                >
-                                    {t('event.pictures.more')}
-                                </Typography.Link>
-                            )}
-                        </>
-                    )}
+                    <Lightbox
+                        open={carrousel}
+                        close={() => setCarrousel(false)}
+                        plugins={[Counter, Fullscreen, Download, Zoom]}
+                        zoom={{
+                            maxZoomPixelRatio: 20,
+                        }}
+                        slides={pictures.map((x) => ({
+                            src: `/api/pictures/${x.id}/download`,
+                            alt: x.id,
+                        }))}
+                    />
+                    {
+                        firstThreePictures.map(x => <img
+                            key={x.id}
+                            src={`/api/pictures/${x.id}/download`}
+                            onClick={() => setCarrousel(true)}
+                            style={{ display: 'block', height: '100%' }}
+                        />)
+                    }
+
+                    {
+                        pictures.length !== 0 && <Button onClick={() => setCarrousel(true)}>Voir plus</Button>
+                    }
+
                     {pictures.length === 0 && (
                         <Typography.Title level={3}>
                             {t('event.pictures.no_pictures')}

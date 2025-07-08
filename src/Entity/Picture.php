@@ -38,7 +38,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
                     fromClass: Event::class, // On veut pointer VERS LA CLASSE AUQUEL eventId FAIT REFERENCE (fromClass event d'après symfonycasts)
                 ),
             ],
-            paginationEnabled: false,
+            paginationEnabled: false, // @TODO: It should be enabled down the road when the front is remade properly
             order: ['takenAt' => 'ASC'],
             provider: PictureCollectionProvider::class,
         ),
