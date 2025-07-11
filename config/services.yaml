@@ -1,7 +1,6 @@
 parameters:
     PARTYNEXUS_VERSION: 'indev'
     PARTYNEXUS_COMMIT: 'INDEV'
-    env(MAGIC_LINK_EXPIRATION): '15 minutes'
     env(PICTURES_LOCATION): '%kernel.project_dir%/var/uploaded_pictures'
     env(TIMELAPSES_LOCATION): '%kernel.project_dir%/var/timelapses'
     env(EXPORTS_LOCATION): '%kernel.project_dir%/var/exports'
@@ -16,6 +15,7 @@ parameters:
     env(MERCURE_BASE_URL): 'http://app'
     env(JWT_PASSPHRASE): 'partynexus_default_passphrase'
     env(SENTRY_ENV): 'prod'
+    thumbnails_location: '%env(PICTURES_LOCATION)%/thumbnails'
     
 services:
     _defaults:

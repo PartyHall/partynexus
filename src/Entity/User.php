@@ -29,7 +29,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @TODO: GET ITEM should be PII proof
  * It should NOT tell the user email unless the SELF is set even though those endpoints are set for self & admin only
- * as they can be used in other stuff (e.g. Magic Password, Event listing, ...)
+ * as they can be used in other stuff (e.g. Forgotten Password, Event listing, ...)
  *
  * I'm not doing this right now as I don't know about the side effects
  */
@@ -72,6 +72,7 @@ use Symfony\Component\Validator\Constraints as Assert;
         new Post(
             uriTemplate: '/users/{id}/set-password',
             security: 'user === object',
+            validationContext: [AbstractNormalizer::GROUPS => [PasswordSet::API_SET_PASSWORD]],
             input: PasswordSet::class,
             processor: UserSetPasswordProcessor::class,
         ),
@@ -214,9 +215,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     ])]
     private ?\DateTimeImmutable $bannedAt = null;
 
-    /** @var Collection<int, MagicPassword> $magicPasswords */
-    #[ORM\OneToMany(targetEntity: MagicPassword::class, mappedBy: 'user', cascade: ['PERSIST'])]
-    private Collection $magicPasswords;
+    /** @var Collection<int, ForgottenPassword> $forgottenPasswords */
+    #[ORM\OneToMany(targetEntity: ForgottenPassword::class, mappedBy: 'user', cascade: ['PERSIST'])]
+    private Collection $forgottenPasswords;
 
     /** @var Collection<int, Appliance> $appliances */
     #[ORM\OneToMany(targetEntity: Appliance::class, mappedBy: 'owner')]
@@ -243,7 +244,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function __construct()
     {
-        $this->magicPasswords = new ArrayCollection();
+        $this->forgottenPasswords = new ArrayCollection();
         $this->appliances = new ArrayCollection();
         $this->userEvents = new ArrayCollection();
         $this->participatingEvents = new ArrayCollection();
@@ -317,27 +318,27 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @return Collection<int, MagicPassword>
+     * @return Collection<int, ForgottenPassword>
      */
-    public function getMagicPasswords(): Collection
+    public function getForgottenPasswords(): Collection
     {
-        return $this->magicPasswords;
+        return $this->forgottenPasswords;
     }
 
-    public function addMagicPassword(MagicPassword $link): self
+    public function addForgottenPassword(ForgottenPassword $link): self
     {
-        if (!$this->magicPasswords->contains($link)) {
+        if (!$this->forgottenPasswords->contains($link)) {
             $link->setUser($this);
-            $this->magicPasswords->add($link);
+            $this->forgottenPasswords->add($link);
         }
 
         return $this;
     }
 
-    public function removeMagicPassword(MagicPassword $link): self
+    public function removeForgottenPassword(ForgottenPassword $link): self
     {
-        if ($this->magicPasswords->contains($link)) {
-            $this->magicPasswords->removeElement($link);
+        if ($this->forgottenPasswords->contains($link)) {
+            $this->forgottenPasswords->removeElement($link);
         }
 
         return $this;

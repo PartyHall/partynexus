@@ -6,10 +6,10 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Post;
 use App\Model\PasswordSet;
-use App\Repository\MagicPasswordRepository;
-use App\State\Processor\MagicPasswordProcessor;
-use App\State\Processor\MagicPasswordSetProcessor;
-use App\State\Provider\MagicPasswordProvider;
+use App\Repository\ForgottenPasswordRepository;
+use App\State\Processor\ForgottenPassword\ForgottenPasswordProcessor;
+use App\State\Processor\ForgottenPassword\ForgottenPasswordSetProcessor;
+use App\State\Provider\ForgottenPasswordProvider;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Attribute\Groups;
@@ -21,27 +21,28 @@ use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
             normalizationContext: [AbstractNormalizer::GROUPS => [self::API_GET_ITEM]],
             denormalizationContext: [AbstractNormalizer::GROUPS => [self::API_CREATE]],
             security: 'is_granted("ROLE_ADMIN")',
-            processor: MagicPasswordProcessor::class,
+            processor: ForgottenPasswordProcessor::class,
         ),
         new Get(
-            uriTemplate: '/magic_passwords/{code}/is-valid',
+            uriTemplate: '/forgotten_passwords/{code}/is-valid',
             uriVariables: ['code'],
             normalizationContext: [AbstractNormalizer::GROUPS => [self::API_GET_ITEM, User::API_GET_ITEM]],
-            provider: MagicPasswordProvider::class
+            provider: ForgottenPasswordProvider::class
         ),
         new Post(
-            uriTemplate: '/magic_passwords/{code}/set-password',
+            uriTemplate: '/forgotten_passwords/{code}/set-password',
             uriVariables: ['code'],
+            validationContext: [AbstractNormalizer::GROUPS => [PasswordSet::API_FORGOTTEN_PASSWORD]],
             input: PasswordSet::class,
-            processor: MagicPasswordSetProcessor::class,
+            processor: ForgottenPasswordSetProcessor::class,
         ),
     ],
 )]
-#[ORM\Entity(repositoryClass: MagicPasswordRepository::class)]
-class MagicPassword
+#[ORM\Entity(repositoryClass: ForgottenPasswordRepository::class)]
+class ForgottenPassword
 {
-    public const string API_GET_ITEM = 'api:magic_password:get';
-    public const string API_CREATE = 'api:magic_password:post';
+    public const string API_GET_ITEM = 'api:forgotten_password:get';
+    public const string API_CREATE = 'api:forgotten_password:post';
 
     #[ORM\Id]
     #[ORM\Column(type: Types::INTEGER)]
@@ -51,7 +52,7 @@ class MagicPassword
     ])]
     private int $id;
 
-    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'magicPasswords')]
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'forgottenPasswords')]
     #[Groups([
         self::API_GET_ITEM,
         self::API_CREATE,

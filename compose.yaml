@@ -82,6 +82,16 @@ services:
   redis:
     image: 'redis:7.4.1-bookworm'
 
+  meilisearch:
+    image: 'getmeili/meilisearch:latest'
+    restart: 'unless-stopped'
+    environment:
+      MEILI_MASTER_KEY: 'masterkey123'
+    ports:
+      - '127.0.0.1:7700:7700'
+    volumes:
+      - './var/meilidata:/meili_data'
+
 volumes:
   caddy_data:
   caddy_config:

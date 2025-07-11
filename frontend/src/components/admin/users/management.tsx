@@ -7,7 +7,7 @@ import dayjs from "dayjs";
 import { enqueueSnackbar } from "notistack";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { generateMagicPassword as apiGenerateMagicPassword, banUser, unbanUser } from '@/api/users/management';
+import { generateForgottenPassword as apiGenerateForgottenPassword, banUser, unbanUser } from '@/api/users/management';
 
 type Props = {
     user: User;
@@ -20,26 +20,26 @@ export default function jUserManagement({ user, onUpdated }: Props) {
 
     const [isBanning, setIsBanning] = useState<boolean>(false);
 
-    const [generatingMagicPassword, setGeneratingMagicPassword] = useState<boolean>(false);
-    const [generatedMagicPassword, setGeneratedMagicPassword] = useState<string | null>(null);
+    const [generatingForgottenPassword, setGeneratingForgottenPassword] = useState<boolean>(false);
+    const [generatedForgottenPassword, setGeneratedForgottenPassword] = useState<string | null>(null);
 
-    const generateMagicPassword = async () => {
+    const generateForgottenPassword = async () => {
         if (!user.id) {
             return;
         }
-        setGeneratingMagicPassword(true);
+        setGeneratingForgottenPassword(true);
 
         try {
-            const resp = await apiGenerateMagicPassword(user.id);
+            const resp = await apiGenerateForgottenPassword(user.id);
 
-            setGeneratedMagicPassword(resp.url);
+            setGeneratedForgottenPassword(resp.url);
         } catch (err) {
-            console.error('Error generating magic password:', err);
+            console.error('Error generating forgotten password:', err);
             enqueueSnackbar(t('generic.error.generic'), { variant: 'error' });
-            setGeneratedMagicPassword(null);
+            setGeneratedForgottenPassword(null);
         }
 
-        setGeneratingMagicPassword(false);
+        setGeneratingForgottenPassword(false);
     };
 
     const toggleBan = async () => {
@@ -68,16 +68,16 @@ export default function jUserManagement({ user, onUpdated }: Props) {
 
     return <div className="flex flex-col gap-4">
         <div className="flex flex-col gap-2">
-            <Title level={3} noMargin>{t('admin.users.management.magic_password.title')}</Title>
-            <p className="text-primary-100">{t('admin.users.management.magic_password.desc')}</p>
+            <Title level={3} noMargin>{t('forgotten_password.title')}</Title>
+            <p className="text-primary-100">{t('admin.users.management.forgotten_password.desc')}</p>
 
             {
-                generatedMagicPassword
-                && <CopyInput value={generatedMagicPassword} label={t('admin.users.management.magic_password.title')} />
+                generatedForgottenPassword
+                && <CopyInput value={generatedForgottenPassword} label={t('forgotten_password.title')} />
             }
 
             <div className="flex flex-row justify-end">
-                <Button disabled={generatingMagicPassword} onClick={generateMagicPassword}>{t('admin.users.management.magic_password.generate')}</Button>
+                <Button disabled={generatingForgottenPassword} onClick={generateForgottenPassword}>{t('admin.users.management.forgotten_password.generate')}</Button>
             </div>
         </div>
 

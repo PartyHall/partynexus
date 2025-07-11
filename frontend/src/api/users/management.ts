@@ -1,8 +1,8 @@
-import type { MagicPassword, User } from "@/types/user";
+import type { ForgottenPassword, User } from "@/types/user";
 import { customFetch } from "../customFetch";
 
-export async function generateMagicPassword(id: number | string): Promise<MagicPassword> {
-    const resp = await customFetch(`/api/magic_passwords`, {
+export async function generateForgottenPassword(id: number | string): Promise<ForgottenPassword> {
+    const resp = await customFetch(`/api/forgotten_passwords`, {
         method: 'POST',
         body: JSON.stringify({ user: `/api/users/${id}` }),
     });

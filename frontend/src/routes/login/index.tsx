@@ -6,7 +6,7 @@ import { HttpError } from '@/api/http_error';
 import { useEffect, useState } from 'react';
 import { login } from '@/api/auth';
 import { useAuthStore } from '@/stores/auth';
-import Input from '@/components/generic/input';
+import Input, { PasswordInput } from '@/components/generic/input';
 import { IconAsterisk, IconUser } from '@tabler/icons-react';
 import Button from '@/components/generic/button';
 import useTranslatedTitle from '@/hooks/useTranslatedTitle';
@@ -80,11 +80,9 @@ function RouteComponent() {
           {...register('username')}
         />
 
-        <Input
+        <PasswordInput
           label={t('generic.password')}
           id='password'
-          icon={<IconAsterisk />}
-          type='password'
           autoComplete="password"
           disabled={isSubmitting}
           {...register('password')}

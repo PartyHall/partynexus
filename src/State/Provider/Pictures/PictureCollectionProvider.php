@@ -1,6 +1,6 @@
 <?php
 
-namespace App\State\Provider;
+namespace App\State\Provider\Pictures;
 
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;

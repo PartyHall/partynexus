@@ -56,6 +56,18 @@
         }
     },
     "register": {},
+    "forgotten_password": {
+        "title": "Forgotten password",
+        "desc_request": "If you have forgotten your password, you can request a link to set a new one. This link will expire in 1 hour.",
+        "desc": "Hello, {{username}}! It seems you either forgotten your password, or never had one in the first place. Let's set it up!",
+        "not_found": "Ce code de mot de passe oublié n'existe pas. Peut-être a-t-il expiré ou a déjà été utilisé ?",
+        "password": "New password",
+        "confirm_password": "Confirm new password",
+        "password_mismatch": "New password and confirmation do not match",
+        "set_password": "Set password",
+        "success": "Password updated successfully",
+        "goto_login": "Go to login"
+    },
     "login": {
         "title": "Login",
         "login_button": "Log In",
@@ -161,9 +173,8 @@
                     "banned_at": "Banned on {{date}} at {{time}}",
                     "unban": "Unban user"
                 },
-                "magic_password": {
-                    "title": "Magic password",
-                    "desc": "A MagicPassword is a link that you can give to someone so that they can define a password without having to login. It is single-use and let the person use the app when mails are poorly configured (Not received, falls in spam, etc...). This can also be used as a \"Forgotten password\" feature.",
+                "forgotten_password": {
+                    "desc": "When user have forgotten their password, you can use this to generate a link for them to set a new one. It can also be used to set the password for a OAuth-registered user. This link will expire in 1 hour.",
                     "generate": "Generate one"
                 }
             },

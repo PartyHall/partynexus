@@ -2,13 +2,13 @@
 
 namespace App\Serializer;
 
-use App\Entity\MagicPassword;
+use App\Entity\ForgottenPassword;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
-class MagicPasswordNormalizer implements NormalizerInterface
+class ForgottenPasswordNormalizer implements NormalizerInterface
 {
-    private const string ALREADY_CALLED = 'MAGIC_PASSWORD_NORMALIZER_ALREADY_CALLED';
+    private const string ALREADY_CALLED = 'FORGOTTEN_PASSWORD_NORMALIZER_ALREADY_CALLED';
     private string $frontUrl;
 
     public function __construct(
@@ -21,7 +21,7 @@ class MagicPasswordNormalizer implements NormalizerInterface
     }
 
     /**
-     * @param MagicPassword $object
+     * @param ForgottenPassword $object
      * @param array<mixed>  $context
      *
      * @return array<mixed>
@@ -35,7 +35,7 @@ class MagicPasswordNormalizer implements NormalizerInterface
             '/',
             [
                 $this->frontUrl,
-                'magic-password',
+                'forgotten-password',
                 $object->getCode(),
             ],
         );
@@ -52,13 +52,13 @@ class MagicPasswordNormalizer implements NormalizerInterface
             return false;
         }
 
-        return $data instanceof MagicPassword;
+        return $data instanceof ForgottenPassword;
     }
 
     public function getSupportedTypes(?string $format): array
     {
         return [
-            MagicPassword::class => true,
+            ForgottenPassword::class => true,
         ];
     }
 }

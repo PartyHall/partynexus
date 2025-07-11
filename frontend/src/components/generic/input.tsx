@@ -1,7 +1,7 @@
-import { cloneElement, isValidElement, type InputHTMLAttributes, type MouseEventHandler, type ReactNode } from "react";
+import { cloneElement, isValidElement, useState, type InputHTMLAttributes, type MouseEventHandler, type ReactNode } from "react";
 import { Controller, type Control, type FieldError } from "react-hook-form";
 import Button from "./button";
-import { IconCopy } from "@tabler/icons-react";
+import { IconAsterisk, IconCopy, IconEye, IconEyeOff } from "@tabler/icons-react";
 import { enqueueSnackbar } from "notistack";
 import dayjs from "dayjs";
 
@@ -51,6 +51,21 @@ export default function Input({ icon, action, label, error, className, hideRequi
             }
         </label>
     );
+}
+
+export function PasswordInput({ ...props }: Omit<InputProps, 'type' | 'icon'>) {
+    const [visible, setVisible] = useState<boolean>(false);
+
+    return <Input
+        type={visible ? 'text' : 'password'}
+        icon={<IconAsterisk />}
+        action={[
+            <Button onClick={() => setVisible(!visible)} type="button" className="h-full bg-transparent!">
+                { visible ? <IconEyeOff /> : <IconEye /> }
+            </Button>
+        ]}
+        {...props}
+    />;
 }
 
 // Fuck react hook form

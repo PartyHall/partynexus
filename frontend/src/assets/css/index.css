@@ -35,6 +35,9 @@ html {
  * @TODO: Success/Warn/Danger/Info were hastely generated, proper colors should be chosen
  */
 @theme {
+    --breakpoint-gallery-xs: 320px;
+    --breakpoint-gallery-md: 500px;
+
     --color-synthbg: oklch(26.789% 0.03332 291.63);
     --color-synthbg-50: oklch(79.658% 0.03383 293.26);
     --color-synthbg-100: oklch(76% 0.03991 291.98);

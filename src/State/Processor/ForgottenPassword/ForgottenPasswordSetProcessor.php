@@ -1,11 +1,11 @@
 <?php
 
-namespace App\State\Processor;
+namespace App\State\Processor\ForgottenPassword;
 
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
 use App\Model\PasswordSet;
-use App\Repository\MagicPasswordRepository;
+use App\Repository\ForgottenPasswordRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -14,12 +14,12 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 /**
  * @implements ProcessorInterface<PasswordSet, Response>
  */
-readonly class MagicPasswordSetProcessor implements ProcessorInterface
+readonly class ForgottenPasswordSetProcessor implements ProcessorInterface
 {
     public function __construct(
-        private MagicPasswordRepository $magicPasswordRepository,
+        private ForgottenPasswordRepository $repository,
         private UserPasswordHasherInterface $passwordHasher,
-        private EntityManagerInterface $entityManager,
+        private EntityManagerInterface      $entityManager,
     ) {
     }
 
@@ -27,15 +27,15 @@ readonly class MagicPasswordSetProcessor implements ProcessorInterface
     {
         $code = $uriVariables['code'] ?? null;
 
-        $entity = $this->magicPasswordRepository->findByCode($code);
+        $entity = $this->repository->findByCode($code);
         if (!$entity) {
-            throw new NotFoundHttpException('MagicPassword not found, expired or already used');
+            throw new NotFoundHttpException('ForgottenPassword not found, expired or already used');
         }
 
         $now = new \DateTimeImmutable();
 
-        if ($entity->isUsed() || $entity->getCreatedAt()->modify('+48 hours') < $now) {
-            throw new NotFoundHttpException('MagicPassword not found, expired or already used');
+        if ($entity->isUsed() || $entity->getCreatedAt()->modify('+24 hours') < $now) {
+            throw new NotFoundHttpException('ForgottenPassword not found, expired or already used');
         }
 
         // No need to check the old password
@@ -49,7 +49,7 @@ readonly class MagicPasswordSetProcessor implements ProcessorInterface
         ));
 
         $this->entityManager->persist($entity);
-        $this->entityManager->persist($entity);
+        $this->entityManager->persist($entity->getUser());
         $this->entityManager->flush();
 
         return new Response(status: 201);

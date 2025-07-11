@@ -4,7 +4,3 @@ framework:
             policy: 'sliding_window'
             limit: 3
             interval: '15 minutes'
-        magic_link:
-            policy: 'sliding_window'
-            limit: 5
-            interval: '%env(MAGIC_LINK_EXPIRATION)%'

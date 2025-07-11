@@ -82,7 +82,7 @@ export default function EventForm({ event }: Props) {
 
         <DateTimeInput
             name='datetime'
-            label={t('events.date')}
+            label={t('generic.date')}
             control={control}
             error={errors.datetime}
             disabled={isSubmitting}

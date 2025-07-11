@@ -4,17 +4,17 @@ namespace App\State\Provider;
 
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
-use App\Entity\MagicPassword;
-use App\Repository\MagicPasswordRepository;
+use App\Entity\ForgottenPassword;
+use App\Repository\ForgottenPasswordRepository;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
- * @implements ProviderInterface<MagicPassword>
+ * @implements ProviderInterface<ForgottenPassword>
  */
-readonly class MagicPasswordProvider implements ProviderInterface
+readonly class ForgottenPasswordProvider implements ProviderInterface
 {
     public function __construct(
-        private MagicPasswordRepository $magicPasswordRepository,
+        private ForgottenPasswordRepository $repository,
     ) {
     }
 
@@ -22,16 +22,16 @@ readonly class MagicPasswordProvider implements ProviderInterface
     {
         $code = $uriVariables['code'];
 
-        /** @var ?MagicPassword $entity */
-        $entity = $this->magicPasswordRepository->findByCode($code);
+        /** @var ?ForgottenPassword $entity */
+        $entity = $this->repository->findByCode($code);
         if (!$entity) {
-            throw new NotFoundHttpException('MagicPassword not found');
+            throw new NotFoundHttpException('ForgottenPassword not found');
         }
 
         $now = new \DateTimeImmutable();
 
         if ($entity->isUsed() || $entity->getCreatedAt()->modify('+48 hours') < $now) {
-            throw new NotFoundHttpException('MagicPassword not found');
+            throw new NotFoundHttpException('ForgottenPassword not found');
         }
 
         return $entity;

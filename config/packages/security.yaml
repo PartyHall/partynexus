@@ -70,9 +70,8 @@ security:
         - { path: ^/api/song_formats, roles: PUBLIC_ACCESS} # TEMP
         - { path: ^/api/_sentry-test, roles: PUBLIC_ACCESS}
         - { path: ^/api/login, roles: PUBLIC_ACCESS }
-        - { path: ^/api/magic-login, roles: PUBLIC_ACCESS }
-        - { path: ^/api/magic_passwords/(.*)/is-valid, roles: PUBLIC_ACCESS }
-        - { path: ^/api/magic_passwords/(.*)/set-password, roles: PUBLIC_ACCESS }
+        - { path: ^/api/forgotten_passwords/(.*)/is-valid, roles: PUBLIC_ACCESS }
+        - { path: ^/api/forgotten_passwords/(.*)/set-password, roles: PUBLIC_ACCESS }
         - { path: ^/api/register, roles: PUBLIC_ACCESS }
         - { path: ^/api/refresh, roles: PUBLIC_ACCESS }
         - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }

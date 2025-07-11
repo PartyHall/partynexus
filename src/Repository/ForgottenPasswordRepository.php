@@ -2,23 +2,23 @@
 
 namespace App\Repository;
 
-use App\Entity\MagicPassword;
+use App\Entity\ForgottenPassword;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @method findOneBy(array $criteria, ?array $orderBy = null): ?MagicPassword
+ * @method findOneBy(array $criteria, ?array $orderBy = null): ?ForgottenPassword
  *
- * @extends ServiceEntityRepository<MagicPassword>
+ * @extends ServiceEntityRepository<ForgottenPassword>
  */
-class MagicPasswordRepository extends ServiceEntityRepository
+class ForgottenPasswordRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, MagicPassword::class);
+        parent::__construct($registry, ForgottenPassword::class);
     }
 
-    public function findByCode(string $code): ?MagicPassword
+    public function findByCode(string $code): ?ForgottenPassword
     {
         return $this->createQueryBuilder('m')
             ->join('m.user', 'u')

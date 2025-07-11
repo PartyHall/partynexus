@@ -56,6 +56,18 @@
         }
     },
     "register": {},
+    "forgotten_password": {
+        "title": "Mot de passe oublié",
+        "desc": "Bonjour, {{username}} ! Il semble que vous ayez oublié votre mot de passe ou que vous n'en ayez jamais eu. Choisissons-le !",
+        "desc_request": "Si vous avez oublié votre mot de passe, vous pouvez demander un lien pour en définir un nouveau. Ce lien expirera dans 1 heure.",
+        "not_found": "This password forgotten code does not exist. Maybe it expired or has already been used?",
+        "password": "Nouveau mot de passe",
+        "confirm_password": "Confirmer le nouveau mot de passe",
+        "password_mismatch": "Le nouveau mot de passe et sa confirmation ne correspondent pas",
+        "set_password": "Valider",
+        "success": "Mot de passe mis à jour avec succès",
+        "goto_login": "Aller à la page de connexion"
+    },
     "login": {
         "title": "Connexion",
         "login_button": "Se connecter",
@@ -160,9 +172,8 @@
                     "banned_at": "Banni le {{date}} à {{time}}",
                     "unban": "Débannir l'utilisateur"
                 },
-                "magic_password": {
-                    "title": "Mot de passe magique",
-                    "desc": "Un mot de passe magique est un lien que vous pouvez donner à quelqu'un pour qu'il puisse définir un mot de passe sans avoir à se connecter. Il est à usage unique et permet à la personne d'utiliser l'application lorsque les mails sont mal configurés (non reçus, tombés dans les spams, etc.). Cela peut également être utilisé comme une fonctionnalité de \"Mot de passe oublié\".",
+                "forgotten_password": {
+                    "desc": "Lorsqu'un utilisateur a oublié son mot de passe, vous pouvez utiliser ceci pour générer un lien pour qu'il puisse en définir un nouveau. Cela peut également être utilisé pour définir le mot de passe d'un utilisateur enregistré via OAuth. Ce lien expirera dans une heure.",
                     "generate": "Générer"
                 }
             },

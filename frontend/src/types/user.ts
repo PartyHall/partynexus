@@ -22,10 +22,10 @@ export type MinimalUser = {
     lastname: string;
 };
 
-export type MagicPassword = {
+export type ForgottenPassword = {
     '@id': string;
     id: number;
-    user: string;
+    user: User;
     createdAt: string;
     code: string;
     used: boolean;

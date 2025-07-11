@@ -1,7 +1,8 @@
-import { Link, type NotFoundRouteProps, type ReactNode } from '@tanstack/react-router';
+import { Link, type NotFoundRouteProps } from '@tanstack/react-router';
 import { IconAlertCircle, IconArrowLeft, IconHome } from '@tabler/icons-react';
 import { useTranslation } from 'react-i18next';
 import { HttpError } from '@/api/http_error';
+import type { ReactNode } from 'react';
 
 type Props = {
     status?: number | string;

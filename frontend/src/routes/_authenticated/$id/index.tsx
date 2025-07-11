@@ -31,7 +31,7 @@ function RouteComponent() {
 
     {
       event.datetime
-      && <KeyVal label='events.date'>
+      && <KeyVal label='generic.date'>
         {dayjs(event.datetime).format('L - LT')}
       </KeyVal>
     }
