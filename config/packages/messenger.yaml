@@ -11,7 +11,6 @@ framework:
                     queue_name: 'exports'
 
         routing:
-            'App\Message\MagicLinkNotification': 'emails'
             'App\Message\UserRegisteredNotification': 'emails'
             'App\Message\TestEmailNotification': 'emails'
             'App\Message\NewSongRequestNotification': 'emails'

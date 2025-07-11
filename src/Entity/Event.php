@@ -75,8 +75,12 @@ class Event
 {
     public const string API_GET_COLLECTION = 'api:event:get-collection';
     public const string API_GET_ITEM = 'api:event:get';
+    public const string API_EVENTMAKER_GET_ITEM = 'api:event_maker:event:get';
+    public const string API_ADMIN_GET_ITEM = 'api:admin:event:get';
     public const string API_CREATE = 'api:event:create';
+    public const string API_ADMIN_CREATE = 'api:admin:event:create';
     public const string API_UPDATE = 'api:event:update';
+    public const string API_ADMIN_UPDATE = 'api:admin:event:update';
     public const string API_EXPORT = 'api:export';
 
     public const string API_GET_REGISTER = 'api:event:get-register';

@@ -44,6 +44,9 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  * so that all songs have the same level
  *
  * @see https://github.com/slhck/ffmpeg-normalize
+ * 
+ * EDIT: Are we sure though? THat probably should be done BEFORE separating vocals
+ * so that the vocals are also normalized.
  */
 
 /**
@@ -87,7 +90,10 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 )]
 #[QueryParameter('ready')]
 #[ApiFilter(SongSearchFilter::class)]
-#[ApiFilter(SearchFilter::class, properties: ['format' => SearchFilterInterface::STRATEGY_EXACT, 'vocals' => SearchFilterInterface::STRATEGY_EXACT])]
+#[ApiFilter(SearchFilter::class, properties: [
+    'format' => SearchFilterInterface::STRATEGY_EXACT,
+    'vocals' => SearchFilterInterface::STRATEGY_EXACT,
+])]
 #[ORM\Entity(repositoryClass: SongRepository::class)]
 #[ORM\Index(name: 'idx_songs_search', fields: ['searchVector'])]
 #[Vich\Uploadable]

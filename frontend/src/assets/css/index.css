@@ -1,4 +1,30 @@
-@import 'tailwindcss';
+@import "tailwindcss";
+@import "./glow.css";
+@import "./modal.css";
+@import "./buttons.css";
+@import "./karaoke.css";
+
+html,
+body,
+#root {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    @apply bg-synthbg-700 text-primary-50;
+}
+
+#root {
+    display: flex;
+    flex-direction: column;
+}
 
 /**
  * Generated with tailwindshades.com
@@ -99,4 +125,64 @@
     --color-info-800: oklch(28.134% 0.06688 252.63);
     --color-info-900: oklch(16.07% 0.02788 251.95);
     --color-info-950: oklch(6.0847% 0.01039 194.77);
+}
+
+.flex-col-center {
+    @apply flex flex-col items-center justify-center gap-2;
+}
+
+input,
+textarea,
+select {
+    @apply bg-synthbg-500 rounded-sm pl-2 pr-2;
+    border: 1px solid transparent;
+}
+
+input:focus,
+textarea:focus {
+    @apply box-purple-glow;
+}
+
+a {
+    position: relative;
+    text-decoration: none;
+    transition: color 0.1s ease;
+}
+
+a:not(.no-hover) {
+    @apply text-blue-glow;
+}
+
+a::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: -2px;
+    width: 0;
+    height: 2px;
+    background-color: theme('colors.primary.500');
+    box-shadow: 0 0 8px theme('colors.primary.400');
+    transition: width 0.1s ease;
+    transform: translateX(-50%);
+}
+
+a:not(.no-hover):hover {
+    @apply text-pink-glow;
+}
+
+a:hover::after {
+    width: 100%;
+    box-shadow: 0 0 12px theme('colors.primary.300');
+}
+
+a.no-underline:hover::after {
+    display: none;
+}
+
+a:not(.no-hover).no-underline:hover {
+    @apply text-white;
+}
+
+.pageContainer {
+    @apply flex flex-col p-4 mx-auto items-center gap-8 w-full sm:w-auto;
 }
