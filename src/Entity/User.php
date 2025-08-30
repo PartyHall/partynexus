@@ -104,6 +104,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public const string API_UPDATE = 'api:user:update';
     public const string API_REGISTER = 'api:user:create-register';
 
+    public const string DEFAULT_VALIDATION_GROUP = 'Default';
+
     #[ORM\Id]
     #[ORM\Column(type: Types::INTEGER)]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
@@ -116,8 +118,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private int $id;
 
     #[ORM\Column(type: Types::STRING, length: 32, unique: true)]
-    #[Assert\Length(min: 3, max: 32)]
-    #[Assert\Length(min: 3, max: 64, groups: [self::API_REGISTER])]
+    #[Assert\Regex(pattern: '/^[a-zA-Z0-9._-]{3,32}$/', groups: [self::DEFAULT_VALIDATION_GROUP, self::API_REGISTER])]
+    #[Assert\Length(min: 3, max: 32, groups: [self::DEFAULT_VALIDATION_GROUP, self::API_REGISTER])]
     #[Groups([
         self::API_GET_ITEM,
         self::API_GET_COLLECTION,
@@ -130,8 +132,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private string $username;
 
     #[ORM\Column(type: Types::STRING, length: 64, nullable: true)]
-    #[Assert\Length(min: 3, max: 64)]
-    #[Assert\Length(min: 3, max: 64, groups: [self::API_REGISTER])]
+    #[Assert\Length(min: 2, max: 64, groups: [self::DEFAULT_VALIDATION_GROUP, self::API_REGISTER])]
     #[Groups([
         self::API_GET_ITEM,
         self::API_GET_COLLECTION,
@@ -145,8 +146,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $firstname = null;
 
     #[ORM\Column(type: Types::STRING, length: 64, nullable: true)]
-    #[Assert\Length(min: 3, max: 64)]
-    #[Assert\Length(min: 3, max: 64, groups: [self::API_REGISTER])]
     #[Groups([
         self::API_GET_ITEM,
         self::API_GET_COLLECTION,
@@ -180,10 +179,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public ?string $newPassword = null;
 
     #[ORM\Column(type: Types::STRING, length: 255, unique: true)]
-    #[Assert\NotBlank]
-    #[Assert\NotBlank(['groups' => [self::API_REGISTER]])]
-    #[Assert\Email]
-    #[Assert\Email(['groups' => [self::API_REGISTER]])]
+    #[Assert\NotBlank(['groups' => [self::DEFAULT_VALIDATION_GROUP, self::API_REGISTER]])]
+    #[Assert\Email(['groups' => [self::DEFAULT_VALIDATION_GROUP, self::API_REGISTER]])]
     #[Groups([
         self::API_GET_ITEM,
         self::API_GET_COLLECTION,
@@ -194,8 +191,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private string $email;
 
     #[ORM\Column(type: Types::STRING, length: 255, enumType: Language::class, options: ['default' => 'en_US'])]
-    #[Assert\NotBlank]
-    #[Assert\NotBlank(['groups' => [self::API_REGISTER]])]
+    #[Assert\NotBlank(['groups' => [self::DEFAULT_VALIDATION_GROUP, self::API_REGISTER]])]
     #[Groups([
         self::API_GET_ITEM,
         self::API_CREATE,

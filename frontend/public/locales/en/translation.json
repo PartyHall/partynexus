@@ -165,6 +165,9 @@
             "title": "Users",
             "title_edit": "{{username}}",
             "amt_users": "{{amt}} users",
+            "create": {
+                "title": "Create user"
+            },
             "management": {
                 "title": "Management",
                 "ban": {

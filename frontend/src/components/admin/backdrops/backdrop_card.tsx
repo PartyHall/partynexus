@@ -18,7 +18,7 @@ export default function BackdropCard({ albumId, backdrop, invalidate }: Props) {
 
     return <Card className="min-h-26 flex flex-row align-center gap-4" noGlow>
         <img
-            className="object-cover rounded-md"
+            className="block object-cover rounded-md w-30 h-20"
             src={backdrop.url}
             alt={backdrop.title}
             loading="lazy"

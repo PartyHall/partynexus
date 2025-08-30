@@ -6,9 +6,11 @@ import Card from '@/components/generic/card';
 import ConfirmButton from '@/components/generic/confirm_button';
 import Title from '@/components/generic/title';
 import useTranslatedTitle from '@/hooks/useTranslatedTitle';
-import { IconPlus, IconTrash, IconUpload } from '@tabler/icons-react';
+import { IconTrash, IconUpload } from '@tabler/icons-react';
 import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next';
+import { Route as IndexRoute } from '.';
+import { useQueryClient } from '@tanstack/react-query';
 
 export const Route = createFileRoute(
   '/_authenticated/admin/backdrop-albums/$id',
@@ -30,6 +32,8 @@ function RouteComponent() {
   const { invalidate } = useRouter();
   const album = Route.useLoaderData();
 
+  const qc = useQueryClient();
+
   useTranslatedTitle('admin.backdrop_albums.title_edit', 'admin.title', { name: album.title });
 
   return <div className='flex flex-col items-center justify-center w-full mx-auto'>
@@ -46,7 +50,10 @@ function RouteComponent() {
           tDescription='admin.backdrop_albums.delete_confirm.desc'
           tDescriptionArgs={{ title: album.title }}
           onConfirm={async () => await deleteBackdropAlbum(album.id)}
-          onSuccess={() => navigate({ to: '/admin/backdrop-albums' })}
+          onSuccess={async () => {
+            qc.removeQueries({ queryKey: ['backdrop_albums'] });
+            navigate({ to: '/admin/backdrop-albums' });
+          }}
         >
           <IconTrash size={18} />{t('admin.backdrop_albums.delete_album')}
         </ConfirmButton>

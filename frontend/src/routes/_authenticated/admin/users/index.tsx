@@ -1,7 +1,6 @@
 import { getUsers } from '@/api/users'
 import UserCard from '@/components/admin/users/user_card'
 import Button, { ButtonLink } from '@/components/generic/button'
-import Card from '@/components/generic/card'
 import InfiniteScroll from '@/components/generic/infinite_scroll'
 import Input from '@/components/generic/input'
 import { Tooltip } from '@/components/generic/tooltip'

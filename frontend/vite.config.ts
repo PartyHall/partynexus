@@ -31,6 +31,9 @@ export default defineConfig({
       '/song_covers': {
         target: 'http://app:80',
       },
+      '/backdrops': {
+        target: 'http://app:80',
+      },
       '/.well-known/mercure': {
         target: 'http://app:80',
       },

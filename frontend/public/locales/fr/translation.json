@@ -164,6 +164,9 @@
             "title": "Utilisateurs",
             "title_edit": "{{username}}",
             "amt_events": "{{amt}} utilisateurs",
+            "create": {
+                "title": "Créer un utilisateur"
+            },
             "management": {
                 "title": "Gestion",
                 "ban": {
