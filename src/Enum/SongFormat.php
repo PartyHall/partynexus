@@ -15,6 +15,7 @@ enum SongFormat: string implements TranslatableEnumLabelInterface
 {
     use EnumApiResourcetrait;
 
+    /** Note: Values should ALWAYS BE lowercase */
     case VIDEO = 'video';
     case CDG = 'cdg';
     case TRANSPARENT_VIDEO = 'transparent_video';

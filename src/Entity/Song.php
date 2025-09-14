@@ -124,6 +124,7 @@ class Song implements HasTimestamps
     #[Groups([
         self::API_GET_ITEM,
         self::API_GET_COLLECTION,
+        'searchable',
     ])]
     private int $id;
 
@@ -134,6 +135,7 @@ class Song implements HasTimestamps
         self::API_GET_ITEM,
         self::API_GET_COLLECTION,
         self::COMPILE_METADATA,
+        'searchable',
     ])]
     #[Assert\NotBlank]
     private string $title;
@@ -145,6 +147,7 @@ class Song implements HasTimestamps
         self::API_GET_ITEM,
         self::API_GET_COLLECTION,
         self::COMPILE_METADATA,
+        'searchable',
     ])]
     #[Assert\NotBlank]
     private string $artist;
@@ -163,6 +166,7 @@ class Song implements HasTimestamps
         self::API_GET_ITEM,
         self::API_GET_COLLECTION,
         self::COMPILE_METADATA,
+        'searchable',
     ])]
     #[Assert\NotBlank]
     private SongFormat $format;
@@ -252,6 +256,7 @@ class Song implements HasTimestamps
     #[Groups([
         self::API_GET_ITEM,
         self::API_GET_COLLECTION,
+        'searchable',
     ])]
     public bool $ready = false; // ??? Why can't I set it to private as I have getter & setter?
 
@@ -272,6 +277,7 @@ class Song implements HasTimestamps
     #[Groups([
         self::API_GET_ITEM,
         self::API_GET_COLLECTION,
+        'searchable',
     ])]
     private bool $vocals = false;
 

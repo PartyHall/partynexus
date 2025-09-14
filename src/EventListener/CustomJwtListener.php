@@ -32,6 +32,7 @@ readonly class CustomJwtListener
         $payload = $event->getData();
 
         $payload['iri'] = $this->iriConverter->getIriFromResource($user);
+        // $payload['username'] = $user->getUserIdentifier();
         $payload['id'] = $user->getId();
         $payload['language'] = $user->getLanguage();
         $payload['mercure'] = [

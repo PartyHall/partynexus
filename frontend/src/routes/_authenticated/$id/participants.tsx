@@ -80,6 +80,7 @@ function RouteComponent() {
           menuPosition='fixed'
           unstyled
           loadOptions={async (val: string) => (await getUsers({ search: val })).member.map(u => {
+            console.log('laoded option: ', u);
             let username = u.username;
 
             if (u.firstname.length) {

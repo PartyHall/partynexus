@@ -71,7 +71,7 @@ class PictureFixture extends Fixture implements DependentFixtureInterface
         $manager->flush();
 
         /** @var Event $event */
-        $event = $this->getReference('event__1');
+        $event = $this->getReference('event__1', Event::class);
 
         // Handtaken pictures for event 1 (the admin one)
         $this->addPicture($manager, '1019b299-d7c8-4670-aff3-9ebf6f9293d2', $event, '1.jpg');

@@ -1,0 +1,11 @@
+meilisearch:
+    url: '%env(MEILISEARCH_URL)%'
+    api_key: '%env(MEILISEARCH_API_KEY)%'
+    prefix: '%env(MEILISEARCH_PREFIX)%'
+    indices:
+        - name: songs
+          class: App\Entity\Song
+          enable_serializer_groups: true
+          settings:
+              searchableAttributes: ['title', 'artist']
+              filterableAttributes: ['format', 'ready', 'vocals']

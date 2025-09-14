@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 import { login } from '@/api/auth';
 import { useAuthStore } from '@/stores/auth';
 import Input, { PasswordInput } from '@/components/generic/input';
-import { IconAsterisk, IconUser } from '@tabler/icons-react';
+import { IconMail } from '@tabler/icons-react';
 import Button from '@/components/generic/button';
 import useTranslatedTitle from '@/hooks/useTranslatedTitle';
 
@@ -51,6 +51,7 @@ function RouteComponent() {
       navigate({ to: '/' });
       setIsSubmitting(false);
     } catch (err: any) {
+      console.error(err);
       setErrorMessage(
         err instanceof HttpError
           ? err.message
@@ -73,7 +74,7 @@ function RouteComponent() {
         <Input
           label={t('generic.username')}
           id='username'
-          icon={<IconUser />}
+          icon={<IconMail />}
           autoFocus
           autoComplete="username"
           disabled={isSubmitting}

@@ -92,11 +92,16 @@ services:
     volumes:
       - './var/meilidata:/meili_data'
 
+
 volumes:
   caddy_data:
   caddy_config:
+    
 ###> symfony/mercure-bundle ###
 ###< symfony/mercure-bundle ###
 
 ###> doctrine/doctrine-bundle ###
 ###< doctrine/doctrine-bundle ###
+
+###> meilisearch/search-bundle ###
+###< meilisearch/search-bundle ###

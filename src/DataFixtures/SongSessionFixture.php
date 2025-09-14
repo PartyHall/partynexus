@@ -2,6 +2,7 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\Event;
 use App\Entity\SongSession;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
@@ -28,14 +29,14 @@ class SongSessionFixture extends Fixture implements DependentFixtureInterface
                 ->setTitle('Some song')
                 ->setArtist('Some artist')
                 ->setSinger('admin')
-                ->setEvent($this->getReference('event__1'))
+                ->setEvent($this->getReference('event__1', Event::class))
                 ->setSungAt(new \DateTimeImmutable('-2 days')),
             (new SongSession())
                 ->setTitle('Some other song')
                 ->setArtist('Some other artist')
                 ->setSinger('user')
                 ->setSungAt(new \DateTimeImmutable('-1 days'))
-                ->setEvent($this->getReference('event__1')),
+                ->setEvent($this->getReference('event__1', Event::class)),
         ];
 
         foreach ($sessions as $s) {

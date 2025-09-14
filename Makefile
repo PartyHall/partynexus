@@ -27,6 +27,8 @@ reset-db:
 	@docker compose exec app rm -rf /app/var/uploaded_pictures /app/var/exports /app/var/timelapses /app/public/backdrops/* /app/public/song_covers/*
 	@docker compose exec app bin/console doctrine:fixtures:load --no-interaction --append
 	$(MAKE) export
+	@docker compose exec app bin/console meili:clear
+	@docker compose exec app bin/console meili:import
 
 export:
 	@docker compose exec app bin/console event:export 0192bf5a-67d8-7d9d-8a5e-962b23aceeaa -vvv
