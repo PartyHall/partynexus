@@ -10,10 +10,11 @@ import { useTranslation } from "react-i18next";
 type Props = {
     albumId: number;
     backdrop: Backdrop;
+    onEdit?: (albumId: number, backdrop: Backdrop) => void;
     invalidate?: () => void;
 };
 
-export default function BackdropCard({ albumId, backdrop, invalidate }: Props) {
+export default function BackdropCard({ albumId, backdrop, invalidate, onEdit }: Props) {
     const { t } = useTranslation();
 
     return <Card className="min-h-26 flex flex-row align-center gap-4" noGlow>
@@ -25,9 +26,12 @@ export default function BackdropCard({ albumId, backdrop, invalidate }: Props) {
         />
         <span className="flex-1">{backdrop.title}</span>
         <div className="flex flex-col items-center justify-around">
-            <Tooltip content={t('generic.edit')}>
-                <Button><IconEdit size={18} /></Button>
-            </Tooltip>
+            {
+                onEdit
+                && <Tooltip content={t('generic.edit')}>
+                    <Button onClick={() => onEdit(albumId, backdrop)}><IconEdit size={18} /></Button>
+                </Tooltip>
+            }
             <Tooltip content={t('generic.delete')}>
                 <ConfirmButton
                     tTitle={"admin.backdrop_albums.backdrops.delete_title"}

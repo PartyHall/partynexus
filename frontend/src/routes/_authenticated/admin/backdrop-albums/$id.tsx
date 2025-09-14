@@ -1,6 +1,6 @@
 import { deleteBackdropAlbum, getBackdropAlbum } from '@/api/photobooth/backdrops';
 import BackdropCard from '@/components/admin/backdrops/backdrop_card';
-import BackdropAlbumForm from '@/components/admin/backdrops/form';
+import BackdropAlbumForm from '@/components/admin/backdrops/album_form';
 import Button from '@/components/generic/button';
 import Card from '@/components/generic/card';
 import ConfirmButton from '@/components/generic/confirm_button';
@@ -9,8 +9,11 @@ import useTranslatedTitle from '@/hooks/useTranslatedTitle';
 import { IconTrash, IconUpload } from '@tabler/icons-react';
 import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next';
-import { Route as IndexRoute } from '.';
 import { useQueryClient } from '@tanstack/react-query';
+import { enqueueSnackbar } from 'notistack';
+import { useState } from 'react';
+import { BackdropFormModal } from '@/components/admin/backdrops/backdrop_form';
+import type { Backdrop } from '@/types/backdrops';
 
 export const Route = createFileRoute(
   '/_authenticated/admin/backdrop-albums/$id',
@@ -32,7 +35,11 @@ function RouteComponent() {
   const { invalidate } = useRouter();
   const album = Route.useLoaderData();
 
+  const [editedBackdrop, setEditedBackdrop] = useState<Backdrop | null>(null);
+
   const qc = useQueryClient();
+
+  const [uploadOpen, setUploadOpen] = useState(false);
 
   useTranslatedTitle('admin.backdrop_albums.title_edit', 'admin.title', { name: album.title });
 
@@ -40,7 +47,10 @@ function RouteComponent() {
     <Card className='m-auto mt-4 w-full sm:w-150'>
       <Title className='text-center' noMargin>{t('admin.backdrop_albums.title_edit', { name: album.title })}</Title>
 
-      <BackdropAlbumForm album={album} />
+      <BackdropAlbumForm
+        album={album}
+        onSuccess={() => enqueueSnackbar(t('generic.edit_saved'), { variant: 'success' })}
+      />
 
       <div className='flex items-center justify-center mt-4'>
         <ConfirmButton
@@ -61,15 +71,37 @@ function RouteComponent() {
     </Card>
 
     <Card className='m-auto mt-4 w-full sm:w-150'>
-      <Title level={2}>{t('admin.backdrop_albums.backdrops.title')}</Title>
+      <Title level={2} noMargin>{t('admin.backdrop_albums.backdrops.title')}</Title>
 
       <div className='flex flex-row items-center justify-center'>
-        <Button>
+        <Button onClick={() => setUploadOpen(true)} disabled={uploadOpen}>
           <IconUpload size={18} />{t('generic.add')}
         </Button>
+
+        <BackdropFormModal
+          open={uploadOpen}
+          albumIri={album['@id']}
+          backdrop={editedBackdrop}
+          onClose={() => {
+            setEditedBackdrop(null);
+            setUploadOpen(false)
+          }}
+          onSuccess={() => invalidate()}
+        />
       </div>
 
-      {album.backdrops.map(x => <BackdropCard key={x.id} albumId={album.id} backdrop={x} invalidate={() => invalidate()} />)}
+      {
+        album.backdrops.map(x => <BackdropCard
+          key={x.id}
+          albumId={album.id}
+          backdrop={x}
+          invalidate={() => invalidate()}
+          onEdit={(_albumId, backdrop) => {
+            setEditedBackdrop(backdrop)
+            setUploadOpen(true);
+          }}
+        />)
+      }
 
       {
         album.backdrops.length === 0

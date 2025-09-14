@@ -1,6 +1,6 @@
 import type { Collection } from "@/types";
 import { customFetch } from "../customFetch";
-import type { BackdropAlbum } from "@/types/backdrops";
+import type { Backdrop, BackdropAlbum } from "@/types/backdrops";
 
 type Props = {
   pageParam?: number;
@@ -44,7 +44,43 @@ export async function deleteBackdropAlbum(id: number | string): Promise<void> {
   });
 }
 
-export async function deleteBackdrop(albumId: number|string, id: number | string): Promise<void> {
+export type UpsertBackdrop = {
+  title: string;
+  album: string;
+  file?: File | null;
+};
+
+export async function createBackdrop(backdrop: UpsertBackdrop): Promise<Backdrop> {
+  if (!backdrop.file) {
+    throw new Error('File is required');
+  }
+
+  const formData = new FormData();
+
+  formData.append('title', backdrop.title);
+  formData.append('album', backdrop.album);
+  formData.append('file', backdrop.file);
+
+  const resp = await customFetch('/api/backdrops', {
+    method: 'POST',
+    body: formData,
+  });
+
+  return await resp.json();
+}
+
+export async function updateBackdrop(albumIri: string, id: number | string, backdrop: UpsertBackdrop): Promise<Backdrop> {
+  const resp = await customFetch(`${albumIri}/backdrops/${id}`, {
+    method: 'PATCH',
+    body: JSON.stringify({
+      title: backdrop.title,
+    }),
+  });
+
+  return await resp.json();
+}
+
+export async function deleteBackdrop(albumId: number | string, id: number | string): Promise<void> {
   await customFetch(`/api/backdrop_albums/${albumId}/backdrops/${id}`, {
     method: 'DELETE',
   });

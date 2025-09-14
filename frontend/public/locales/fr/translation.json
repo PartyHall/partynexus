@@ -31,6 +31,8 @@
         "yes": "Oui",
         "no": "Non",
         "ok": "OK",
+        "edit_saved": "Modifications enregistrées avec succès",
+        "title": "Title",
         "error": {
             "generic": "Une erreur s'est produite",
             "generic_desc": "Merci de réessayer plus tard ou de contacter votre administrateur PartyHall",
@@ -204,7 +206,8 @@
             "backdrops": {
                 "title": "Passe-têtes",
                 "delete_title": "Supprimer ce passe-tête",
-                "delete_desc": "Êtes-vous sûr de vouloir supprimer le passe-tête '{{title}}' ?"
+                "delete_desc": "Êtes-vous sûr de vouloir supprimer le passe-tête '{{title}}' ?",
+                "image": "Image"
             }
         }
     },

@@ -15,6 +15,10 @@ type InputProps = {
 } & InputHTMLAttributes<HTMLInputElement>;
 
 export default function Input({ icon, action, label, error, className, hideRequired, ...props }: InputProps) {
+    if (props.type === 'hidden') {
+        return <input className={`block w-full ${icon ? '!pl-10' : ''} ${action ? '!pr-8' : ''} disabled:bg-synthbg-600! disabled:text-synthfg-400!`} {...props} />
+    }
+
     return (
         <label className={`flex flex-col w-full gap-0.5̀ ${className || ''}`}>
             {

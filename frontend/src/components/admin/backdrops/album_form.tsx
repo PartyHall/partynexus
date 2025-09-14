@@ -3,6 +3,7 @@ import { ValidationError } from "@/api/violations_error";
 import Button from "@/components/generic/button";
 import Input from "@/components/generic/input";
 import type { BackdropAlbum } from "@/types/backdrops";
+import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -14,6 +15,7 @@ type Props = {
 
 export default function BackdropAlbumForm({ album, onSuccess }: Props) {
     const { t } = useTranslation();
+    const qc = useQueryClient();
     const [globalErrors, setGlobalErrors] = useState<string[]>([]);
 
     const {
@@ -47,6 +49,7 @@ export default function BackdropAlbumForm({ album, onSuccess }: Props) {
             reset(updatedAlbum);
             setGlobalErrors([]);
 
+            qc.removeQueries({ queryKey: ['backdrop_albums'] });
             onSuccess?.(updatedAlbum);
         } catch (err: any) {
             if (err instanceof ValidationError) {
@@ -83,7 +86,7 @@ export default function BackdropAlbumForm({ album, onSuccess }: Props) {
         <Input
             label={t('admin.backdrop_albums.version')}
             {...register('version', { required: true })}
-            type="number"
+            type={album ? "number" : "hidden"}
             required
             error={errors.version}
             disabled={isSubmitting}
@@ -101,7 +104,10 @@ export default function BackdropAlbumForm({ album, onSuccess }: Props) {
             )
         }
 
-        <p className="text-primary-100">{t('admin.backdrop_albums.note_appliance_update')}</p>
+        {
+            album &&
+            <p className="text-primary-100">{t('admin.backdrop_albums.note_appliance_update')}</p>
+        }
 
         <Button className="mt-3">
             {t('generic.save')}

@@ -31,6 +31,8 @@
         "yes": "Yes",
         "no": "No",
         "ok": "OK",
+        "edit_saved": "Modifications saved successfully",
+        "title": "Titre",
         "error": {
             "generic": "An error occurred",
             "generic_desc": "Please try again later or contact your PartyHall administrator",
@@ -204,8 +206,11 @@
             },
             "backdrops": {
                 "title": "Backdrops",
+                "new_title": "Add backdrop",
+                "edit_title": "Editing backdrop '{{title}}'",
                 "delete_title": "Delete backdrop",
-                "delete_desc": "Are you sure you want to delete the backdrop '{{title}}'?"
+                "delete_desc": "Are you sure you want to delete the backdrop '{{title}}'?",
+                "image": "Picture"
             }
         }
     },
