@@ -21,7 +21,6 @@ use App\Interface\Impl\HasTimestampsTrait;
 use App\Repository\SongRepository;
 use App\State\Processor\SongCompileProcessor;
 use App\State\Processor\SongDecompileProcessor;
-use App\State\Processor\SongPostProcessor;
 use App\State\Provider\SongDownloadProvider;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -44,7 +43,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  * so that all songs have the same level
  *
  * @see https://github.com/slhck/ffmpeg-normalize
- * 
+ *
  * EDIT: Are we sure though? THat probably should be done BEFORE separating vocals
  * so that the vocals are also normalized.
  */
@@ -63,9 +62,11 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
             normalizationContext: [AbstractNormalizer::GROUPS => [self::API_GET_ITEM]],
             denormalizationContext: [AbstractNormalizer::GROUPS => [self::API_CREATE]],
             security: 'is_granted("ROLE_ADMIN")',
-            processor: SongPostProcessor::class,
         ),
-        new Patch(
+        new Post( // because php sucks https://github.com/api-platform/api-platform/issues/1523
+            uriTemplate: '/songs/{id}',
+            inputFormats: ['multipart' => ['multipart/form-data']],
+            outputFormats: ['jsonld' => ['application/ld+json']],
             normalizationContext: [AbstractNormalizer::GROUPS => [self::API_GET_ITEM]],
             denormalizationContext: [AbstractNormalizer::GROUPS => [self::API_UPDATE]],
             security: 'is_granted("ROLE_ADMIN") and not object.ready',
@@ -104,7 +105,7 @@ class Song implements HasTimestamps
     public const string API_GET_ITEM = 'api:song:get';
     public const string API_GET_COLLECTION = 'api:song:get-collection';
     public const string API_CREATE = 'api:song:create';
-    public const string API_UPDATE = 'api:song:create';
+    public const string API_UPDATE = 'api:song:update';
     public const string API_COMPILE = 'api:song:compile';
     public const string COMPILE_METADATA = 'compile:metadata';
 
@@ -180,7 +181,7 @@ class Song implements HasTimestamps
     /**
      * The unique MBID for the song, when it exists.
      */
-    #[ORM\Column(type: UuidType::NAME, nullable: true)]
+    #[ORM\Column(type: Types::STRING, nullable: true, length: 64)]
     #[Groups([
         self::API_CREATE,
         self::API_UPDATE,
@@ -188,7 +189,7 @@ class Song implements HasTimestamps
         self::COMPILE_METADATA,
     ])]
     #[Assert\Uuid]
-    private ?Uuid $musicBrainzId = null;
+    private ?string $musicBrainzId = null;
 
     /**
      * The id to quickly listen to it on Spotify.
@@ -374,12 +375,12 @@ class Song implements HasTimestamps
         return $this;
     }
 
-    public function getMusicBrainzId(): ?Uuid
+    public function getMusicBrainzId(): ?string
     {
         return $this->musicBrainzId;
     }
 
-    public function setMusicBrainzId(?Uuid $musicBrainzId): self
+    public function setMusicBrainzId(?string $musicBrainzId): self
     {
         $this->musicBrainzId = $musicBrainzId;
 

@@ -251,7 +251,8 @@
                 "title_spotify": "Search on Spotify",
                 "title_musicBrainz": "Search on MusicBrainz"
             },
-            "upload_cover": "Upload cover art"
+            "upload_cover": "Upload cover art",
+            "not_uploaded_yet": "Not uploaded yet"
         },
         "compile": {
             "title": "Compilation settings",

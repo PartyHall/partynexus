@@ -71,17 +71,43 @@ export async function createSong(song: UpsertSong): Promise<Song> {
 };
 
 export async function updateSong(song: Record<string, any>): Promise<Song> {
+    const formData = new FormData();
+
+    if (song.title) {
+        formData.set('title', song.title);
+    }
+
+    if (song.artist) {
+        formData.set('artist', song.artist);
+    }
+
+    if (song.format) {
+        formData.set('format', song.format);
+    }
+
+    if (song.quality) {
+        formData.set('quality', song.quality);
+    }
+
+    if (song.musicBrainzId !== undefined) {
+        formData.set('musicBrainzId', song.musicBrainzId);
+    }
+
+    if (song.spotifyId !== undefined) {
+        formData.set('spotifyId', song.spotifyId);
+    }
+
+    if (song.hotspot !== undefined) {
+        formData.set('hotspot', String(song.hotspot));
+    }
+
+    if (song.coverFile) {
+        formData.set('coverFile', song.coverFile);
+    }
+
     const resp = await customFetch(`/api/songs/${song.id}`, {
-        method: 'PATCH',
-        body: JSON.stringify({
-            title: song.title,
-            artist: song.artist,
-            format: song.format ?? undefined,
-            quality: song.quality ?? undefined,
-            musicBrainzId: song.musicBrainzId,
-            spotifyId: song.spotifyId,
-            hotspot: song.hotspot,
-        }),
+        method: 'POST',
+        body: formData,
     });
 
     return await resp.json();

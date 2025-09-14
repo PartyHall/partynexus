@@ -86,7 +86,7 @@ class SongFixture extends Fixture
             $s
                 ->setTitle($song['title'])
                 ->setArtist($song['artist'])
-                ->setMusicBrainzId(Uuid::fromString($song['mbid']))
+                ->setMusicBrainzId($song['mbid'])
                 // ->setCoverFile($this->getCover($song['cover']))
                 ->setFormat(SongFormat::from($song['format']))
                 ->setQuality(SongQuality::from($song['quality']))

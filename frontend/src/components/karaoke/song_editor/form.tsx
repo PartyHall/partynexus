@@ -26,6 +26,7 @@ export default function SongEditorForm({ song, onSuccess }: Props) {
     const [externalSongService, setExternalSongService] = useState<'spotify' | 'musicBrainz' | null>(null);
 
     const {
+        control,
         register,
         handleSubmit,
         setError,
@@ -51,17 +52,17 @@ export default function SongEditorForm({ song, onSuccess }: Props) {
 
     const onSubmit = async (data: UpsertSong) => {
         console.log("Form data:", data);
-        return;
         setGlobalErrors([]);
 
         try {
             let savedSong: Song | null = null;
 
-            if (song && song.id) {
+            if (song?.id) {
                 data.id = song.id;
                 savedSong = await updateSong(data);
 
                 reset(savedSong);
+                reset({ coverFile: null });
             } else {
                 savedSong = await createSong(data);
             }
@@ -91,14 +92,12 @@ export default function SongEditorForm({ song, onSuccess }: Props) {
             </Title>
         }
 
-        {/*
         <SongFormCover
+            control={control}
             song={song}
             disabled={isSubmitting || song?.ready}
             {...register('coverFile')}
-        />*/}
-
-        <UploadButton {...register('coverFile')} />
+        />
 
         <Input
             label={t('karaoke.song_title')}

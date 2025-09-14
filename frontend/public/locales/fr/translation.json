@@ -248,7 +248,8 @@
                 "title_spotify": "Chercher sur Spotify",
                 "title_musicBrainz": "Chercher sur MusicBrainz"
             },
-            "upload_cover": "Téléverser une pochette"
+            "upload_cover": "Téléverser une pochette",
+            "not_uploaded_yet": "Pas encore téléversé"
         },
         "compile": {
             "title": "Paramètres de compilation",

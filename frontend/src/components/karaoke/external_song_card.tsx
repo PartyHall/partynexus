@@ -20,6 +20,7 @@ export default function ExternalSongCard({ song, onSelect }: Props) {
                 && <img
                     src={song.cover ?? 'https://placehold.co/64x64/171520/d72793/png'}
                     alt={`${song.title} cover`}
+                    className="block h-20 rounded-2xl"
                     onError={e => {
                         const target = e.currentTarget;
                         target.src = 'https://placehold.co/64x64/171520/d72793/png';
