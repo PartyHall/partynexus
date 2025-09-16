@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Command;
+namespace App\Command\Karaoke;
 
 use App\Repository\SongRepository;
 use App\Service\SongCompiler;

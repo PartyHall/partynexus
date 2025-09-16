@@ -12,7 +12,6 @@ import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import ExternalSongModal from "./external_song_modal";
 import SongFormCover from "./song_form_cover";
-import UploadButton from "@/components/generic/upload_button";
 
 type Props = {
     song?: Song | null;
@@ -51,7 +50,6 @@ export default function SongEditorForm({ song, onSuccess }: Props) {
     const artist = watch('artist');
 
     const onSubmit = async (data: UpsertSong) => {
-        console.log("Form data:", data);
         setGlobalErrors([]);
 
         try {

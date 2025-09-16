@@ -51,6 +51,7 @@ readonly class SongCompiler
         }
 
         $song->setReady(false);
+        $song->setNexusBuildId(null);
         $this->fs->remove($compiledFile);
 
         $this->emi->persist($song);

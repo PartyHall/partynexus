@@ -20,16 +20,17 @@ class SongNormalizer implements NormalizerInterface
         #[Autowire(service: 'api_platform.jsonld.normalizer.item')]
         private readonly NormalizerInterface $normalizer,
         #[Autowire(env: 'PUBLIC_URL')]
-        string $baseUrl,
+        string                               $baseUrl,
         #[Autowire(env: 'SONG_EXTRACT_LOCATION')]
-        private string $wipLocation,
-        private readonly StorageInterface $storage,
-    ) {
+        private readonly string              $wipLocation,
+        private readonly StorageInterface    $storage,
+    )
+    {
         $this->baseUrl = \rtrim($baseUrl, '/');
     }
 
     /**
-     * @param Song         $object
+     * @param Song $object
      * @param array<mixed> $context
      *
      * @return array<mixed>|string|int|float|bool|\ArrayObject<int, mixed>|null
@@ -47,15 +48,15 @@ class SongNormalizer implements NormalizerInterface
             $ext = SongFormat::CDG === $object->getFormat() ? 'mp3' : 'webm';
 
             if (\file_exists(Path::join($this->wipLocation, \sprintf('%s', $object->getId()), "instrumental.$ext"))) {
-                $object->instrumentalUrl = $this->baseUrl.'/api/song_file/'.$object->getId().'/instrumental.'.$ext;
+                $object->instrumentalUrl = $this->baseUrl . '/api/song_file/' . $object->getId() . '/instrumental.' . $ext;
             }
 
             if (\file_exists(Path::join($this->wipLocation, \sprintf('%s', $object->getId()), 'vocals.mp3'))) {
-                $object->vocalsUrl = $this->baseUrl.'/api/song_file/'.$object->getId().'/vocals.mp3';
+                $object->vocalsUrl = $this->baseUrl . '/api/song_file/' . $object->getId() . '/vocals.mp3';
             }
 
             if (\file_exists(Path::join($this->wipLocation, \sprintf('%s', $object->getId()), 'full.mp3'))) {
-                $object->combinedUrl = $this->baseUrl.'/api/song_file/'.$object->getId().'/full.mp3';
+                $object->combinedUrl = $this->baseUrl . '/api/song_file/' . $object->getId() . '/full.mp3';
             }
 
             if (SongFormat::CDG === $object->getFormat()) {

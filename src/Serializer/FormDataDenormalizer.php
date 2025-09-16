@@ -14,11 +14,6 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
  */
 class FormDataDenormalizer extends AbstractItemNormalizer implements DenormalizerInterface
 {
-    private function stupidHack(string $key): bool
-    {
-        return !\in_array($key, ['title', 'artist', 'spotifyId']);
-    }
-
     /**
      * @param array<mixed> $data
      * @param array<mixed> $context
@@ -31,28 +26,40 @@ class FormDataDenormalizer extends AbstractItemNormalizer implements Denormalize
             throw new \Exception('Data should be an array');
         }
 
+        $reflection = new \ReflectionClass($type);
+
         foreach ($data as $k => $v) {
-            if (\is_string($v)) {
-                if (null !== filter_var($v, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) && $this->stupidHack($k)) {
-                    $data[$k] = filter_var($v, FILTER_VALIDATE_BOOLEAN);
-                    continue;
-                }
-
-                if (false !== filter_var($v, FILTER_VALIDATE_INT) && $this->stupidHack($k)) {
-                    $data[$k] = filter_var($v, FILTER_VALIDATE_INT);
-                    continue;
-                }
-
-                if (false !== filter_var($v, FILTER_VALIDATE_FLOAT) && $this->stupidHack($k)) {
-                    $data[$k] = filter_var($v, FILTER_VALIDATE_FLOAT);
-                    continue;
-                }
-
-                // fuck but idc
-                if ($v === 'null') {
-                    $data[$k] = null;
-                }
+            if ($k === 'id' || !$reflection->hasProperty($k)) {
+                continue;
             }
+
+            $property = $reflection->getProperty($k);
+            $propertyType = $property->getType();
+
+            if ($propertyType === null) {
+                continue;
+            }
+
+            $typeName = $propertyType->getName();
+
+            if ($v === 'null') {
+                $data[$k] = null;
+
+                continue;
+            }
+
+            if (!\is_string($v)) {
+                continue;
+            }
+
+            $data[$k] = match ($typeName) {
+                'int' => \filter_var($v, FILTER_VALIDATE_INT),
+                'float' => \filter_var($v, FILTER_VALIDATE_FLOAT),
+                'bool' => \filter_var($v, FILTER_VALIDATE_BOOLEAN),
+                // Not sure about the date? Is it the sole normalizer that goes through, I guess?
+                \DateTimeInterface::class, \DateTime::class, \DateTimeImmutable::class => new \DateTimeImmutable($v),
+                default => $v,
+            };
         }
 
         return parent::denormalize($data, $type, $format, $context);

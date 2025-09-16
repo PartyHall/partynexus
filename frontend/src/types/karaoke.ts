@@ -16,6 +16,11 @@ export type Song = {
     coverUrl: string|null;
     vocals: boolean;
     combined: boolean;
+
+    cdgFileUploaded: boolean;
+    instrumentalUrl: string|null;
+    vocalsUrl: string|null;
+    combinedUrl: string|null;
 }
 
 export type UpsertSong = Song & { coverFile: File | null };

@@ -15,14 +15,14 @@ import { IconX } from '@tabler/icons-react';
 import dayjs from 'dayjs';
 import LocalizedFormat from 'dayjs/plugin/localizedFormat';
 
-const router = createRouter({ routeTree });
 const queryClient = new QueryClient();
+const router = createRouter({ routeTree, context: {queryClient} });
 
 dayjs.extend(LocalizedFormat)
 
 declare module '@tanstack/react-router' {
   interface Register {
-    router: typeof router
+    router: typeof router;
   }
 }
 

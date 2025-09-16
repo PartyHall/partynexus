@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Command;
+namespace App\Command\Backdrop;
 
 use App\Entity\BackdropAlbum;
 use App\Repository\BackdropAlbumRepository;

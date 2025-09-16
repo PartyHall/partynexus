@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Command;
+namespace App\Command\Event;
 
 use App\Entity\Event;
 use App\Repository\EventRepository;

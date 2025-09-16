@@ -27,14 +27,15 @@ use Symfony\Component\Serializer\SerializerInterface;
 class SongUploadFileController extends AbstractController
 {
     public function __construct(
-        private readonly Security $security,
+        private readonly Security               $security,
         private readonly EntityManagerInterface $emi,
-        private readonly SongRepository $songRepository,
-        private readonly Filesystem $fs,
-        private readonly SerializerInterface $serializer,
+        private readonly SongRepository         $songRepository,
+        private readonly Filesystem             $fs,
+        private readonly SerializerInterface    $serializer,
         #[Autowire(env: 'SONG_EXTRACT_LOCATION')]
-        private readonly string $wipLocation,
-    ) {
+        private readonly string                 $wipLocation,
+    )
+    {
     }
 
     #[Route(
@@ -66,67 +67,49 @@ class SongUploadFileController extends AbstractController
             throw new ProblemDetailsException(400, 'Song already compiled', 'The song you are trying to upload a file for is already compiled');
         }
 
-        // The cover is a special case as it should be both in the
-        // zip file and in the vich folder
-        if ('cover' === $filetype) {
-            $outdir = Path::join($this->wipLocation, \sprintf('%s/cover.jpg', $song->getId()));
-            $this->fs->remove($outdir);
+        if ('instrumental' === $filetype) {
+            $outFile = Path::join($this->wipLocation, \sprintf('%s/instrumental.', $song->getId()));
 
-            $this->fs->copy(
-                $file->getRealPath(),
-                $outdir,
-            );
+            $this->fs->remove([
+                $outFile . 'webm',
+                $outFile . 'mp3',
+            ]);
 
-            $song->setCoverFile($file);
-            $song->setCover(true);
-
-            $this->emi->persist($song);
-            $this->emi->flush();
-        } else {
-            if ('instrumental' === $filetype) {
-                $outFile = Path::join($this->wipLocation, \sprintf('%s/instrumental.', $song->getId()));
-
-                $this->fs->remove([
-                    $outFile.'webm',
-                    $outFile.'mp3',
-                ]);
-
-                if (SongFormat::CDG === $song->getFormat()) {
-                    $ext = 'mp3';
-                } else {
-                    $ext = 'webm';
-                }
-            } elseif ('lyrics' === $filetype) {
-                $ext = 'cdg';
-                $outFile = Path::join($this->wipLocation, \sprintf('%s/lyrics.cdg', $song->getId()));
-                $this->fs->remove($outFile);
-            } else {
+            if (SongFormat::CDG === $song->getFormat()) {
                 $ext = 'mp3';
-                $this->fs->remove(Path::join(
-                    $this->wipLocation,
-                    \sprintf(
-                        '%s/%s.%s',
-                        $song->getId(),
-                        $filetype,
-                        $ext,
-                    )
-                ));
+            } else {
+                $ext = 'webm';
             }
-
-            if ('vocals' === $filetype) {
-                $song->setVocals(true);
-            } elseif ('full' === $filetype) {
-                $song->setCombined(true);
-            }
-
-            $this->emi->persist($song);
-            $this->emi->flush();
-
-            $file->move(
-                Path::join($this->wipLocation, \sprintf('%s', $song->getId())),
-                $filetype.'.'.$ext,
-            );
+        } elseif ('lyrics' === $filetype) {
+            $ext = 'cdg';
+            $outFile = Path::join($this->wipLocation, \sprintf('%s/lyrics.cdg', $song->getId()));
+            $this->fs->remove($outFile);
+        } else {
+            $ext = 'mp3';
+            $this->fs->remove(Path::join(
+                $this->wipLocation,
+                \sprintf(
+                    '%s/%s.%s',
+                    $song->getId(),
+                    $filetype,
+                    $ext,
+                )
+            ));
         }
+
+        if ('vocals' === $filetype) {
+            $song->setVocals(true);
+        } elseif ('full' === $filetype) {
+            $song->setCombined(true);
+        }
+
+        $this->emi->persist($song);
+        $this->emi->flush();
+
+        $file->move(
+            Path::join($this->wipLocation, \sprintf('%s', $song->getId())),
+            $filetype . '.' . $ext,
+        );
 
         $songData = $this->serializer->serialize($song, 'json', [
             AbstractNormalizer::GROUPS => [Song::API_GET_ITEM],

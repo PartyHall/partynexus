@@ -111,7 +111,6 @@ class Song implements HasTimestamps
 
     /** @var string[] */
     public static array $ALLOWED_FILETYPES = [
-        'cover',
         'instrumental',
         'lyrics',
         'vocals',
@@ -223,7 +222,7 @@ class Song implements HasTimestamps
         self::COMPILE_METADATA,
     ])]
     #[Assert\Uuid]
-    private ?Uuid $nexusBuildId;
+    private ?Uuid $nexusBuildId = null;
 
     /**
      * The 10 seconds that are the most recognizable

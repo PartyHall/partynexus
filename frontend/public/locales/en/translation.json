@@ -33,10 +33,13 @@
         "ok": "OK",
         "edit_saved": "Modifications saved successfully",
         "title": "Titre",
+        "upload": "Upload",
+        "upload_success": "Upload successful",
         "error": {
             "generic": "An error occurred",
             "generic_desc": "Please try again later or contact your PartyHall administrator",
-            "generic_with_message": "An error occurred: {{message}}"
+            "generic_with_message": "An error occurred: {{message}}",
+            "upload_failed": "Upload failed"
         }
     },
     "errors": {
@@ -252,7 +255,16 @@
                 "title_musicBrainz": "Search on MusicBrainz"
             },
             "upload_cover": "Upload cover art",
-            "not_uploaded_yet": "Not uploaded yet"
+            "not_uploaded_yet": "Not uploaded yet",
+            "song_files": "Song files",
+            "transparent_video": "Transparent video (WebM with alpha)",
+            "video": "Video",
+            "vocals": "Vocals",
+            "instrumental": "Instrumental",
+            "full": "Full song",
+            "cdg": "Lyrics (CDG)",
+            "no_file": "No file",
+            "cdg_uploaded": "CDG uploaded"
         },
         "compile": {
             "title": "Compilation settings",

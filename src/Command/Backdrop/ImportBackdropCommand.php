@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Command;
+namespace App\Command\Backdrop;
 
 use App\Service\BackdropManager;
 use Symfony\Component\Console\Attribute\AsCommand;

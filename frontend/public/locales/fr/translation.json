@@ -33,10 +33,13 @@
         "ok": "OK",
         "edit_saved": "Modifications enregistrées avec succès",
         "title": "Title",
+        "upload": "Upload",
+        "upload_success": "Téléversement réussi",
         "error": {
             "generic": "Une erreur s'est produite",
             "generic_desc": "Merci de réessayer plus tard ou de contacter votre administrateur PartyHall",
-            "generic_with_message": "Une erreur est survenue: {{message}}"
+            "generic_with_message": "Une erreur est survenue: {{message}}",
+            "upload_failed": "Échec du téléversement"
         }
     },
     "errors": {
@@ -249,7 +252,16 @@
                 "title_musicBrainz": "Chercher sur MusicBrainz"
             },
             "upload_cover": "Téléverser une pochette",
-            "not_uploaded_yet": "Pas encore téléversé"
+            "not_uploaded_yet": "Pas encore téléversé",
+            "song_files": "Fichiers de la musique",
+            "transparent_video": "Vidéo transparente (WebM avec alpha)",
+            "video": "Vidéo",
+            "vocals": "Voix",
+            "instrumental": "Instrumentale",
+            "full": "Musique complète",
+            "cdg": "Lyrics (CDG)",
+            "no_file": "Aucun fichier",
+            "cdg_uploaded": "CDG téléversé"
         },
         "compile": {
             "title": "Paramètres de compilation",

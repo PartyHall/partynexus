@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Command;
+namespace App\Command\Karaoke;
 
 use App\Entity\Song;
 use App\Repository\SongRepository;

@@ -8,9 +8,6 @@ Built with my new wip stack: tanstack router, tanstack query, tailwind and zusta
 
 - Forgotten password => Créer la page frontend pour faire une demande de mail pour (+ ratelimit etc...)
 - Login doit pouvoir utiliser l'email (attention il doit manquer qqchose parce que j'arrive à me logguer mais ça 401 direct après sur un endpoint, le LexikJWT authenticator pète et si on surcharge le username dans le jwt ça pète dans le navigateur le parsing)
-- Karaoke: Chercher une musique pète sur les espaces (Dégager les tsvector et passer sur Meilisearch ou Typesense)
-- Karaoke: La décompilation ne rafraichis pas la page
-- Karaoke: Upload de media
 - Fonctionnalité de "créer un compte pour cet évenement"
 - Faire l'authentification oauth customizable
 - Refaire le système de formulaire comme dans Spectrum/Luminance
