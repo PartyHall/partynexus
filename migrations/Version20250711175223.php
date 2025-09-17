@@ -30,9 +30,6 @@ final class Version20250711175223 extends AbstractMigration
         $this->addSql('ALTER TABLE magic_password DROP CONSTRAINT fk_8971003ca76ed395');
         $this->addSql('DROP TABLE magic_link');
         $this->addSql('DROP TABLE magic_password');
-        $this->addSql('ALTER TABLE event ADD user_registration_code VARCHAR(255) DEFAULT NULL');
-        $this->addSql('ALTER TABLE event ADD user_registration_enabled BOOLEAN DEFAULT false NOT NULL');
-        $this->addSql('CREATE UNIQUE INDEX UNIQ_3BAE0AA740349C6F ON event (user_registration_code)');
         $this->addSql('ALTER TABLE song ALTER search_vector TYPE tsvector');
         $this->addSql('ALTER TABLE song_request ALTER search_vector TYPE tsvector');
     }
@@ -53,9 +50,6 @@ final class Version20250711175223 extends AbstractMigration
         $this->addSql('ALTER TABLE magic_password ADD CONSTRAINT fk_8971003ca76ed395 FOREIGN KEY (user_id) REFERENCES nexus_user (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE forgotten_password DROP CONSTRAINT FK_2EDC8D24A76ED395');
         $this->addSql('DROP TABLE forgotten_password');
-        $this->addSql('DROP INDEX UNIQ_3BAE0AA740349C6F');
-        $this->addSql('ALTER TABLE event DROP user_registration_code');
-        $this->addSql('ALTER TABLE event DROP user_registration_enabled');
         $this->addSql('ALTER TABLE song_request ALTER search_vector TYPE TEXT');
         $this->addSql('ALTER TABLE song ALTER search_vector TYPE TEXT');
     }
