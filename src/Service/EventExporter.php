@@ -62,7 +62,7 @@ class EventExporter
         // Non, @TODO: utiliser le bundle mercure proprement
         // pour qu'il envoie automatiquement les update au persist
         $this->hub->publish(new Update(
-            '/events/' . $this->event->getId()->toString(),
+            '/events/'.$this->event->getId()->toString(),
             \json_encode($this->event),
         ));
     }

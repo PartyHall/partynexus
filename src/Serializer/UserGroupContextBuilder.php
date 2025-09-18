@@ -51,7 +51,7 @@ readonly class UserGroupContextBuilder implements SerializerContextBuilderInterf
             ];
         }
 
-        /**
+        /*
          * On the GET operation for the User resource, if the user is requesting their own data,
          * we allow him to fetch more stuff.
          */

@@ -12,13 +12,10 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Filesystem\Path;
-use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -27,15 +24,14 @@ use Symfony\Component\Serializer\SerializerInterface;
 class SongUploadFileController extends AbstractController
 {
     public function __construct(
-        private readonly Security               $security,
+        private readonly Security $security,
         private readonly EntityManagerInterface $emi,
-        private readonly SongRepository         $songRepository,
-        private readonly Filesystem             $fs,
-        private readonly SerializerInterface    $serializer,
+        private readonly SongRepository $songRepository,
+        private readonly Filesystem $fs,
+        private readonly SerializerInterface $serializer,
         #[Autowire(env: 'SONG_EXTRACT_LOCATION')]
-        private readonly string                 $wipLocation,
-    )
-    {
+        private readonly string $wipLocation,
+    ) {
     }
 
     #[Route(
@@ -71,8 +67,8 @@ class SongUploadFileController extends AbstractController
             $outFile = Path::join($this->wipLocation, \sprintf('%s/instrumental.', $song->getId()));
 
             $this->fs->remove([
-                $outFile . 'webm',
-                $outFile . 'mp3',
+                $outFile.'webm',
+                $outFile.'mp3',
             ]);
 
             if (SongFormat::CDG === $song->getFormat()) {
@@ -108,7 +104,7 @@ class SongUploadFileController extends AbstractController
 
         $file->move(
             Path::join($this->wipLocation, \sprintf('%s', $song->getId())),
-            $filetype . '.' . $ext,
+            $filetype.'.'.$ext,
         );
 
         $songData = $this->serializer->serialize($song, 'json', [

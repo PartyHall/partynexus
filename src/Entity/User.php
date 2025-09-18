@@ -375,7 +375,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $role = strtoupper($role);
 
         if (!str_starts_with($role, 'ROLE_')) {
-            $role = 'ROLE_' . $role;
+            $role = 'ROLE_'.$role;
         }
 
         if (!in_array($role, $this->roles)) {
@@ -390,10 +390,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $role = strtoupper($role);
 
         if (!str_starts_with($role, 'ROLE_')) {
-            $role = 'ROLE_' . $role;
+            $role = 'ROLE_'.$role;
         }
 
-        $this->roles = array_filter($this->roles, fn($x) => $x !== $role);
+        $this->roles = array_filter($this->roles, fn ($x) => $x !== $role);
 
         return $this;
     }

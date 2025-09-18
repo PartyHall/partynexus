@@ -22,9 +22,8 @@ readonly class EventPersistProcessor implements ProcessorInterface
         /** @var ProcessorInterface<object, object> $processor */
         #[Autowire(service: PersistProcessor::class)]
         private ProcessorInterface $processor,
-        private Security           $security,
-    )
-    {
+        private Security $security,
+    ) {
     }
 
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): mixed
@@ -48,7 +47,7 @@ readonly class EventPersistProcessor implements ProcessorInterface
             $data->setParticipants(
                 \array_filter(
                     $data->getParticipants()->toArray(),
-                    fn(User $participant) => $participant->getId() !== $owner->getId(),
+                    fn (User $participant) => $participant->getId() !== $owner->getId(),
                 ),
             );
         }

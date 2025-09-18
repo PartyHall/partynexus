@@ -2,7 +2,6 @@
 
 namespace App\Enum;
 
-
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Operation;
 use Symfony\Component\Serializer\Attribute\Groups;

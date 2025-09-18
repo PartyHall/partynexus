@@ -22,23 +22,21 @@ use Symfony\Component\Serializer\SerializerInterface;
 readonly class Mercure
 {
     public function __construct(
-        private HubInterface        $hub,
+        private HubInterface $hub,
         private SerializerInterface $serializer,
-    )
-    {
+    ) {
     }
 
     /**
-     * @param array<string> $groups
-     * @param array<string> $userIds
+     * @param array<string>     $groups
+     * @param array<string|int> $userIds
      */
     public function submitToUsers(
         string $topic,
         object $data,
-        array  $groups,
-        array  $userIds = [],
-    ): void
-    {
+        array $groups,
+        array $userIds = [],
+    ): void {
         $data = $this->serializer->serialize($data, 'jsonld', [AbstractNormalizer::GROUPS => $groups]);
 
         foreach ($userIds as $user) {
@@ -50,5 +48,4 @@ readonly class Mercure
             ));
         }
     }
-
 }

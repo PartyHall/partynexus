@@ -35,7 +35,7 @@ enum SongQuality: string implements TranslatableEnumLabelInterface
     {
         $name = $uriVariables['id'] ?? null;
 
-        return constant(self::class . "::$name");
+        return constant(self::class."::$name");
     }
 
     /**

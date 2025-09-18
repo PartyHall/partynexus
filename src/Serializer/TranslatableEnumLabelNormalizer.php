@@ -9,7 +9,8 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-class TranslatableEnumLabelNormalizer implements NormalizerInterface {
+class TranslatableEnumLabelNormalizer implements NormalizerInterface
+{
     private const string ALREADY_CALLED = 'TRANSLATABLE_ENUM_LABEL_NORMALIZER_ALREADY_CALLED';
 
     public function __construct(
@@ -66,6 +67,6 @@ class TranslatableEnumLabelNormalizer implements NormalizerInterface {
 
     public function getSupportedTypes(?string $format): array
     {
-        return [ '*' => false ];
+        return ['*' => false];
     }
 }

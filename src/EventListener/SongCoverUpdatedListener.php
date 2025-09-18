@@ -5,15 +5,13 @@ namespace App\EventListener;
 use App\Entity\Song;
 use Doctrine\Bundle\DoctrineBundle\Attribute\AsEntityListener;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\Event\PostPersistEventArgs;
-use Doctrine\ORM\Event\PostUpdateEventArgs;
+use Doctrine\ORM\Events as DoctrineEvents;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Filesystem\Path;
 use Vich\UploaderBundle\Event\Event;
 use Vich\UploaderBundle\Event\Events;
-use Doctrine\ORM\Events as DoctrineEvents;
 
 #[AsEntityListener(event: DoctrineEvents::postPersist, entity: Song::class)]
 #[AsEntityListener(event: DoctrineEvents::postUpdate, entity: Song::class)]
@@ -26,11 +24,10 @@ class SongCoverUpdatedListener implements EventSubscriberInterface
 
     public function __construct(
         #[Autowire(env: 'SONG_EXTRACT_LOCATION')]
-        private readonly string                 $wipLocation,
-        private readonly Filesystem             $fs,
+        private readonly string $wipLocation,
+        private readonly Filesystem $fs,
         private readonly EntityManagerInterface $emi,
-    )
-    {
+    ) {
     }
 
     /**
@@ -73,7 +70,7 @@ class SongCoverUpdatedListener implements EventSubscriberInterface
 
         $mapping = $pendingData['mapping'];
 
-        $filepath = $mapping->getUploadDestination() . '/' . $mapping->getFileName($entity);
+        $filepath = $mapping->getUploadDestination().'/'.$mapping->getFileName($entity);
         if (!$this->fs->exists($filepath)) {
             return;
         }
@@ -83,7 +80,7 @@ class SongCoverUpdatedListener implements EventSubscriberInterface
             $this->fs->mkdir(\dirname($outPath), 0755);
         }
 
-        if ($this->fs->exists($outPath)){
+        if ($this->fs->exists($outPath)) {
             $this->fs->remove($outPath);
         }
 

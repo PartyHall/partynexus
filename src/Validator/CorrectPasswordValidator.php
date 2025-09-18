@@ -14,10 +14,9 @@ use Symfony\Component\Validator\Exception\UnexpectedValueException;
 class CorrectPasswordValidator extends ConstraintValidator
 {
     public function __construct(
-        private readonly Security                    $security,
+        private readonly Security $security,
         private readonly UserPasswordHasherInterface $passwordHasher,
-    )
-    {
+    ) {
     }
 
     public function validate(mixed $value, Constraint $constraint): void

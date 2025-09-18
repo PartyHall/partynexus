@@ -7,7 +7,6 @@ use App\Entity\Export;
 use App\Enum\EnumApiConfig;
 use App\Service\Mercure;
 use Doctrine\Bundle\DoctrineBundle\Attribute\AsEntityListener;
-use Doctrine\Persistence\Event\LifecycleEventArgs;
 
 #[AsEntityListener(event: 'postUpdate', method: 'onUpdate', entity: Event::class)]
 #[AsEntityListener(event: 'postPersist', method: 'onUpdate', entity: Export::class)]
@@ -16,15 +15,14 @@ readonly class EventUpdatedListener
 {
     public function __construct(
         private Mercure $mercure,
-    )
-    {
+    ) {
     }
 
     /**
      * When an event is updated or an export is created or updated,
-     * we want to send the updated event to the user
+     * we want to send the updated event to the user.
      */
-    public function onUpdate(Event|Export $event, LifecycleEventArgs $args): void
+    public function onUpdate(Event|Export $event): void
     {
         if ($event instanceof Export) {
             $event = $event->getEvent();
@@ -35,7 +33,7 @@ readonly class EventUpdatedListener
             $event,
             [Event::API_GET_ITEM, EnumApiConfig::GET_GROUP],
             \array_map(
-                fn($user) => $user->getId(),
+                fn ($user) => $user->getId(),
                 [$event->getOwner(), ...$event->getParticipants()->toArray()],
             ),
         );

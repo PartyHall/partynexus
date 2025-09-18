@@ -34,7 +34,7 @@ readonly class PictureCollectionProvider implements ProviderInterface
      * @param array<mixed> $uriVariables
      * @param array<mixed> $context
      *
-     * @return Picture|iterable<Picture>|null
+     * @return Picture|array<Picture>|null
      */
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): array|Picture|null
     {

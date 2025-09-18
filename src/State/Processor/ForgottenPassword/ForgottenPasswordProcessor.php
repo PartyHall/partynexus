@@ -22,8 +22,8 @@ readonly class ForgottenPasswordProcessor implements ProcessorInterface
 
     /**
      * @param ForgottenPassword $data
-     * @param array<mixed>  $uriVariables
-     * @param array<mixed>  $context
+     * @param array<mixed>      $uriVariables
+     * @param array<mixed>      $context
      */
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): ForgottenPassword
     {

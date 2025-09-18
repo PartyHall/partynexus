@@ -22,7 +22,7 @@ class ForgottenPasswordNormalizer implements NormalizerInterface
 
     /**
      * @param ForgottenPassword $object
-     * @param array<mixed>  $context
+     * @param array<mixed>      $context
      *
      * @return array<mixed>
      */

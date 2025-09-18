@@ -14,19 +14,21 @@ use Symfony\Component\Filesystem\Path;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
+/**
+ * @implements ProviderInterface<BinaryFileResponse>
+ */
 abstract readonly class AbstractPictureDownloadProvider implements ProviderInterface
 {
     public function __construct(
         private PictureRepository $pictureRepository,
-        private LoggerInterface   $logger,
-        private Security          $security,
+        private LoggerInterface $logger,
+        private Security $security,
         #[Autowire(env: 'PICTURES_LOCATION')]
-        private string            $rootPicturePath,
+        private string $rootPicturePath,
         #[Autowire(param: 'kernel.cache_dir')]
-        private string            $cacheDir,
-        private ImageManager      $imageManager,
-    )
-    {
+        private string $cacheDir,
+        private ImageManager $imageManager,
+    ) {
     }
 
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): object|array|null
@@ -84,7 +86,7 @@ abstract readonly class AbstractPictureDownloadProvider implements ProviderInter
         return new BinaryFileResponse($cachePath);
     }
 
-    protected abstract function getCacheDir(): string;
+    abstract protected function getCacheDir(): string;
 
-    protected abstract function processPicture(ImageInterface $image): ImageInterface;
+    abstract protected function processPicture(ImageInterface $image): ImageInterface;
 }

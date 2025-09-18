@@ -21,6 +21,7 @@ use App\Interface\Impl\HasTimestampsTrait;
 use App\Repository\SongRepository;
 use App\State\Processor\SongCompileProcessor;
 use App\State\Processor\SongDecompileProcessor;
+use App\State\Provider\SongCollectionProvider;
 use App\State\Provider\SongDownloadProvider;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -54,7 +55,10 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 #[ApiResource(
     operations: [
         // Sort order is done in SongOrderExtension
-        new GetCollection(normalizationContext: [AbstractNormalizer::GROUPS => [self::API_GET_COLLECTION]]),
+        new GetCollection(
+            normalizationContext: [AbstractNormalizer::GROUPS => [self::API_GET_COLLECTION]],
+            provider: SongCollectionProvider::class,
+        ),
         new Get(normalizationContext: [AbstractNormalizer::GROUPS => [self::API_GET_ITEM]]),
         new Post(
             inputFormats: ['multipart' => ['multipart/form-data']],

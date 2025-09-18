@@ -13,6 +13,6 @@ readonly class PictureThumbnailProvider extends AbstractPictureDownloadProvider
 
     protected function processPicture(ImageInterface $image): ImageInterface
     {
-       return $image->cover(300, 300, 'center');
+        return $image->cover(300, 300, 'center');
     }
 }

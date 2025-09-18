@@ -28,9 +28,9 @@ readonly class NewSongRequestNotificationHandler
         foreach ($admins as $admin) {
             $mail = (new TemplatedEmail())
                 ->to($admin->getEmail())
-                ->subject('[PartyHall] '.$this->translator->trans('emails.new_song_request.subject', locale: $admin->getLanguage()))
+                ->subject('[PartyHall] '.$this->translator->trans('emails.new_song_request.subject', locale: $admin->getLanguage()->value))
                 ->htmlTemplate('emails/new_song_request.html.twig')
-                ->locale($admin->getLanguage())
+                ->locale($admin->getLanguage()->value)
                 ->context([
                     'username' => $admin->getUsername(),
                     'fullname' => $admin->getFullName(),

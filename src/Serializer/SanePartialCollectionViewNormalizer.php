@@ -11,7 +11,7 @@ use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 /**
- * Thanks API Platform to be AS USUAL simultaneously such an AMAZING framework to work with, and a pain in the ass
+ * Thanks API Platform to be AS USUAL simultaneously such an AMAZING framework to work with, and a pain in the ass.
  */
 #[AsDecorator(decorates: 'api_platform.hydra.normalizer.partial_collection_view')]
 readonly class SanePartialCollectionViewNormalizer implements NormalizerInterface, NormalizerAwareInterface
@@ -19,12 +19,16 @@ readonly class SanePartialCollectionViewNormalizer implements NormalizerInterfac
     public function __construct(
         #[AutowireDecorated]
         private PartialCollectionViewNormalizer $inner,
-    )
-    {
+    ) {
     }
 
     // IDC about HydraPrefix we'll assume there is none
     // as it will probably be used only for this software
+    /**
+     * @param array<mixed> $context
+     *
+     * @return array<mixed>|string|int|float|bool|\ArrayObject<int, mixed>|null
+     */
     public function normalize(mixed $object, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         $data = $this->inner->normalize($object, $format, $context);
@@ -52,10 +56,12 @@ readonly class SanePartialCollectionViewNormalizer implements NormalizerInterfac
             }
         }
 
-
         return $data;
     }
 
+    /**
+     * @param array<mixed> $context
+     */
     public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
     {
         return $this->inner->supportsNormalization($data, $format, $context);

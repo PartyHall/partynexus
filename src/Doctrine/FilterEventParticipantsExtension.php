@@ -28,7 +28,10 @@ final readonly class FilterEventParticipantsExtension extends AbstractPermission
         return Event::class;
     }
 
-    protected function getUserClassNames(): string|array
+    /**
+     * @return array<class-string>
+     */
+    protected function getUserClassNames(): array
     {
         return [User::class, Appliance::class];
     }

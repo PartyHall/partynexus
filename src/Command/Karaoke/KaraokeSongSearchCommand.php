@@ -15,8 +15,7 @@ class KaraokeSongSearchCommand extends Command
 {
     public function __construct(
         private readonly BigSearchService $searchService,
-    )
-    {
+    ) {
         parent::__construct();
     }
 
@@ -24,16 +23,16 @@ class KaraokeSongSearchCommand extends Command
     {
         $this->addArgument('search', null, 'Search term')
             ->addOption('ready', null, InputOption::VALUE_NEGATABLE, 'Show only compiled / not-compiled songs')
-            ->addOption('vocals', null,  InputOption::VALUE_NEGATABLE, 'Show only songs with / without vocals')
+            ->addOption('vocals', null, InputOption::VALUE_NEGATABLE, 'Show only songs with / without vocals')
             ->addOption(
                 'formats',
                 null,
                 InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY,
-                'Filter by format (values are ' . \array_reduce(
+                'Filter by format (values are '.\array_reduce(
                     SongFormat::cases(),
-                    fn ($carry, SongFormat $format) => $carry . ($carry ? ', ' : '') . $format->value,
+                    fn ($carry, SongFormat $format) => $carry.($carry ? ', ' : '').$format->value,
                     '',
-                ) . ')')
+                ).')')
         ;
     }
 
@@ -49,7 +48,7 @@ class KaraokeSongSearchCommand extends Command
         $formats = $input->getOption('formats');
         if ($formats) {
             try {
-                $formats = \array_map(fn($format) => SongFormat::from(\strtolower($format)), $formats);
+                $formats = \array_map(fn ($format) => SongFormat::from(\strtolower($format)), $formats);
             } catch (\Exception $e) {
                 $output->writeln('Invalid search format.');
 
@@ -63,7 +62,6 @@ class KaraokeSongSearchCommand extends Command
             $input->getOption('vocals'),
             $formats,
         );
-
 
         foreach ($hits as $hit) {
             $output->writeln(\sprintf(

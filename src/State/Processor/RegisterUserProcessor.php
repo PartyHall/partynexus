@@ -15,6 +15,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\RateLimiter\RateLimiterFactory;
 
+/**
+ * @implements ProcessorInterface<mixed, Response>
+ */
 readonly class RegisterUserProcessor implements ProcessorInterface
 {
     public function __construct(

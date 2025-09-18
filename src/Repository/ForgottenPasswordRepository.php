@@ -7,7 +7,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @method findOneBy(array $criteria, ?array $orderBy = null): ?ForgottenPassword
+ * @method findOneBy(mixed[] $criteria, ?mixed[] $orderBy = null): ?ForgottenPassword
  *
  * @extends ServiceEntityRepository<ForgottenPassword>
  */

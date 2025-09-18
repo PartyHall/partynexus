@@ -15,11 +15,10 @@ use Symfony\Component\HttpFoundation\RequestStack;
 readonly class CustomJwtListener
 {
     public function __construct(
-        private IriConverterInterface  $iriConverter,
-        private RequestStack           $requestStack,
+        private IriConverterInterface $iriConverter,
+        private RequestStack $requestStack,
         private EntityManagerInterface $entityManager,
-    )
-    {
+    ) {
     }
 
     public function onJWTCreated(JWTCreatedEvent $event): void
@@ -43,10 +42,6 @@ readonly class CustomJwtListener
         ];
 
         $event->setData($payload);
-
-        if (!$user instanceof User) {
-            return;
-        }
 
         $log = (new UserAuthenticationLog())
             ->setUser($user)

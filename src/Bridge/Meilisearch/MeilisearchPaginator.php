@@ -4,10 +4,11 @@ namespace App\Bridge\Meilisearch;
 
 use ApiPlatform\State\Pagination\HasNextPagePaginatorInterface;
 use ApiPlatform\State\Pagination\PaginatorInterface;
-use Traversable;
 
+// @phpstan-ignore-next-line
 class MeilisearchPaginator implements PaginatorInterface, \IteratorAggregate, HasNextPagePaginatorInterface
 {
+    /** @var \Traversable<object>|\ArrayIterator<object> */
     private \Traversable $iterator;
 
     private int $count;
@@ -21,17 +22,13 @@ class MeilisearchPaginator implements PaginatorInterface, \IteratorAggregate, Ha
      */
     public function __construct(array $meilisearchResponse)
     {
-        $this->count = \count($meilisearchResponse['hits']) ?? 0;
+        $this->count = \array_key_exists('hits', $meilisearchResponse) ? \count($meilisearchResponse['hits']) : 0;
         $this->page = $meilisearchResponse['page'] ?? 1;
         $this->hitsPerPage = $meilisearchResponse['hitsPerPage'] ?? 20;
         $this->totalPages = $meilisearchResponse['totalPages'] ?? 0;
         $this->totalHits = $meilisearchResponse['totalHits'] ?? 0;
 
-        if ($this->count > 0 && 1 < $this->totalHits) {
-            $this->iterator = new \LimitIterator(new \ArrayIterator($meilisearchResponse['hits']), 1, $this->hitsPerPage);
-        } else {
-            $this->iterator = new \EmptyIterator();
-        }
+        $this->iterator = new \ArrayIterator($meilisearchResponse['hits']);
     }
 
     public function count(): int
@@ -41,17 +38,17 @@ class MeilisearchPaginator implements PaginatorInterface, \IteratorAggregate, Ha
 
     public function getLastPage(): float
     {
-        return (float)$this->totalPages;
+        return (float) $this->totalPages;
     }
 
     public function getTotalItems(): float
     {
-        return (float)$this->totalHits;
+        return (float) $this->totalHits;
     }
 
     public function getCurrentPage(): float
     {
-        return (float)$this->page;
+        return (float) $this->page;
     }
 
     public function getItemsPerPage(): float
@@ -59,7 +56,7 @@ class MeilisearchPaginator implements PaginatorInterface, \IteratorAggregate, Ha
         return $this->hitsPerPage;
     }
 
-    public function getIterator(): Traversable
+    public function getIterator(): \Traversable
     {
         return $this->iterator;
     }

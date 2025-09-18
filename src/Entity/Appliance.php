@@ -181,6 +181,6 @@ class Appliance implements UserInterface
 
     public function getUserIdentifier(): string
     {
-        return $this->hardwareId;
+        return $this->hardwareId->toString();
     }
 }

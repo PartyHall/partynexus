@@ -10,7 +10,7 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
 /**
  * This file is awful dont look at it too much
- * it needs to be fixed at some point
+ * it needs to be fixed at some point.
  */
 class FormDataDenormalizer extends AbstractItemNormalizer implements DenormalizerInterface
 {
@@ -29,20 +29,21 @@ class FormDataDenormalizer extends AbstractItemNormalizer implements Denormalize
         $reflection = new \ReflectionClass($type);
 
         foreach ($data as $k => $v) {
-            if ($k === 'id' || !$reflection->hasProperty($k)) {
+            if ('id' === $k || !$reflection->hasProperty($k)) {
                 continue;
             }
 
             $property = $reflection->getProperty($k);
             $propertyType = $property->getType();
 
-            if ($propertyType === null) {
+            if (null === $propertyType) {
                 continue;
             }
 
+            // @phpstan-ignore-next-line
             $typeName = $propertyType->getName();
 
-            if ($v === 'null') {
+            if ('null' === $v) {
                 $data[$k] = null;
 
                 continue;
@@ -73,11 +74,17 @@ class FormDataDenormalizer extends AbstractItemNormalizer implements Denormalize
         return Picture::class === $type || Song::class === $type;
     }
 
+    /**
+     * @param array<mixed> $context
+     */
     public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
     {
         return false;
     }
 
+    /**
+     * @return array<string, bool|null>
+     */
     public function getSupportedTypes(?string $format): array
     {
         return [

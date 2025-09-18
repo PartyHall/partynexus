@@ -19,7 +19,7 @@ readonly class ForgottenPasswordSetProcessor implements ProcessorInterface
     public function __construct(
         private ForgottenPasswordRepository $repository,
         private UserPasswordHasherInterface $passwordHasher,
-        private EntityManagerInterface      $entityManager,
+        private EntityManagerInterface $entityManager,
     ) {
     }
 
