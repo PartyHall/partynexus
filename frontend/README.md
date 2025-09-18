@@ -15,15 +15,16 @@ Built with my new wip stack: tanstack router, tanstack query, tailwind and zusta
 ## OAuth login & co
 
 Il faut que je fasse un endpoint qui récupère:
+
 - Les méthodes de login via OAuth (configurable dans le backend)
 - Si les inscriptions sont ouvertes
 
 Les méthodes de login il faudrait un truc dans le genre:
 {
-    "name": "some_slug"
-    "buttonColor": "Some button color",
-    "textColor: "Some text color",
-    "icon": "b64 icon",
+"name": "some_slug"
+"buttonColor": "Some button color",
+"textColor: "Some text color",
+"icon": "b64 icon",
 }
 
 Après sur le backend on fait des routes au format `/api/oauth/{name}/login` et `/api/oauth/{name}/callback`

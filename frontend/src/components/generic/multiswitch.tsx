@@ -30,7 +30,12 @@ export default function TriStateSwitchRadio({
   className = "",
 }: TriStateSwitchProps) {
   const knobStyle: React.CSSProperties = {
-    left: value === false ? "calc(0% + 5px)" : value === null ? "calc(50%)" : "calc(100% - 5px)",
+    left:
+      value === false
+        ? "calc(0% + 5px)"
+        : value === null
+          ? "calc(50%)"
+          : "calc(100% - 5px)",
     transform:
       value === false
         ? "translateX(0%)"
@@ -50,7 +55,7 @@ export default function TriStateSwitchRadio({
     key: string,
     val: SwitchValue,
     srLabel: string,
-    posClass: string
+    posClass: string,
   ) => (
     <label
       key={key}

@@ -7,106 +7,157 @@
  **/
 
 @utility text-blue-glow {
-    color: #fdfdfd;
-    text-shadow: 0 0 2px #001716, 0 0 3px #03edf9, 0 0 5px #03edf9, 0 0 8px #03edf9;
-    backface-visibility: hidden;
+  color: #fdfdfd;
+  text-shadow:
+    0 0 2px #001716,
+    0 0 3px #03edf9,
+    0 0 5px #03edf9,
+    0 0 8px #03edf9;
+  backface-visibility: hidden;
 }
 
 @utility box-blue-glow {
-    box-shadow: 0 0 5px #03edf94d, 0 0 10px #03edf933;
-    border: 1px solid #03edf980;
+  box-shadow:
+    0 0 5px #03edf94d,
+    0 0 10px #03edf933;
+  border: 1px solid #03edf980;
 }
 
 @utility text-purple-glow {
-    color: #fdfdfd;
-    text-shadow: 0 0 2px #1d0922, 0 0 3px #c17aff, 0 0 5px #c17aff, 0 0 8px #c17aff;
-    backface-visibility: hidden;
+  color: #fdfdfd;
+  text-shadow:
+    0 0 2px #1d0922,
+    0 0 3px #c17aff,
+    0 0 5px #c17aff,
+    0 0 8px #c17aff;
+  backface-visibility: hidden;
 }
 
 @utility box-purple-glow {
-    box-shadow: 0 0 5px #c17aff4d, 0 0 10px #c17aff33;
-    border: 1px solid #c17aff80;
+  box-shadow:
+    0 0 5px #c17aff4d,
+    0 0 10px #c17aff33;
+  border: 1px solid #c17aff80;
 }
 
 @utility text-red-glow {
-    color: #fff5f6;
-    text-shadow: 0 0 2px #000, 0 0 10px #fc1f2c, 0 0 5px #fc1f2c, 0 0 25px #fc1f2c;
-    backface-visibility: hidden;
+  color: #fff5f6;
+  text-shadow:
+    0 0 2px #000,
+    0 0 10px #fc1f2c,
+    0 0 5px #fc1f2c,
+    0 0 25px #fc1f2c;
+  backface-visibility: hidden;
 }
 
 @utility box-red-glow {
-    box-shadow: 0 0 5px #fc1f2c4d, 0 0 10px #fc1f2c33;
-    border: 1px solid #fc1f2c80;
+  box-shadow:
+    0 0 5px #fc1f2c4d,
+    0 0 10px #fc1f2c33;
+  border: 1px solid #fc1f2c80;
 }
 
 @utility text-pink-glow {
-    color: #f92aad;
-    text-shadow: 0 0 2px #100c0f, 0 0 5px #dc078e33, 0 0 10px #ffffff33;
-    backface-visibility: hidden;
+  color: #f92aad;
+  text-shadow:
+    0 0 2px #100c0f,
+    0 0 5px #dc078e33,
+    0 0 10px #ffffff33;
+  backface-visibility: hidden;
 }
 
 @utility box-pink-glow {
-    box-shadow: 0 0 5px #f92aad4d, 0 0 10px #f92aad33;
-    border: 1px solid #f92aad80;
+  box-shadow:
+    0 0 5px #f92aad4d,
+    0 0 10px #f92aad33;
+  border: 1px solid #f92aad80;
 }
 
 @utility text-yellow-glow {
-    color: #f4eee4;
-    text-shadow: 0 0 2px #393a33, 0 0 8px #f39f05, 0 0 2px #f39f05;
-    backface-visibility: hidden;
+  color: #f4eee4;
+  text-shadow:
+    0 0 2px #393a33,
+    0 0 8px #f39f05,
+    0 0 2px #f39f05;
+  backface-visibility: hidden;
 }
 
 @utility box-yellow-glow {
-    box-shadow: 0 0 5px #f39f054d, 0 0 10px #f39f0533;
-    border: 1px solid #f39f0580;
+  box-shadow:
+    0 0 5px #f39f054d,
+    0 0 10px #f39f0533;
+  border: 1px solid #f39f0580;
 }
 
 @utility text-green-glow {
-    color: #72f1b8;
-    text-shadow: 0 0 2px #100c0f, 0 0 10px #257c55cc, 0 0 35px #212724cc;
-    backface-visibility: hidden;
+  color: #72f1b8;
+  text-shadow:
+    0 0 2px #100c0f,
+    0 0 10px #257c55cc,
+    0 0 35px #212724cc;
+  backface-visibility: hidden;
 }
 
 @utility box-green-glow {
-    box-shadow: 0 0 5px #72f1b84d, 0 0 10px #72f1b833;
-    border: 1px solid #72f1b880;
+  box-shadow:
+    0 0 5px #72f1b84d,
+    0 0 10px #72f1b833;
+  border: 1px solid #72f1b880;
 }
 
 @utility text-white-glow {
-    color: #ffffff;
-    text-shadow: 0 0 2px #202020, 0 0 3px #ffffff, 0 0 5px #ffffff, 0 0 8px #ffffff;
-    backface-visibility: hidden;
+  color: #ffffff;
+  text-shadow:
+    0 0 2px #202020,
+    0 0 3px #ffffff,
+    0 0 5px #ffffff,
+    0 0 8px #ffffff;
+  backface-visibility: hidden;
 }
 
 @utility box-white-glow {
-    box-shadow: 0 0 5px #ffffff4d, 0 0 10px #ffffff33;
-    border: 1px solid #ffffff80;
+  box-shadow:
+    0 0 5px #ffffff4d,
+    0 0 10px #ffffff33;
+  border: 1px solid #ffffff80;
 }
 
 @utility text-gold-glow {
-    color: #fdf8e6;
-    text-shadow: 0 0 2px #3a3000, 0 0 3px #ffcc00, 0 0 5px #ffcc00, 0 0 8px #ffcc00;
-    backface-visibility: hidden;
+  color: #fdf8e6;
+  text-shadow:
+    0 0 2px #3a3000,
+    0 0 3px #ffcc00,
+    0 0 5px #ffcc00,
+    0 0 8px #ffcc00;
+  backface-visibility: hidden;
 }
 
 @utility box-gold-glow {
-    box-shadow: 0 0 5px #ffcc004d, 0 0 10px #ffcc0033;
-    border: 1px solid #ffcc0080;
+  box-shadow:
+    0 0 5px #ffcc004d,
+    0 0 10px #ffcc0033;
+  border: 1px solid #ffcc0080;
 }
 
 @utility text-lemon-green-glow {
-    color: #fdfdfd;
-    text-shadow: 0 0 2px #142300, 0 0 3px #c8ff00, 0 0 5px #c8ff00, 0 0 8px #c8ff00;
-    backface-visibility: hidden;
+  color: #fdfdfd;
+  text-shadow:
+    0 0 2px #142300,
+    0 0 3px #c8ff00,
+    0 0 5px #c8ff00,
+    0 0 8px #c8ff00;
+  backface-visibility: hidden;
 }
 
 @utility box-lemon-green-glow {
-    box-shadow: 0 0 5px #c8ff004d, 0 0 10px #c8ff0033;
-    border: 1px solid #c8ff0080;
+  box-shadow:
+    0 0 5px #c8ff004d,
+    0 0 10px #c8ff0033;
+  border: 1px solid #c8ff0080;
 }
 
 /* No utilities for now as it's only used in participant list */
 .icon-blue-glow {
-    color: #fdfdfd !important;
-    filter: drop-shadow(0 0 3px #03edf9);
+  color: #fdfdfd !important;
+  filter: drop-shadow(0 0 3px #03edf9);
 }

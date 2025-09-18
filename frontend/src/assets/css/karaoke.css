@@ -1,23 +1,23 @@
 .songCard {
-    @apply p-2! flex flex-row w-full;
+  @apply p-2! flex flex-row w-full;
 }
 
 .songCard > div > img {
-    @apply rounded-md w-[64px] h-[64px] object-cover;
+  @apply rounded-md w-[64px] h-[64px] object-cover;
 }
 
 .songCard .songDetails {
-    @apply flex-1 flex flex-col gap-1 pl-2;
+  @apply flex-1 flex flex-col gap-1 pl-2;
 }
 
 .songCard .songDetails h3 {
-    @apply text-lg font-semibold;
+  @apply text-lg font-semibold;
 }
 
 .songCard .songDetails p {
-    @apply text-sm;
+  @apply text-sm;
 }
 
 .songCard .songFiles {
-    @apply flex flex-col gap-1 justify-center items-center;
+  @apply flex flex-col gap-1 justify-center items-center;
 }

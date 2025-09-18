@@ -1,9 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: [
-    "./index.html",
-    "./src/**/*.{js,ts,jsx,tsx}",
-  ],
+  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {},
   },
@@ -13,5 +10,5 @@ export default {
     // Cette configuration permet de s'assurer que les utilitaires personnalisés
     // dans glow.css sont correctement traités par Tailwind
     extraTransformations: true,
-  }
-}
+  },
+};

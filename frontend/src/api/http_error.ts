@@ -1,7 +1,7 @@
 export class HttpError extends Error {
-  submessage?: string
-  status: number
-  body?: unknown
+  submessage?: string;
+  status: number;
+  body?: unknown;
 
   constructor({
     message,
@@ -9,15 +9,15 @@ export class HttpError extends Error {
     status,
     body,
   }: {
-    message: string
-    submessage?: string
-    status: number
-    body?: unknown
+    message: string;
+    submessage?: string;
+    status: number;
+    body?: unknown;
   }) {
     super(message);
 
     this.submessage = submessage;
-    this.name = 'HttpError';
+    this.name = "HttpError";
     this.status = status;
     this.body = body;
   }
@@ -25,18 +25,18 @@ export class HttpError extends Error {
 
 export class HttpServerError extends HttpError {
   constructor({
-    message = 'Internal server error',
+    message = "Internal server error",
     submessage,
     status = 500,
     body,
   }: {
-    message?: string
-    submessage?: string
-    status?: number
-    body?: unknown
+    message?: string;
+    submessage?: string;
+    status?: number;
+    body?: unknown;
   } = {}) {
     super({ message, submessage, status, body });
-    this.name = 'HttpServerError';
+    this.name = "HttpServerError";
   }
 }
 

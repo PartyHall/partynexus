@@ -1,84 +1,84 @@
 .button {
-    @apply rounded-sm p-1 flex items-center gap-1 justify-center;
-    cursor: pointer;
+  @apply rounded-sm p-1 flex items-center gap-1 justify-center;
+  cursor: pointer;
 }
 
 .button:hover {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .button:disabled {
-    cursor: not-allowed;
+  cursor: not-allowed;
 }
 
 .button-primary {
-    @apply bg-primary-500 text-white;
+  @apply bg-primary-500 text-white;
 }
 
 .button-primary:hover {
-    @apply bg-primary-400;
+  @apply bg-primary-400;
 }
 
 .button-primary:disabled {
-    @apply bg-primary-800 text-gray-400;
+  @apply bg-primary-800 text-gray-400;
 }
 
 .button-secondary {
-    @apply bg-secondary-700 text-white;
+  @apply bg-secondary-700 text-white;
 }
 
 .button-secondary:hover {
-    @apply bg-secondary-600;
+  @apply bg-secondary-600;
 }
 
 .button-secondary:disabled {
-    @apply bg-secondary-800 text-gray-400;
+  @apply bg-secondary-800 text-gray-400;
 }
 
 .button-danger {
-    @apply bg-error-600 text-white box-red-glow;
+  @apply bg-error-600 text-white box-red-glow;
 }
 
 .button-danger:hover {
-    @apply bg-error-500;
+  @apply bg-error-500;
 }
 
 .button-danger:disabled {
-    @apply bg-error-800 text-gray-400;
+  @apply bg-error-800 text-gray-400;
 }
 
 .button-info {
-    @apply bg-info-600 text-white box-blue-glow;
+  @apply bg-info-600 text-white box-blue-glow;
 }
 
 .button-info:hover {
-    @apply bg-info-500;
+  @apply bg-info-500;
 }
 
 .button-info:disabled {
-    @apply bg-info-800 text-gray-400;
+  @apply bg-info-800 text-gray-400;
 }
 
 .button-success {
-    @apply bg-success-600 text-white box-green-glow;
+  @apply bg-success-600 text-white box-green-glow;
 }
 
 .button-success:hover {
-    @apply bg-success-500;
+  @apply bg-success-500;
 }
 
 .button-success:disabled {
-    @apply bg-success-800 text-gray-400;
+  @apply bg-success-800 text-gray-400;
 }
 
 .button-warning {
-    @apply bg-warning-600 text-white box-gold-glow;
+  @apply bg-warning-600 text-white box-gold-glow;
 }
 
 .button-warning:hover {
-    @apply bg-warning-500;
+  @apply bg-warning-500;
 }
 
 .button-warning:disabled {
-    @apply bg-warning-800 text-gray-400;
+  @apply bg-warning-800 text-gray-400;
 }

@@ -2,42 +2,50 @@ import { createLink } from "@tanstack/react-router";
 import { forwardRef } from "react";
 
 type Props = {
-    children: React.ReactNode;
-    className?: string;
-    noGlow?: boolean;
-    customGlow?: string;
+  children: React.ReactNode;
+  className?: string;
+  noGlow?: boolean;
+  customGlow?: string;
 };
 
-export default function Card({ children, className, noGlow, customGlow }: Props) {
-    const glow = `shadow-md ${customGlow ? customGlow : 'box-purple-glow'}`;
+export default function Card({
+  children,
+  className,
+  noGlow,
+  customGlow,
+}: Props) {
+  const glow = `shadow-md ${customGlow ? customGlow : "box-purple-glow"}`;
 
-    return <div
-        className={`
+  return (
+    <div
+      className={`
             ${className}
             bg-synthbg-800
             rounded-md
             p-4
-            ${noGlow ? '' : glow}
+            ${noGlow ? "" : glow}
         `}
     >
-        {children}
+      {children}
     </div>
+  );
 }
 
-interface CustomCardLinkProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
-    className?: string;
-    noGlow?: boolean;
+interface CustomCardLinkProps
+  extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
+  className?: string;
+  noGlow?: boolean;
 }
 
 const CustomCardLink = forwardRef<HTMLAnchorElement, CustomCardLinkProps>(
-    ({ className, noGlow, ...props }, ref) => {
-        const glow = `shadow-md box-purple-glow`;
+  ({ className, noGlow, ...props }, ref) => {
+    const glow = `shadow-md box-purple-glow`;
 
-        return (
-            <a
-                ref={ref}
-                {...props}
-                className={`
+    return (
+      <a
+        ref={ref}
+        {...props}
+        className={`
                     no-underline
                     no-hover
                     ${className}
@@ -46,11 +54,11 @@ const CustomCardLink = forwardRef<HTMLAnchorElement, CustomCardLinkProps>(
                     p-4
                     transition-shadow
                     duration-300
-                    ${noGlow ? '' : glow}
+                    ${noGlow ? "" : glow}
                 `}
-            />
-        )
-    },
-)
+      />
+    );
+  },
+);
 
-export const CardLink = createLink(CustomCardLink)
+export const CardLink = createLink(CustomCardLink);

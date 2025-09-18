@@ -3,40 +3,46 @@ import { customFetch } from "../customFetch";
 import type { EventListItem, Event, UpsertEvent } from "@/types/event";
 
 type GetAllEventsParams = {
-    pageParam?: number;
-    mineOnly?: boolean;
+  pageParam?: number;
+  mineOnly?: boolean;
 };
 
-export async function getAllEvents({ pageParam = 0, mineOnly }: GetAllEventsParams): Promise<Collection<EventListItem>> {
-    const qp = new URLSearchParams();
-    qp.set('page', pageParam.toString());
-    qp.set('mine', mineOnly ? 'true' : 'false');
+export async function getAllEvents({
+  pageParam = 0,
+  mineOnly,
+}: GetAllEventsParams): Promise<Collection<EventListItem>> {
+  const qp = new URLSearchParams();
+  qp.set("page", pageParam.toString());
+  qp.set("mine", mineOnly ? "true" : "false");
 
-    const resp = await customFetch('/api/events?' + qp.toString());
+  const resp = await customFetch("/api/events?" + qp.toString());
 
-    return await resp.json();
+  return await resp.json();
 }
 
 export async function getEventById(id: string): Promise<Event> {
-    const resp = await customFetch(`/api/events/${id}`);
+  const resp = await customFetch(`/api/events/${id}`);
 
-    return await resp.json();
+  return await resp.json();
 }
 
 export async function createEvent(data: UpsertEvent): Promise<Event> {
-    const resp = await customFetch('/api/events', {
-        method: 'POST',
-        body: JSON.stringify(data),
-    });
+  const resp = await customFetch("/api/events", {
+    method: "POST",
+    body: JSON.stringify(data),
+  });
 
-    return await resp.json();
+  return await resp.json();
 }
 
-export async function updateEvent(id: string, data: UpsertEvent): Promise<Event> {
-    const resp = await customFetch(`/api/events/${id}`, {
-        method: 'PATCH',
-        body: JSON.stringify(data),
-    });
+export async function updateEvent(
+  id: string,
+  data: UpsertEvent,
+): Promise<Event> {
+  const resp = await customFetch(`/api/events/${id}`, {
+    method: "PATCH",
+    body: JSON.stringify(data),
+  });
 
-    return await resp.json();
+  return await resp.json();
 }
