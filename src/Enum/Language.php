@@ -16,7 +16,7 @@ enum Language: string implements EnumLabelInterface
     case AMERICAN_ENGLISH = 'en_US';
     case FRENCH = 'fr_FR';
 
-    #[Groups([EnumApiConfig::GET_GROUP])]
+    #[Groups([EnumApiConfig::GET])]
     public function getLabel(): string
     {
         return match ($this) {

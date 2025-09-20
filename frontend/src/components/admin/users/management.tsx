@@ -8,7 +8,7 @@ import { enqueueSnackbar } from "notistack";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
-  generateForgottenPassword as apiGenerateForgottenPassword,
+  adminGenerateForgottenPassword as apiGenerateForgottenPassword,
   banUser,
   unbanUser,
 } from "@/api/users/management";

@@ -31,7 +31,7 @@ readonly class EventUpdatedListener
         $this->mercure->submitToUsers(
             \sprintf('/events/%s', $event->getId()),
             $event,
-            [Event::API_GET_ITEM, EnumApiConfig::GET_GROUP],
+            [Event::API_GET_ITEM, EnumApiConfig::GET],
             \array_map(
                 fn ($user) => $user->getId(),
                 [$event->getOwner(), ...$event->getParticipants()->toArray()],

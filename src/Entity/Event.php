@@ -14,8 +14,10 @@ use App\Controller\EventConcludeController;
 use App\Enum\EnumApiConfig;
 use App\Repository\EventRepository;
 use App\State\Processor\EventPersistProcessor;
+use App\State\Processor\SelfJoinEventProcessor;
 use App\State\Provider\ExportDownloadProvider;
 use App\State\Provider\RegistrationEventProvider;
+use App\State\Provider\SelfJoinEventProvider;
 use App\State\Provider\TimelapseDownloadProvider;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -35,7 +37,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     operations: [
         new GetCollection(
             order: ['datetime' => 'DESC'],
-            normalizationContext: [AbstractNormalizer::GROUPS => [self::API_GET_COLLECTION, EnumApiConfig::GET_GROUP]],
+            normalizationContext: [AbstractNormalizer::GROUPS => [self::API_GET_COLLECTION, EnumApiConfig::GET]],
         ),
         new Get(security: 'is_granted("ROLE_ADMIN") or object.getOwner().hasAppliance(user) or object.hasParticipant(user)'),
         new Post(
@@ -60,13 +62,19 @@ use Symfony\Component\Validator\Constraints as Assert;
         new Get(uriTemplate: '/events/{id}/timelapse', provider: TimelapseDownloadProvider::class),
         new Get(uriTemplate: '/events/{id}/export', provider: ExportDownloadProvider::class),
         new Get(
-            uriTemplate: '/register/{userRegistrationCode}',
+            uriTemplate: '/self_register/{userRegistrationCode}',
             uriVariables: ['userRegistrationCode'],
             normalizationContext: [AbstractNormalizer::GROUPS => [self::API_GET_REGISTER]],
             provider: RegistrationEventProvider::class,
         ),
+        new Post(
+            uriTemplate: '/join_event/{userRegistrationCode}',
+            uriVariables: ['userRegistrationCode'],
+            provider: RegistrationEventProvider::class,
+            processor: SelfJoinEventProcessor::class,
+        ),
     ],
-    normalizationContext: [AbstractNormalizer::GROUPS => [self::API_GET_ITEM, EnumApiConfig::GET_GROUP]],
+    normalizationContext: [AbstractNormalizer::GROUPS => [self::API_GET_ITEM, EnumApiConfig::GET]],
 )]
 #[ApiFilter(SearchFilter::class, properties: ['name' => 'ipartial'])]
 #[ORM\Entity(repositoryClass: EventRepository::class)]
@@ -186,8 +194,8 @@ class Event
     #[Groups([self::API_GET_ITEM])]
     private ?DisplayBoardKey $displayBoardKey = null;
 
-    #[ORM\Column(type: Types::STRING, length: 255, unique: true, nullable: true)]
-    private ?string $userRegistrationCode = null;
+    #[ORM\Column(type: Types::STRING, length: 255, unique: true, nullable: false)]
+    private string $userRegistrationCode;
 
     #[ORM\Column(type: Types::BOOLEAN, options: ['default' => false])]
     #[Groups([self::API_GET_ITEM, self::API_CREATE, self::API_UPDATE])]
@@ -371,12 +379,12 @@ class Event
         return $this;
     }
 
-    public function getUserRegistrationCode(): ?string
+    public function getUserRegistrationCode(): string
     {
         return $this->userRegistrationCode;
     }
 
-    public function setUserRegistrationCode(?string $userRegistrationCode): self
+    public function setUserRegistrationCode(string $userRegistrationCode): self
     {
         $this->userRegistrationCode = $userRegistrationCode;
 

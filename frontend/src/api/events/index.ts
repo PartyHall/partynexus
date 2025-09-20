@@ -46,3 +46,15 @@ export async function updateEvent(
 
   return await resp.json();
 }
+
+export async function setUserRegistrationEnabled(
+  id: string,
+  enabled: boolean,
+): Promise<Event> {
+  const resp = await customFetch(`/api/events/${id}`, {
+    method: "PATCH",
+    body: JSON.stringify({ userRegistrationEnabled: enabled }),
+  });
+
+  return await resp.json();
+}

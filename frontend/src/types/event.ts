@@ -19,6 +19,8 @@ export type Event = EventListItem & {
   export: Export | null;
   participants: MinimalUser[];
   displayBoardKey: DisplayBoardKey | null;
+  userRegistrationEnabled: boolean;
+  userRegistrationUrl: string;
 };
 
 export type UpsertEvent = {

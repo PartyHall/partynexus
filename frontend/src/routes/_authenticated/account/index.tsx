@@ -5,7 +5,7 @@ import Card from "@/components/generic/card";
 import Title from "@/components/generic/title";
 import useTranslatedTitle from "@/hooks/useTranslatedTitle";
 import { useAuthStore } from "@/stores/auth";
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 

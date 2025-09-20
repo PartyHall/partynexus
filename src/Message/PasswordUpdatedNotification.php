@@ -2,6 +2,6 @@
 
 namespace App\Message;
 
-class PasswordUpdatedNotification extends AbstractPersonMessage
+readonly class PasswordUpdatedNotification extends AbstractPersonMessage
 {
 }

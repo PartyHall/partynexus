@@ -2,6 +2,7 @@ import {
   createFileRoute,
   Outlet,
   redirect,
+  useLocation,
   useNavigate,
 } from "@tanstack/react-router";
 import { useAuthStore } from "../../stores/auth";
@@ -11,11 +12,21 @@ import setI18NLanguage from "@/utils/lang";
 import MercureProvider from "@/hooks/useMercure";
 
 export const Route = createFileRoute("/_authenticated")({
-  beforeLoad: async () => {
+  beforeLoad: async ({ location }) => {
     const { token, tokenUser, doRefresh } = useAuthStore.getState();
 
     if (!token || !tokenUser) {
-      throw redirect({ to: "/login", reloadDocument: true });
+      // fuck that
+      let loc: string | undefined = location.pathname;
+      if (loc === '/' || loc === '/login' || loc === '/account') {
+        loc = undefined;
+      }
+
+      throw redirect({
+        to: "/login",
+        search: { redirect: loc },
+        reloadDocument: true,
+      });
     }
 
     setI18NLanguage(tokenUser.language);
@@ -34,6 +45,7 @@ export const Route = createFileRoute("/_authenticated")({
 function RouteComponent() {
   const { tokenUser, refreshToken, doRefresh } = useAuthStore();
   const navigate = useNavigate();
+  const location = useLocation();
 
   /**
    * Set a timeout to refresh the token
@@ -46,7 +58,12 @@ function RouteComponent() {
    */
   useEffect(() => {
     if (!tokenUser || !refreshToken) {
-      navigate({ to: "/login" });
+      // fuck that
+      let loc: string | undefined = location.pathname;
+      if (loc === '/' || loc === '/login' || loc === '/account') {
+        loc = undefined;
+      }
+      navigate({ to: "/login", search: { redirect: loc } });
       return;
     }
 

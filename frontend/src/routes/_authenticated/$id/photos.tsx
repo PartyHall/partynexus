@@ -27,7 +27,7 @@ export const Route = createFileRoute("/_authenticated/$id/photos")({
      * so its a bit of a pain as tanstack expects a known number of rows
      */
 
-    return await getPicturesForEvent(params.id);
+    return await getPicturesForEvent(params.id, false);
   },
 });
 

@@ -81,6 +81,8 @@ services:
   
   redis:
     image: 'redis:7.4.1-bookworm'
+    ports:
+      - '127.0.0.1:6379:6379'
 
   meilisearch:
     image: 'getmeili/meilisearch:latest'

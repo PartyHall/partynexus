@@ -6,6 +6,7 @@ use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use App\Entity\Event;
 use App\Repository\EventRepository;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 /**
  * @implements ProviderInterface<Event>
@@ -27,8 +28,12 @@ readonly class RegistrationEventProvider implements ProviderInterface
             'userRegistrationCode' => $uriVariables['userRegistrationCode'],
         ]);
 
-        if (!$event || !$event->isUserRegistrationEnabled()) {
+        if (!$event) {
             return null;
+        }
+
+        if (!$event->isUserRegistrationEnabled()) {
+            throw new BadRequestHttpException();
         }
 
         return $event;

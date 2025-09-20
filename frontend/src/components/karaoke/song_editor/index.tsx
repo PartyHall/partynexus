@@ -7,7 +7,7 @@ import MediaUploadForm from "./media_upload_form";
 
 type Props = {
   song?: Song | null;
-  onSuccess?: () => void; // Used for either invalidate route or navigate to song edit page
+  onSuccess?: (song: Song) => void; // Used for either invalidate route or navigate to song edit page
 };
 
 export default function SongEditor({ song, onSuccess }: Props) {

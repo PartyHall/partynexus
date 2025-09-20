@@ -19,7 +19,7 @@ enum ExportProgress: string implements TranslatableEnumLabelInterface
     case ADDING_METADATA = 'adding_metadata';
     case BUILDING_ZIP = 'building_zip';
 
-    #[Groups([EnumApiConfig::GET_GROUP])]
+    #[Groups([EnumApiConfig::GET])]
     public function getLabel(): string
     {
         return \sprintf('events.export.progress.%s', $this->value);

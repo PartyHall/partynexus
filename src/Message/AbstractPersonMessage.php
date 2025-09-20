@@ -4,7 +4,7 @@ namespace App\Message;
 
 use App\Entity\User;
 
-abstract class AbstractPersonMessage
+abstract readonly class AbstractPersonMessage
 {
     private string $username;
     private string $fullname;

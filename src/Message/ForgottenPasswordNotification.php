@@ -4,9 +4,12 @@ namespace App\Message;
 
 use App\Entity\User;
 
-readonly class UserRegisteredNotification extends AbstractPersonMessage
+readonly class ForgottenPasswordNotification extends AbstractPersonMessage
 {
-    public function __construct(User $user, private string $code)
+    public function __construct(
+        private string $code,
+        User           $user,
+    )
     {
         parent::__construct($user);
     }

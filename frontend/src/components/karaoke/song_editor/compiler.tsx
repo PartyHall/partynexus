@@ -8,7 +8,7 @@ import { useTranslation } from "react-i18next";
 
 type Props = {
   song: Song;
-  doInvalidate?: () => void;
+  doInvalidate?: (song: Song) => void;
 };
 
 export default function SongEditorCompiler({ song, doInvalidate }: Props) {
@@ -29,7 +29,7 @@ export default function SongEditorCompiler({ song, doInvalidate }: Props) {
         await compileSong(song.id);
       }
 
-      doInvalidate?.();
+      doInvalidate?.(song);
     } catch (e) {
       console.error(e);
       enqueueSnackbar(t("generic.error.generic"), { variant: "error" });

@@ -13,14 +13,18 @@ import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/
 import { Route as LoginIndexRouteImport } from './routes/login/index'
 import { Route as ForgottenPasswordIndexRouteImport } from './routes/forgotten-password/index'
 import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated/index'
+import { Route as ForgottenPasswordSentRouteImport } from './routes/forgotten-password/sent'
 import { Route as ForgottenPasswordIdRouteImport } from './routes/forgotten-password/$id'
 import { Route as AuthenticatedNewRouteImport } from './routes/_authenticated/new'
+import { Route as SelfRegisterIdRouteRouteImport } from './routes/self-register.$id/route'
 import { Route as AuthenticatedAdminRouteRouteImport } from './routes/_authenticated/admin/route'
 import { Route as AuthenticatedIdRouteRouteImport } from './routes/_authenticated/$id/route'
+import { Route as SelfRegisterIdIndexRouteImport } from './routes/self-register.$id/index'
 import { Route as AuthenticatedKaraokeIndexRouteImport } from './routes/_authenticated/karaoke/index'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin/index'
 import { Route as AuthenticatedAccountIndexRouteImport } from './routes/_authenticated/account/index'
 import { Route as AuthenticatedIdIndexRouteImport } from './routes/_authenticated/$id/index'
+import { Route as SelfRegisterIdRegisterRouteImport } from './routes/self-register.$id/register'
 import { Route as DisplayBoardEventIdKeyRouteImport } from './routes/display-board.$eventId.$key'
 import { Route as AuthenticatedKaraokeRequestRouteImport } from './routes/_authenticated/karaoke/request'
 import { Route as AuthenticatedKaraokeNewRouteImport } from './routes/_authenticated/karaoke/new'
@@ -62,6 +66,11 @@ const AuthenticatedIndexRoute = AuthenticatedIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const ForgottenPasswordSentRoute = ForgottenPasswordSentRouteImport.update({
+  id: '/forgotten-password/sent',
+  path: '/forgotten-password/sent',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ForgottenPasswordIdRoute = ForgottenPasswordIdRouteImport.update({
   id: '/forgotten-password/$id',
   path: '/forgotten-password/$id',
@@ -72,6 +81,11 @@ const AuthenticatedNewRoute = AuthenticatedNewRouteImport.update({
   path: '/new',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const SelfRegisterIdRouteRoute = SelfRegisterIdRouteRouteImport.update({
+  id: '/self-register/$id',
+  path: '/self-register/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedAdminRouteRoute = AuthenticatedAdminRouteRouteImport.update({
   id: '/admin',
   path: '/admin',
@@ -81,6 +95,11 @@ const AuthenticatedIdRouteRoute = AuthenticatedIdRouteRouteImport.update({
   id: '/$id',
   path: '/$id',
   getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const SelfRegisterIdIndexRoute = SelfRegisterIdIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => SelfRegisterIdRouteRoute,
 } as any)
 const AuthenticatedKaraokeIndexRoute =
   AuthenticatedKaraokeIndexRouteImport.update({
@@ -103,6 +122,11 @@ const AuthenticatedIdIndexRoute = AuthenticatedIdIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => AuthenticatedIdRouteRoute,
+} as any)
+const SelfRegisterIdRegisterRoute = SelfRegisterIdRegisterRouteImport.update({
+  id: '/register',
+  path: '/register',
+  getParentRoute: () => SelfRegisterIdRouteRoute,
 } as any)
 const DisplayBoardEventIdKeyRoute = DisplayBoardEventIdKeyRouteImport.update({
   id: '/display-board/$eventId/$key',
@@ -227,8 +251,10 @@ const AuthenticatedAccountAppliancesIdRoute =
 export interface FileRoutesByFullPath {
   '/$id': typeof AuthenticatedIdRouteRouteWithChildren
   '/admin': typeof AuthenticatedAdminRouteRouteWithChildren
+  '/self-register/$id': typeof SelfRegisterIdRouteRouteWithChildren
   '/new': typeof AuthenticatedNewRoute
   '/forgotten-password/$id': typeof ForgottenPasswordIdRoute
+  '/forgotten-password/sent': typeof ForgottenPasswordSentRoute
   '/': typeof AuthenticatedIndexRoute
   '/forgotten-password': typeof ForgottenPasswordIndexRoute
   '/login': typeof LoginIndexRoute
@@ -244,10 +270,12 @@ export interface FileRoutesByFullPath {
   '/karaoke/new': typeof AuthenticatedKaraokeNewRoute
   '/karaoke/request': typeof AuthenticatedKaraokeRequestRoute
   '/display-board/$eventId/$key': typeof DisplayBoardEventIdKeyRoute
+  '/self-register/$id/register': typeof SelfRegisterIdRegisterRoute
   '/$id/': typeof AuthenticatedIdIndexRoute
   '/account': typeof AuthenticatedAccountIndexRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
   '/karaoke': typeof AuthenticatedKaraokeIndexRoute
+  '/self-register/$id/': typeof SelfRegisterIdIndexRoute
   '/account/appliances/$id': typeof AuthenticatedAccountAppliancesIdRoute
   '/account/appliances/new': typeof AuthenticatedAccountAppliancesNewRoute
   '/admin/backdrop-albums/$id': typeof AuthenticatedAdminBackdropAlbumsIdRoute
@@ -261,6 +289,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/new': typeof AuthenticatedNewRoute
   '/forgotten-password/$id': typeof ForgottenPasswordIdRoute
+  '/forgotten-password/sent': typeof ForgottenPasswordSentRoute
   '/': typeof AuthenticatedIndexRoute
   '/forgotten-password': typeof ForgottenPasswordIndexRoute
   '/login': typeof LoginIndexRoute
@@ -275,10 +304,12 @@ export interface FileRoutesByTo {
   '/karaoke/new': typeof AuthenticatedKaraokeNewRoute
   '/karaoke/request': typeof AuthenticatedKaraokeRequestRoute
   '/display-board/$eventId/$key': typeof DisplayBoardEventIdKeyRoute
+  '/self-register/$id/register': typeof SelfRegisterIdRegisterRoute
   '/$id': typeof AuthenticatedIdIndexRoute
   '/account': typeof AuthenticatedAccountIndexRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
   '/karaoke': typeof AuthenticatedKaraokeIndexRoute
+  '/self-register/$id': typeof SelfRegisterIdIndexRoute
   '/account/appliances/$id': typeof AuthenticatedAccountAppliancesIdRoute
   '/account/appliances/new': typeof AuthenticatedAccountAppliancesNewRoute
   '/admin/backdrop-albums/$id': typeof AuthenticatedAdminBackdropAlbumsIdRoute
@@ -294,8 +325,10 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/_authenticated/$id': typeof AuthenticatedIdRouteRouteWithChildren
   '/_authenticated/admin': typeof AuthenticatedAdminRouteRouteWithChildren
+  '/self-register/$id': typeof SelfRegisterIdRouteRouteWithChildren
   '/_authenticated/new': typeof AuthenticatedNewRoute
   '/forgotten-password/$id': typeof ForgottenPasswordIdRoute
+  '/forgotten-password/sent': typeof ForgottenPasswordSentRoute
   '/_authenticated/': typeof AuthenticatedIndexRoute
   '/forgotten-password/': typeof ForgottenPasswordIndexRoute
   '/login/': typeof LoginIndexRoute
@@ -311,10 +344,12 @@ export interface FileRoutesById {
   '/_authenticated/karaoke/new': typeof AuthenticatedKaraokeNewRoute
   '/_authenticated/karaoke/request': typeof AuthenticatedKaraokeRequestRoute
   '/display-board/$eventId/$key': typeof DisplayBoardEventIdKeyRoute
+  '/self-register/$id/register': typeof SelfRegisterIdRegisterRoute
   '/_authenticated/$id/': typeof AuthenticatedIdIndexRoute
   '/_authenticated/account/': typeof AuthenticatedAccountIndexRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
   '/_authenticated/karaoke/': typeof AuthenticatedKaraokeIndexRoute
+  '/self-register/$id/': typeof SelfRegisterIdIndexRoute
   '/_authenticated/account/appliances/$id': typeof AuthenticatedAccountAppliancesIdRoute
   '/_authenticated/account/appliances/new': typeof AuthenticatedAccountAppliancesNewRoute
   '/_authenticated/admin/backdrop-albums/$id': typeof AuthenticatedAdminBackdropAlbumsIdRoute
@@ -330,8 +365,10 @@ export interface FileRouteTypes {
   fullPaths:
     | '/$id'
     | '/admin'
+    | '/self-register/$id'
     | '/new'
     | '/forgotten-password/$id'
+    | '/forgotten-password/sent'
     | '/'
     | '/forgotten-password'
     | '/login'
@@ -347,10 +384,12 @@ export interface FileRouteTypes {
     | '/karaoke/new'
     | '/karaoke/request'
     | '/display-board/$eventId/$key'
+    | '/self-register/$id/register'
     | '/$id/'
     | '/account'
     | '/admin/'
     | '/karaoke'
+    | '/self-register/$id/'
     | '/account/appliances/$id'
     | '/account/appliances/new'
     | '/admin/backdrop-albums/$id'
@@ -364,6 +403,7 @@ export interface FileRouteTypes {
   to:
     | '/new'
     | '/forgotten-password/$id'
+    | '/forgotten-password/sent'
     | '/'
     | '/forgotten-password'
     | '/login'
@@ -378,10 +418,12 @@ export interface FileRouteTypes {
     | '/karaoke/new'
     | '/karaoke/request'
     | '/display-board/$eventId/$key'
+    | '/self-register/$id/register'
     | '/$id'
     | '/account'
     | '/admin'
     | '/karaoke'
+    | '/self-register/$id'
     | '/account/appliances/$id'
     | '/account/appliances/new'
     | '/admin/backdrop-albums/$id'
@@ -396,8 +438,10 @@ export interface FileRouteTypes {
     | '/_authenticated'
     | '/_authenticated/$id'
     | '/_authenticated/admin'
+    | '/self-register/$id'
     | '/_authenticated/new'
     | '/forgotten-password/$id'
+    | '/forgotten-password/sent'
     | '/_authenticated/'
     | '/forgotten-password/'
     | '/login/'
@@ -413,10 +457,12 @@ export interface FileRouteTypes {
     | '/_authenticated/karaoke/new'
     | '/_authenticated/karaoke/request'
     | '/display-board/$eventId/$key'
+    | '/self-register/$id/register'
     | '/_authenticated/$id/'
     | '/_authenticated/account/'
     | '/_authenticated/admin/'
     | '/_authenticated/karaoke/'
+    | '/self-register/$id/'
     | '/_authenticated/account/appliances/$id'
     | '/_authenticated/account/appliances/new'
     | '/_authenticated/admin/backdrop-albums/$id'
@@ -430,7 +476,9 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  SelfRegisterIdRouteRoute: typeof SelfRegisterIdRouteRouteWithChildren
   ForgottenPasswordIdRoute: typeof ForgottenPasswordIdRoute
+  ForgottenPasswordSentRoute: typeof ForgottenPasswordSentRoute
   ForgottenPasswordIndexRoute: typeof ForgottenPasswordIndexRoute
   LoginIndexRoute: typeof LoginIndexRoute
   DisplayBoardEventIdKeyRoute: typeof DisplayBoardEventIdKeyRoute
@@ -466,6 +514,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedIndexRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/forgotten-password/sent': {
+      id: '/forgotten-password/sent'
+      path: '/forgotten-password/sent'
+      fullPath: '/forgotten-password/sent'
+      preLoaderRoute: typeof ForgottenPasswordSentRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/forgotten-password/$id': {
       id: '/forgotten-password/$id'
       path: '/forgotten-password/$id'
@@ -480,6 +535,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedNewRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/self-register/$id': {
+      id: '/self-register/$id'
+      path: '/self-register/$id'
+      fullPath: '/self-register/$id'
+      preLoaderRoute: typeof SelfRegisterIdRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authenticated/admin': {
       id: '/_authenticated/admin'
       path: '/admin'
@@ -493,6 +555,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/$id'
       preLoaderRoute: typeof AuthenticatedIdRouteRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/self-register/$id/': {
+      id: '/self-register/$id/'
+      path: '/'
+      fullPath: '/self-register/$id/'
+      preLoaderRoute: typeof SelfRegisterIdIndexRouteImport
+      parentRoute: typeof SelfRegisterIdRouteRoute
     }
     '/_authenticated/karaoke/': {
       id: '/_authenticated/karaoke/'
@@ -521,6 +590,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/$id/'
       preLoaderRoute: typeof AuthenticatedIdIndexRouteImport
       parentRoute: typeof AuthenticatedIdRouteRoute
+    }
+    '/self-register/$id/register': {
+      id: '/self-register/$id/register'
+      path: '/register'
+      fullPath: '/self-register/$id/register'
+      preLoaderRoute: typeof SelfRegisterIdRegisterRouteImport
+      parentRoute: typeof SelfRegisterIdRouteRoute
     }
     '/display-board/$eventId/$key': {
       id: '/display-board/$eventId/$key'
@@ -778,9 +854,24 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
 const AuthenticatedRouteRouteWithChildren =
   AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
 
+interface SelfRegisterIdRouteRouteChildren {
+  SelfRegisterIdRegisterRoute: typeof SelfRegisterIdRegisterRoute
+  SelfRegisterIdIndexRoute: typeof SelfRegisterIdIndexRoute
+}
+
+const SelfRegisterIdRouteRouteChildren: SelfRegisterIdRouteRouteChildren = {
+  SelfRegisterIdRegisterRoute: SelfRegisterIdRegisterRoute,
+  SelfRegisterIdIndexRoute: SelfRegisterIdIndexRoute,
+}
+
+const SelfRegisterIdRouteRouteWithChildren =
+  SelfRegisterIdRouteRoute._addFileChildren(SelfRegisterIdRouteRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  SelfRegisterIdRouteRoute: SelfRegisterIdRouteRouteWithChildren,
   ForgottenPasswordIdRoute: ForgottenPasswordIdRoute,
+  ForgottenPasswordSentRoute: ForgottenPasswordSentRoute,
   ForgottenPasswordIndexRoute: ForgottenPasswordIndexRoute,
   LoginIndexRoute: LoginIndexRoute,
   DisplayBoardEventIdKeyRoute: DisplayBoardEventIdKeyRoute,

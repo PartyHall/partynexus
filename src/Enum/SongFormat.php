@@ -45,7 +45,7 @@ enum SongFormat: string implements TranslatableEnumLabelInterface
         return array_column(self::cases(), 'value');
     }
 
-    #[Groups([EnumApiConfig::GET_GROUP])]
+    #[Groups([EnumApiConfig::GET])]
     public function getLabel(): string
     {
         return match ($this) {

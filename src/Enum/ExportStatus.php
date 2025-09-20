@@ -17,7 +17,7 @@ enum ExportStatus: string implements TranslatableEnumLabelInterface
     case COMPLETE = 'complete';
     case FAILED = 'failed';
 
-    #[Groups([EnumApiConfig::GET_GROUP])]
+    #[Groups([EnumApiConfig::GET])]
     public function getLabel(): string
     {
         return \sprintf('events.export.status.%s', $this->value);

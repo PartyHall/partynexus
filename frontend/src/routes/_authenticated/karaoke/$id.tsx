@@ -14,6 +14,7 @@ export const Route = createFileRoute("/_authenticated/karaoke/$id")({
       throw new Error("Appliance ID is required");
     }
 
+    // @ts-ignore
     return await context.queryClient.ensureQueryData({
       queryKey: ["karaoke_song", id],
       queryFn: async () => await getSong(id),

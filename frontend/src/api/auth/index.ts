@@ -1,6 +1,6 @@
 import { HttpError } from "../http_error";
 
-type LoginResponse = {
+export type LoginResponse = {
   token: string;
   refresh_token: string;
 };

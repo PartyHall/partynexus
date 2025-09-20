@@ -12,6 +12,7 @@ use Lexik\Bundle\JWTAuthenticationBundle\Security\Http\Authentication\Authentica
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\RateLimiter\RateLimiterFactory;
 
@@ -35,23 +36,25 @@ readonly class RegisterUserProcessor implements ProcessorInterface
 
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = [])
     {
-        $event = $this->repository->findOneBy([
-            // Fuck api platform bullshit, it tries to parse the uriVariables
-            'userRegistrationCode' => $context['request']->attributes->get('userRegistrationCode') ?? null,
-        ]);
-
-        if (!$event || !$event->isUserRegistrationEnabled()) {
-            throw new NotFoundHttpException();
-        }
-
-        // We went through validators + standard checks, so now
-        // just before persisting, we can add the rate limiter
         /**
          * @TODO: Test that it properly follows X-Forwarded-For
          */
         $rl = $this->registerApiLimiter->create($this->requestStack->getMainRequest()->getClientIp());
         if (false === $rl->consume()->isAccepted()) {
             return new Response(status: 429);
+        }
+
+        $event = $this->repository->findOneBy([
+            // Fuck api platform bullshit, it tries to parse the uriVariables
+            'userRegistrationCode' => $context['request']->attributes->get('userRegistrationCode') ?? null,
+        ]);
+
+        if (!$event) {
+            throw new NotFoundHttpException();
+        }
+
+        if (!$event->isUserRegistrationEnabled()) {
+            throw new BadRequestHttpException();
         }
 
         $user = $this->processor->process($data, $operation, $uriVariables, $context);

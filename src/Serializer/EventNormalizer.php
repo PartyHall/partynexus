@@ -17,13 +17,14 @@ class EventNormalizer implements NormalizerInterface
         #[Autowire(service: 'api_platform.jsonld.normalizer.item')]
         private readonly NormalizerInterface $normalizer,
         #[Autowire(env: 'PUBLIC_URL')]
-        string $baseUrl,
-    ) {
+        string                               $baseUrl,
+    )
+    {
         $this->baseUrl = \rtrim($baseUrl, '/');
     }
 
     /**
-     * @param Event        $object
+     * @param Event $object
      * @param array<mixed> $context
      *
      * @return array<mixed>|string|int|float|bool|\ArrayObject<int, mixed>|null
@@ -37,18 +38,14 @@ class EventNormalizer implements NormalizerInterface
         /** @var array<mixed> $data */
         $data = $this->normalizer->normalize($object, $format, $context);
 
-        if ($object->getUserRegistrationCode()) {
-            $data['userRegistrationUrl'] = \implode(
-                '/',
-                [
-                    $this->baseUrl,
-                    'register',
-                    $object->getUserRegistrationCode(),
-                ]
-            );
-        } else {
-            $data['userRegsistrationUrl'] = null;
-        }
+        $data['userRegistrationUrl'] = \implode(
+            '/',
+            [
+                $this->baseUrl,
+                'self-register',
+                $object->getUserRegistrationCode(),
+            ]
+        );
 
         return $data;
     }

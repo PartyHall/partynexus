@@ -12,6 +12,9 @@ import Button from "@/components/generic/button";
 import useTranslatedTitle from "@/hooks/useTranslatedTitle";
 
 export const Route = createFileRoute("/login/")({
+  validateSearch: (search) => ({
+    redirect: search.redirect ? String(search.redirect) : undefined,
+  }),
   component: RouteComponent,
 });
 
@@ -22,6 +25,8 @@ type LoginForm = {
 
 function RouteComponent() {
   useTranslatedTitle("login.title");
+
+  const { redirect } = Route.useSearch();
 
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -48,7 +53,13 @@ function RouteComponent() {
       const resp = await login(data.username, data.password);
 
       setToken(resp.token, resp.refresh_token);
-      navigate({ to: "/" });
+
+      if (redirect) {
+        navigate({ to: redirect });
+      } else {
+        navigate({ to: "/" });
+      }
+
       setIsSubmitting(false);
     } catch (err: any) {
       console.error(err);

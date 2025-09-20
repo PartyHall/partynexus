@@ -35,6 +35,7 @@
     "title": "Title",
     "upload": "Upload",
     "upload_success": "Téléversement réussi",
+    "enabled": "Activé",
     "error": {
       "generic": "Une erreur s'est produite",
       "generic_desc": "Merci de réessayer plus tard ou de contacter votre administrateur PartyHall",
@@ -55,12 +56,27 @@
       "title": "Page perdue dans l'espace",
       "message": "La page que vous cherchez n'existe pas ou a été déplacé.\nPeut-être s'est-elle égarée dans une autre galaxie ?"
     },
+    "429": {
+      "title": "Trop de requêtes",
+      "message": "Vous avez essayé de faire cela trop de fois, merci d'attendre un peu avant de réessayer."
+    },
     "5xx": {
       "title": "Erreur serveur",
       "message": "Une erreur inattendue s'est produite sur le serveur.\nVeuillez réessayer plus tard."
     }
   },
-  "register": {},
+  "register": {
+    "self": {
+      "desc_1": "Vous allez rejoindre l'évènement \"<blueGlow>{{eventName}}</blueGlow>\".",
+      "desc_2": "Si vous avez déjà un compte, merci de vous connecter avec. Sinon, vous pouvez en créer un.",
+      "join_as": "Rejoindre en tant que {{username}}",
+      "404": "Ce lien d'inscription est introuvable. Merci de demander un nouveau lien à l'organisateur de l'évènement.",
+      "400": "Cet évènement n'autorise pas l'inscription de nouveaux utilisateurs. Merci de demander de l'aide à l'organisateur de l'évènement."
+    },
+    "register": "S'inscrire",
+    "confirm_password": "Confirmer le mot de passe",
+    "password_mismatch": "Le mot de passe et sa confirmation ne correspondent pas"
+  },
   "forgotten_password": {
     "title": "Mot de passe oublié",
     "desc": "Bonjour, {{username}} ! Il semble que vous ayez oublié votre mot de passe ou que vous n'en ayez jamais eu. Choisissons-le !",
@@ -71,7 +87,10 @@
     "password_mismatch": "Le nouveau mot de passe et sa confirmation ne correspondent pas",
     "set_password": "Valider",
     "success": "Mot de passe mis à jour avec succès",
-    "goto_login": "Aller à la page de connexion"
+    "goto_login": "Aller à la page de connexion",
+    "request": "Réinitialiser le mot de passe",
+    "sent_1": "Si votre email existe dans notre base de données, vous allez recevoir un email avec un lien pour définir un nouveau mot de passe.",
+    "sent_2": "Si vous ne recevez pas d'email, merci de vérifier votre dossier de spam ou de contacter votre administrateur PartyHall."
   },
   "login": {
     "title": "Connexion",
@@ -132,6 +151,12 @@
         "status": "Status de l'export",
         "force_reexport": "Forcer un nouvel export",
         "force_reexport_desc": "Vous allez exporter à nouveau cet évènement, ce qui va supprimer l'ancien export et en créer un nouveau. Cela peut prendre du temps."
+      },
+      "user_registration": {
+        "title": "Auto-inscription des utilisateurs",
+        "desc": "Cela permettra aux utilisateurs d'utiliser le lien suivant pour créer un compte sur PartyHall (ou se connecter avec leur compte existant) et rejoindre automatiquement cet évènement.",
+        "link": "Lien d'inscription",
+        "appliance_qr": "Notez que l'appareil aura aussi un QR code affiché pour permettre aux utilisateurs de s'inscrire facilement à l'évènement."
       }
     }
   },

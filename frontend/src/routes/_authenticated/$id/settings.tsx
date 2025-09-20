@@ -5,6 +5,7 @@ import SettingsExport from "@/components/event/settings/export";
 import { useEvent } from "@/stores/event";
 import SettingsDisplayBoard from "@/components/event/settings/display_board";
 import SettingsConclude from "@/components/event/settings/conclude";
+import SettingsUserRegistration from "@/components/event/settings/user_registration";
 
 export const Route = createFileRoute("/_authenticated/$id/settings")({
   component: RouteComponent,
@@ -21,6 +22,8 @@ function RouteComponent() {
       </Title>
 
       <SettingsDisplayBoard />
+
+      <SettingsUserRegistration />
 
       {!event.over && (
         <SettingsConclude eventId={event.id} eventName={event.name} />
