@@ -4,7 +4,7 @@ import type { Picture } from "@/types/photo";
 
 export async function getPicturesForEvent(
   eventId: string,
-  showUnattended: boolean|null = null,
+  showUnattended: boolean | null = null,
 ): Promise<Collection<Picture>> {
   const qs = new URLSearchParams();
 

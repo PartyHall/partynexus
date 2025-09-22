@@ -14,7 +14,7 @@ readonly class AppSettingsController
         #[Autowire(env: 'PUBLIC_URL')]
         private string $nexusPublicUrl,
         #[Autowire(param: 'oauth.enabled')]
-        private bool   $oauthEnabled,
+        private bool $oauthEnabled,
         #[Autowire(param: 'oauth.base_url')]
         private string $oauthBaseUrl,
         #[Autowire(param: 'oauth.client_id')]
@@ -33,8 +33,7 @@ readonly class AppSettingsController
         private string $spotifyClientId = '',
         #[Autowire(env: 'SPOTIFY_CLIENT_SECRET')]
         private string $spotifyClientSecret = '',
-    )
-    {
+    ) {
     }
 
     #[Route(path: '/api/settings', name: 'nexus_settings', methods: ['GET'])]
@@ -43,8 +42,8 @@ readonly class AppSettingsController
         $settings = [];
 
         if ($this->oauthEnabled) {
-            $baseUrl = \trim(\rtrim($this->oauthBaseUrl, '/')) . '/auth?';
-            $nexusPublicUrl = \trim(\rtrim($this->nexusPublicUrl, '/')) . '/oauth-callback';
+            $baseUrl = \trim(\rtrim($this->oauthBaseUrl, '/')).'/auth?';
+            $nexusPublicUrl = \trim(\rtrim($this->nexusPublicUrl, '/')).'/oauth-callback';
 
             $queryString = \http_build_query([
                 'client_id' => \trim($this->oauthClientId),
@@ -58,7 +57,7 @@ readonly class AppSettingsController
             $btTextColor = \trim($this->oauthButtonColorsText);
 
             $settings['oauth'] = [
-                'loginUrl' => $baseUrl . $queryString,
+                'loginUrl' => $baseUrl.$queryString,
                 'buttonIcon' => \trim($this->oauthButtonIcon),
                 'buttonText' => \trim($this->oauthButtonText),
                 'buttonCss' => <<<CSS
@@ -77,7 +76,6 @@ CSS,
 
         if (strlen(\trim($this->spotifyClientId)) > 0 && strlen(\trim($this->spotifyClientSecret)) > 0) {
             $settings['spotify_enabled'] = true;
-
         }
 
         return new JsonResponse($settings);

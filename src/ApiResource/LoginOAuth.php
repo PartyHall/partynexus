@@ -12,7 +12,7 @@ use Symfony\Component\Validator\Constraints as Assert;
         new Post(
             uriTemplate: '/login_oauth',
             processor: OAuthLoginProcessor::class,
-        )
+        ),
     ],
 )]
 class LoginOAuth

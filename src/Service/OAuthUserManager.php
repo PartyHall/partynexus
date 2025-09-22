@@ -12,10 +12,9 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 class OAuthUserManager
 {
     public function __construct(
-        private UserRepository         $userRepository,
+        private UserRepository $userRepository,
         private EntityManagerInterface $emi,
-    )
-    {
+    ) {
     }
 
     public function generateUniqueUsername(OAuthUserInfos $userInfos): ?string
@@ -23,7 +22,7 @@ class OAuthUserManager
         $baseUsername = '';
         if (\strlen($userInfos->username) > 0) {
             $user = $this->userRepository->findOneByUsername($userInfos->username);
-            if ($user === null) {
+            if (null === $user) {
                 return $userInfos->username;
             }
 
@@ -34,11 +33,11 @@ class OAuthUserManager
             $username = "{$userInfos->firstName}_{$userInfos->lastName}";
 
             $user = $this->userRepository->findOneByUsername($username);
-            if ($user === null) {
+            if (null === $user) {
                 return $username;
             }
 
-            if (\strlen($baseUsername) === 0) {
+            if (0 === \strlen($baseUsername)) {
                 $baseUsername = $username;
             }
         }
@@ -51,11 +50,11 @@ class OAuthUserManager
 
                 $username = \sprintf('%s_%05d', $baseUsername, $randomSuffix);
                 $user = $this->userRepository->findOneByUsername($username);
-                if ($user === null) {
+                if (null === $user) {
                     return $username;
                 }
 
-                $tries++;
+                ++$tries;
             }
         }
 
@@ -64,16 +63,16 @@ class OAuthUserManager
 
     public function createUser(OAuthUserInfos $userInfos): User
     {
-        if (\strlen($userInfos->oauthUserId) === 0) {
+        if (0 === \strlen($userInfos->oauthUserId)) {
             throw new BadRequestHttpException('No OAuth user ID from the IDP');
         }
 
-        if (\strlen($userInfos->email) === 0) {
+        if (0 === \strlen($userInfos->email)) {
             throw new BadRequestHttpException('No email from the IDP');
         }
 
         $username = $this->generateUniqueUsername($userInfos);
-        if ($username === null) {
+        if (null === $username) {
             throw new BadRequestHttpException('Cannot generate a unique username');
         }
 

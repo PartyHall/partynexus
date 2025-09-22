@@ -44,13 +44,12 @@ function RouteComponent() {
           disabled={data.oauthUser}
         />
 
-        {
-          data.oauthUser
-          && <div className="mt-4 text-center flex flex-col gap-2 text-sm">
-            <p>{t('account.oauth_user_1')}</p>
-            <p>{t('account.oauth_user_2')}</p>
+        {data.oauthUser && (
+          <div className="mt-4 text-center flex flex-col gap-2 text-sm">
+            <p>{t("account.oauth_user_1")}</p>
+            <p>{t("account.oauth_user_2")}</p>
           </div>
-        }
+        )}
       </Card>
 
       <Card className="w-full sm:w-150 flex flex-col gap-2 items-center">

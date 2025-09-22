@@ -8,9 +8,8 @@ readonly class ForgottenPasswordNotification extends AbstractPersonMessage
 {
     public function __construct(
         private string $code,
-        User           $user,
-    )
-    {
+        User $user,
+    ) {
         parent::__construct($user);
     }
 

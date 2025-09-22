@@ -39,13 +39,13 @@ i18n
   });
 
 (async function () {
-  const resp = await fetch('/api/settings');
+  const resp = await fetch("/api/settings");
   const settings = await resp.json();
 
   useSettingsStore.setState({ ...settings });
 
   if (settings.oauth?.buttonCss) {
-    const style = document.createElement('style');
+    const style = document.createElement("style");
     style.textContent = settings.oauth.buttonCss;
     document.head.appendChild(style);
   }

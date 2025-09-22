@@ -133,7 +133,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private string $username;
 
     #[ORM\Column(type: Types::STRING, length: 128, unique: true, nullable: true)]
-    private ?string $oauthUserId;
+    private ?string $oauthUserId = null;
 
     #[ORM\Column(type: Types::STRING, length: 64, nullable: true)]
     #[Assert\Length(min: 2, max: 64, groups: [self::DEFAULT_VALIDATION_GROUP, self::API_REGISTER])]
@@ -381,7 +381,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function getRoles(): array
     {
-        return \array_map(fn(string $x) => \strtoupper($x), \array_unique(\array_merge(['ROLE_USER', ...$this->roles])));
+        return \array_map(fn (string $x) => \strtoupper($x), \array_unique(\array_merge(['ROLE_USER', ...$this->roles])));
     }
 
     /**
@@ -401,7 +401,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $role = \strtoupper($role);
 
         if (!\str_starts_with($role, 'ROLE_')) {
-            $role = 'ROLE_' . $role;
+            $role = 'ROLE_'.$role;
         }
 
         if (!\in_array($role, $this->roles)) {
@@ -416,10 +416,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $role = \strtoupper($role);
 
         if (!\str_starts_with($role, 'ROLE_')) {
-            $role = 'ROLE_' . $role;
+            $role = 'ROLE_'.$role;
         }
 
-        $this->roles = \array_filter($this->roles, fn($x) => $x !== $role);
+        $this->roles = \array_filter($this->roles, fn ($x) => $x !== $role);
 
         return $this;
     }

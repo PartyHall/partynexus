@@ -14,27 +14,31 @@ export const Route = createFileRoute("/forgotten-password/")({
 
 function RouteComponent() {
   const { t } = useTranslation();
-  const [globalErrors, setGlobalErrors] = useState<string>('');
+  const [globalErrors, setGlobalErrors] = useState<string>("");
   const navigate = useNavigate();
 
-  const { register, handleSubmit, formState: { isSubmitting } } = useForm<{ email: string }>({
-    defaultValues: { email: '' },
+  const {
+    register,
+    handleSubmit,
+    formState: { isSubmitting },
+  } = useForm<{ email: string }>({
+    defaultValues: { email: "" },
   });
 
   const onSubmit = async (data: { email: string }) => {
     try {
       await generateForgottenPassword(data.email);
-      navigate({to: '/forgotten-password/sent'})
+      navigate({ to: "/forgotten-password/sent" });
     } catch (err) {
       if (err instanceof HttpError && err.status === 429) {
-        setGlobalErrors(t('errors.429.message'));
+        setGlobalErrors(t("errors.429.message"));
 
         return;
       }
       console.error(err);
-      setGlobalErrors(t('generic.error.generic'));
+      setGlobalErrors(t("generic.error.generic"));
     }
-  }
+  };
 
   return (
     <div className="flex h-full w-full items-center justify-center">
@@ -45,10 +49,7 @@ function RouteComponent() {
 
         <p className="text-center">{t("forgotten_password.desc_request")}</p>
 
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className="flex flex-col gap-4"
-        >
+        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
           <Input
             type="email"
             {...register("email", { required: true })}
@@ -56,15 +57,13 @@ function RouteComponent() {
             required
           />
 
-          {
-            globalErrors.length > 0 && (
-              <div className="text-red-glow text-center">
-                {globalErrors}
-              </div>
-            )
-          }
+          {globalErrors.length > 0 && (
+            <div className="text-red-glow text-center">{globalErrors}</div>
+          )}
 
-          <Button type='submit' disabled={isSubmitting}>{t('forgotten_password.request')}</Button>
+          <Button type="submit" disabled={isSubmitting}>
+            {t("forgotten_password.request")}
+          </Button>
         </form>
       </Card>
     </div>

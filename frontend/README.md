@@ -4,7 +4,6 @@ This is a remaster of the original frontend.
 
 Built with my new wip stack: tanstack router, tanstack query, tailwind and zustand.
 
-
 The code is not that great as its the first one I've made with this new stack. It will be cleaned up slowly but surely in the future.
 
 ## Ordre des choses à faire

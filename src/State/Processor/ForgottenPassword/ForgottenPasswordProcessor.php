@@ -21,20 +21,19 @@ use Symfony\Component\RateLimiter\RateLimiterFactory;
 readonly class ForgottenPasswordProcessor implements ProcessorInterface
 {
     public function __construct(
-        private UserRepository         $userRepository,
+        private UserRepository $userRepository,
         private EntityManagerInterface $emi,
-        private MessageBusInterface    $messageBus,
-        private RequestStack           $requestStack,
+        private MessageBusInterface $messageBus,
+        private RequestStack $requestStack,
         #[Autowire(service: 'limiter.forgotten_password')]
-        private RateLimiterFactory     $forgottenPasswordApiLimiter,
-    )
-    {
+        private RateLimiterFactory $forgottenPasswordApiLimiter,
+    ) {
     }
 
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): Response
     {
         if (!$data instanceof PasswordReset) {
-            throw new \InvalidArgumentException('Expected instance of ' . PasswordReset::class);
+            throw new \InvalidArgumentException('Expected instance of '.PasswordReset::class);
         }
 
         $rl = $this->forgottenPasswordApiLimiter->create($this->requestStack->getMainRequest()->getClientIp());

@@ -36,7 +36,7 @@ export default function Input({
   hideRequired,
   ...props
 }: InputProps) {
-  const {t} = useTranslation();
+  const { t } = useTranslation();
 
   if (props.type === "hidden") {
     return (
@@ -80,7 +80,13 @@ export default function Input({
           ? error.length > 0
           : (error.message?.length || 0) > 0) && (
           <span className="text-sm text-red-glow mt-0.5">
-            {typeof error === "string" ? (error.startsWith('validation.') ? t(error) : error) : (error.message?.startsWith('validation.') ? t(error.message) : error.message)}
+            {typeof error === "string"
+              ? error.startsWith("validation.")
+                ? t(error)
+                : error
+              : error.message?.startsWith("validation.")
+                ? t(error.message)
+                : error.message}
           </span>
         )}
     </label>
@@ -96,7 +102,7 @@ export function PasswordInput({ ...props }: Omit<InputProps, "type" | "icon">) {
       icon={<IconAsterisk />}
       action={[
         <Button
-          key='ICON_TOGGLE'
+          key="ICON_TOGGLE"
           onClick={() => setVisible(!visible)}
           type="button"
           className="h-full bg-transparent!"

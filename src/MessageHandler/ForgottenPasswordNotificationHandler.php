@@ -33,7 +33,7 @@ readonly class ForgottenPasswordNotificationHandler
             ->context([
                 'username' => $notification->getUsername(),
                 'fullname' => $notification->getFullname(),
-                'link' => $this->baseUrl . '/forgotten-password/' . $notification->getCode(),
+                'link' => $this->baseUrl.'/forgotten-password/'.$notification->getCode(),
             ])
         ;
 

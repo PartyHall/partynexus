@@ -26,7 +26,7 @@ const decodeToken = (token: string) => {
   const parsed = atob(fixed); // fuck this crap API that breaks twice a month
 
   return JSON.parse(parsed);
-}
+};
 
 export const useAuthStore = create<StoreType>()((set, get) => ({
   token: localStorage.getItem("token") || null,

@@ -10,5 +10,6 @@ class OAuthUserInfos
     public ?string $email = null;
     public ?string $locale = null;
     public ?string $username = null;
+    /** @var array<string> */
     public array $roles = [];
 }

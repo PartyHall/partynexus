@@ -37,7 +37,7 @@ function RouteComponent() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const oauthSettings = useSettingsStore(state => state.oauth);
+  const oauthSettings = useSettingsStore((state) => state.oauth);
 
   const [username, password] = watch(["username", "password"]);
   useEffect(() => {
@@ -117,17 +117,23 @@ function RouteComponent() {
             {t("login.login_button")}
           </Button>
 
-          {
-            oauthSettings
-            && <ButtonLink id="oauthButton" className="mt-2" to={oauthSettings.loginUrl}>
-              {
-                oauthSettings.buttonIcon
-                && oauthSettings.buttonIcon.length > 0
-                && <img src={oauthSettings.buttonIcon} alt="OAuth Provider icon" className="inline h-8 mr-2" />
-              }
+          {oauthSettings && (
+            <ButtonLink
+              id="oauthButton"
+              className="mt-2"
+              to={oauthSettings.loginUrl}
+            >
+              {oauthSettings.buttonIcon &&
+                oauthSettings.buttonIcon.length > 0 && (
+                  <img
+                    src={oauthSettings.buttonIcon}
+                    alt="OAuth Provider icon"
+                    className="inline h-8 mr-2"
+                  />
+                )}
               {oauthSettings.buttonText}
             </ButtonLink>
-          }
+          )}
         </form>
       </Card>
     </div>

@@ -18,7 +18,7 @@ enum Language: string implements EnumLabelInterface
 
     public static function fromAlpha2(string $alpha2): ?self
     {
-        return match($alpha2) {
+        return match ($alpha2) {
             'en' => self::AMERICAN_ENGLISH,
             'fr' => self::FRENCH,
             default => null,

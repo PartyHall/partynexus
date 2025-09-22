@@ -18,7 +18,7 @@ export const Route = createFileRoute("/_authenticated")({
     if (!token || !tokenUser) {
       // fuck that
       let loc: string | undefined = location.pathname;
-      if (loc === '/' || loc === '/login' || loc === '/account') {
+      if (loc === "/" || loc === "/login" || loc === "/account") {
         loc = undefined;
       }
 
@@ -60,7 +60,7 @@ function RouteComponent() {
     if (!tokenUser || !refreshToken) {
       // fuck that
       let loc: string | undefined = location.pathname;
-      if (loc === '/' || loc === '/login' || loc === '/account') {
+      if (loc === "/" || loc === "/login" || loc === "/account") {
         loc = undefined;
       }
       navigate({ to: "/login", search: { redirect: loc } });

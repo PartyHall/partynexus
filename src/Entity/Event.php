@@ -17,7 +17,6 @@ use App\State\Processor\EventPersistProcessor;
 use App\State\Processor\SelfJoinEventProcessor;
 use App\State\Provider\ExportDownloadProvider;
 use App\State\Provider\RegistrationEventProvider;
-use App\State\Provider\SelfJoinEventProvider;
 use App\State\Provider\TimelapseDownloadProvider;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;

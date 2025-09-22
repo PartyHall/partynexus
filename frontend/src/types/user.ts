@@ -46,7 +46,7 @@ export type RegistrationUser = {
   username: string;
   email: string;
   firstname: string;
-  lastname: string|null;
+  lastname: string | null;
   newPassword: string;
   language: string;
 };

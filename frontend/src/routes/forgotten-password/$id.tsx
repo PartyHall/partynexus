@@ -150,7 +150,7 @@ function RouteComponent() {
         {passwordUpdated && (
           <div className="flex flex-col items-center gap-4">
             <p className="text-green-glow">{t("forgotten_password.success")}</p>
-            <ButtonLink to="/login" search={{redirect: undefined}}>
+            <ButtonLink to="/login" search={{ redirect: undefined }}>
               {t("forgotten_password.goto_login")}
             </ButtonLink>
           </div>

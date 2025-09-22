@@ -5,6 +5,7 @@ namespace App\State\Processor;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
 use App\ApiResource\LoginOAuth;
+use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Service\OAuthClient;
 use App\Service\OAuthUserManager;
@@ -19,13 +20,12 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 readonly class OAuthLoginProcessor implements ProcessorInterface
 {
     public function __construct(
-        private LoggerInterface              $logger,
-        private OAuthClient                  $oauthClient,
-        private OAuthUserManager             $oauthUserManager,
-        private UserRepository               $userRepository,
+        private LoggerInterface $logger,
+        private OAuthClient $oauthClient,
+        private OAuthUserManager $oauthUserManager,
+        private UserRepository $userRepository,
         private AuthenticationSuccessHandler $authenticationSuccessHandler,
-    )
-    {
+    ) {
     }
 
     /**
@@ -41,14 +41,15 @@ readonly class OAuthLoginProcessor implements ProcessorInterface
         try {
             $userData = $this->oauthClient->exchangeTokenAndGetUserInfos($data->code);
 
+            /** @var ?User $user */
             $user = $this->userRepository->findOneByOauthUserId($userData->oauthUserId);
-            if ($user === null) {
+            if (null === $user) {
                 $user = $this->oauthUserManager->createUser($userData);
             } else {
                 $user = $this->oauthUserManager->updateUser($user, $userData);
             }
         } catch (\Exception $e) {
-            $this->logger->error('Failed to get user from OAuth provider: ' . $e->getMessage());
+            $this->logger->error('Failed to get user from OAuth provider: '.$e->getMessage());
 
             throw new BadRequestHttpException('An error occured, contact your PartyHall administrator.');
         }
