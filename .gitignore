@@ -49,3 +49,4 @@ http/*.private.*.json
 songs.csv
 
 .dump_data
+public/app/var/uploaded_pictures
