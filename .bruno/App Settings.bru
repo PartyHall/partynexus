@@ -1,0 +1,15 @@
+meta {
+  name: App Settings
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{base_url}}/api/settings
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+}

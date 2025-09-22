@@ -39,11 +39,25 @@ class UserRepository extends ServiceEntityRepository implements UserLoaderInterf
         return $query->getResult();
     }
 
+    public function findOneByOauthUserId(string $oauthUserId): ?UserInterface
+    {
+        return $this->findOneBy(['oauthUserId' => $oauthUserId]);
+    }
+
     public function loadUserByIdentifier(string $identifier): ?UserInterface
     {
         return $this->createQueryBuilder('u')
-            ->where('LOWER(u.email) = LOWER(:query)')
+            ->where('LOWER(u.email) = LOWER(:query) OR LOWER(u.username) = LOWER(:query)')
             ->setParameter('query', $identifier)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
+    public function findOneByUsername(string $username): ?UserInterface
+    {
+        return $this->createQueryBuilder('u')
+            ->where('LOWER(u.username) = LOWER(:query)')
+            ->setParameter('query', $username)
             ->getQuery()
             ->getOneOrNullResult();
     }

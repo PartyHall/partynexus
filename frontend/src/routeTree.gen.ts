@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as OauthCallbackRouteImport } from './routes/oauth-callback'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as LoginIndexRouteImport } from './routes/login/index'
 import { Route as ForgottenPasswordIndexRouteImport } from './routes/forgotten-password/index'
@@ -47,6 +48,11 @@ import { Route as AuthenticatedAdminBackdropAlbumsIdRouteImport } from './routes
 import { Route as AuthenticatedAccountAppliancesNewRouteImport } from './routes/_authenticated/account/appliances/new'
 import { Route as AuthenticatedAccountAppliancesIdRouteImport } from './routes/_authenticated/account/appliances/$id'
 
+const OauthCallbackRoute = OauthCallbackRouteImport.update({
+  id: '/oauth-callback',
+  path: '/oauth-callback',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
   id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
@@ -249,6 +255,7 @@ const AuthenticatedAccountAppliancesIdRoute =
   } as any)
 
 export interface FileRoutesByFullPath {
+  '/oauth-callback': typeof OauthCallbackRoute
   '/$id': typeof AuthenticatedIdRouteRouteWithChildren
   '/admin': typeof AuthenticatedAdminRouteRouteWithChildren
   '/self-register/$id': typeof SelfRegisterIdRouteRouteWithChildren
@@ -287,6 +294,7 @@ export interface FileRoutesByFullPath {
   '/admin/users': typeof AuthenticatedAdminUsersIndexRoute
 }
 export interface FileRoutesByTo {
+  '/oauth-callback': typeof OauthCallbackRoute
   '/new': typeof AuthenticatedNewRoute
   '/forgotten-password/$id': typeof ForgottenPasswordIdRoute
   '/forgotten-password/sent': typeof ForgottenPasswordSentRoute
@@ -323,6 +331,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/oauth-callback': typeof OauthCallbackRoute
   '/_authenticated/$id': typeof AuthenticatedIdRouteRouteWithChildren
   '/_authenticated/admin': typeof AuthenticatedAdminRouteRouteWithChildren
   '/self-register/$id': typeof SelfRegisterIdRouteRouteWithChildren
@@ -363,6 +372,7 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
+    | '/oauth-callback'
     | '/$id'
     | '/admin'
     | '/self-register/$id'
@@ -401,6 +411,7 @@ export interface FileRouteTypes {
     | '/admin/users'
   fileRoutesByTo: FileRoutesByTo
   to:
+    | '/oauth-callback'
     | '/new'
     | '/forgotten-password/$id'
     | '/forgotten-password/sent'
@@ -436,6 +447,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/_authenticated'
+    | '/oauth-callback'
     | '/_authenticated/$id'
     | '/_authenticated/admin'
     | '/self-register/$id'
@@ -476,6 +488,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  OauthCallbackRoute: typeof OauthCallbackRoute
   SelfRegisterIdRouteRoute: typeof SelfRegisterIdRouteRouteWithChildren
   ForgottenPasswordIdRoute: typeof ForgottenPasswordIdRoute
   ForgottenPasswordSentRoute: typeof ForgottenPasswordSentRoute
@@ -486,6 +499,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/oauth-callback': {
+      id: '/oauth-callback'
+      path: '/oauth-callback'
+      fullPath: '/oauth-callback'
+      preLoaderRoute: typeof OauthCallbackRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authenticated': {
       id: '/_authenticated'
       path: ''
@@ -869,6 +889,7 @@ const SelfRegisterIdRouteRouteWithChildren =
 
 const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  OauthCallbackRoute: OauthCallbackRoute,
   SelfRegisterIdRouteRoute: SelfRegisterIdRouteRouteWithChildren,
   ForgottenPasswordIdRoute: ForgottenPasswordIdRoute,
   ForgottenPasswordSentRoute: ForgottenPasswordSentRoute,

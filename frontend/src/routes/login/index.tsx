@@ -8,8 +8,9 @@ import { login } from "@/api/auth";
 import { useAuthStore } from "@/stores/auth";
 import Input, { PasswordInput } from "@/components/generic/input";
 import { IconMail } from "@tabler/icons-react";
-import Button from "@/components/generic/button";
+import Button, { ButtonLink } from "@/components/generic/button";
 import useTranslatedTitle from "@/hooks/useTranslatedTitle";
+import { useSettingsStore } from "@/stores/settings";
 
 export const Route = createFileRoute("/login/")({
   validateSearch: (search) => ({
@@ -35,6 +36,8 @@ function RouteComponent() {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  const oauthSettings = useSettingsStore(state => state.oauth);
 
   const [username, password] = watch(["username", "password"]);
   useEffect(() => {
@@ -113,6 +116,18 @@ function RouteComponent() {
           <Button type="submit" disabled={isSubmitting}>
             {t("login.login_button")}
           </Button>
+
+          {
+            oauthSettings
+            && <ButtonLink id="oauthButton" className="mt-2" to={oauthSettings.loginUrl}>
+              {
+                oauthSettings.buttonIcon
+                && oauthSettings.buttonIcon.length > 0
+                && <img src={oauthSettings.buttonIcon} alt="OAuth Provider icon" className="inline h-8 mr-2" />
+              }
+              {oauthSettings.buttonText}
+            </ButtonLink>
+          }
         </form>
       </Card>
     </div>

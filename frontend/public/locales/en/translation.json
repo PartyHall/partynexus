@@ -96,7 +96,11 @@
     "title": "Login",
     "login_button": "Log In",
     "forgot_password": "Forgot password?",
-    "register_prompt": "Don't have an account? Register here."
+    "register_prompt": "Don't have an account? Register here.",
+    "oauth": {
+      "title": "Authenticating...",
+      "desc": "Please wait while PartyHall validate your identity..."
+    }
   },
   "events": {
     "title": "Events",
@@ -187,7 +191,9 @@
       "new": "New password",
       "confirm": "Confirm new password",
       "password_mismatch": "New password and confirmation do not match"
-    }
+    },
+    "oauth_user_1": "You can't edit your profile as you are logged in using a third-party service.",
+    "oauth_user_2": "If you want to update your info, change them on the service's website then log-in again."
   },
   "admin": {
     "title": "Admin",
@@ -315,5 +321,8 @@
         "description": "The song was not decompiled. Look at the console for more infos"
       }
     }
+  },
+  "validation": {
+    "username_regex": "Username can only contain letters, numbers, dots, underscores and hyphens and be between 3 and 32 characters."
   }
 }

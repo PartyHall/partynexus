@@ -68,8 +68,8 @@ function RouteComponent() {
     };
   }, [tokenUser, refreshToken, doRefresh]);
 
-  return <div className='w-full h-full flex flex-col items-center justify-center'>
-    <Card className='flex flex-col max-w-full md:max-w-md mx-4'>
+  return <div className='w-full h-full flex flex-col items-center justify-center px-4'>
+    <Card className='flex flex-col w-full max-w-sm mx-4'>
       <img
         src="/assets/ph_logo_sd.webp"
         alt="PartyHall logo"

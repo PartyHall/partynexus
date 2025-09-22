@@ -12,9 +12,10 @@ import { createUser, updateUser, type UpsertUser } from "@/api/users";
 type Props = {
   user: User | null;
   onSuccess?: (user: User) => void;
+  disabled?: boolean;
 };
 
-export default function UserEditForm({ user, onSuccess }: Props) {
+export default function UserEditForm({ user, onSuccess, disabled }: Props) {
   const { t } = useTranslation();
 
   const [globalErrors, setGlobalErrors] = useState<string[]>([]);
@@ -74,7 +75,7 @@ export default function UserEditForm({ user, onSuccess }: Props) {
         id="username"
         {...register("username")}
         error={errors.username}
-        disabled={isSubmitting || !!user?.id} // @TODO: Admin can probably update the username
+        disabled={isSubmitting || !!user?.id || disabled} // @TODO: Admin can probably update the username
       />
 
       <Input
@@ -83,7 +84,7 @@ export default function UserEditForm({ user, onSuccess }: Props) {
         type="email"
         {...register("email")}
         error={errors.email}
-        disabled={isSubmitting}
+        disabled={isSubmitting || disabled}
       />
 
       <Input
@@ -91,7 +92,7 @@ export default function UserEditForm({ user, onSuccess }: Props) {
         id="firstname"
         {...register("firstname")}
         error={errors.firstname}
-        disabled={isSubmitting}
+        disabled={isSubmitting || disabled}
       />
 
       <Input
@@ -99,7 +100,7 @@ export default function UserEditForm({ user, onSuccess }: Props) {
         id="lastname"
         {...register("lastname")}
         error={errors.lastname}
-        disabled={isSubmitting}
+        disabled={isSubmitting || disabled}
       />
 
       <EnumSelect

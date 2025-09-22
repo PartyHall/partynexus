@@ -15,6 +15,27 @@ parameters:
     env(MERCURE_BASE_URL): 'http://app'
     env(JWT_PASSPHRASE): 'partynexus_default_passphrase'
     env(SENTRY_ENV): 'prod'
+    
+    env(OAUTH_ENABLED): false
+    env(OAUTH_BASE_URL): ''
+    env(OAUTH_CLIENT_ID): ''
+    env(OAUTH_CLIENT_SECRET): ''
+    env(OAUTH_BUTTON_ICON): ''
+    env(OAUTH_BUTTON_TEXT): 'Login with OAuth'
+    env(OAUTH_BUTTON_COLOR): ''
+    env(OAUTH_BUTTON_COLOR_HOVER): ''
+    env(OAUTH_BUTTON_COLOR_TEXT): ''
+    
+    oauth.enabled: '%env(bool:OAUTH_ENABLED)%'
+    oauth.base_url: '%env(OAUTH_BASE_URL)%'
+    oauth.client_id: '%env(OAUTH_CLIENT_ID)%'
+    oauth.client_secret: '%env(OAUTH_CLIENT_SECRET)%'
+    oauth.button_icon: '%env(OAUTH_BUTTON_ICON)%'
+    oauth.button_text: '%env(OAUTH_BUTTON_TEXT)%'
+    oauth.button_colors.main: '%env(OAUTH_BUTTON_COLOR)%'
+    oauth.button_colors.hover: '%env(OAUTH_BUTTON_COLOR_HOVER)%'
+    oauth.button_colors.text: '%env(OAUTH_BUTTON_COLOR_TEXT)%'
+    
     thumbnails_location: '%env(PICTURES_LOCATION)%/thumbnails'
     
 services:

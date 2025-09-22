@@ -16,6 +16,15 @@ enum Language: string implements EnumLabelInterface
     case AMERICAN_ENGLISH = 'en_US';
     case FRENCH = 'fr_FR';
 
+    public static function fromAlpha2(string $alpha2): ?self
+    {
+        return match($alpha2) {
+            'en' => self::AMERICAN_ENGLISH,
+            'fr' => self::FRENCH,
+            default => null,
+        };
+    }
+
     #[Groups([EnumApiConfig::GET])]
     public function getLabel(): string
     {

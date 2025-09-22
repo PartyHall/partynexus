@@ -12,6 +12,8 @@ export type User = {
   bannedAt: string | null;
   passwordSet: boolean;
   appliances: Appliance[];
+
+  oauthUser: boolean;
 };
 
 export type MinimalUser = {

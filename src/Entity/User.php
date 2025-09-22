@@ -12,6 +12,7 @@ use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use App\Enum\Language;
 use App\Model\PasswordSet;
+use App\Repository\UserRepository;
 use App\State\Processor\BanUserProcessor;
 use App\State\Processor\RegisterUserProcessor;
 use App\State\Processor\UserSetPasswordProcessor;
@@ -90,7 +91,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[UniqueEntity(fields: ['email'], message: 'Email already taken')]
 #[UniqueEntity(fields: ['username'], message: 'Username already taken', groups: [self::API_REGISTER])]
 #[UniqueEntity(fields: ['email'], message: 'Email already taken', groups: [self::API_REGISTER])]
-#[ORM\Entity]
+#[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table('nexus_user')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -118,7 +119,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private int $id;
 
     #[ORM\Column(type: Types::STRING, length: 32, unique: true)]
-    #[Assert\Regex(pattern: '/^[a-zA-Z0-9._-]{3,32}$/', groups: [self::DEFAULT_VALIDATION_GROUP, self::API_REGISTER])]
+    #[Assert\Regex(pattern: '/^[a-zA-Z0-9._-]{3,32}$/', message: 'validation.username_regex', groups: [self::DEFAULT_VALIDATION_GROUP, self::API_REGISTER])]
     #[Assert\Length(min: 3, max: 32, groups: [self::DEFAULT_VALIDATION_GROUP, self::API_REGISTER])]
     #[Groups([
         self::API_GET_ITEM,
@@ -130,6 +131,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         Event::API_EXPORT,
     ])]
     private string $username;
+
+    #[ORM\Column(type: Types::STRING, length: 128, unique: true, nullable: true)]
+    private ?string $oauthUserId;
 
     #[ORM\Column(type: Types::STRING, length: 64, nullable: true)]
     #[Assert\Length(min: 2, max: 64, groups: [self::DEFAULT_VALIDATION_GROUP, self::API_REGISTER])]
@@ -265,6 +269,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    public function getOauthUserId(): string
+    {
+        return $this->oauthUserId;
+    }
+
+    public function setOauthUserId(string $oauthUserId): void
+    {
+        $this->oauthUserId = $oauthUserId;
+    }
+
     public function getFirstname(): ?string
     {
         return $this->firstname;
@@ -367,18 +381,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function getRoles(): array
     {
-        return array_merge(['ROLE_USER', ...$this->roles]);
+        return \array_map(fn(string $x) => \strtoupper($x), \array_unique(\array_merge(['ROLE_USER', ...$this->roles])));
+    }
+
+    /**
+     * @param array<string> $roles
+     */
+    public function setRoles(array $roles): self
+    {
+        foreach ($roles as $role) {
+            $this->addRole($role);
+        }
+
+        return $this;
     }
 
     public function addRole(string $role): self
     {
-        $role = strtoupper($role);
+        $role = \strtoupper($role);
 
-        if (!str_starts_with($role, 'ROLE_')) {
-            $role = 'ROLE_'.$role;
+        if (!\str_starts_with($role, 'ROLE_')) {
+            $role = 'ROLE_' . $role;
         }
 
-        if (!in_array($role, $this->roles)) {
+        if (!\in_array($role, $this->roles)) {
             $this->roles[] = $role;
         }
 
@@ -387,13 +413,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function removeRole(string $role): self
     {
-        $role = strtoupper($role);
+        $role = \strtoupper($role);
 
-        if (!str_starts_with($role, 'ROLE_')) {
-            $role = 'ROLE_'.$role;
+        if (!\str_starts_with($role, 'ROLE_')) {
+            $role = 'ROLE_' . $role;
         }
 
-        $this->roles = array_filter($this->roles, fn ($x) => $x !== $role);
+        $this->roles = \array_filter($this->roles, fn($x) => $x !== $role);
 
         return $this;
     }
@@ -405,7 +431,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function getUserIdentifier(): string
     {
-        return $this->username;
+        return $this->email;
     }
 
     /**
@@ -549,5 +575,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function isPasswordSet(): bool
     {
         return null !== $this->password;
+    }
+
+    #[Groups([self::API_GET_ITEM])]
+    public function isOauthUser(): bool
+    {
+        return $this->oauthUserId && \strlen($this->oauthUserId) > 0;
     }
 }

@@ -5,6 +5,7 @@ namespace App\Service;
 use ApiPlatform\Metadata\IriConverterInterface;
 use App\Bridge\Meilisearch\MeilisearchPaginator;
 use App\Entity\Song;
+use App\Entity\SongRequest;
 use App\Enum\SongFormat;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
@@ -49,6 +50,14 @@ readonly class BigSearchService
             'page' => $page,
             'hitsPerPage' => $itemsPerPage,
         ]), Song::class);
+    }
+
+    public function searchSongRequest(string $query, int $page = 1, int $itemsPerPage = 30): MeilisearchPaginator
+    {
+        return $this->hydrateItems($this->searchService->rawSearch(Song::class, $query, [
+            'page' => $page,
+            'hitsPerPage' => $itemsPerPage,
+        ]), SongRequest::class);
     }
 
     /**

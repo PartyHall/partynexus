@@ -2,17 +2,15 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
-use App\Doctrine\DBAL\Types\TsVectorType;
-use App\Doctrine\Filter\SongSearchFilter;
 use App\Interface\HasTimestamps;
 use App\Interface\Impl\HasTimestampsTrait;
 use App\State\Processor\SongRequestProcessor;
+use App\State\Provider\SongRequestCollectionProvider;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Attribute\Groups;
@@ -25,7 +23,8 @@ use Symfony\Component\Validator\Constraints as Assert;
         new Get(normalizationContext: [AbstractNormalizer::GROUPS => [self::API_GET_ITEM, HasTimestamps::API_GET, User::API_GET_ITEM]]),
         new GetCollection(
             order: ['createdAt' => 'DESC'],
-            normalizationContext: [AbstractNormalizer::GROUPS => [self::API_GET_ITEM, HasTimestamps::API_GET, User::API_GET_ITEM]]
+            normalizationContext: [AbstractNormalizer::GROUPS => [self::API_GET_ITEM, HasTimestamps::API_GET, User::API_GET_ITEM]],
+            provider: SongRequestCollectionProvider::class,
         ),
         new Post(
             normalizationContext: [AbstractNormalizer::GROUPS => [self::API_GET_ITEM, HasTimestamps::API_GET, User::API_GET_ITEM]],
@@ -35,7 +34,6 @@ use Symfony\Component\Validator\Constraints as Assert;
         new Delete(security: 'is_granted("ROLE_ADMIN")'),
     ],
 )]
-#[ApiFilter(SongSearchFilter::class)]
 class SongRequest implements HasTimestamps
 {
     use HasTimestampsTrait;
@@ -78,10 +76,6 @@ class SongRequest implements HasTimestamps
     ])]
     private User $requestedBy;
 
-    /** @var string[] */
-    #[ORM\Column(type: TsVectorType::TYPE, nullable: true)]
-    private array $searchVector;
-
     public function getId(): int
     {
         return $this->id;
@@ -121,17 +115,5 @@ class SongRequest implements HasTimestamps
         $this->requestedBy = $requestedBy;
 
         return $this;
-    }
-
-    /** @return string[] */
-    public function getSearchVector(): array
-    {
-        return $this->searchVector;
-    }
-
-    /** @param string[] $searchVector */
-    public function setSearchVector(array $searchVector): void
-    {
-        $this->searchVector = $searchVector;
     }
 }

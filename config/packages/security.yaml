@@ -6,7 +6,6 @@ security:
         user_provider:
             entity:
                 class: App\Entity\User
-                property: username
         appliance_provider:
             entity:
                 class: App\Entity\Appliance
@@ -76,6 +75,7 @@ security:
         - { path: ^/api/register, roles: PUBLIC_ACCESS }
         - { path: ^/api/refresh, roles: PUBLIC_ACCESS }
         - { path: ^/api/languages, roles: PUBLIC_ACCESS } # Used for registration
+        - { path: ^/api/settings, roles: PUBLIC_ACCESS }
         - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }
         - { path: ^/api/external, roles: ROLE_ADMIN }
 

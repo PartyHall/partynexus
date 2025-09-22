@@ -12,6 +12,7 @@ import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import ExternalSongModal from "./external_song_modal";
 import SongFormCover from "./song_form_cover";
+import { useSettingsStore } from "@/stores/settings";
 
 type Props = {
   song?: Song | null;
@@ -21,6 +22,7 @@ type Props = {
 export default function SongEditorForm({ song, onSuccess }: Props) {
   const { t } = useTranslation();
   const [globalErrors, setGlobalErrors] = useState<string[]>([]);
+  const isSpotifyEnabled = useSettingsStore(state => state.spotify_enabled);
 
   const [externalSongService, setExternalSongService] = useState<
     "spotify" | "musicBrainz" | null
@@ -150,14 +152,13 @@ export default function SongEditorForm({ song, onSuccess }: Props) {
 
       <Input
         label={t("karaoke.editor.spotify_id")}
-        action={
-          <Button
-            type="button"
-            disabled={song?.ready}
-            onClick={() => setExternalSongService("spotify")}
-          >
-            <IconSearch size={18} />
-          </Button>
+        action={isSpotifyEnabled && <Button
+          type="button"
+          disabled={song?.ready}
+          onClick={() => setExternalSongService("spotify")}
+        >
+          <IconSearch size={18} />
+        </Button>
         }
         {...register("spotifyId")}
         error={errors.spotifyId}

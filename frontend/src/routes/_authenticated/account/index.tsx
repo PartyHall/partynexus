@@ -5,7 +5,7 @@ import Card from "@/components/generic/card";
 import Title from "@/components/generic/title";
 import useTranslatedTitle from "@/hooks/useTranslatedTitle";
 import { useAuthStore } from "@/stores/auth";
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -41,7 +41,16 @@ function RouteComponent() {
               await doRefresh();
             }
           }}
+          disabled={data.oauthUser}
         />
+
+        {
+          data.oauthUser
+          && <div className="mt-4 text-center flex flex-col gap-2 text-sm">
+            <p>{t('account.oauth_user_1')}</p>
+            <p>{t('account.oauth_user_2')}</p>
+          </div>
+        }
       </Card>
 
       <Card className="w-full sm:w-150 flex flex-col gap-2 items-center">

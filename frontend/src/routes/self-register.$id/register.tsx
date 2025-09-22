@@ -75,8 +75,7 @@ function RouteComponent() {
     }
   };
 
-  return <form className='flex flex-col gap-1 sm:w-sm' onSubmit={handleSubmit(onSubmit)}>
-
+  return <form className='flex flex-col gap-1 w-full' onSubmit={handleSubmit(onSubmit)}>
     <Input
       label={t('generic.username')}
       {...register('username', { required: true })}

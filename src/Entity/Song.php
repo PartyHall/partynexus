@@ -12,8 +12,6 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\QueryParameter;
-use App\Doctrine\DBAL\Types\TsVectorType;
-use App\Doctrine\Filter\SongSearchFilter;
 use App\Enum\SongFormat;
 use App\Enum\SongQuality;
 use App\Interface\HasTimestamps;
@@ -32,22 +30,6 @@ use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
-
-/**
- * @TODO: When a video is uploaded it should be ran through ffmpeg to get it in vp9/webm
- * This means that we should have a way of telling on the frontend that this is in progress
- * thus preventing the compilation.
- */
-
-/**
- * @TODO: When an audio/video file is uploaded, it should be normalized
- * so that all songs have the same level
- *
- * @see https://github.com/slhck/ffmpeg-normalize
- *
- * EDIT: Are we sure though? THat probably should be done BEFORE separating vocals
- * so that the vocals are also normalized.
- */
 
 /**
  * @see \App\Doctrine\FilterSongOnReadinessExtension
@@ -94,13 +76,11 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
     ]
 )]
 #[QueryParameter('ready')]
-#[ApiFilter(SongSearchFilter::class)]
 #[ApiFilter(SearchFilter::class, properties: [
     'format' => SearchFilterInterface::STRATEGY_EXACT,
     'vocals' => SearchFilterInterface::STRATEGY_EXACT,
 ])]
 #[ORM\Entity(repositoryClass: SongRepository::class)]
-#[ORM\Index(name: 'idx_songs_search', fields: ['searchVector'])]
 #[Vich\Uploadable]
 class Song implements HasTimestamps
 {
@@ -304,10 +284,6 @@ class Song implements HasTimestamps
     #[Groups([self::API_GET_ITEM])]
     public ?string $combinedUrl = null;
 
-    /** @var string[] */
-    #[ORM\Column(type: TsVectorType::TYPE, nullable: true)]
-    private array $searchVector;
-
     public function __construct()
     {
         $this->setCreatedAt(new \DateTimeImmutable());
@@ -500,17 +476,5 @@ class Song implements HasTimestamps
         $this->duration = $duration;
 
         return $this;
-    }
-
-    /** @return string[] */
-    public function getSearchVector(): array
-    {
-        return $this->searchVector;
-    }
-
-    /** @param string[] $searchVector */
-    public function setSearchVector(array $searchVector): void
-    {
-        $this->searchVector = $searchVector;
     }
 }

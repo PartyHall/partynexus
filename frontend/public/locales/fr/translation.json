@@ -96,7 +96,11 @@
     "title": "Connexion",
     "login_button": "Se connecter",
     "forgot_password": "Mot de passe oublié ?",
-    "register_prompt": "Pas de compte ? S'inscrire."
+    "register_prompt": "Pas de compte ? S'inscrire.",
+    "oauth": {
+      "title": "Connexion...",
+      "desc": "Veuillez patienter pendant que PartyHall valide votre identité..."
+    }
   },
   "events": {
     "title": "Évènements",
@@ -186,7 +190,9 @@
       "new": "Nouveau mot de passe",
       "confirm": "Confirmer le nouveau mot de passe",
       "password_mismatch": "Les mots de passe ne correspondent pas"
-    }
+    },
+    "oauth_user_1": "Vous ne pouvez pas modifier votre profil car vous êtes connecté via un service tiers.",
+    "oauth_user_2": "Si vous souhaitez mettre à jour vos informations, modifiez-les sur le site web du service puis reconnectez-vous."
   },
   "admin": {
     "title": "Admin",
@@ -312,5 +318,8 @@
         "description": "La musique n'a pas été décompilée, voir la console pour plus d'infos"
       }
     }
+  },
+  "validation": {
+    "username_regex": "Le pseudo ne peut contenir que des lettres, chiffres, points, underscores et tirets et doit faire entre 3 et 32 caractères."
   }
 }

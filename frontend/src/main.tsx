@@ -14,6 +14,7 @@ import Button from "./components/generic/button";
 import { IconX } from "@tabler/icons-react";
 import dayjs from "dayjs";
 import LocalizedFormat from "dayjs/plugin/localizedFormat";
+import { useSettingsStore } from "./stores/settings";
 
 const queryClient = new QueryClient();
 const router = createRouter({ routeTree, context: { queryClient } });
@@ -37,21 +38,34 @@ i18n
     },
   });
 
-createRoot(document.getElementById("root")!).render(
-  <StrictMode>
-    <I18nextProvider i18n={i18n}>
-      <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
-        <SnackbarProvider
-          anchorOrigin={{ horizontal: "right", vertical: "top" }}
-          autoHideDuration={3000}
-          action={(id) => (
-            <Button onClick={() => closeSnackbar(id)}>
-              <IconX />
-            </Button>
-          )}
-        />
-      </QueryClientProvider>
-    </I18nextProvider>
-  </StrictMode>,
-);
+(async function () {
+  const resp = await fetch('/api/settings');
+  const settings = await resp.json();
+
+  useSettingsStore.setState({ ...settings });
+
+  if (settings.oauth?.buttonCss) {
+    const style = document.createElement('style');
+    style.textContent = settings.oauth.buttonCss;
+    document.head.appendChild(style);
+  }
+
+  createRoot(document.getElementById("root")!).render(
+    <StrictMode>
+      <I18nextProvider i18n={i18n}>
+        <QueryClientProvider client={queryClient}>
+          <RouterProvider router={router} />
+          <SnackbarProvider
+            anchorOrigin={{ horizontal: "right", vertical: "top" }}
+            autoHideDuration={3000}
+            action={(id) => (
+              <Button onClick={() => closeSnackbar(id)}>
+                <IconX />
+              </Button>
+            )}
+          />
+        </QueryClientProvider>
+      </I18nextProvider>
+    </StrictMode>,
+  );
+})();
