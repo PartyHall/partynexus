@@ -3,6 +3,7 @@
 namespace App\DataFixtures;
 
 use App\Entity\User;
+use App\Enum\Language;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -24,7 +25,7 @@ class UserFixture extends Fixture
         $user = (new User())
             ->setUsername($username)
             ->setEmail($username.'@partyhall.dev')
-            ->setLanguage('en_US')
+            ->setLanguage(Language::AMERICAN_ENGLISH)
             ->setFirstname($firstname)
             ->setLastname($lastname)
         ;
@@ -50,7 +51,7 @@ class UserFixture extends Fixture
          */
 
         $this->createUser(1, 'admin', ['ROLE_ADMIN'], 'Dominick', 'Cobb');
-        $this->createUser(2, 'eventmaker', ['ROLE_ADMIN'], 'Robert', 'Fischer');
+        $this->createUser(2, 'eventmaker', ['ROLE_EVENT_MAKER'], 'Robert', 'Fischer');
         $this->createUser(3, 'user');
         $this->createUser(4, 'noevents', [], 'Nash');
 

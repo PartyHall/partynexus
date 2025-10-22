@@ -53,10 +53,6 @@ abstract readonly class AbstractPermissionsFilter implements QueryCollectionExte
 
         $isCorrectClass = false;
         foreach ($classNames as $className) {
-            // Not sure why it makes phpstan angry but there seems to have
-            // a few issues on phpstan's github relating is_subclass_of
-            // so meh
-            // @phpstan-ignore-next-line
             if (\get_class($user) === $className || \is_subclass_of($user, $className)) {
                 $isCorrectClass = true;
                 break;

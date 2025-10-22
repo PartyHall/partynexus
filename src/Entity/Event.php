@@ -11,8 +11,10 @@ use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\QueryParameter;
 use App\Controller\EventConcludeController;
+use App\Enum\EnumApiConfig;
 use App\Repository\EventRepository;
-use App\State\Processor\EventCreationProcessor;
+use App\State\Processor\EventPersistProcessor;
+use App\State\Processor\SelfJoinEventProcessor;
 use App\State\Provider\ExportDownloadProvider;
 use App\State\Provider\RegistrationEventProvider;
 use App\State\Provider\TimelapseDownloadProvider;
@@ -34,28 +36,23 @@ use Symfony\Component\Validator\Constraints as Assert;
     operations: [
         new GetCollection(
             order: ['datetime' => 'DESC'],
-            normalizationContext: [AbstractNormalizer::GROUPS => [self::API_GET_COLLECTION]],
+            normalizationContext: [AbstractNormalizer::GROUPS => [self::API_GET_COLLECTION, EnumApiConfig::GET]],
         ),
-        new Get(
-            normalizationContext: [AbstractNormalizer::GROUPS => [self::API_GET_ITEM]],
-            security: 'is_granted("ROLE_ADMIN") or object.getOwner().hasAppliance(user) or object.hasParticipant(user)'
-        ),
+        new Get(security: 'is_granted("ROLE_ADMIN") or object.getOwner().hasAppliance(user) or object.hasParticipant(user)'),
         new Post(
-            normalizationContext: [AbstractNormalizer::GROUPS => [self::API_GET_ITEM]],
             denormalizationContext: [AbstractNormalizer::GROUPS => [self::API_CREATE]],
             security: 'is_granted("ROLE_APPLIANCE") or is_granted("ROLE_ADMIN")',
-            processor: EventCreationProcessor::class,
+            processor: EventPersistProcessor::class,
         ),
         new Patch(
-            normalizationContext: [AbstractNormalizer::GROUPS => [self::API_GET_ITEM]],
             denormalizationContext: [AbstractNormalizer::GROUPS => [self::API_UPDATE]],
-            security: 'is_granted("ROLE_ADMIN") or user == object.getOwner()'
+            security: 'is_granted("ROLE_ADMIN") or user == object.getOwner()',
+            processor: EventPersistProcessor::class,
         ),
         new Post(
             uriTemplate: '/events/{id}/conclude',
             status: 200,
             controller: EventConcludeController::class,
-            normalizationContext: [AbstractNormalizer::GROUPS => [self::API_GET_ITEM]],
             denormalizationContext: [AbstractNormalizer::GROUPS => []],
             // security: 'is_granted("ROLE_ADMIN") or user == object.getOwner()', // Handled in the controller temporarly
             read: false,
@@ -64,12 +61,19 @@ use Symfony\Component\Validator\Constraints as Assert;
         new Get(uriTemplate: '/events/{id}/timelapse', provider: TimelapseDownloadProvider::class),
         new Get(uriTemplate: '/events/{id}/export', provider: ExportDownloadProvider::class),
         new Get(
-            uriTemplate: '/register/{userRegistrationCode}',
+            uriTemplate: '/self_register/{userRegistrationCode}',
             uriVariables: ['userRegistrationCode'],
             normalizationContext: [AbstractNormalizer::GROUPS => [self::API_GET_REGISTER]],
             provider: RegistrationEventProvider::class,
         ),
+        new Post(
+            uriTemplate: '/join_event/{userRegistrationCode}',
+            uriVariables: ['userRegistrationCode'],
+            provider: RegistrationEventProvider::class,
+            processor: SelfJoinEventProcessor::class,
+        ),
     ],
+    normalizationContext: [AbstractNormalizer::GROUPS => [self::API_GET_ITEM, EnumApiConfig::GET]],
 )]
 #[ApiFilter(SearchFilter::class, properties: ['name' => 'ipartial'])]
 #[ORM\Entity(repositoryClass: EventRepository::class)]
@@ -78,8 +82,12 @@ class Event
 {
     public const string API_GET_COLLECTION = 'api:event:get-collection';
     public const string API_GET_ITEM = 'api:event:get';
+    public const string API_EVENTMAKER_GET_ITEM = 'api:event_maker:event:get';
+    public const string API_ADMIN_GET_ITEM = 'api:admin:event:get';
     public const string API_CREATE = 'api:event:create';
+    public const string API_ADMIN_CREATE = 'api:admin:event:create';
     public const string API_UPDATE = 'api:event:update';
+    public const string API_ADMIN_UPDATE = 'api:admin:event:update';
     public const string API_EXPORT = 'api:export';
 
     public const string API_GET_REGISTER = 'api:event:get-register';
@@ -185,8 +193,8 @@ class Event
     #[Groups([self::API_GET_ITEM])]
     private ?DisplayBoardKey $displayBoardKey = null;
 
-    #[ORM\Column(type: Types::STRING, length: 255, unique: true, nullable: true)]
-    private ?string $userRegistrationCode = null;
+    #[ORM\Column(type: Types::STRING, length: 255, unique: true, nullable: false)]
+    private string $userRegistrationCode;
 
     #[ORM\Column(type: Types::BOOLEAN, options: ['default' => false])]
     #[Groups([self::API_GET_ITEM, self::API_CREATE, self::API_UPDATE])]
@@ -370,12 +378,12 @@ class Event
         return $this;
     }
 
-    public function getUserRegistrationCode(): ?string
+    public function getUserRegistrationCode(): string
     {
         return $this->userRegistrationCode;
     }
 
-    public function setUserRegistrationCode(?string $userRegistrationCode): self
+    public function setUserRegistrationCode(string $userRegistrationCode): self
     {
         $this->userRegistrationCode = $userRegistrationCode;
 

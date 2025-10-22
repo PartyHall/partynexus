@@ -31,7 +31,6 @@ class EventVoter extends Voter
      */
     protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token): bool
     {
-        // @phpstan-ignore-next-line
         if (!$subject) {
             return true;
         }

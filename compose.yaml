@@ -38,7 +38,7 @@ services:
 
 ###> doctrine/doctrine-bundle ###
   database:
-    image: 'postgres:16-alpine'
+    image: 'postgres:18-alpine'
     environment:
       POSTGRES_DB: 'partynexus'
       POSTGRES_PASSWORD: 'partynexus'
@@ -66,8 +66,8 @@ services:
     volumes:
       - './frontend:/app'
     ports:
-      - '5175:5173'
-    
+      - '127.0.0.1:5175:5173'
+
   ###> symfony/mailer ###
   mailer:
     image: 'axllent/mailpit'
@@ -80,13 +80,30 @@ services:
   ###< symfony/mailer ###
   
   redis:
-    image: 'redis:7.4.1-bookworm'
+    image: 'redis:8-bookworm'
+    ports:
+      - '127.0.0.1:6379:6379'
+
+  meilisearch:
+    image: 'getmeili/meilisearch:latest'
+    restart: 'unless-stopped'
+    environment:
+      MEILI_MASTER_KEY: 'masterkey123'
+    ports:
+      - '127.0.0.1:7700:7700'
+    volumes:
+      - './var/meilidata:/meili_data'
+
 
 volumes:
   caddy_data:
   caddy_config:
+    
 ###> symfony/mercure-bundle ###
 ###< symfony/mercure-bundle ###
 
 ###> doctrine/doctrine-bundle ###
 ###< doctrine/doctrine-bundle ###
+
+###> meilisearch/search-bundle ###
+###< meilisearch/search-bundle ###

@@ -1,0 +1,141 @@
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { useTranslation } from "react-i18next";
+import Card from "@/components/generic/card";
+import { useForm } from "react-hook-form";
+import { HttpError } from "@/api/http_error";
+import { useEffect, useState } from "react";
+import { login } from "@/api/auth";
+import { useAuthStore } from "@/stores/auth";
+import Input, { PasswordInput } from "@/components/generic/input";
+import { IconMail } from "@tabler/icons-react";
+import Button, { ButtonLink } from "@/components/generic/button";
+import useTranslatedTitle from "@/hooks/useTranslatedTitle";
+import { useSettingsStore } from "@/stores/settings";
+
+export const Route = createFileRoute("/login/")({
+  validateSearch: (search) => ({
+    redirect: search.redirect ? String(search.redirect) : undefined,
+  }),
+  component: RouteComponent,
+});
+
+type LoginForm = {
+  username: string;
+  password: string;
+};
+
+function RouteComponent() {
+  useTranslatedTitle("login.title");
+
+  const { redirect } = Route.useSearch();
+
+  const { t } = useTranslation();
+  const navigate = useNavigate();
+  const setToken = useAuthStore((state) => state.setToken);
+  const { handleSubmit, register, watch, resetField } = useForm<LoginForm>();
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  const oauthSettings = useSettingsStore((state) => state.oauth);
+
+  const [username, password] = watch(["username", "password"]);
+  useEffect(() => {
+    if (!password) {
+      return;
+    }
+
+    setErrorMessage(null);
+  }, [username, password]);
+
+  const onSubmit = async (data: LoginForm) => {
+    setErrorMessage(null);
+    setIsSubmitting(true);
+
+    try {
+      const resp = await login(data.username, data.password);
+
+      setToken(resp.token, resp.refresh_token);
+
+      if (redirect) {
+        navigate({ to: redirect });
+      } else {
+        navigate({ to: "/" });
+      }
+
+      setIsSubmitting(false);
+    } catch (err: any) {
+      console.error(err);
+      setErrorMessage(
+        err instanceof HttpError ? err.message : t("generic.error.generic"),
+      );
+      resetField("password");
+      setIsSubmitting(false);
+    }
+  };
+
+  return (
+    <div className="flex-col-center h-full">
+      <Card>
+        <img
+          src="/assets/ph_logo_sd.webp"
+          alt="PartyHall logo"
+          className="w-60 m-auto"
+        />
+
+        <form
+          className="flex flex-col gap-2 w-full"
+          onSubmit={handleSubmit(onSubmit)}
+        >
+          <Input
+            label={t("generic.username")}
+            id="username"
+            icon={<IconMail />}
+            autoFocus
+            autoComplete="username"
+            disabled={isSubmitting}
+            {...register("username")}
+          />
+
+          <PasswordInput
+            label={t("generic.password")}
+            id="password"
+            autoComplete="password"
+            disabled={isSubmitting}
+            {...register("password")}
+          />
+
+          <div className="text-center p-2">
+            <Link to="/forgotten-password">{t("login.forgot_password")}</Link>
+          </div>
+
+          {errorMessage && (
+            <div className="text-red-glow text-center">{errorMessage}</div>
+          )}
+
+          <Button type="submit" disabled={isSubmitting}>
+            {t("login.login_button")}
+          </Button>
+
+          {oauthSettings && (
+            <ButtonLink
+              id="oauthButton"
+              className="mt-2"
+              to={oauthSettings.loginUrl}
+            >
+              {oauthSettings.buttonIcon &&
+                oauthSettings.buttonIcon.length > 0 && (
+                  <img
+                    src={oauthSettings.buttonIcon}
+                    alt="OAuth Provider icon"
+                    className="inline h-8 mr-2"
+                  />
+                )}
+              {oauthSettings.buttonText}
+            </ButtonLink>
+          )}
+        </form>
+      </Card>
+    </div>
+  );
+}

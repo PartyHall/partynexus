@@ -3,8 +3,6 @@ doctrine:
         url: '%env(resolve:DATABASE_URL)%'
         profiling_collect_backtrace: '%kernel.debug%'
         use_savepoints: true
-        types:
-            tsvector: App\Doctrine\DBAL\Types\TsVectorType
         
     orm:
         auto_generate_proxy_classes: true
@@ -22,9 +20,6 @@ doctrine:
                 alias: App
         controller_resolver:
             auto_mapping: false
-        dql:
-            string_functions:
-                ts_query: App\Doctrine\DQL\TsQuery
 
 when@test:
     doctrine:

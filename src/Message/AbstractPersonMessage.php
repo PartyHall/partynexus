@@ -4,7 +4,7 @@ namespace App\Message;
 
 use App\Entity\User;
 
-abstract class AbstractPersonMessage
+abstract readonly class AbstractPersonMessage
 {
     private string $username;
     private string $fullname;
@@ -16,7 +16,7 @@ abstract class AbstractPersonMessage
         $this->username = $user->getUsername();
         $this->fullname = $user->getFullName();
         $this->userEmail = $user->getEmail();
-        $this->language = $user->getLanguage();
+        $this->language = $user->getLanguage()->value;
     }
 
     public function getUsername(): string

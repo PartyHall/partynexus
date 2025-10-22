@@ -14,8 +14,9 @@ use App\Interface\HasEvent;
 use App\Repository\PictureRepository;
 use App\Security\EventVoter;
 use App\State\Processor\PictureProcessor;
-use App\State\Provider\PictureCollectionProvider;
-use App\State\Provider\PictureDownloadProvider;
+use App\State\Provider\Pictures\PictureCollectionProvider;
+use App\State\Provider\Pictures\PictureDownloadProvider;
+use App\State\Provider\Pictures\PictureThumbnailProvider;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Types\UuidType;
@@ -47,7 +48,13 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
         ),
         new Get(
             uriTemplate: '/pictures/{id}/download',
+            write: false,
             provider: PictureDownloadProvider::class,
+        ),
+        new Get(
+            uriTemplate: '/pictures/{id}/thumbnail',
+            write: false,
+            provider: PictureThumbnailProvider::class,
         ),
         new Post(
             // uriTemplate: '/events/{eventId}/pictures',

@@ -37,18 +37,14 @@ class EventNormalizer implements NormalizerInterface
         /** @var array<mixed> $data */
         $data = $this->normalizer->normalize($object, $format, $context);
 
-        if ($object->getUserRegistrationCode()) {
-            $data['userRegistrationUrl'] = \implode(
-                '/',
-                [
-                    $this->baseUrl,
-                    'register',
-                    $object->getUserRegistrationCode(),
-                ]
-            );
-        } else {
-            $data['userRegsistrationUrl'] = null;
-        }
+        $data['userRegistrationUrl'] = \implode(
+            '/',
+            [
+                $this->baseUrl,
+                'self-register',
+                $object->getUserRegistrationCode(),
+            ]
+        );
 
         return $data;
     }

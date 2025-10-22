@@ -33,7 +33,7 @@ readonly class UserRegisteredNotificationHandler
             ->context([
                 'username' => $notification->getUsername(),
                 'fullname' => $notification->getFullname(),
-                'link' => $this->baseUrl.'/magic-login/?email='.$notification->getUserEmail().'&code='.$notification->getCode(),
+                'link' => $this->baseUrl,
             ])
         ;
 

@@ -1,7 +1,7 @@
 #syntax=docker/dockerfile:1
 
 # Versions
-FROM dunglas/frankenphp:1-php8.3 AS frankenphp_upstream
+FROM dunglas/frankenphp:1-php8.4 AS frankenphp_upstream
 
 # The different stages of this Dockerfile are meant to be built into separate images
 # https://docs.docker.com/develop/develop-images/multistage-build/#stop-at-a-specific-build-stage
@@ -40,8 +40,7 @@ ENV COMPOSER_ALLOW_SUPERUSER=1
 ENV PHP_INI_SCAN_DIR=":$PHP_INI_DIR/app.conf.d"
 
 ENV MERCURE_SUBSCRIBER_JWT_ALG=RS256
-ENV JWT_SECRET_KEY="%kernel.project_dir%/config/jwt/private.pem"
-ENV JWT_PUBLIC_KEY="%kernel.project_dir%/config/jwt/public.pem"
+ENV MERCURE_JWT_SECRET="we dont care for the setup it will be injected properly at runtime"
 
 # PARTYNEXUS: Adding redis, postgres and xsl (inky for mails)
 ###> recipes ###

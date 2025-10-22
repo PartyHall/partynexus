@@ -32,7 +32,7 @@ use Symfony\Component\Validator\Constraints as Assert;
         new Post(
             normalizationContext: [AbstractNormalizer::GROUPS => [Appliance::API_GET_ITEM]],
             denormalizationContext: [AbstractNormalizer::GROUPS => [Appliance::API_CREATE]],
-            security: 'is_granted("ROLE_ADMIN")',
+            security: 'is_granted("ROLE_EVENT_MAKER")',
             processor: ApplianceProcessor::class,
         ),
         new Patch(
@@ -181,6 +181,6 @@ class Appliance implements UserInterface
 
     public function getUserIdentifier(): string
     {
-        return $this->hardwareId;
+        return $this->hardwareId->toString();
     }
 }

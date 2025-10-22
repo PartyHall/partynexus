@@ -1,366 +1,328 @@
 {
-    "generic": {
-        "home": "Home",
-        "username": "Username",
-        "password": "Password",
-        "email": "Email",
-        "search": "Search...",
-        "list_count": "Total: {{total}}",
-        "no_results": "No results",
-        "modal_im_sure": "I'm sure!",
-        "cancel": "Cancel",
-        "no_selection": "-- Select a value --",
-        "remove": "Remove",
-        "edit": "Edit",
-        "choose": "Choose",
-        "save": "Save",
-        "link": "Link",
-        "error": {
-            "unknown": "An unknown error has occured",
-            "unknown_desc": "There was an issue, see the console for more info",
-            "not_found": {
-                "event": "The requested event was not found."
-            }
-        }
-    },
-    "menu": {
-        "events": "Events",
-        "karaoke": "Karaoke",
-        "my_account": "My account",
-        "admin": {
-            "title": "Admin",
-            "user_management": "Users",
-            "backdrop_management": "Backdrops"
-        }
-    },
-    "login": {
-        "title": "Login",
-        "tab_login": "Login",
-        "tab_login_password": "Password",
-        "tab_magic_login": "Magic link",
-        "retype_password": "Re-type password",
-        "login_bt": "Login",
-        "register_bt": "Register",
-        "magic_login": {
-            "desc": "A magic link will be sent to your email to authenticate",
-            "sent": "If a user exists with this email, you should receive a link to connect",
-            "rate_limit": "Please wait before trying to login again!"
-        },
-        "magic_login_callback": {
-            "title": "Welcome back!",
-            "desc": "Sign-in in progress...",
-            "fail": {
-                "title": "An error occured",
-                "desc_already_used": "This link was already used",
-                "desc_expired": "This link has expired",
-                "desc_unknown": "An unknown error has occured, see console for more details"
-            }
-        },
-        "magic_password": {
-            "hello": "Hello {{firstName}} {{lastName}}",
-            "desc": "You can now set the password for your account.",
-            "not_found": "This MagicPassword code was not found. Maybe it was already used or has expired (+48h)",
-            "success_title": "Your password was set !",
-            "success_desc": "You can now login with the username \"{{username}}\" and this password !",
-            "success_gohome": "Go back to login"
-        }
-    },
-    "my_account": {
-        "title": "My account",
-        "logout": "Logout",
-        "my_appliances": "My appliances",
-        "change_password": "Change password",
-        "new": "New",
-        "edit": "Edit",
-        "delete": "Delete",
-        "delete_appliance": {
-            "name": "Delete",
-            "title": "Delete this appliance?"
-        },
-        "appliance_editor": {
-            "title": "Edit appliance",
-            "title_create": "Create an appliance",
-            "name": "Name"
-        },
-        "set_password": {
-            "old_password": "Old password",
-            "password": "New password",
-            "password_2": "Repeat password",
-            "dont_match": "Passwords don't match",
-            "requirements": "Requirements",
-            "min_chars": "Min 8 characters",
-            "luc": "Has upper and lowercase letters",
-            "numbers": "Has numbers",
-            "sc": "Has special characters",
-            "success_title": "Password updated",
-            "success_desc": "Your password was changed successfully"
-        }
-    },
-    "users": {
-        "title": "Users",
-        "new_user_bt": "Register user",
-        "new": {
-            "username": "Username",
-            "firstname": "First name",
-            "lastname": "Last name",
-            "email": "Email address",
-            "lang": "Language",
-            "register": "Register user",
-            "success": {
-                "title": "User created",
-                "desc": "You registered {{username}}, an email will be sent to their inbox to login."
-            }
-        },
-        "ban": {
-            "tooltip": "Ban this user",
-            "confirm": {
-                "title": "You are trying to ban {{username}}",
-                "desc": "They will no longer be able to login. Existing tokens will still work for 15 minutes."
-            },
-            "success_title": "User banned",
-            "success_desc": "The user {{username}} was banned!",
-            "error_title": "Failed to ban user",
-            "error_desc": "An error occured while banning this user. More info in the console."
-        },
-        "unban": {
-            "tooltip": "Unban this user",
-            "confirm": {
-                "title": "You are trying to unban {{username}}",
-                "desc": "They will be able to login again."
-            },
-            "success_title": "User unbanned",
-            "success_desc": "The user {{username}} was unbanned!",
-            "error_title": "Failed to unban user",
-            "error_desc": "An error occured while unbanning this user. More info in the console."
-        },
-        "editor": {
-            "edit_someone": "Edit user {{username}}",
-            "authentication_logs": "Authentication logs",
-            "username": "My username",
-            "email": "My email",
-            "firstname": "First name",
-            "lastname": "Last name",
-            "has_password": "Has a password set?",
-            "magic_password": {
-                "generator": {
-                    "title": "Magic Password generator",
-                    "desc": "A MagicPassword is a link that you can give to someone so that they can define a password without having to login. It is single-use and let the person use the app when mails are poorly configured (Not received, falls in spam, etc...). This can also be used as a \"Forgotten password\" feature.",
-                    "generate": "Generate one",
-                    "generated_desc": "Link generated. Provide it to the user, it will expire in 48h."
-                }
-            }
-        }
-    },
-    "karaoke": {
-        "title": "Song list",
-        "by": "By {{artist}}",
-        "song_count": "{{total}} songs",
-        "new_song": "New song",
-        "filters": {
-            "title": "Filters",
-            "ready": "Ready?",
-            "format": "Format",
-            "video": "Video",
-            "transparent_video": "Transparent video",
-            "cdg": "CDG",
-            "has_vocals": "Has vocals?",
-            "no": "No",
-            "yes": "Yes"
-        },
-        "files": {
-            "instrumental": "Instrumental",
-            "vocals": "Vocals",
-            "mixed": "Mixed"
-        },
-        "request": {
-            "title": "Request a song",
-            "song_title": "Title",
-            "song_artist": "Artist",
-            "create": "Request",
-            "requested_by": "Requested by",
-            "mark_done": "Mark as done",
-            "success": {
-                "title": "Song requested",
-                "description": "The admins are contacted and will review your song request."
-            },
-            "error": {
-                "title": "Failed to request song",
-                "description": "An issue occured while requesting the song. See console for more info or contact the admin."
-            }
-        },
-        "editor": {
-            "title_edit": "Editing {{title}}",
-            "title_new": "New song",
-            "title": "Title",
-            "artist": "Artist",
-            "format": "Format",
-            "quality": "Quality",
-            "song_files": "Song files",
-            "cover": {
-                "bad_format": {
-                    "title": "The format is invalid",
-                    "description": "Please only use jpg, webp and png files."
-                },
-                "failed": {
-                    "title": "Cover update failure",
-                    "description": "The cover was not updated. See console for more infos."
-                }
-            },
-            "upload": {
-                "choose_bt": "Choose a file",
-                "no_file_uploaded": "No file uploaded",
-                "bad_format": {
-                    "title": "The format is invalid",
-                    "description": "Please use the correct format depending on the file you want to upload"
-                },
-                "failed": {
-                    "title": "Upload failed",
-                    "description": "The upload has failed. See console for more infos."
-                }
-            },
-            "compile": {
-                "title": "Compilation settings",
-                "text1": "A song can be either uncompiled (extracted, ready to be edited) or compiled (a .phk file is generated and edition is locked).",
-                "text2": "Here you can request to compile / decompile your song",
-                "text3": "Note that decompiling the song will remove it from all the appliances that fetched it, and rebuilding it will cause the appliance to fetch it again.",
-                "request_compile": "Lancer la compilation",
-                "request_decompile": "Lancer la décompilation",
-                "success_compile": {
-                    "title": "Song compiled",
-                    "description": "The song was compiled successfully"
-                },
-                "failure_compile": {
-                    "title": "Failed to compile",
-                    "description": "The song was not compiled. Look at the console for more infos"
-                },
-                "success_decompile": {
-                    "title": "Song decompiled",
-                    "description": "The song was decompiled successfully"
-                },
-                "failure_decompile": {
-                    "title": "Failed to decompile",
-                    "description": "The song was not decompiled. Look at the console for more infos"
-                }
-            },
-            "search_external": {
-                "title": "Search metadata on {{provider}}",
-                "artist": "Artist",
-                "track": "Track name",
-                "id": "ID"
-            }
-        }
-    },
-    "event": {
-        "infos": "Infos",
-        "by": "By {{author}}",
-        "at": "At {{location}}",
-        "no_events": "No event found",
-        "create_bt": "New",
-        "id": "PartyNexus ID",
-        "name": "Name",
-        "author": "Author",
-        "location": "Location",
-        "datetime": "On",
-        "force_export": "Force export",
-        "download_export": "Download everything",
-        "show_timelapse_bt": "Show the timelapse",
-        "edit": "Edit",
-        "see": "See",
-        "display_board": {
-            "title": "Display board",
-            "create": "Create a Display board key",
-            "created": "Display board key created",
-            "error": "An error occured while creating the display board key, see console for more info"
-        },
-        "conclude": {
-            "bt": "Mark as \"over\"",
-            "title": "You are going to conclude the event",
-            "description": "This will start the export of the event and it will be locked for modification. You must do this only after the event is over.",
-            "success": {
-                "title": "The event is concluded",
-                "description": "The event will now be exported. Please wait, an email will be sent to participant once ready."
-            },
-            "failed": {
-                "title": "Failed to conclude the event",
-                "description": "Failure when concluding the event. The event will not be exported"
-            }
-        },
-        "participants": {
-            "title": "Participants",
-            "delete": {
-                "title": "Kicking a user",
-                "description": "You are going to kick {{name}} from the event.",
-                "yes": "Remove",
-                "failure": {
-                    "title": "Kick failed",
-                    "description": "An error occured while kicking {{name}} out of the event."
-                }
-            },
-            "add": {
-                "title": "Add participant",
-                "confirm": "You are trying to add {{participant}} to the event, are you sure?",
-                "failure": {
-                    "title": "Adding failed",
-                    "description": "An error occured while adding the user to the event."
-                }
-            },
-            "search": {
-                "failure": {
-                    "title": "Searching failed",
-                    "description": "An error occured while searching for a user."
-                }
-            }
-        },
-        "editor": {
-            "create_title": "Create an event",
-            "edit_title": "Editing {{title}}"
-        },
-        "export": {
-            "title": "Export",
-            "id": "ID",
-            "started_at": "Started at",
-            "ended_at": "Ended at",
-            "progress": "Progress",
-            "status": "Status"
-        },
-        "pictures": {
-            "title": "Photos",
-            "no_pictures": "No pictures available yet.",
-            "timelapse": "Timelapse",
-            "more": "More..."
-        },
-        "karaoke": {
-            "sessions": "Sung songs",
-            "no_sung_songs": "No sung songs yet!",
-            "session": {
-                "title": "Title",
-                "artist": "Artist",
-                "sung_at": "Sung at",
-                "singer": "Singer"
-            }
-        }
-    },
-    "backdrops": {
-        "title": "Backdrops",
-        "title_and_author": "{{title}} by {{author}}",
-        "create": "New album",
-        "delete_album": {
-            "title": "Delete album",
-            "description": "You're going to remove the album {{title}}, every backdrops in it will be removed too."
-        },
-        "add_backdrop": {
-            "title": "Add backdrop"
-        },
-        "edit_album": {
-            "title": "Edit album",
-            "album_title": "Title",
-            "album_author": "Author",
-            "album_version": "Version"
-        },
-        "edit_backdrop": {
-            "backdrop_title": "Title",
-            "backdrop_file": "File"
-        },
-        "delete_backdrop": "Remove the backdrop {{title}}."
+  "generic": {
+    "home": "Home",
+    "username": "Username",
+    "email": "Email",
+    "password": "Password",
+    "date": "Date",
+    "ip": "IP Address",
+    "id": "ID",
+    "firstname": "First Name",
+    "lastname": "Last Name",
+    "loading": "Loading...",
+    "search": "Search...",
+    "clear_search": "Clear search",
+    "no_more_results": "You have reached the end of the list",
+    "filters": "Filters",
+    "no_results": "No results found",
+    "cancel": "Cancel",
+    "save": "Save",
+    "create": "Create",
+    "changes_saved": "Changes saved successfully",
+    "created": "Created successfully",
+    "delete": "Delete",
+    "new": "New",
+    "add": "Add",
+    "edit": "Edit",
+    "link": "Link",
+    "use": "Use",
+    "go_back": "Go Back",
+    "logout": "Log out",
+    "yes": "Yes",
+    "no": "No",
+    "ok": "OK",
+    "edit_saved": "Modifications saved successfully",
+    "title": "Titre",
+    "upload": "Upload",
+    "upload_success": "Upload successful",
+    "enabled": "Enabled",
+    "error": {
+      "generic": "An error occurred",
+      "generic_desc": "Please try again later or contact your PartyHall administrator",
+      "generic_with_message": "An error occurred: {{message}}",
+      "upload_failed": "Upload failed"
     }
+  },
+  "errors": {
+    "401": {
+      "title": "Authentication expired",
+      "message": "This should not have happened.\nRefresh or logout should have been called"
+    },
+    "403": {
+      "title": "Forbidden",
+      "message": "You do not have permission to access this resource."
+    },
+    "404": {
+      "title": "Page lost in space",
+      "message": "The page you are looking for does not exist or has been moved.\nMaybe it got lost in another galaxy?"
+    },
+    "429": {
+      "title": "Too many requests",
+      "message": "You have tried to do this too many time, please wait a bit before trying again."
+    },
+    "5xx": {
+      "title": "Server error",
+      "message": "An unexpected error occurred on the server.\nPlease try again later."
+    }
+  },
+  "register": {
+    "self": {
+      "desc_1": "You are going to join the event \"<redGlow>{{eventName}}</redGlow>\".",
+      "desc_2": "If you already have an account for this PartyHall instance, please log-in with it. Otherwise you can create a new account.",
+      "join_as": "Join as {{username}}",
+      "404": "This registration link is not found. Please ask your event organizer for a new one.",
+      "400": "The event does not allow new users to register. Please ask the event organizer for help."
+    },
+    "register": "Register",
+    "confirm_password": "Repeat password",
+    "password_mismatch": "Password and confirmation do not match"
+  },
+  "forgotten_password": {
+    "title": "Forgotten password",
+    "desc_request": "If you have forgotten your password, you can request a link to set a new one. This link will expire in 1 hour.",
+    "desc": "Hello, {{username}}! It seems you either forgotten your password, or never had one in the first place. Let's set it up!",
+    "not_found": "Ce code de mot de passe oublié n'existe pas. Peut-être a-t-il expiré ou a déjà été utilisé ?",
+    "password": "New password",
+    "confirm_password": "Confirm new password",
+    "password_mismatch": "New password and confirmation do not match",
+    "set_password": "Set password",
+    "success": "Password updated successfully",
+    "goto_login": "Go to login",
+    "request": "Request password reset",
+    "sent_1": "If your email exists in our database, you will receive an email with a link to set a new password.",
+    "sent_2": "If you do not receive any email, please check your spam folder or contact your PartyHall administrator."
+  },
+  "login": {
+    "title": "Login",
+    "login_button": "Log In",
+    "forgot_password": "Forgot password?",
+    "register_prompt": "Don't have an account? Register here.",
+    "oauth": {
+      "title": "Authenticating...",
+      "desc": "Please wait while PartyHall validate your identity..."
+    }
+  },
+  "events": {
+    "title": "Events",
+    "amt_events": "{{amt}} events",
+    "notice_id_appliance": "Note: If the event was created manually, the id is to be filled on every appliance participating to the event.",
+    "editor": {
+      "title_new": "New event",
+      "title_edit": "Editing '{{name}}'",
+      "name": "Event name",
+      "participants": {
+        "add": "Add participant",
+        "add_disclaimer": "Are you sure you want to add {{username}} to this event?",
+        "add_success": "{{username}} added successfully",
+        "remove": "Remove participant",
+        "remove_disclaimer": "Are you sure you want to remove {{username}} from this event?",
+        "remove_success": "Participant removed successfully"
+      }
+    },
+    "made_by": "Made by",
+    "located_at": "Location",
+    "about": "About",
+    "photos": "Photos",
+    "timelapse": "Timelapse",
+    "participants": "Participants",
+    "no_timelapse": "No timelapse available",
+    "download_everything": "Download everything",
+    "karaoke": {
+      "title": "Sung songs",
+      "no_sessions": "No sung songs for this event!",
+      "song_title": "{{title}} by {{artist}}",
+      "interpreted_by": "Interpreted by {{singer}}",
+      "sung_at": "Sung on {{date}} at {{time}}",
+      "amt_song_session": "{{amt}} sung songs"
+    },
+    "settings": {
+      "title": "Settings",
+      "conclude": "Conclude / Mark as \"over\"",
+      "conclude_description": "Mark this event as over. It will no longer be editable, the timelapse generation will be launched, and users will be able to download a zip file containing everything related to the event. Do this once the event is over and the appliance has fully synchronized with PartyNexus.",
+      "conclude_confirm_desc": "You are going to conclude the event '{{eventName}}'. Be careful as once this is done, the event will not be able to receive new pictures or do anything new. Please ensure your appliance has properly synchronized everything !",
+      "concluded_no_export": "Event is over but no export has been generated yet. Please wait a bit!",
+      "display_board": {
+        "title": "Display board",
+        "desc": "A display board generates a link that you can put on a screen next to the appliance to show the last 9 pictures taken.",
+        "link": "Display board link",
+        "no_key": "No link were generated yet for this event.",
+        "generate": "Generate display board link"
+      },
+      "export": {
+        "title": "Export infos",
+        "started_at": "Export started at",
+        "ended_at": "Export ended at",
+        "progress": "Export progress",
+        "status": "Export status",
+        "force_reexport": "Force re-export",
+        "force_reexport_desc": "You are going to re-export this event, which will delete the old export and create a new one. This may take some time."
+      },
+      "user_registration": {
+        "title": "User self-register",
+        "desc": "This will allow users to use the following link to create an account on PartyHall (or login with their existing one) and join this event automatically.",
+        "link": "Registration link",
+        "appliance_qr": "Note that the appliance will also have a QR code displayed to let users register easily at the event."
+      }
+    }
+  },
+  "account": {
+    "title": "My account",
+    "actions": "Actions",
+    "language": "Language",
+    "my_appliances": {
+      "title": "My appliances",
+      "none_found": "No appliances found",
+      "delete": "Delete appliance",
+      "delete_confirm": "Are you sure you want to delete the appliance '{{name}}'?",
+      "editor": {
+        "title_edit": "Editing appliance '{{name}}'",
+        "title_new": "New appliance",
+        "id": "Appliance ID",
+        "name": "Appliance name",
+        "hwid": "Hardware ID",
+        "token": "Token",
+        "hwid_copied": "Hardware ID copied to clipboard",
+        "token_copied": "Token copied to clipboard"
+      }
+    },
+    "change_password": {
+      "title": "Change password",
+      "current": "Current password",
+      "new": "New password",
+      "confirm": "Confirm new password",
+      "password_mismatch": "New password and confirmation do not match"
+    },
+    "oauth_user_1": "You can't edit your profile as you are logged in using a third-party service.",
+    "oauth_user_2": "If you want to update your info, change them on the service's website then log-in again."
+  },
+  "admin": {
+    "title": "Admin",
+    "users": {
+      "title": "Users",
+      "title_edit": "{{username}}",
+      "amt_users": "{{amt}} users",
+      "create": {
+        "title": "Create user"
+      },
+      "management": {
+        "title": "Management",
+        "ban": {
+          "title": "Ban user",
+          "desc": "Banning a user will prevent them from logging in to PartyNexus.",
+          "banned_at": "Banned on {{date}} at {{time}}",
+          "unban": "Unban user"
+        },
+        "forgotten_password": {
+          "desc": "When user have forgotten their password, you can use this to generate a link for them to set a new one. It can also be used to set the password for a OAuth-registered user. This link will expire in 1 hour.",
+          "generate": "Generate one"
+        }
+      },
+      "auth_log": {
+        "title": "Authentication logs",
+        "empty": "No authentication logs found for this user"
+      }
+    },
+    "backdrop_albums": {
+      "title": "Backdrop albums",
+      "title_new": "New backdrop album",
+      "title_edit": "Editing '{{name}}'",
+      "amt_album": "{{amt}} albums",
+      "album_version": "Version {{version}}",
+      "delete_album": "Delete album",
+      "album_title": "Album title",
+      "author": "Album author",
+      "version": "Album version",
+      "note_appliance_update": "Note: The appliance will only update whenever the album version is updated. Do all the update you want then increment the version number.",
+      "no_backdrops": "No backdrops in this album",
+      "delete_confirm": {
+        "title": "Delete album",
+        "desc": "Are you sure you want to delete the album '{{title}}'? This will remove it from all appliances that fetched it."
+      },
+      "backdrops": {
+        "title": "Backdrops",
+        "new_title": "Add backdrop",
+        "edit_title": "Editing backdrop '{{title}}'",
+        "delete_title": "Delete backdrop",
+        "delete_desc": "Are you sure you want to delete the backdrop '{{title}}'?",
+        "image": "Picture"
+      }
+    }
+  },
+  "karaoke": {
+    "title": "Karaoke",
+    "amt_songs": "{{amt}} songs",
+    "song_title": "Title",
+    "song_artist": "Artist",
+    "files": {
+      "instrumental": "Instrumental",
+      "vocals": "Vocals",
+      "mixed": "Full song"
+    },
+    "filters": {
+      "ready": "Ready?",
+      "has_vocals": "Has vocals?",
+      "format": "Format",
+      "video": "Video",
+      "transparent_video": "Transparent video"
+    },
+    "request_song": {
+      "title": "Request a song",
+      "requested_by": "Requested by",
+      "submit": "Request",
+      "success": "Song request created",
+      "mark_done": "Mark as done",
+      "request_completed": "Song request completed!"
+    },
+    "editor": {
+      "title_new": "New song",
+      "title_edit": "Editing '{{name}}'",
+      "metadata": "Metadata",
+      "quality": "Quality",
+      "musicbrainz_id": "MusicBrainz ID",
+      "spotify_id": "Spotify ID",
+      "hotspot": "Hotspot",
+      "external_song": {
+        "title_spotify": "Search on Spotify",
+        "title_musicBrainz": "Search on MusicBrainz"
+      },
+      "upload_cover": "Upload cover art",
+      "not_uploaded_yet": "Not uploaded yet",
+      "song_files": "Song files",
+      "transparent_video": "Transparent video (WebM with alpha)",
+      "video": "Video",
+      "vocals": "Vocals",
+      "instrumental": "Instrumental",
+      "full": "Full song",
+      "cdg": "Lyrics (CDG)",
+      "no_file": "No file",
+      "cdg_uploaded": "CDG uploaded"
+    },
+    "compile": {
+      "title": "Compilation settings",
+      "text1": "A song can be either uncompiled (extracted, ready to be edited) or compiled (a .phk file is generated and edition is locked).",
+      "text2": "Here you can request to compile / decompile your song",
+      "text3": "Note that decompiling the song will remove it from all the appliances that fetched it, and rebuilding it will cause the appliance to fetch it again.",
+      "request_compile": "Lancer la compilation",
+      "request_decompile": "Lancer la décompilation",
+      "success_compile": {
+        "title": "Song compiled",
+        "description": "The song was compiled successfully"
+      },
+      "failure_compile": {
+        "title": "Failed to compile",
+        "description": "The song was not compiled. Look at the console for more infos"
+      },
+      "success_decompile": {
+        "title": "Song decompiled",
+        "description": "The song was decompiled successfully"
+      },
+      "failure_decompile": {
+        "title": "Failed to decompile",
+        "description": "The song was not decompiled. Look at the console for more infos"
+      }
+    }
+  },
+  "validation": {
+    "username_regex": "Username can only contain letters, numbers, dots, underscores and hyphens and be between 3 and 32 characters."
+  }
 }

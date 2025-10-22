@@ -1,197 +1,71 @@
-import './assets/css/index.scss';
+import "./assets/css/glow.css";
+import "./assets/css/index.css";
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+import { routeTree } from "./routeTree.gen";
+import { createRouter, RouterProvider } from "@tanstack/react-router";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { I18nextProvider, initReactI18next } from "react-i18next";
+import Backend from "i18next-http-backend";
+import detector from "i18next-browser-languagedetector";
+import i18n from "i18next";
+import { closeSnackbar, SnackbarProvider } from "notistack";
+import Button from "./components/generic/button";
+import { IconX } from "@tabler/icons-react";
+import dayjs from "dayjs";
+import LocalizedFormat from "dayjs/plugin/localizedFormat";
+import { useSettingsStore } from "./stores/settings";
 
-import { ConfigProvider, theme } from 'antd';
-import { I18nextProvider, initReactI18next } from 'react-i18next';
-import {
-    RouterProvider,
-    createBrowserRouter,
-    redirect,
-} from 'react-router-dom';
-import AdminBackdropsPage from './pages/admin/backdrops.tsx';
-import AdminEditUserPage from './pages/admin/edit_user.tsx';
-import AdminIndexPage from './pages/admin/index.tsx';
-import AdminLayout from './layout/AdminLayout.tsx';
-import AdminNewUserPage from './pages/admin/new_user.tsx';
-import AdminUsersPage from './pages/admin/users.tsx';
-import AuthProvider from './hooks/auth.tsx';
-import AuthenticatedLayout from './layout/AuthenticatedLayout.tsx';
-import Backend from 'i18next-http-backend';
-import DisplayBoardPage from './pages/DisplayBoard.tsx';
-import EditAppliancePage from './pages/appliances/EditAppliance.tsx';
-import EditEventPage from './pages/EditEvent.tsx';
-import EditSongPage from './pages/karaoke/EditSong.tsx';
-import EventsPage from './pages/Events.tsx';
-import LoginPage from './pages/login/index.tsx';
-import MagicLoginPage from './pages/login/MagicLoginCallback.tsx';
-import MagicPasswordPage from './pages/login/MagicPassword.tsx';
-import MyAccountPage from './pages/MyAccount.tsx';
-import NewAppliancePage from './pages/appliances/NewAppliance.tsx';
-import NewEventPage from './pages/NewEvent.tsx';
-import NewSongPage from './pages/karaoke/NewSong.tsx';
-import RequestSong from './pages/karaoke/RequestSong.tsx';
-import ShowEventPage from './pages/ShowEvent.tsx';
-import SongListingPage from './pages/karaoke/SongListing.tsx';
-import { StrictMode } from 'react';
-import { createRoot } from 'react-dom/client';
-import detector from 'i18next-browser-languagedetector';
-import i18n from 'i18next';
-import RegisterPage from './pages/Register.tsx';
+const queryClient = new QueryClient();
+const router = createRouter({ routeTree, context: { queryClient } });
 
-i18n.use(Backend)
-    .use(detector)
-    .use(initReactI18next)
-    .init({
-        fallbackLng: 'en',
-        interpolation: {
-            escapeValue: false,
-        },
-    });
+dayjs.extend(LocalizedFormat);
 
-const router = createBrowserRouter([
-    {
-        path: '/',
-        loader: () => redirect('/events'),
-    },
-    {
-        path: '/login',
-        element: <LoginPage />,
-    },
-    {
-        path: '/magic-login',
-        element: <MagicLoginPage />,
-    },
-    {
-        path: '/magic-password/:code',
-        element: <MagicPasswordPage />,
-    },
-    {
-        path: '/display-board/:eventId/:displayBoardKey',
-        element: <DisplayBoardPage />,
-    },
-    {
-        path: '/register/:token',
-        element: <RegisterPage />,
-    },
-    {
-        path: '/',
-        element: <AuthenticatedLayout />,
-        children: [
-            {
-                path: '/admin',
-                element: <AdminLayout />,
-                children: [
-                    {
-                        path: '',
-                        element: <AdminIndexPage />,
-                    },
-                    {
-                        path: '/admin/users/new',
-                        element: <AdminNewUserPage />,
-                    },
-                    {
-                        path: '/admin/users',
-                        element: <AdminUsersPage />,
-                    },
-                    {
-                        path: '/admin/users/:id',
-                        element: <AdminEditUserPage />,
-                    },
-                    {
-                        path: '/admin/backdrops',
-                        element: <AdminBackdropsPage />,
-                    },
-                ],
-            },
-            {
-                path: '/events',
-                element: <EventsPage />,
-            },
-            {
-                path: '/events/new',
-                element: <NewEventPage />,
-            },
-            {
-                path: '/events/:id',
-                element: <ShowEventPage />,
-            },
-            {
-                path: '/events/:id/edit',
-                element: <EditEventPage />,
-            },
-            {
-                path: '/karaoke',
-                element: <SongListingPage />,
-            },
-            {
-                path: '/karaoke/request',
-                element: <RequestSong />,
-            },
-            {
-                path: '/karaoke/new',
-                element: <NewSongPage />,
-            },
-            {
-                path: '/karaoke/:id',
-                element: <EditSongPage />,
-            },
-            {
-                path: '/me',
-                element: <MyAccountPage />,
-            },
-            {
-                path: '/appliances/new',
-                element: <NewAppliancePage />,
-            },
-            {
-                path: '/appliances/:id',
-                element: <EditAppliancePage />,
-            },
-        ],
-    },
-]);
+declare module "@tanstack/react-router" {
+  interface Register {
+    router: typeof router;
+  }
+}
 
-const phTheme = {
-    token: {
-        colorBgBase: '#262335',
-        colorTextBase: '#8a8692',
-        colorError: '#db3e4b',
-        colorSuccess: '#5db793',
-        colorPrimary: '#f92aa9',
-        colorInfo: '#f92aa9',
-        sizeStep: 4,
-        sizeUnit: 4,
-        borderRadius: 3,
-        colorBgContainer: '#241b2f',
-        colorBgElevated: '#2a2139',
-        fontSize: 16,
+i18n
+  .use(Backend)
+  .use(detector)
+  .use(initReactI18next)
+  .init({
+    fallbackLng: "en",
+    interpolation: {
+      escapeValue: false,
     },
-    components: {
-        Typography: {
-            algorithm: true,
-        },
-        Layout: {
-            headerBg: 'rgb(23,21,32)',
-            headerColor: 'rgb(211,208,212)',
-            siderBg: 'rgb(23,21,32)',
-        },
-        Menu: {
-            darkItemBg: 'rgb(23,21,32)',
-        },
-        Modal: {
-            contentBg: 'rgb(23,21,32)',
-        },
-    },
-    algorithm: [theme.darkAlgorithm, theme.compactAlgorithm],
-};
+  });
 
-createRoot(document.getElementById('root')!).render(
+(async function () {
+  const resp = await fetch("/api/settings");
+  const settings = await resp.json();
+
+  useSettingsStore.setState({ ...settings });
+
+  if (settings.oauth?.buttonCss) {
+    const style = document.createElement("style");
+    style.textContent = settings.oauth.buttonCss;
+    document.head.appendChild(style);
+  }
+
+  createRoot(document.getElementById("root")!).render(
     <StrictMode>
-        <I18nextProvider i18n={i18n}>
-            <ConfigProvider theme={phTheme}>
-                <AuthProvider>
-                    <RouterProvider router={router} />
-                </AuthProvider>
-            </ConfigProvider>
-        </I18nextProvider>
-    </StrictMode>
-);
+      <I18nextProvider i18n={i18n}>
+        <QueryClientProvider client={queryClient}>
+          <RouterProvider router={router} />
+          <SnackbarProvider
+            anchorOrigin={{ horizontal: "right", vertical: "top" }}
+            autoHideDuration={3000}
+            action={(id) => (
+              <Button onClick={() => closeSnackbar(id)}>
+                <IconX />
+              </Button>
+            )}
+          />
+        </QueryClientProvider>
+      </I18nextProvider>
+    </StrictMode>,
+  );
+})();

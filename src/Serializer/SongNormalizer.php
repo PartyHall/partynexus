@@ -22,7 +22,7 @@ class SongNormalizer implements NormalizerInterface
         #[Autowire(env: 'PUBLIC_URL')]
         string $baseUrl,
         #[Autowire(env: 'SONG_EXTRACT_LOCATION')]
-        private string $wipLocation,
+        private readonly string $wipLocation,
         private readonly StorageInterface $storage,
     ) {
         $this->baseUrl = \rtrim($baseUrl, '/');

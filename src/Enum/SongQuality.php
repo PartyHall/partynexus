@@ -2,10 +2,18 @@
 
 namespace App\Enum;
 
+use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Operation;
+use Symfony\Component\Serializer\Attribute\Groups;
 
-enum SongQuality: string
+#[ApiResource(
+    cacheHeaders: EnumApiConfig::CACHE_HEADERS,
+    normalizationContext: EnumApiConfig::NORMALIZATION_CONTEXT,
+)]
+enum SongQuality: string implements TranslatableEnumLabelInterface
 {
+    use EnumApiResourcetrait;
+
     case AWFUL = 'awful';
     case BAD = 'bad';
     case OK = 'ok';
@@ -36,5 +44,11 @@ enum SongQuality: string
     public static function values(): array
     {
         return array_column(self::cases(), 'value');
+    }
+
+    #[Groups([EnumApiConfig::GET])]
+    public function getLabel(): string
+    {
+        return \sprintf('song.quality.%s', $this->value);
     }
 }

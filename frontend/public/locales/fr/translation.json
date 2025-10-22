@@ -1,368 +1,325 @@
 {
-    "generic": {
-        "home": "Accueil",
-        "username": "Pseudo",
-        "password": "Mot de passe",
-        "email": "Email",
-        "search": "Rechercher...",
-        "list_count": "Total: {{total}}",
-        "no_results": "Aucun résultats",
-        "modal_im_sure": "Je suis sûr(e)",
-        "cancel": "Annuler",
-        "no_selection": "-- Choisir une valeur --",
-        "remove": "Supprimer",
-        "edit": "Éditer",
-        "choose": "Choisir",
-        "save": "Sauvegarder",
-        "link": "Lien",
-        "error": {
-            "unknown": "Une erreur inconnue s'est produite",
-            "unknown_desc": "Il y a eu un soucis. Regardez la console pour plus d'infos",
-            "not_found": {
-                "event": "L'évènement n'a pas été trouvé"
-            }
-        }
-    },
-    "menu": {
-        "events": "Évènements",
-        "karaoke": "Karaoké",
-        "my_account": "Mon compte",
-        "admin": {
-            "title": "Administration",
-            "user_management": "Utilisateurs",
-            "backdrop_management": "Passe-têtes"
-        }
-    },
-    "login": {
-        "tab_login": "Connexion",
-        "tab_login_password": "Mot de passe",
-        "tab_magic_login": "Lien magique",
-        "retype_password": "Retaper le mot de passe",
-        "login_bt": "Connexion",
-        "registerBt": "S'inscrire",
-        "magic_login": {
-            "desc": "Un lien vous sera envoyé par email pour vous connecter",
-            "sent": "Si un utilisateur avec cet email existe vous allez recevoir un lien de connexion",
-            "rate_limit": "Veuillez patienter avant de faire une nouvelle tentative !"
-        },
-        "magic_login_callback": {
-            "title": "Bon retour !",
-            "desc": "Connexion en cours...",
-            "fail": {
-                "title": "Une erreur est survenue",
-                "desc_already_used": "Ce lien à déjà été utilisé",
-                "desc_expired": "Ce lien à expiré",
-                "desc_unknown": "Erreur inconnue, regarder la console pour plus d'infos"
-            }
-        },
-        "magic_password": {
-            "hello": "Salut {{firstName}} {{lastName}}",
-            "desc": "Vous pouvez maintenant définir un mot de passe pour votre compte",
-            "not_found": "Ce code mot de passe magique n'a pas été trouvé. Peut-être qu'il a déjà été utilisé ou qu'il a expiré (+48h) ?",
-            "success_title": "Votre mot de passe a été défini",
-            "success_desc": "Vous pouvez maintenant vous connecter avec le pseudo \"{{username}}\" et ce mot de passe !",
-            "success_gohome": "Retourner à la connexion"
-        }
-    },
-    "my_account": {
-        "title": "Mon compte",
-        "logout": "Déconnexion",
-        "my_appliances": "Mes appareils",
-        "change_password": "Changer de mot de passe",
-        "new": "Nouveau",
-        "edit": "Éditer",
-        "delete": "Supprimer",
-        "delete_appliance": {
-            "name": "Supprimer",
-            "title": "Supprimer cet appareil ?"
-        },
-        "appliance_editor": {
-            "title": "Éditer l'appareil",
-            "title_create": "Créer un appareil",
-            "name": "Nom"
-        },
-        "set_password": {
-            "old_password": "Ancien mot de passe",
-            "password": "Nouveau mot de passe",
-            "password_2": "Répéter le mot de passe",
-            "dont_match": "Les mots de passes ne correspondent pas",
-            "requirements": "Règles",
-            "min_chars": "Minimum 8 caractères",
-            "luc": "Contient des minuscules et majuscules",
-            "numbers": "Contient des chiffres",
-            "sc": "Contient des caractères spéciaux",
-            "success_title": "Mot de passe mis à jour",
-            "success_desc": "Votre mot de passe à été changé avec succès."
-        }
-    },
-    "users": {
-        "title": "Utilisateurs",
-        "new_user_bt": "Inscrire un utilisateur",
-        "new": {
-            "username": "Pseudo",
-            "firstname": "Prénom",
-            "lastname": "Nom de famille",
-            "email": "Adresse email",
-            "lang": "Langue",
-            "register": "Inscrire l'utilisateur",
-            "success": {
-                "title": "Utilisateur créé",
-                "desc": "Vous avez inscrit {{username}}, un email sera envoyé dans sa boite pour se connecter."
-            }
-        },
-        "ban": {
-            "tooltip": "Bannir cet utilisateur",
-            "confirm": {
-                "title": "Vous tentez de bannir {{username}}",
-                "desc": "Cette personne ne pourra plus se connecter. Les tokens seront encore valides 15 minutes"
-            },
-            "success_title": "Utilisateur banni",
-            "success_desc": "L'utilisateur {{username}} a été banni !",
-            "error_title": "Échec de banissement",
-            "error_desc": "Une erreur est survenue lors du bannissement de l'utilisateur. Voir la console pour plus d'infos"
-        },
-        "unban": {
-            "tooltip": "Dé-bannir cet utilisateur",
-            "confirm": {
-                "title": "Vous tentez de débannir {{username}}",
-                "desc": "Il pourra à nouveau se connecter."
-            },
-            "success_title": "Utilisateur dé-banni",
-            "success_desc": "L'utilisateur {{username}} a été débanni !",
-            "error_title": "Échec du débannissement de l'utilisateur",
-            "error_desc": "Une erreur est survenue lors du débannissement de l'utilisateur. Voir la console pour plus d'infos"
-        },
-        "editor": {
-            "edit_someone": "Éditer l'utilisateur {{username}}",
-            "authentication_logs": "Historique de connexion",
-            "username": "Mon pseudo",
-            "email": "Mon email",
-            "firstname": "Prénom",
-            "lastname": "Nom de famille",
-            "has_password": "A défini son mot de passe ?",
-            "magic_password": {
-                "generator": {
-                    "title": "Générateur de MagicPassword",
-                    "desc": "Un MagicPassword est un lien que vous pouvez donner à la personne afin qu'elle puisse définir un mot de passe sans avoir à se connecter. Il est à usage unique et permet à la personne d'utiliser l'application quand les mails sont mal configurés (Non reçu, tombent en spam, etc...). Cela peut aussi être utilisé en cas d'oublie du mot de passe.",
-                    "generate": "Générer un MagicPassword",
-                    "generated_desc": "Lien généré. Transmettez-le à la personne afin qu'elle puisse définir un mot de passe. Il expirera dans 48h."
-                }
-            }
-        }
-    },
-    "karaoke": {
-        "title": "Liste des musiques",
-        "search": "Rechercher une musique...",
-        "by": "Par {{artist}}",
-        "song_count": "{{total}} musiques",
-        "new_song": "Créer une musique",
-        "request_song": "Demander une musique",
-        "filters": {
-            "title": "Filtres",
-            "ready": "Prête?",
-            "format": "Format",
-            "video": "Vidéo",
-            "transparent_video": "Vidéo transparente",
-            "cdg": "CDG",
-            "has_vocals": "Voix?",
-            "no": "Non",
-            "yes": "Oui"
-        },
-        "request": {
-            "title": "Demander une musique",
-            "song_title": "Titre",
-            "song_artist": "Artiste",
-            "requested_by": "Demandé par",
-            "mark_done": "Marqué comme fait",
-            "create": "Demander",
-            "success": {
-                "title": "Musique demandée",
-                "description": "Les admins ont étés contactés et traiterons votre demande."
-            },
-            "error": {
-                "title": "Échec de la demande de musique",
-                "description": "Une erreur est survenue lors de la demande de musique. Voir la console pour plus d'infos ou contactez un admin."
-            }
-        },
-        "files": {
-            "instrumental": "Instrumentale",
-            "vocals": "Voix",
-            "mixed": "Mixés"
-        },
-        "editor": {
-            "title_edit": "Modification de {{title}}",
-            "title_new": "Nouvelle musique",
-            "title": "Titre",
-            "artist": "Artiste",
-            "format": "Format",
-            "quality": "Qualité",
-            "song_files": "Fichiers de la musique",
-            "cover": {
-                "bad_format": {
-                    "title": "Ce format est invalide",
-                    "description": "Merci d'utiliser uniquement des jpeg, png ou webp"
-                },
-                "failed": {
-                    "title": "Échec du changement de cover",
-                    "description": "La cover n'a pas été mise à jour. Voir la console pour plus d'infos."
-                }
-            },
-            "upload": {
-                "choose_bt": "Choisir un fichier",
-                "no_file_uploaded": "Pas de fichier téléversé",
-                "bad_format": {
-                    "title": "Le format est invalide",
-                    "description": "Merci d'utiliser le bon format en fonction du fichier."
-                },
-                "failed": {
-                    "title": "Échec de l'upload",
-                    "description": "L'envoie à échoué. Voir la console pour plus d'infos."
-                }
-            },
-            "compile": {
-                "title": "Paramètres de compilation",
-                "text1": "Une musique peut être décompilée (extraite, prête à être édité) ou compilé (un fichier .phk est généré et l'édition est bloquée).",
-                "text2": "Vous pouvez ici demander une compilation / décompilation de votre musique",
-                "text3": "Nb: Décompiler une musique va la supprimer de tous vos appareils qui l'ont synchronisé. Si vous recompilez, les appareils pourront la resynchroniser.",
-                "request_compile": "Lancer la compilation",
-                "request_decompile": "Lancer la décompilation",
-                "success_compile": {
-                    "title": "Musique compilée",
-                    "description": "La musique à été correctement compilée"
-                },
-                "failure_compile": {
-                    "title": "Échec de la compilation",
-                    "description": "La musique n'a pas été compilée, voir la console pour plus d'infos"
-                },
-                "success_decompile": {
-                    "title": "Musique décompilée",
-                    "description": "La musique à été correctement décompilée"
-                },
-                "failure_decompile": {
-                    "title": "Échec de la décompilation",
-                    "description": "La musique n'a pas été décompilée, voir la console pour plus d'infos"
-                }
-            },
-            "search_external": {
-                "title": "Recherche de metadata sur {{provider}}",
-                "artist": "Artiste",
-                "track": "Nom",
-                "id": "ID"
-            }
-        }
-    },
-    "event": {
-        "infos": "Infos",
-        "show_one": "Afficher un évènement",
-        "by": "Par {{author}}",
-        "at": "Lieu: {{location}}",
-        "no_events": "Pas d'évènements trouvés",
-        "create_bt": "Nouveau",
-        "id": "ID PartyNexus",
-        "name": "Nom",
-        "author": "Auteur",
-        "location": "Lieu",
-        "datetime": "Le",
-        "force_export": "Forcer l'export",
-        "download_export": "Tout télécharger",
-        "show_timelapse_bt": "Voir le timelapse",
-        "edit": "Editer",
-        "see": "Ouvrir",
-        "display_board": {
-            "title": "Panneau d'affichage",
-            "create": "Créer un panneau d'affichage",
-            "created": "Panneau d'affichage créé",
-            "error": "Une erreur est survenue lors de la création du panneau d'affichage, regardez la console pour plus d'infos"
-        },
-        "conclude": {
-            "bt": "Marquer \"terminé\"",
-            "title": "Vous aller conclure l'évènement",
-            "description": "Cela provoquera l'export de l'évènement et il ne pourra plus être modifié. Il faut le faire après l'évènement uniquement.",
-            "success": {
-                "title": "L'évènement est terminé !",
-                "description": "Il va maintenant être exporté. Un email sera envoyé aux participants quand ce sera terminé."
-            },
-            "failed": {
-                "title": "Échec du marquage de l'évènement",
-                "description": "L'évènement n'a pas été marqué conclu. Il ne sera pas exporté."
-            }
-        },
-        "participants": {
-            "title": "Participants",
-            "delete": {
-                "title": "Expulser un utilisateur",
-                "description": "Vous allez expulser {{name}} de l'évènement.",
-                "yes": "Expulser",
-                "failure": {
-                    "title": "Échec de l'expulsion",
-                    "description": "Une erreur est survenue lors de l'expulsion de {{name}}."
-                }
-            },
-            "add": {
-                "title": "Ajouter un participant",
-                "confirm": "Vous essayez d'ajouter {{participant}} à l'évènement, êtes-vous sûr(e) ?",
-                "failure": {
-                    "title": "Échec de l'ajout",
-                    "description": "Une erreur est survenue lors de l'ajout d'un participant."
-                }
-            },
-            "search": {
-                "failure": {
-                    "title": "Échec de la recherche",
-                    "description": "Une erreur est survenue lors de la recherche."
-                }
-            }
-        },
-        "editor": {
-            "create_title": "Créer un évènement",
-            "edit_title": "Édition de {{title}}"
-        },
-        "export": {
-            "title": "Export",
-            "id": "ID",
-            "started_at": "Débuté à",
-            "ended_at": "Fini à",
-            "progress": "Progression",
-            "status": "Status"
-        },
-        "pictures": {
-            "title": "Photos",
-            "no_pictures": "Pas de photo disponibles pour l'instant",
-            "timelapse": "Timelapse",
-            "more": "Plus..."
-        },
-        "karaoke": {
-            "sessions": "Musiques chantées",
-            "no_sung_songs": "Pas encore de musique chantées !",
-            "session": {
-                "title": "Titre",
-                "artist": "Artiste",
-                "sung_at": "Chanté à",
-                "singer": "Chanteur"
-            }
-        }
-    },
-    "backdrops": {
-        "title": "Passe-têtes",
-        "title_and_author": "{{title}} par {{author}}",
-        "create": "Nouvel album",
-        "delete_album": {
-            "title": "Supprimer l'album",
-            "description": "Vous allez supprimer l'album {{title}}, tous les passes-têtes dedans seront supprimés aussi."
-        },
-        "add_backdrop": {
-            "title": "Ajouter un passe-tête"
-        },
-        "edit_album": {
-            "title": "Éditer l'album",
-            "album_title": "Titre",
-            "album_author": "Auteur",
-            "album_version": "Version"
-        },
-        "edit_backdrop": {
-            "backdrop_title": "Titre",
-            "backdrop_file": "Fichier"
-        },
-        "delete_backdrop": "Vous allez supprimer le passe-tête {{title}}."
+  "generic": {
+    "home": "Accueil",
+    "username": "Pseudo",
+    "email": "Email",
+    "password": "Mot de passe",
+    "date": "Date",
+    "ip": "Adresse IP",
+    "id": "ID",
+    "firstname": "Prénom",
+    "lastname": "Nom de famille",
+    "loading": "Chargement...",
+    "search": "Rechercher...",
+    "clear_search": "Effacer la recherche",
+    "no_more_results": "Vous avez atteint la fin de la liste",
+    "filters": "Filtres",
+    "no_results": "Aucun résultat trouvé",
+    "cancel": "Annuler",
+    "create": "Créer",
+    "add": "Ajouter",
+    "save": "Enregistrer",
+    "changes_saved": "Changements enregistrés avec succès",
+    "created": "Créé avec succès",
+    "delete": "Supprimer",
+    "new": "Ajouter",
+    "edit": "Modifier",
+    "link": "Lien",
+    "use": "Utiliser",
+    "go_back": "Page précédente",
+    "logout": "Se déconnecter",
+    "yes": "Oui",
+    "no": "Non",
+    "ok": "OK",
+    "edit_saved": "Modifications enregistrées avec succès",
+    "title": "Title",
+    "upload": "Upload",
+    "upload_success": "Téléversement réussi",
+    "enabled": "Activé",
+    "error": {
+      "generic": "Une erreur s'est produite",
+      "generic_desc": "Merci de réessayer plus tard ou de contacter votre administrateur PartyHall",
+      "generic_with_message": "Une erreur est survenue: {{message}}",
+      "upload_failed": "Échec du téléversement"
     }
+  },
+  "errors": {
+    "401": {
+      "title": "Authentification expirée",
+      "message": "Cela ne devrait pas arriver.\nUn rafraîchissement ou une déconnexion aurait dû être effectué."
+    },
+    "403": {
+      "title": "Interdit",
+      "message": "Vous n'avez pas la permission d'accéder à cette ressource."
+    },
+    "404": {
+      "title": "Page perdue dans l'espace",
+      "message": "La page que vous cherchez n'existe pas ou a été déplacé.\nPeut-être s'est-elle égarée dans une autre galaxie ?"
+    },
+    "429": {
+      "title": "Trop de requêtes",
+      "message": "Vous avez essayé de faire cela trop de fois, merci d'attendre un peu avant de réessayer."
+    },
+    "5xx": {
+      "title": "Erreur serveur",
+      "message": "Une erreur inattendue s'est produite sur le serveur.\nVeuillez réessayer plus tard."
+    }
+  },
+  "register": {
+    "self": {
+      "desc_1": "Vous allez rejoindre l'évènement \"<blueGlow>{{eventName}}</blueGlow>\".",
+      "desc_2": "Si vous avez déjà un compte, merci de vous connecter avec. Sinon, vous pouvez en créer un.",
+      "join_as": "Rejoindre en tant que {{username}}",
+      "404": "Ce lien d'inscription est introuvable. Merci de demander un nouveau lien à l'organisateur de l'évènement.",
+      "400": "Cet évènement n'autorise pas l'inscription de nouveaux utilisateurs. Merci de demander de l'aide à l'organisateur de l'évènement."
+    },
+    "register": "S'inscrire",
+    "confirm_password": "Confirmer le mot de passe",
+    "password_mismatch": "Le mot de passe et sa confirmation ne correspondent pas"
+  },
+  "forgotten_password": {
+    "title": "Mot de passe oublié",
+    "desc": "Bonjour, {{username}} ! Il semble que vous ayez oublié votre mot de passe ou que vous n'en ayez jamais eu. Choisissons-le !",
+    "desc_request": "Si vous avez oublié votre mot de passe, vous pouvez demander un lien pour en définir un nouveau. Ce lien expirera dans 1 heure.",
+    "not_found": "This password forgotten code does not exist. Maybe it expired or has already been used?",
+    "password": "Nouveau mot de passe",
+    "confirm_password": "Confirmer le nouveau mot de passe",
+    "password_mismatch": "Le nouveau mot de passe et sa confirmation ne correspondent pas",
+    "set_password": "Valider",
+    "success": "Mot de passe mis à jour avec succès",
+    "goto_login": "Aller à la page de connexion",
+    "request": "Réinitialiser le mot de passe",
+    "sent_1": "Si votre email existe dans notre base de données, vous allez recevoir un email avec un lien pour définir un nouveau mot de passe.",
+    "sent_2": "Si vous ne recevez pas d'email, merci de vérifier votre dossier de spam ou de contacter votre administrateur PartyHall."
+  },
+  "login": {
+    "title": "Connexion",
+    "login_button": "Se connecter",
+    "forgot_password": "Mot de passe oublié ?",
+    "register_prompt": "Pas de compte ? S'inscrire.",
+    "oauth": {
+      "title": "Connexion...",
+      "desc": "Veuillez patienter pendant que PartyHall valide votre identité..."
+    }
+  },
+  "events": {
+    "title": "Évènements",
+    "amt_events": "{{amt}} évènements",
+    "notice_id_appliance": "Note: Si l'évènement a été créé manuellement, l'ID doit être renseigné sur chaque appareil participant à l'évènement.",
+    "name": "Nom de l'évènement",
+    "editor": {
+      "title_new": "Nouvel évènement",
+      "participants": {
+        "add": "Ajouter un participant",
+        "add_disclaimer": "Êtes-vous sûr de vouloir ajouter {{username}} à cet évènement ?",
+        "add_success": "{{username}} ajouté avec succès",
+        "remove": "Supprimer un participant",
+        "remove_disclaimer": "Êtes-vous sûr de vouloir supprimer {{username}} de cet évènement ?",
+        "remove_success": "Participant supprimé avec succès"
+      }
+    },
+    "made_by": "Proposé par",
+    "located_at": "Lieu",
+    "about": "Infos",
+    "photos": "Photos",
+    "timelapse": "Timelapse",
+    "participants": "Participants",
+    "no_timelapse": "Aucun timelapse disponible",
+    "download_everything": "Tout télécharger",
+    "karaoke": {
+      "title": "Musiques chantées",
+      "no_sessions": "Aucune musique chantée pour cet évènement !",
+      "song_title": "{{title}} par {{artist}}",
+      "interpreted_by": "Interprétée par {{singer}}",
+      "sung_at": "Chantée le {{date}} à {{time}}",
+      "amt_song_session": "{{amt}} musiques chantées"
+    },
+    "settings": {
+      "title": "Paramètres",
+      "conclude": "Conclure / Marquer comme terminé",
+      "conclude_description": "Marquer cet évènement comme terminé. Il ne sera plus modifiable, la génération du timelapse sera lancée et les utilisateurs pourront télécharger un fichier zip contenant tout ce qui est lié à l'évènement. Faites cela une fois l'évènement terminé et que l'appareil a entièrement synchronisé avec PartyNexus.",
+      "conclude_confirm_desc": "Vous allez conclure l'évènement '{{eventName}}'. Faites attention, une fois cela fait, l'évènement ne pourra plus recevoir de nouvelles photos ou faire quoi que ce soit de nouveau. Veuillez vous assurer que votre appareil a correctement synchronisé toutes les données !",
+      "concluded_no_export": "L'évènement est terminé mais aucun export n'a été généré pour le moment. Veuillez patienter un peu !",
+      "display_board": {
+        "title": "Tableau d'affichage",
+        "desc": "Un tableau d'affichage génère un lien que vous pouvez mettre sur un écran à côté de l'appareil afin d'afficher les 9 dernières images prises.",
+        "link": "Lien du tableau d'affichage",
+        "no_key": "Aucun lien n'a été généré pour cet évènement.",
+        "generate": "Générer le lien du tableau d'affichage"
+      },
+      "export": {
+        "title": "Infos d'export",
+        "started_at": "Export démarré à",
+        "ended_at": "Export terminé à",
+        "progress": "Progression de l'export",
+        "status": "Status de l'export",
+        "force_reexport": "Forcer un nouvel export",
+        "force_reexport_desc": "Vous allez exporter à nouveau cet évènement, ce qui va supprimer l'ancien export et en créer un nouveau. Cela peut prendre du temps."
+      },
+      "user_registration": {
+        "title": "Auto-inscription des utilisateurs",
+        "desc": "Cela permettra aux utilisateurs d'utiliser le lien suivant pour créer un compte sur PartyHall (ou se connecter avec leur compte existant) et rejoindre automatiquement cet évènement.",
+        "link": "Lien d'inscription",
+        "appliance_qr": "Notez que l'appareil aura aussi un QR code affiché pour permettre aux utilisateurs de s'inscrire facilement à l'évènement."
+      }
+    }
+  },
+  "account": {
+    "title": "Mon compte",
+    "actions": "Actions",
+    "language": "Langue",
+    "my_appliances": {
+      "title": "Mes appareils",
+      "none_found": "Aucun appareil trouvé",
+      "delete": "Supprimer l'appareil",
+      "delete_confirm": "Êtes vous sûr de vouloir supprimer l'appareil '{{name}}' ?",
+      "editor": {
+        "title_edit": "Modification de l'appareil '{{name}}'",
+        "title_new": "Nouvel appareil",
+        "id": "ID Appareil",
+        "name": "Nom de l'appareil",
+        "hwid": "Hardware ID",
+        "token": "Token",
+        "hwid_copied": "Hardware ID copié dans le presse-papiers",
+        "token_copied": "Token copied copié dans le presse-papiers"
+      }
+    },
+    "change_password": {
+      "title": "Changer le mot de passe",
+      "current": "Mot de passe actuel",
+      "new": "Nouveau mot de passe",
+      "confirm": "Confirmer le nouveau mot de passe",
+      "password_mismatch": "Les mots de passe ne correspondent pas"
+    },
+    "oauth_user_1": "Vous ne pouvez pas modifier votre profil car vous êtes connecté via un service tiers.",
+    "oauth_user_2": "Si vous souhaitez mettre à jour vos informations, modifiez-les sur le site web du service puis reconnectez-vous."
+  },
+  "admin": {
+    "title": "Admin",
+    "users": {
+      "title": "Utilisateurs",
+      "title_edit": "{{username}}",
+      "amt_events": "{{amt}} utilisateurs",
+      "create": {
+        "title": "Créer un utilisateur"
+      },
+      "management": {
+        "title": "Gestion",
+        "ban": {
+          "title": "Bannir l'utilisateur",
+          "desc": "Bannir un utilisateur l'empêchera de se connecter à PartyNexus.",
+          "banned_at": "Banni le {{date}} à {{time}}",
+          "unban": "Débannir l'utilisateur"
+        },
+        "forgotten_password": {
+          "desc": "Lorsqu'un utilisateur a oublié son mot de passe, vous pouvez utiliser ceci pour générer un lien pour qu'il puisse en définir un nouveau. Cela peut également être utilisé pour définir le mot de passe d'un utilisateur enregistré via OAuth. Ce lien expirera dans une heure.",
+          "generate": "Générer"
+        }
+      },
+      "auth_log": {
+        "title": "Logs de connexion",
+        "empty": "Aucun log de connexion trouvé pour cet utilisateur"
+      }
+    },
+    "backdrop_albums": {
+      "title": "Albums de passe-têtes",
+      "title_new": "Nouvel album de passe-têtes",
+      "title_edit": "Modification de '{{name}}'",
+      "amt_album": "{{amt}} albums",
+      "album_version": "Version {{version}}",
+      "delete_album": "Supprimer l'album",
+      "album_title": "Titre de l'album",
+      "author": "Auteur de l'album",
+      "version": "Version de l'album",
+      "note_appliance_update": "Note: Les appareils ne mettrons à jour l'album que si la version est changée. Faites toutes vos modifications puis augmentez le numéro de version.",
+      "no_backdrops": "Aucun passe-tête trouvé dans cet album",
+      "delete_confirm": {
+        "title": "Supprimer l'album",
+        "desc": "Êtes-vous sûr de vouloir supprimer l'album '{{title}}' ? Cela va le supprimer des appareils l'ayant déjà téléchargé."
+      },
+      "backdrops": {
+        "title": "Passe-têtes",
+        "delete_title": "Supprimer ce passe-tête",
+        "delete_desc": "Êtes-vous sûr de vouloir supprimer le passe-tête '{{title}}' ?",
+        "image": "Image"
+      }
+    }
+  },
+  "karaoke": {
+    "title": "Karaoké",
+    "amt_songs": "{{amt}} musiques",
+    "song_title": "Titre",
+    "song_artist": "Artiste",
+    "files": {
+      "instrumental": "Instrumentale",
+      "vocals": "Voix",
+      "mixed": "Musique complète"
+    },
+    "filters": {
+      "ready": "Prête ?",
+      "has_vocals": "Avec voix ?",
+      "format": "Format",
+      "video": "Vidéo",
+      "transparent_video": "Vidéo transparente"
+    },
+    "request_song": {
+      "title": "Demander une musique",
+      "requested_by": "Demandé par",
+      "submit": "Demander",
+      "success": "Demande de musique créée",
+      "mark_done": "Marquer comme terminé",
+      "request_completed": "Demande de musique terminée !"
+    },
+    "editor": {
+      "title_new": "Nouvelle musique",
+      "title_edit": "Modification de '{{name}}'",
+      "metadata": "Metadata",
+      "quality": "Qualité",
+      "musicbrainz_id": "MusicBrainz ID",
+      "spotify_id": "Spotify ID",
+      "hotspot": "Hotspot",
+      "external_song": {
+        "title_spotify": "Chercher sur Spotify",
+        "title_musicBrainz": "Chercher sur MusicBrainz"
+      },
+      "upload_cover": "Téléverser une pochette",
+      "not_uploaded_yet": "Pas encore téléversé",
+      "song_files": "Fichiers de la musique",
+      "transparent_video": "Vidéo transparente (WebM avec alpha)",
+      "video": "Vidéo",
+      "vocals": "Voix",
+      "instrumental": "Instrumentale",
+      "full": "Musique complète",
+      "cdg": "Lyrics (CDG)",
+      "no_file": "Aucun fichier",
+      "cdg_uploaded": "CDG téléversé"
+    },
+    "compile": {
+      "title": "Paramètres de compilation",
+      "text1": "Une musique peut être décompilée (extraite, prête à être édité) ou compilé (un fichier .phk est généré et l'édition est bloquée).",
+      "text2": "Vous pouvez ici demander une compilation / décompilation de votre musique",
+      "text3": "Nb: Décompiler une musique va la supprimer de tous vos appareils qui l'ont synchronisé. Si vous recompilez, les appareils pourront la resynchroniser.",
+      "request_compile": "Lancer la compilation",
+      "request_decompile": "Lancer la décompilation",
+      "success_compile": {
+        "title": "Musique compilée",
+        "description": "La musique à été correctement compilée"
+      },
+      "failure_compile": {
+        "title": "Échec de la compilation",
+        "description": "La musique n'a pas été compilée, voir la console pour plus d'infos"
+      },
+      "success_decompile": {
+        "title": "Musique décompilée",
+        "description": "La musique à été correctement décompilée"
+      },
+      "failure_decompile": {
+        "title": "Échec de la décompilation",
+        "description": "La musique n'a pas été décompilée, voir la console pour plus d'infos"
+      }
+    }
+  },
+  "validation": {
+    "username_regex": "Le pseudo ne peut contenir que des lettres, chiffres, points, underscores et tirets et doit faire entre 3 et 32 caractères."
+  }
 }

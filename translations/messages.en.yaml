@@ -15,6 +15,12 @@ emails:
         text1: 'An administrator created an account for you on PartyHall!'
         link: "Let's login!"
         warning: 'If you did not request this, please contact your PartyHall administrator.'
+    forgotten_password:
+        subject: 'Password forgotten request'
+        welcome: 'Hello %fullname%!'
+        text1: 'It seems you forgot your password and have requested to reset it'
+        link: "Let's change it"
+        warning: 'If you did not request this, please contact your PartyHall administrator.'
     event_concluded:
         subject: '%event_name% is now over. Watch the event again!'
         text1: "Now that %event_name% is over, you can see all the pictures taken and a timelapse!"
@@ -31,3 +37,28 @@ emails:
 users:
     login:
         banned: 'You are banned.'
+        
+events:
+    export:
+        progress:
+            started: 'Export started'
+            adding_pictures: 'Adding pictures'
+            generating_timelapse: 'Generating timelapse'
+            adding_metadata: 'Adding metadata'
+            building_zip: 'Building final zip'
+        status:
+            started: 'Export in progress'
+            complete: 'Export complete'
+            failed: 'Export failed'
+
+song:
+    format:
+        video: 'Video'
+        cdg: 'CDG'
+        transparent_video: 'Transparent video'
+    quality:
+        awful: 'Awful'
+        bad: 'Bad'
+        ok: 'OK'
+        good: 'Good'
+        perfect: 'Perfect'

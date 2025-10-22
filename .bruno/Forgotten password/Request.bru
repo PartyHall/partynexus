@@ -1,0 +1,21 @@
+meta {
+  name: Request
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{base_url}}/api/forgotten_passwords
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "email": "admin@partyhall.dev"
+  }
+}
+
+settings {
+  encodeUrl: true
+}

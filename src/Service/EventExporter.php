@@ -16,6 +16,8 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Filesystem\Path;
 use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mercure\HubInterface;
+use Symfony\Component\Mercure\Update;
 use Symfony\Component\Mime\MimeTypesInterface;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -40,6 +42,7 @@ class EventExporter
         private readonly EntityManagerInterface $emi,
         private readonly TranslatorInterface $translator,
         private readonly MailerInterface $mailer,
+        private readonly HubInterface $hub,
         #[Autowire(env: 'EXPORTS_LOCATION')]
         private readonly string $exportLocation,
         #[Autowire(env: 'TIMELAPSES_LOCATION')]
@@ -55,6 +58,13 @@ class EventExporter
         $this->export->setProgress($progress);
         $this->emi->persist($this->export);
         $this->emi->flush();
+
+        // Non, @TODO: utiliser le bundle mercure proprement
+        // pour qu'il envoie automatiquement les update au persist
+        $this->hub->publish(new Update(
+            '/events/'.$this->event->getId()->toString(),
+            \json_encode($this->event),
+        ));
     }
 
     /**
@@ -231,7 +241,7 @@ class EventExporter
 
         // @TODO: Do properly ?
         exec(\sprintf(
-            'ffmpeg -f concat -safe 0 -i %s -vf "settb=AVTB,setpts=N/%s/TB,fps=%s" -c:v libx264 %s',
+            'ffmpeg -f concat -safe 0 -i %s -vf "settb=AVTB,setpts=N/%s/TB,fps=%s" -c:v libx264 -profile:v baseline -level 3.1 -pix_fmt yuv420p -movflags +faststart %s',
             $listFile,
             $framerate,
             $framerate,
@@ -326,10 +336,10 @@ class EventExporter
                         '%username%' => $user->getUsername(),
                         '%fullname%' => $user->getFullName(),
                     ],
-                    locale: $user->getLanguage()),
+                    locale: $user->getLanguage()->value),
                 )
                 ->htmlTemplate('emails/event_exported.html.twig')
-                ->locale($user->getLanguage())
+                ->locale($user->getLanguage()->value)
                 ->context([
                     'fullname' => $user->getFullName(),
                     'event' => $this->event,

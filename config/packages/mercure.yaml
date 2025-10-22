@@ -4,5 +4,5 @@ mercure:
             url: '%env(MERCURE_BASE_URL)%/.well-known/mercure'
             public_url: '%env(PUBLIC_URL)%/.well-known/mercure'
             jwt:
-                secret: '%env(JWT_SECRET_KEY)%'
+                secret: '%env(MERCURE_JWT_SECRET)%'
                 publish: '*'

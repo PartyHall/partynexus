@@ -10,7 +10,9 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Link;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
+use App\Enum\Language;
 use App\Model\PasswordSet;
+use App\Repository\UserRepository;
 use App\State\Processor\BanUserProcessor;
 use App\State\Processor\RegisterUserProcessor;
 use App\State\Processor\UserSetPasswordProcessor;
@@ -28,7 +30,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @TODO: GET ITEM should be PII proof
  * It should NOT tell the user email unless the SELF is set even though those endpoints are set for self & admin only
- * as they can be used in other stuff (e.g. Magic Password, Event listing, ...)
+ * as they can be used in other stuff (e.g. Forgotten Password, Event listing, ...)
  *
  * I'm not doing this right now as I don't know about the side effects
  */
@@ -71,6 +73,7 @@ use Symfony\Component\Validator\Constraints as Assert;
         new Post(
             uriTemplate: '/users/{id}/set-password',
             security: 'user === object',
+            validationContext: [AbstractNormalizer::GROUPS => [PasswordSet::API_SET_PASSWORD]],
             input: PasswordSet::class,
             processor: UserSetPasswordProcessor::class,
         ),
@@ -88,7 +91,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[UniqueEntity(fields: ['email'], message: 'Email already taken')]
 #[UniqueEntity(fields: ['username'], message: 'Username already taken', groups: [self::API_REGISTER])]
 #[UniqueEntity(fields: ['email'], message: 'Email already taken', groups: [self::API_REGISTER])]
-#[ORM\Entity]
+#[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table('nexus_user')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -102,52 +105,58 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public const string API_UPDATE = 'api:user:update';
     public const string API_REGISTER = 'api:user:create-register';
 
+    public const string DEFAULT_VALIDATION_GROUP = 'Default';
+
     #[ORM\Id]
     #[ORM\Column(type: Types::INTEGER)]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     #[Groups([
         self::API_GET_ITEM,
         self::API_GET_COLLECTION,
+        Event::API_GET_COLLECTION,
         Event::API_GET_ITEM,
     ])]
     private int $id;
 
     #[ORM\Column(type: Types::STRING, length: 32, unique: true)]
-    #[Assert\Length(min: 3, max: 32)]
-    #[Assert\Length(min: 3, max: 64, groups: [self::API_REGISTER])]
+    #[Assert\Regex(pattern: '/^[a-zA-Z0-9._-]{3,32}$/', message: 'validation.username_regex', groups: [self::DEFAULT_VALIDATION_GROUP, self::API_REGISTER])]
+    #[Assert\Length(min: 3, max: 32, groups: [self::DEFAULT_VALIDATION_GROUP, self::API_REGISTER])]
     #[Groups([
         self::API_GET_ITEM,
         self::API_GET_COLLECTION,
         self::API_CREATE,
         self::API_REGISTER,
+        Event::API_GET_COLLECTION,
         Event::API_GET_ITEM,
         Event::API_EXPORT,
     ])]
     private string $username;
 
+    #[ORM\Column(type: Types::STRING, length: 128, unique: true, nullable: true)]
+    private ?string $oauthUserId = null;
+
     #[ORM\Column(type: Types::STRING, length: 64, nullable: true)]
-    #[Assert\Length(min: 3, max: 64)]
-    #[Assert\Length(min: 3, max: 64, groups: [self::API_REGISTER])]
+    #[Assert\Length(min: 2, max: 64, groups: [self::DEFAULT_VALIDATION_GROUP, self::API_REGISTER])]
     #[Groups([
         self::API_GET_ITEM,
         self::API_GET_COLLECTION,
         self::API_CREATE,
         self::API_UPDATE,
         self::API_REGISTER,
+        Event::API_GET_COLLECTION,
         Event::API_GET_ITEM,
         Event::API_EXPORT,
     ])]
     private ?string $firstname = null;
 
     #[ORM\Column(type: Types::STRING, length: 64, nullable: true)]
-    #[Assert\Length(min: 3, max: 64)]
-    #[Assert\Length(min: 3, max: 64, groups: [self::API_REGISTER])]
     #[Groups([
         self::API_GET_ITEM,
         self::API_GET_COLLECTION,
         self::API_CREATE,
         self::API_UPDATE,
         self::API_REGISTER,
+        Event::API_GET_COLLECTION,
         Event::API_GET_ITEM,
         Event::API_EXPORT,
     ])]
@@ -174,10 +183,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public ?string $newPassword = null;
 
     #[ORM\Column(type: Types::STRING, length: 255, unique: true)]
-    #[Assert\NotBlank]
-    #[Assert\NotBlank(['groups' => [self::API_REGISTER]])]
-    #[Assert\Email]
-    #[Assert\Email(['groups' => [self::API_REGISTER]])]
+    #[Assert\NotBlank(['groups' => [self::DEFAULT_VALIDATION_GROUP, self::API_REGISTER]])]
+    #[Assert\Email(['groups' => [self::DEFAULT_VALIDATION_GROUP, self::API_REGISTER]])]
     #[Groups([
         self::API_GET_ITEM,
         self::API_GET_COLLECTION,
@@ -187,16 +194,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     ])]
     private string $email;
 
-    #[ORM\Column(type: Types::STRING, length: 255, options: ['default' => 'en_US'])]
-    #[Assert\NotBlank]
-    #[Assert\NotBlank(['groups' => [self::API_REGISTER]])]
+    #[ORM\Column(type: Types::STRING, length: 255, enumType: Language::class, options: ['default' => 'en_US'])]
+    #[Assert\NotBlank(['groups' => [self::DEFAULT_VALIDATION_GROUP, self::API_REGISTER]])]
     #[Groups([
         self::API_GET_ITEM,
         self::API_CREATE,
         self::API_UPDATE,
         self::API_REGISTER,
     ])]
-    private string $language;
+    private Language $language;
 
     /** @var string[] $roles */
     #[ORM\Column(type: Types::JSON)]
@@ -209,13 +215,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     ])]
     private ?\DateTimeImmutable $bannedAt = null;
 
-    /** @var Collection<int, MagicLink> $magicLinks */
-    #[ORM\OneToMany(targetEntity: MagicLink::class, mappedBy: 'user', cascade: ['PERSIST'])]
-    private Collection $magicLinks;
-
-    /** @var Collection<int, MagicPassword> $magicPasswords */
-    #[ORM\OneToMany(targetEntity: MagicPassword::class, mappedBy: 'user', cascade: ['PERSIST'])]
-    private Collection $magicPasswords;
+    /** @var Collection<int, ForgottenPassword> $forgottenPasswords */
+    #[ORM\OneToMany(targetEntity: ForgottenPassword::class, mappedBy: 'user', cascade: ['PERSIST'])]
+    private Collection $forgottenPasswords;
 
     /** @var Collection<int, Appliance> $appliances */
     #[ORM\OneToMany(targetEntity: Appliance::class, mappedBy: 'owner')]
@@ -242,8 +244,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function __construct()
     {
-        $this->magicLinks = new ArrayCollection();
-        $this->magicPasswords = new ArrayCollection();
+        $this->forgottenPasswords = new ArrayCollection();
         $this->appliances = new ArrayCollection();
         $this->userEvents = new ArrayCollection();
         $this->participatingEvents = new ArrayCollection();
@@ -266,6 +267,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->username = $username;
 
         return $this;
+    }
+
+    public function getOauthUserId(): string
+    {
+        return $this->oauthUserId;
+    }
+
+    public function setOauthUserId(string $oauthUserId): void
+    {
+        $this->oauthUserId = $oauthUserId;
     }
 
     public function getFirstname(): ?string
@@ -317,54 +328,27 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @return Collection<int, MagicLink>
+     * @return Collection<int, ForgottenPassword>
      */
-    public function getMagicLinks(): Collection
+    public function getForgottenPasswords(): Collection
     {
-        return $this->magicLinks;
+        return $this->forgottenPasswords;
     }
 
-    public function addMagicLink(MagicLink $link): self
+    public function addForgottenPassword(ForgottenPassword $link): self
     {
-        if (!$this->magicLinks->contains($link)) {
+        if (!$this->forgottenPasswords->contains($link)) {
             $link->setUser($this);
-            $this->magicLinks->add($link);
+            $this->forgottenPasswords->add($link);
         }
 
         return $this;
     }
 
-    public function removeMagicLink(MagicLink $link): self
+    public function removeForgottenPassword(ForgottenPassword $link): self
     {
-        if ($this->magicLinks->contains($link)) {
-            $this->magicLinks->removeElement($link);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, MagicPassword>
-     */
-    public function getMagicPasswords(): Collection
-    {
-        return $this->magicPasswords;
-    }
-
-    public function addMagicPassword(MagicPassword $link): self
-    {
-        if (!$this->magicPasswords->contains($link)) {
-            $link->setUser($this);
-            $this->magicPasswords->add($link);
-        }
-
-        return $this;
-    }
-
-    public function removeMagicPassword(MagicPassword $link): self
-    {
-        if ($this->magicPasswords->contains($link)) {
-            $this->magicPasswords->removeElement($link);
+        if ($this->forgottenPasswords->contains($link)) {
+            $this->forgottenPasswords->removeElement($link);
         }
 
         return $this;
@@ -397,18 +381,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function getRoles(): array
     {
-        return array_merge(['ROLE_USER', ...$this->roles]);
+        return \array_map(fn (string $x) => \strtoupper($x), \array_unique(\array_merge(['ROLE_USER', ...$this->roles])));
+    }
+
+    /**
+     * @param array<string> $roles
+     */
+    public function setRoles(array $roles): self
+    {
+        foreach ($roles as $role) {
+            $this->addRole($role);
+        }
+
+        return $this;
     }
 
     public function addRole(string $role): self
     {
-        $role = strtoupper($role);
+        $role = \strtoupper($role);
 
-        if (!str_starts_with($role, 'ROLE_')) {
+        if (!\str_starts_with($role, 'ROLE_')) {
             $role = 'ROLE_'.$role;
         }
 
-        if (!in_array($role, $this->roles)) {
+        if (!\in_array($role, $this->roles)) {
             $this->roles[] = $role;
         }
 
@@ -417,24 +413,25 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function removeRole(string $role): self
     {
-        $role = strtoupper($role);
+        $role = \strtoupper($role);
 
-        if (!str_starts_with($role, 'ROLE_')) {
+        if (!\str_starts_with($role, 'ROLE_')) {
             $role = 'ROLE_'.$role;
         }
 
-        $this->roles = array_filter($this->roles, fn ($x) => $x !== $role);
+        $this->roles = \array_filter($this->roles, fn ($x) => $x !== $role);
 
         return $this;
     }
 
+    #[\Deprecated]
     public function eraseCredentials(): void
     {
     }
 
     public function getUserIdentifier(): string
     {
-        return $this->username;
+        return $this->email;
     }
 
     /**
@@ -500,12 +497,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getLanguage(): string
+    public function getLanguage(): Language
     {
         return $this->language;
     }
 
-    public function setLanguage(string $language): self
+    public function setLanguage(Language $language): self
     {
         $this->language = $language;
 
@@ -578,5 +575,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function isPasswordSet(): bool
     {
         return null !== $this->password;
+    }
+
+    #[Groups([self::API_GET_ITEM])]
+    public function isOauthUser(): bool
+    {
+        return $this->oauthUserId && \strlen($this->oauthUserId) > 0;
     }
 }

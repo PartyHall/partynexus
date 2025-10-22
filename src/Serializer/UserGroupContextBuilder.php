@@ -30,13 +30,37 @@ readonly class UserGroupContextBuilder implements SerializerContextBuilderInterf
 
         $user = $this->security->getUser();
 
+        if (!$user instanceof User) {
+            return $ctx;
+        }
+
+        if (isset($ctx[AbstractNormalizer::GROUPS])) {
+            $additionalGroups = [];
+
+            if ($this->security->isGranted('ROLE_ADMIN')) {
+                foreach ($ctx[AbstractNormalizer::GROUPS] as $group) {
+                    if (\str_starts_with($group, 'api:')) {
+                        $additionalGroups[] = \preg_replace('/^api:/', 'api:admin:', $group, 1);
+                    }
+                }
+            }
+
+            $ctx[AbstractNormalizer::GROUPS] = [
+                ...$ctx[AbstractNormalizer::GROUPS],
+                ...$additionalGroups,
+            ];
+        }
+
+        /*
+         * On the GET operation for the User resource, if the user is requesting their own data,
+         * we allow him to fetch more stuff.
+         */
         if (
             !$extractedAttributes
             || !\array_key_exists('resource_class', $extractedAttributes)
             || !\array_key_exists('operation', $extractedAttributes)
             || User::class !== $extractedAttributes['resource_class']
             || !($extractedAttributes['operation'] instanceof Get)
-            || !$user instanceof User
             || ((string) $user->getId()) !== $request->attributes->get('id')
         ) {
             return $ctx;

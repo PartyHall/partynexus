@@ -1,0 +1,42 @@
+<?php
+
+namespace App\MessageHandler;
+
+use App\Message\ForgottenPasswordNotification;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Messenger\Attribute\AsMessageHandler;
+use Symfony\Contracts\Translation\TranslatorInterface;
+
+#[AsMessageHandler]
+readonly class ForgottenPasswordNotificationHandler
+{
+    private string $baseUrl;
+
+    public function __construct(
+        private TranslatorInterface $translator,
+        private MailerInterface $mailer,
+        #[Autowire(env: 'PUBLIC_URL')]
+        string $baseUrl,
+    ) {
+        $this->baseUrl = \rtrim($baseUrl, '/');
+    }
+
+    public function __invoke(ForgottenPasswordNotification $notification): void
+    {
+        $mail = (new TemplatedEmail())
+            ->to($notification->getUserEmail())
+            ->subject('[PartyHall] '.$this->translator->trans('emails.forgotten_password.subject', locale: $notification->getLanguage()))
+            ->htmlTemplate('emails/forgotten_password.html.twig')
+            ->locale($notification->getLanguage())
+            ->context([
+                'username' => $notification->getUsername(),
+                'fullname' => $notification->getFullname(),
+                'link' => $this->baseUrl.'/forgotten-password/'.$notification->getCode(),
+            ])
+        ;
+
+        $this->mailer->send($mail);
+    }
+}

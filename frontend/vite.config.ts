@@ -1,34 +1,42 @@
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
-import tailwindcss from '@tailwindcss/vite';
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import { tanstackRouter } from "@tanstack/router-plugin/vite";
+import tailwindcss from "@tailwindcss/vite";
+import path from "path";
 
-// https://vitejs.dev/config/
 export default defineConfig({
-    plugins: [tailwindcss(), react()],
-    // Temp fix for tabler-icons
-    // => https://github.com/tabler/tabler-icons/issues/1233#issuecomment-2428245119
-    resolve: {
-        alias: {
-            // /esm/icons/index.mjs only exports the icons statically, so no separate chunks are created
-            '@tabler/icons-react':
-                '@tabler/icons-react/dist/esm/icons/index.mjs',
-        },
+  plugins: [
+    tailwindcss(),
+    tanstackRouter({
+      target: "react",
+      autoCodeSplitting: true,
+    }),
+    react(),
+  ],
+  resolve: {
+    alias: {
+      "@": path.resolve(__dirname, "src"),
+      "@tabler/icons-react": "@tabler/icons-react/dist/esm/icons/index.mjs",
     },
-    optimizeDeps: {
-        include: ['@tabler/icons-react'],
-        entries: ['@tabler/icons-react/**/*.js'],
+  },
+  optimizeDeps: {
+    include: ["@tabler/icons-react"],
+    entries: ["@tabler/icons-react/**/*.js"],
+  },
+  server: {
+    proxy: {
+      "/api": {
+        target: "http://app:80",
+      },
+      "/song_covers": {
+        target: "http://app:80",
+      },
+      "/backdrops": {
+        target: "http://app:80",
+      },
+      "/.well-known/mercure": {
+        target: "http://app:80",
+      },
     },
-    server: {
-        proxy: {
-            '/api': {
-                target: 'http://app:80',
-            },
-            '/song_covers': {
-                target: 'http://app:80',
-            },
-            '/.well-known': {
-                target: 'http://app:80',
-            },
-        },
-    },
+  },
 });

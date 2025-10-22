@@ -2,7 +2,7 @@
 
 USER := $(shell id -u):$(shell id -g)
 
-VERSION = 0.1.26
+VERSION = 0.2.0-rc1
 COMMIT = $(shell git rev-parse --short HEAD)
 
 up:
@@ -27,6 +27,8 @@ reset-db:
 	@docker compose exec app rm -rf /app/var/uploaded_pictures /app/var/exports /app/var/timelapses /app/public/backdrops/* /app/public/song_covers/*
 	@docker compose exec app bin/console doctrine:fixtures:load --no-interaction --append
 	$(MAKE) export
+	@docker compose exec app bin/console meili:clear
+	@docker compose exec app bin/console meili:import
 
 export:
 	@docker compose exec app bin/console event:export 0192bf5a-67d8-7d9d-8a5e-962b23aceeaa -vvv
@@ -45,12 +47,6 @@ phpstan:
 	@docker compose exec app php -d memory_limit=8G vendor/bin/phpstan analyse
 
 phpcsfixer:
-	@docker compose exec app php -d memory_limit=-1 vendor/bin/php-cs-fixer fix --dry-run -vv --diff
-
-phpcsfixer-fix:
-	@docker compose exec app php -d memory_limit=-1 vendor/bin/php-cs-fixer fix -vv --diff
-
-lint-fix:
 	@docker compose exec app php -d memory_limit=-1 vendor/bin/php-cs-fixer fix -vv --diff
 
 fix-perms:

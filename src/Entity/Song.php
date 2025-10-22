@@ -12,8 +12,6 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\QueryParameter;
-use App\Doctrine\DBAL\Types\TsVectorType;
-use App\Doctrine\Filter\SongSearchFilter;
 use App\Enum\SongFormat;
 use App\Enum\SongQuality;
 use App\Interface\HasTimestamps;
@@ -21,6 +19,7 @@ use App\Interface\Impl\HasTimestampsTrait;
 use App\Repository\SongRepository;
 use App\State\Processor\SongCompileProcessor;
 use App\State\Processor\SongDecompileProcessor;
+use App\State\Provider\SongCollectionProvider;
 use App\State\Provider\SongDownloadProvider;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -33,31 +32,27 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
- * @TODO: When a video is uploaded it should be ran through ffmpeg to get it in vp9/webm
- * This means that we should have a way of telling on the frontend that this is in progress
- * thus preventing the compilation.
- */
-
-/**
- * @TODO: When an audio/video file is uploaded, it should be normalized
- * so that all songs have the same level
- *
- * @see https://github.com/slhck/ffmpeg-normalize
- */
-
-/**
  * @see \App\Doctrine\FilterSongOnReadinessExtension
  */
 #[ApiResource(
     operations: [
-        new GetCollection(normalizationContext: [AbstractNormalizer::GROUPS => [self::API_GET_COLLECTION]]),
+        // Sort order is done in SongOrderExtension
+        new GetCollection(
+            normalizationContext: [AbstractNormalizer::GROUPS => [self::API_GET_COLLECTION]],
+            provider: SongCollectionProvider::class,
+        ),
         new Get(normalizationContext: [AbstractNormalizer::GROUPS => [self::API_GET_ITEM]]),
         new Post(
+            inputFormats: ['multipart' => ['multipart/form-data']],
+            outputFormats: ['jsonld' => ['application/ld+json']],
             normalizationContext: [AbstractNormalizer::GROUPS => [self::API_GET_ITEM]],
             denormalizationContext: [AbstractNormalizer::GROUPS => [self::API_CREATE]],
             security: 'is_granted("ROLE_ADMIN")',
         ),
-        new Patch(
+        new Post( // because php sucks https://github.com/api-platform/api-platform/issues/1523
+            uriTemplate: '/songs/{id}',
+            inputFormats: ['multipart' => ['multipart/form-data']],
+            outputFormats: ['jsonld' => ['application/ld+json']],
             normalizationContext: [AbstractNormalizer::GROUPS => [self::API_GET_ITEM]],
             denormalizationContext: [AbstractNormalizer::GROUPS => [self::API_UPDATE]],
             security: 'is_granted("ROLE_ADMIN") and not object.ready',
@@ -81,10 +76,11 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
     ]
 )]
 #[QueryParameter('ready')]
-#[ApiFilter(SongSearchFilter::class)]
-#[ApiFilter(SearchFilter::class, properties: ['format' => SearchFilterInterface::STRATEGY_EXACT, 'vocals' => SearchFilterInterface::STRATEGY_EXACT])]
+#[ApiFilter(SearchFilter::class, properties: [
+    'format' => SearchFilterInterface::STRATEGY_EXACT,
+    'vocals' => SearchFilterInterface::STRATEGY_EXACT,
+])]
 #[ORM\Entity(repositoryClass: SongRepository::class)]
-#[ORM\Index(name: 'idx_songs_search', fields: ['searchVector'])]
 #[Vich\Uploadable]
 class Song implements HasTimestamps
 {
@@ -93,13 +89,12 @@ class Song implements HasTimestamps
     public const string API_GET_ITEM = 'api:song:get';
     public const string API_GET_COLLECTION = 'api:song:get-collection';
     public const string API_CREATE = 'api:song:create';
-    public const string API_UPDATE = 'api:song:create';
+    public const string API_UPDATE = 'api:song:update';
     public const string API_COMPILE = 'api:song:compile';
     public const string COMPILE_METADATA = 'compile:metadata';
 
     /** @var string[] */
     public static array $ALLOWED_FILETYPES = [
-        'cover',
         'instrumental',
         'lyrics',
         'vocals',
@@ -112,6 +107,7 @@ class Song implements HasTimestamps
     #[Groups([
         self::API_GET_ITEM,
         self::API_GET_COLLECTION,
+        'searchable',
     ])]
     private int $id;
 
@@ -122,6 +118,7 @@ class Song implements HasTimestamps
         self::API_GET_ITEM,
         self::API_GET_COLLECTION,
         self::COMPILE_METADATA,
+        'searchable',
     ])]
     #[Assert\NotBlank]
     private string $title;
@@ -133,11 +130,13 @@ class Song implements HasTimestamps
         self::API_GET_ITEM,
         self::API_GET_COLLECTION,
         self::COMPILE_METADATA,
+        'searchable',
     ])]
     #[Assert\NotBlank]
     private string $artist;
 
     #[Vich\UploadableField(mapping: 'song_covers', fileNameProperty: 'coverName')]
+    #[Groups([self::API_CREATE, self::API_UPDATE])]
     private ?File $coverFile = null;
 
     #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
@@ -150,6 +149,7 @@ class Song implements HasTimestamps
         self::API_GET_ITEM,
         self::API_GET_COLLECTION,
         self::COMPILE_METADATA,
+        'searchable',
     ])]
     #[Assert\NotBlank]
     private SongFormat $format;
@@ -168,7 +168,7 @@ class Song implements HasTimestamps
     /**
      * The unique MBID for the song, when it exists.
      */
-    #[ORM\Column(type: UuidType::NAME, nullable: true)]
+    #[ORM\Column(type: Types::STRING, nullable: true, length: 64)]
     #[Groups([
         self::API_CREATE,
         self::API_UPDATE,
@@ -176,7 +176,7 @@ class Song implements HasTimestamps
         self::COMPILE_METADATA,
     ])]
     #[Assert\Uuid]
-    private ?Uuid $musicBrainzId = null;
+    private ?string $musicBrainzId = null;
 
     /**
      * The id to quickly listen to it on Spotify.
@@ -206,7 +206,7 @@ class Song implements HasTimestamps
         self::COMPILE_METADATA,
     ])]
     #[Assert\Uuid]
-    private ?Uuid $nexusBuildId;
+    private ?Uuid $nexusBuildId = null;
 
     /**
      * The 10 seconds that are the most recognizable
@@ -239,6 +239,7 @@ class Song implements HasTimestamps
     #[Groups([
         self::API_GET_ITEM,
         self::API_GET_COLLECTION,
+        'searchable',
     ])]
     public bool $ready = false; // ??? Why can't I set it to private as I have getter & setter?
 
@@ -259,6 +260,7 @@ class Song implements HasTimestamps
     #[Groups([
         self::API_GET_ITEM,
         self::API_GET_COLLECTION,
+        'searchable',
     ])]
     private bool $vocals = false;
 
@@ -281,10 +283,6 @@ class Song implements HasTimestamps
 
     #[Groups([self::API_GET_ITEM])]
     public ?string $combinedUrl = null;
-
-    /** @var string[] */
-    #[ORM\Column(type: TsVectorType::TYPE, nullable: true)]
-    private array $searchVector;
 
     public function __construct()
     {
@@ -362,12 +360,12 @@ class Song implements HasTimestamps
         return $this;
     }
 
-    public function getMusicBrainzId(): ?Uuid
+    public function getMusicBrainzId(): ?string
     {
         return $this->musicBrainzId;
     }
 
-    public function setMusicBrainzId(?Uuid $musicBrainzId): self
+    public function setMusicBrainzId(?string $musicBrainzId): self
     {
         $this->musicBrainzId = $musicBrainzId;
 
@@ -478,17 +476,5 @@ class Song implements HasTimestamps
         $this->duration = $duration;
 
         return $this;
-    }
-
-    /** @return string[] */
-    public function getSearchVector(): array
-    {
-        return $this->searchVector;
-    }
-
-    /** @param string[] $searchVector */
-    public function setSearchVector(array $searchVector): void
-    {
-        $this->searchVector = $searchVector;
     }
 }
