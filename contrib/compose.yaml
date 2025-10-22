@@ -38,7 +38,7 @@ services:
       retries: 5
 
   app:
-    image: 'partynexus:0.2.0-rc1'
+    image: 'ghcr.io/partyhall/partynexus:0.2.0-rc3'
     restart: 'unless-stopped'
     command: 'main'
     tty: true
@@ -48,13 +48,15 @@ services:
         condition: 'service_healthy'
       redis:
         condition: 'service_healthy'
+      meilisearch:
+        condition: 'service_healthy'
     volumes:
       - './jwt_keys:/app/config/jwt'
       - './data:/app/var'
       - './song_covers:/app/public/song_covers'
       - './backdrops:/app/public/backdrops'
     ports:
-      - '80:80'
+      - '127.0.0.1:8321:80'
     healthcheck:
       test: [ 'CMD', 'curl', '-f', 'http://localhost/health' ]
       interval: '30s'
@@ -63,7 +65,7 @@ services:
       start_period: "20s"
 
   worker_emails:
-    image: 'partynexus:0.2.0-rc1'
+    image: 'ghcr.io/partyhall/partynexus:0.2.0-rc3'
     restart: 'unless-stopped'
     command: ['consumer', 'emails']
     tty: true
@@ -73,7 +75,7 @@ services:
         condition: 'service_healthy'
 
   worker_export:
-    image: 'partynexus:0.2.0-rc1'
+    image: 'ghcr.io/partyhall/partynexus:0.2.0-rc3'
     restart: 'unless-stopped'
     command: ['consumer', 'export']
     tty: true

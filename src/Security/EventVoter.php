@@ -59,6 +59,8 @@ class EventVoter extends Voter
         // When we are on an appliance
         // It must be the appliance of the owner of the event
         if (!$isAppliance) {
+            // DO NOT TRANSFORM THIS INTO ARRAY_ANY AS PHPSTORM WANTS TO
+            // SINCE ITS A DOCTRINE COLLECTION AND NOT AN ARRAY
             foreach ($event->getParticipants() as $participant) {
                 if ($participant === $user) {
                     return true;

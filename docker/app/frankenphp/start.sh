@@ -26,6 +26,9 @@ elif [ "$1" = 'main' ]; then
 		php bin/console lexik:jwt:generate-keypair
 	fi
 
+	# Lets also update meilisearch indexes
+	php bin/console meili:import
+
 	# We ensure the permissions are set correctly
 	# for the var folder
 	setfacl -R -m u:www-data:rwX -m u:"$(whoami)":rwX var

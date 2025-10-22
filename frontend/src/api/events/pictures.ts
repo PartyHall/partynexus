@@ -12,7 +12,7 @@ export async function getPicturesForEvent(
     qs.append("unattended", showUnattended ? "true" : "false");
   }
 
-  const resp = await customFetch(`/api/events/${eventId}/pictures`);
+  const resp = await customFetch(`/api/events/${eventId}/pictures?` + qs.toString());
 
   return await resp.json();
 }

@@ -76,7 +76,10 @@ abstract readonly class AbstractPictureDownloadProvider implements ProviderInter
             }
 
             if (!\is_dir(\dirname($cachePath))) {
-                \mkdir(\dirname($cachePath), 0755, true);
+                // Muting the warning with the "@" because we can have a ToC-ToU here
+                // when the user fetches for the first time the main page
+                // of an event with a lot of pictures.
+                @\mkdir(\dirname($cachePath), 0755, true);
             }
 
             $image = $this->processPicture($this->imageManager->read($picturePath));
