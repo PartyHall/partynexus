@@ -57,8 +57,6 @@ class FormDataDenormalizer extends AbstractItemNormalizer implements Denormalize
                 'int' => \filter_var($v, FILTER_VALIDATE_INT),
                 'float' => \filter_var($v, FILTER_VALIDATE_FLOAT),
                 'bool' => \filter_var($v, FILTER_VALIDATE_BOOLEAN),
-                // Not sure about the date? Is it the sole normalizer that goes through, I guess?
-                \DateTimeInterface::class, \DateTime::class, \DateTimeImmutable::class => new \DateTimeImmutable($v),
                 default => $v,
             };
         }

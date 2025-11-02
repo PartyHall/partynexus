@@ -1,0 +1,23 @@
+meta {
+  name: post photo
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{base_url}}/api/pictures
+  body: multipartForm
+  auth: inherit
+}
+
+body:multipart-form {
+  applianceUuid: b094786e-5158-4ceb-861b-28cb45b2a2c3
+  event: /api/events/0192bf5a-67d8-7d9d-8a5e-962b23aceeaa
+  takenAt: 2025-11-02T00:38:52Z
+  unattended: true
+  file: @file(/home/oxodao/[067930].png)
+}
+
+settings {
+  encodeUrl: true
+}
