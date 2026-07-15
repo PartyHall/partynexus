@@ -7,6 +7,7 @@ use App\Entity\Event;
 use App\Interface\HasEvent;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Authorization\Voter\Vote;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
 /**
@@ -29,7 +30,7 @@ class EventVoter extends Voter
     /**
      * @param HasEvent $subject
      */
-    protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token): bool
+    protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token, ?Vote $vote = null): bool
     {
         if (!$subject) {
             return true;
