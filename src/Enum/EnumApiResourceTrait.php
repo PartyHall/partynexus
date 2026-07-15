@@ -5,7 +5,7 @@ namespace App\Enum;
 use ApiPlatform\Metadata\ApiProperty;
 use Symfony\Component\Serializer\Attribute\Groups;
 
-trait EnumApiResourcetrait
+trait EnumApiResourceTrait
 {
     #[Groups(EnumApiConfig::GET)]
     #[ApiProperty(identifier: true)]

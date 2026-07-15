@@ -11,7 +11,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
 )]
 enum ExportStatus: string implements TranslatableEnumLabelInterface
 {
-    use EnumApiResourcetrait;
+    use EnumApiResourceTrait;
 
     case STARTED = 'started';
     case COMPLETE = 'complete';

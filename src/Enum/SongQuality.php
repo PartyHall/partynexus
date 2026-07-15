@@ -12,7 +12,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
 )]
 enum SongQuality: string implements TranslatableEnumLabelInterface
 {
-    use EnumApiResourcetrait;
+    use EnumApiResourceTrait;
 
     case AWFUL = 'awful';
     case BAD = 'bad';
