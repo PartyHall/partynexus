@@ -16,7 +16,7 @@ class CrashCommand extends Command
         parent::__construct();
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this->setHelp('Simple command that triggers an exception and logs an error. Used to test that sentry is working');
     }

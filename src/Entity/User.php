@@ -183,8 +183,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public ?string $newPassword = null;
 
     #[ORM\Column(type: Types::STRING, length: 255, unique: true)]
-    #[Assert\NotBlank(['groups' => [self::DEFAULT_VALIDATION_GROUP, self::API_REGISTER]])]
-    #[Assert\Email(['groups' => [self::DEFAULT_VALIDATION_GROUP, self::API_REGISTER]])]
+    #[Assert\NotBlank(groups: [self::DEFAULT_VALIDATION_GROUP, self::API_REGISTER])]
+    #[Assert\Email(groups: [self::DEFAULT_VALIDATION_GROUP, self::API_REGISTER])]
     #[Groups([
         self::API_GET_ITEM,
         self::API_GET_COLLECTION,
@@ -195,7 +195,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private string $email;
 
     #[ORM\Column(type: Types::STRING, length: 255, enumType: Language::class, options: ['default' => 'en_US'])]
-    #[Assert\NotBlank(['groups' => [self::DEFAULT_VALIDATION_GROUP, self::API_REGISTER]])]
+    #[Assert\NotBlank(groups: [self::DEFAULT_VALIDATION_GROUP, self::API_REGISTER])]
     #[Groups([
         self::API_GET_ITEM,
         self::API_CREATE,

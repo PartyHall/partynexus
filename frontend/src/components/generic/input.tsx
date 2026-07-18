@@ -6,7 +6,13 @@ import {
   type MouseEventHandler,
   type ReactNode,
 } from "react";
-import { Controller, type Control, type FieldError } from "react-hook-form";
+import {
+  Controller,
+  type Control,
+  type FieldError,
+  type FieldPath,
+  type FieldValues,
+} from "react-hook-form";
 import Button from "./button";
 import {
   IconAsterisk,
@@ -118,7 +124,7 @@ export function PasswordInput({ ...props }: Omit<InputProps, "type" | "icon">) {
 // Fuck react hook form
 // I need to move to Tanstack form at some point
 // but i'm already learning enough libs for now
-export function DateTimeInput({
+export function DateTimeInput<T extends FieldValues>({
   label,
   name,
   control,
@@ -127,8 +133,8 @@ export function DateTimeInput({
   required,
 }: {
   label?: string;
-  name: string;
-  control: Control<any>;
+  name: FieldPath<T>;
+  control: Control<T>;
   disabled?: boolean;
   error?: string | FieldError;
   required?: boolean;

@@ -11,7 +11,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
 )]
 enum ExportProgress: string implements TranslatableEnumLabelInterface
 {
-    use EnumApiResourcetrait;
+    use EnumApiResourceTrait;
 
     case STARTED = 'started';
     case ADDING_PICTURES = 'adding_pictures';

@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 readonly class SongRequestCollectionProvider implements ProviderInterface
 {
     /**
-     * @param ProviderInterface<object> $decorated
+     * @param ProviderInterface<MeilisearchPaginator<SongRequest>> $decorated
      */
     public function __construct(
         #[Autowire(service: 'api_platform.doctrine.orm.state.collection_provider')]

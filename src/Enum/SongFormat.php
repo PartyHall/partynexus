@@ -12,7 +12,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
 )]
 enum SongFormat: string implements TranslatableEnumLabelInterface
 {
-    use EnumApiResourcetrait;
+    use EnumApiResourceTrait;
 
     /** Note: Values should ALWAYS BE lowercase */
     case VIDEO = 'video';

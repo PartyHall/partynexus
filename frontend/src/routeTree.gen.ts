@@ -255,6 +255,7 @@ const AuthenticatedAccountAppliancesIdRoute =
   } as any)
 
 export interface FileRoutesByFullPath {
+  '/': typeof AuthenticatedIndexRoute
   '/oauth-callback': typeof OauthCallbackRoute
   '/$id': typeof AuthenticatedIdRouteRouteWithChildren
   '/admin': typeof AuthenticatedAdminRouteRouteWithChildren
@@ -262,9 +263,8 @@ export interface FileRoutesByFullPath {
   '/new': typeof AuthenticatedNewRoute
   '/forgotten-password/$id': typeof ForgottenPasswordIdRoute
   '/forgotten-password/sent': typeof ForgottenPasswordSentRoute
-  '/': typeof AuthenticatedIndexRoute
-  '/forgotten-password': typeof ForgottenPasswordIndexRoute
-  '/login': typeof LoginIndexRoute
+  '/forgotten-password/': typeof ForgottenPasswordIndexRoute
+  '/login/': typeof LoginIndexRoute
   '/account/appliances': typeof AuthenticatedAccountAppliancesRouteRouteWithChildren
   '/$id/edit': typeof AuthenticatedIdEditRoute
   '/$id/participants': typeof AuthenticatedIdParticipantsRoute
@@ -279,9 +279,9 @@ export interface FileRoutesByFullPath {
   '/display-board/$eventId/$key': typeof DisplayBoardEventIdKeyRoute
   '/self-register/$id/register': typeof SelfRegisterIdRegisterRoute
   '/$id/': typeof AuthenticatedIdIndexRoute
-  '/account': typeof AuthenticatedAccountIndexRoute
+  '/account/': typeof AuthenticatedAccountIndexRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
-  '/karaoke': typeof AuthenticatedKaraokeIndexRoute
+  '/karaoke/': typeof AuthenticatedKaraokeIndexRoute
   '/self-register/$id/': typeof SelfRegisterIdIndexRoute
   '/account/appliances/$id': typeof AuthenticatedAccountAppliancesIdRoute
   '/account/appliances/new': typeof AuthenticatedAccountAppliancesNewRoute
@@ -290,8 +290,8 @@ export interface FileRoutesByFullPath {
   '/admin/users/$id': typeof AuthenticatedAdminUsersIdRoute
   '/admin/users/new': typeof AuthenticatedAdminUsersNewRoute
   '/account/appliances/': typeof AuthenticatedAccountAppliancesIndexRoute
-  '/admin/backdrop-albums': typeof AuthenticatedAdminBackdropAlbumsIndexRoute
-  '/admin/users': typeof AuthenticatedAdminUsersIndexRoute
+  '/admin/backdrop-albums/': typeof AuthenticatedAdminBackdropAlbumsIndexRoute
+  '/admin/users/': typeof AuthenticatedAdminUsersIndexRoute
 }
 export interface FileRoutesByTo {
   '/oauth-callback': typeof OauthCallbackRoute
@@ -372,6 +372,7 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
+    | '/'
     | '/oauth-callback'
     | '/$id'
     | '/admin'
@@ -379,9 +380,8 @@ export interface FileRouteTypes {
     | '/new'
     | '/forgotten-password/$id'
     | '/forgotten-password/sent'
-    | '/'
-    | '/forgotten-password'
-    | '/login'
+    | '/forgotten-password/'
+    | '/login/'
     | '/account/appliances'
     | '/$id/edit'
     | '/$id/participants'
@@ -396,9 +396,9 @@ export interface FileRouteTypes {
     | '/display-board/$eventId/$key'
     | '/self-register/$id/register'
     | '/$id/'
-    | '/account'
+    | '/account/'
     | '/admin/'
-    | '/karaoke'
+    | '/karaoke/'
     | '/self-register/$id/'
     | '/account/appliances/$id'
     | '/account/appliances/new'
@@ -407,8 +407,8 @@ export interface FileRouteTypes {
     | '/admin/users/$id'
     | '/admin/users/new'
     | '/account/appliances/'
-    | '/admin/backdrop-albums'
-    | '/admin/users'
+    | '/admin/backdrop-albums/'
+    | '/admin/users/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/oauth-callback'
@@ -509,21 +509,21 @@ declare module '@tanstack/react-router' {
     '/_authenticated': {
       id: '/_authenticated'
       path: ''
-      fullPath: ''
+      fullPath: '/'
       preLoaderRoute: typeof AuthenticatedRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login/': {
       id: '/login/'
       path: '/login'
-      fullPath: '/login'
+      fullPath: '/login/'
       preLoaderRoute: typeof LoginIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/forgotten-password/': {
       id: '/forgotten-password/'
       path: '/forgotten-password'
-      fullPath: '/forgotten-password'
+      fullPath: '/forgotten-password/'
       preLoaderRoute: typeof ForgottenPasswordIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
@@ -586,7 +586,7 @@ declare module '@tanstack/react-router' {
     '/_authenticated/karaoke/': {
       id: '/_authenticated/karaoke/'
       path: '/karaoke'
-      fullPath: '/karaoke'
+      fullPath: '/karaoke/'
       preLoaderRoute: typeof AuthenticatedKaraokeIndexRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
@@ -600,7 +600,7 @@ declare module '@tanstack/react-router' {
     '/_authenticated/account/': {
       id: '/_authenticated/account/'
       path: '/account'
-      fullPath: '/account'
+      fullPath: '/account/'
       preLoaderRoute: typeof AuthenticatedAccountIndexRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
@@ -705,14 +705,14 @@ declare module '@tanstack/react-router' {
     '/_authenticated/admin/users/': {
       id: '/_authenticated/admin/users/'
       path: '/users'
-      fullPath: '/admin/users'
+      fullPath: '/admin/users/'
       preLoaderRoute: typeof AuthenticatedAdminUsersIndexRouteImport
       parentRoute: typeof AuthenticatedAdminRouteRoute
     }
     '/_authenticated/admin/backdrop-albums/': {
       id: '/_authenticated/admin/backdrop-albums/'
       path: '/backdrop-albums'
-      fullPath: '/admin/backdrop-albums'
+      fullPath: '/admin/backdrop-albums/'
       preLoaderRoute: typeof AuthenticatedAdminBackdropAlbumsIndexRouteImport
       parentRoute: typeof AuthenticatedAdminRouteRoute
     }

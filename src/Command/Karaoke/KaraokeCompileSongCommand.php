@@ -27,7 +27,7 @@ class KaraokeCompileSongCommand extends Command
         parent::__construct();
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this->addArgument('song', InputArgument::REQUIRED, 'The song to compile');
     }

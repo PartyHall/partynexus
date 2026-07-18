@@ -11,7 +11,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
 )]
 enum Language: string implements EnumLabelInterface
 {
-    use EnumApiResourcetrait;
+    use EnumApiResourceTrait;
 
     case AMERICAN_ENGLISH = 'en_US';
     case FRENCH = 'fr_FR';
