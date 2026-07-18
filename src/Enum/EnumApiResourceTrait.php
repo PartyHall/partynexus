@@ -9,7 +9,7 @@ trait EnumApiResourceTrait
 {
     #[Groups(EnumApiConfig::GET)]
     #[ApiProperty(identifier: true)]
-    public function getId(): int|string
+    public function getId(): string
     {
         return $this->value;
     }
@@ -21,7 +21,7 @@ trait EnumApiResourceTrait
     }
 
     #[Groups(EnumApiConfig::GET)]
-    public function getValue(): int|string
+    public function getValue(): string
     {
         return $this->value;
     }
