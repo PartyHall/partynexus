@@ -25,8 +25,20 @@
 
 	handle /.well-known/* {
 		mercure {
-			publisher_jwt {env.MERCURE_PUBLISHER_JWT_KEY} {env.MERCURE_PUBLISHER_JWT_ALG}
-			subscriber_jwt {env.MERCURE_SUBSCRIBER_JWT_KEY} {env.MERCURE_SUBSCRIBER_JWT_ALG}
+			# Modern (Mercure 1.x / OAuth 2.0) token validation.
+			# The tokens issued by the app carry this exact "iss" value and the
+			# canonical audience below as their "aud" claim.
+			issuer {$PUBLIC_URL:https://partyhall.example.com} {
+				publisher {
+					jwt {env.MERCURE_PUBLISHER_JWT_KEY} {env.MERCURE_PUBLISHER_JWT_ALG}
+				}
+				subscriber {
+					jwt {env.MERCURE_SUBSCRIBER_JWT_KEY} {env.MERCURE_SUBSCRIBER_JWT_ALG}
+				}
+			}
+			resource_identifier {$PUBLIC_URL:https://partyhall.example.com}/.well-known/mercure
+			# The frontend stores the subscriber JWT in this cookie.
+			cookie_name mercureAuthorization
 			{$MERCURE_EXTRA_DIRECTIVES}
 		}
 	}

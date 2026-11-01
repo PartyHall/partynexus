@@ -8,6 +8,7 @@ services:
     restart: 'unless-stopped'
     environment:
       SERVER_NAME: 'localhost:80, php:80, host.docker.internal:80'
+      PUBLIC_URL: 'http://localhost:5175'
       MERCURE_PUBLISHER_JWT_KEY: '!ChangeThisMercureHubJWTSecretKey!'
       MERCURE_URL: 'http://php/.well-known/mercure'
       MERCURE_PUBLIC_URL: 'https://localhost/.well-known/mercure'
