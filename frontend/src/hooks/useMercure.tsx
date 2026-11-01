@@ -38,7 +38,7 @@ export default function MercureProvider({ children }: Props) {
     );
 
     context.listeners.forEach(({ topic }) => {
-      url.searchParams.append("topic", topic);
+      url.searchParams.append("match", topic);
     });
 
     const es = new EventSource(url, { withCredentials: true });
