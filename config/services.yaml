@@ -54,6 +54,13 @@ services:
         tags:
             - { name: kernel.event_listener, event: kernel.exception, priority: 255 }
 
+    Sentry\Monolog\Handler:
+        arguments:
+            $hub: '@Sentry\State\HubInterface'
+            $level: !php/const Monolog\Logger::ERROR
+            $bubble: true
+            $fillExtraContext: true
+
     # api_platform.state.error_provider:
         # class: App\State\Provider\ErrorProvider
         # tags:
